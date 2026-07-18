@@ -1,7 +1,0 @@
-SOCKSPort 127.0.0.1:9052
-ControlPort 127.0.0.1:9051
-CookieAuthentication 1
-DataDirectory /data/data/com.termux/files/home/hive/state/tor
-ClientOnly 1
-AvoidDiskWrites 1
-Log notice file /data/data/com.termux/files/home/hive/logs/tor.local.log
