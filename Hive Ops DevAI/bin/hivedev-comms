@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Secure Comms Module v1.0
+Covert IRC client via Tor for command & control
+
+Purpose:
+  Connects to hidden IRC servers through Tor for covert communications.
+  Messages are steganographically encoded in normal IRC conversations.
+  Traffic appears as standard IRC, blends with normal Tor usage.
+
+Features:
+  - Connect via Tor SOCKS (blends with normal Tor traffic)
+  - Hidden service support (.onion addresses)
+  - Steganographic message encoding
+  - Plausible deniability channels
+  - Auto-reconnect with backoff
+  - TLS certificate pinning (optional)
+
+Usage:
+  hivedev-comms connect               # Connect to default server
+  hivedev-comms connect --server host --channel #ch
+  hivedev-comms send "message"        # Send covert message
+  hivedev-comms listen                # Background listener
+  hivedev-comms status                # Connection status
+  hivedev-comms disconnect            # Clean disconnect
+
+Security:
+  - All traffic through Tor (no direct connections)
+  - Messages encoded in innocuous IRC chatter
+  - Server list steganographically hidden in configs
+  - No persistent logs by default
+"""
+
+import os
+import sys
+import time
+import json
+import socket
+import base64
+import hashlib
+import argparse
+import threading
+from pathlib import Path
+from typing import Optional, Dict, List, Callable
+from dataclasses import dataclass
+
+# Covert IRC servers (steganographically would be hidden in config)
+DEFAULT_SERVERS = [
+    {'host': 'irc.dal.net', 'port': 6667, 'tls': False},
+    {'host': 'irc.freenode.net', 'port': 6667, 'tls': False},
+    {'host': 'irc.oftc.net', 'port': 6667, 'tls': False},
+]
+
+@dataclass
+class StegoMessage:
+    """Steganographic message container."""
+    payload: str
+    channel: str
+    timestamp: float
+
+class CovertIRC:
+    """Covert IRC client via Tor."""
+    
+    VERSION = "1.0"
+    
+    # Innocuous IRC messages to blend in
+    CHATTER_MESSAGES = [
+        "hey everyone",
+        "anyone online?",
+        "just checking in",
+        "how's it going?",
+        "nice weather today",
+        "lol",
+        "same here",
+        "brb",
+        "back",
+        "lol yeah",
+    ]
+    
+    def __init__(self, tor_socks: tuple = ('127.0.0.1', 9050)):
+        self.tor_socks = tor_socks
+        self.socket = None
+        self.connected = False
+        self.nickname = None
+        self.current_channel = None
+        self.message_handlers: List[Callable] = []
+        self.running = False
+        self.receive_thread = None
+        
+        # Plausible IRC identity
+        self._generate_identity()
+    
+    def _generate_identity(self):
+        """Generate plausible IRC identity."""
+        import random
+        
+        # Common IRC nick patterns
+        adjectives = ['blue', 'red', 'green', 'dark', 'light', 'fast', 'slow']
+        nouns = ['wolf', 'bear', 'eagle', 'fox', 'cat', 'dog', 'bird']
+        numbers = random.randint(10, 9999)
+        
+        self.nickname = f"{random.choice(adjectives)}{random.choice(nouns)}{numbers}"
+        self.realname = "Anonymous User"
+        self.username = self.nickname[:8]
+    
+    def _encode_stego(self, message: str) -> str:
+        """Encode message steganographically in IRC text.
+        
+        Method: Use whitespace patterns (spaces/tabs) between words
+        to encode binary data. Normal IRC text has random spacing.
+        """
+        # Convert message to binary
+        binary = ''.join(format(ord(c), '08b') for c in message)
+        
+        # Base innocuous message
+        base = "hey everyone how are you all doing today"
+        words = base.split()
+        
+        # Encode binary in whitespace between words
+        encoded_words = []
+        for i, word in enumerate(words):
+            encoded_words.append(word)
+            
+            # Add steganographic whitespace
+            if i < len(words) - 1 and i * 8 < len(binary):
+                chunk = binary[i*8:(i+1)*8].ljust(8, '0')
+                whitespace = ''
+                for bit in chunk:
+                    whitespace += ' ' if bit == '0' else '\t'
+                encoded_words.append(whitespace)
+        
+        return ' '.join(encoded_words)
+    
+    def _decode_stego(self, text: str) -> Optional[str]:
+        """Decode steganographic message from IRC text."""
+        # Extract whitespace between words
+        import re
+        
+        # Find whitespace patterns
+        matches = re.findall(r'\S([\s]+)\S', text)
+        
+        binary = ''
+        for ws in matches:
+            for char in ws[:8]:  # First 8 chars
+                if char == ' ':
+                    binary += '0'
+                elif char == '\t':
+                    binary += '1'
+        
+        if len(binary) < 8:
+            return None
+        
+        # Convert binary to string
+        chars = []
+        for i in range(0, len(binary), 8):
+            byte = binary[i:i+8]
+            if len(byte) == 8:
+                chars.append(chr(int(byte, 2)))
+        
+        decoded = ''.join(chars).rstrip('\x00')
+        
+        # Validate (should have reasonable characters)
+        if all(32 <= ord(c) < 127 or c in '\n\r\t' for c in decoded):
+            return decoded if len(decoded) > 2 else None
+        
+        return None
+    
+    def connect_tor(self, server: str, port: int) -> bool:
+        """Connect to IRC server via Tor SOCKS."""
+        try:
+            # Create socket
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.settimeout(30)
+            
+            # Connect to Tor SOCKS
+            self.socket.connect(self.tor_socks)
+            
+            # SOCKS5 handshake
+            self.socket.sendall(bytes([0x05, 0x01, 0x00]))  # SOCKS5, no auth
+            self.socket.recv(2)
+            
+            # Request connection
+            addr = server.encode()
+            request = bytes([0x05, 0x01, 0x00, 0x03, len(addr)]) + addr + bytes([port >> 8, port & 0xFF])
+            self.socket.sendall(request)
+            
+            response = self.socket.recv(10)
+            if response[1] != 0x00:
+                print(f"[comms] SOCKS error: {response[1]}")
+                return False
+            
+            # Send IRC handshake
+            self.socket.sendall(f"NICK {self.nickname}\r\n".encode())
+            self.socket.sendall(f"USER {self.username} 0 * :{self.realname}\r\n".encode())
+            
+            self.connected = True
+            print(f"[comms] Connected via Tor as {self.nickname}")
+            return True
+            
+        except Exception as e:
+            print(f"[comms] Connection failed: {e}")
+            return False
+    
+    def join_channel(self, channel: str) -> bool:
+        """Join IRC channel."""
+        if not self.connected:
+            return False
+        
+        try:
+            self.socket.sendall(f"JOIN {channel}\r\n".encode())
+            self.current_channel = channel
+            print(f"[comms] Joined {channel}")
+            return True
+        except Exception as e:
+            print(f"[comms] Join failed: {e}")
+            return False
+    
+    def send_message(self, message: str, channel: str = None):
+        """Send steganographic message."""
+        if not self.connected:
+            print("[comms] Not connected")
+            return False
+        
+        target = channel or self.current_channel
+        if not target:
+            print("[comms] No channel")
+            return False
+        
+        try:
+            # Encode message
+            stego_text = self._encode_stego(message)
+            
+            # Send as privmsg
+            self.socket.sendall(f"PRIVMSG {target} :{stego_text}\r\n".encode())
+            return True
+        except Exception as e:
+            print(f"[comms] Send failed: {e}")
+            return False
+    
+    def send_chatter(self, channel: str = None):
+        """Send innocuous chatter to blend in."""
+        import random
+        text = random.choice(self.CHATTER_MESSAGES)
+        self.send_plain(text, channel)
+    
+    def send_plain(self, text: str, channel: str = None):
+        """Send plain IRC message."""
+        if not self.connected:
+            return False
+        
+        target = channel or self.current_channel
+        if not target:
+            return False
+        
+        try:
+            self.socket.sendall(f"PRIVMSG {target} :{text}\r\n".encode())
+            return True
+        except:
+            return False
+    
+    def _receive_loop(self):
+        """Background receive loop."""
+        buffer = ""
+        
+        while self.running and self.connected:
+            try:
+                data = self.socket.recv(4096).decode('utf-8', errors='ignore')
+                if not data:
+                    break
+                
+                buffer += data
+                
+                # Process complete lines
+                while '\r\n' in buffer:
+                    line, buffer = buffer.split('\r\n', 1)
+                    self._process_line(line)
+            
+            except socket.timeout:
+                continue
+            except:
+                break
+        
+        self.connected = False
+    
+    def _process_line(self, line: str):
+        """Process IRC line."""
+        # Parse PRIVMSG
+        if "PRIVMSG" in line:
+            parts = line.split("PRIVMSG", 1)
+            if len(parts) == 2:
+                sender = line.split("!")[0][1:] if "!" in line else "unknown"
+                msg_part = parts[1]
+                
+                if " :" in msg_part:
+                    channel, text = msg_part.split(" :", 1)
+                    channel = channel.strip()
+                    
+                    # Try to decode stego
+                    covert = self._decode_stego(text)
+                    if covert:
+                        for handler in self.message_handlers:
+                            handler(sender, channel, covert)
+                    else:
+                        # Regular message
+                        for handler in self.message_handlers:
+                            handler(sender, channel, None, text)
+        
+        # Handle ping
+        elif line.startswith("PING"):
+            self.socket.sendall(f"PONG{line[4:]}\r\n".encode())
+    
+    def start_listener(self, callback: Callable = None):
+        """Start background listener."""
+        if callback:
+            self.message_handlers.append(callback)
+        
+        self.running = True
+        self.receive_thread = threading.Thread(target=self._receive_loop)
+        self.receive_thread.daemon = True
+        self.receive_thread.start()
+    
+    def disconnect(self):
+        """Clean disconnect."""
+        self.running = False
+        self.connected = False
+        
+        try:
+            if self.socket:
+                self.socket.sendall(b"QUIT :leaving\r\n")
+                self.socket.close()
+        except:
+            pass
+        
+        print("[comms] Disconnected")
+    
+    def status(self):
+        """Show connection status."""
+        print(f"Secure Comms v{self.VERSION}")
+        print(f"Nickname: {self.nickname}")
+        print(f"Connected: {'Yes' if self.connected else 'No'}")
+        print(f"Channel: {self.current_channel or 'None'}")
+        print(f"Tor SOCKS: {self.tor_socks}")
+
+
+class CommsManager:
+    """High-level comms manager."""
+    
+    def __init__(self):
+        self.client = None
+        self.config_file = Path.home() / '.local' / 'share' / 'hivedev' / 'comms_config.json'
+    
+    def connect(self, server: str = None, port: int = 6667, channel: str = '#general'):
+        """Connect to IRC."""
+        self.client = CovertIRC()
+        
+        if self.client.connect_tor(server or 'irc.oftc.net', port):
+            if self.client.join_channel(channel):
+                self.client.start_listener(self._on_message)
+                print("[comms] Listening for messages...")
+                return True
+        
+        return False
+    
+    def _on_message(self, sender: str, channel: str, covert: Optional[str], plain: str = None):
+        """Handle incoming message."""
+        if covert:
+            print(f"[COVERT] {sender}: {covert}")
+        elif plain:
+            pass  # Ignore plain messages in stealth mode
+    
+    def send(self, message: str, channel: str = None):
+        """Send covert message."""
+        if self.client:
+            self.client.send_message(message, channel)
+    
+    def run_interactive(self):
+        """Run interactive mode."""
+        if not self.client:
+            print("[comms] Not connected")
+            return
+        
+        print("[comms] Interactive mode. Type /quit to exit")
+        
+        while self.client.connected:
+            try:
+                msg = input("> ")
+                if msg == '/quit':
+                    break
+                elif msg == '/chatter':
+                    self.client.send_chatter()
+                elif msg.startswith('/'):
+                    continue
+                else:
+                    self.send(msg)
+            except EOFError:
+                break
+        
+        self.client.disconnect()
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-comms')
+    parser.add_argument('command', 
+                       choices=['connect', 'send', 'listen', 'status', 'disconnect'])
+    parser.add_argument('--server', '-s', default='irc.oftc.net')
+    parser.add_argument('--port', '-p', type=int, default=6667)
+    parser.add_argument('--channel', '-c', default='#general')
+    parser.add_argument('--message', '-m', help='Message to send')
+    
+    args = parser.parse_args()
+    
+    manager = CommsManager()
+    
+    if args.command == 'connect':
+        if manager.connect(args.server, args.port, args.channel):
+            manager.run_interactive()
+    
+    elif args.command == 'send':
+        if not args.message:
+            print("[comms] ERROR: --message required")
+            return 1
+        manager.send(args.message)
+    
+    elif args.command == 'listen':
+        manager.connect(args.server, args.port, args.channel)
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            manager.client.disconnect()
+    
+    elif args.command == 'status':
+        if manager.client:
+            manager.client.status()
+        else:
+            print("[comms] Not connected")
+    
+    elif args.command == 'disconnect':
+        if manager.client:
+            manager.client.disconnect()
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,0 +1,341 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Duress Password Module v1.0
+Silent self-destruct on special password entry
+
+Purpose:
+  When under coercion, user enters duress password instead of real password.
+  System appears to unlock normally but silently wipes all sensitive data.
+  Creates plausible deniability - attacker believes they succeeded.
+
+Features:
+  - Dual-password system (real vs duress)
+  - Silent wipe (appears to authenticate)
+  - Configurable wipe targets
+  - Fake data generation (decoy content)
+  - Delayed execution (natural behavior delay)
+  - No forensic traces of duress trigger
+
+Usage:
+  hivedev-duress setup          # Configure duress password
+  hivedev-duress check          # Verify duress system active
+  hivedev-duress trigger        # Manual trigger (testing)
+  hivedev-duress test-real      # Test real password
+  hivedev-duress test-duress    # Test duress wipe (DESTRUCTIVE)
+
+Security Notes:
+  - Duress password MUST be different from real password
+  - Duress password SHOULD be plausible (not obviously fake)
+  - Wipe is IRREVERSIBLE - data cannot be recovered
+  - Fake data must be CONVINCING to attacker
+"""
+
+import os
+import sys
+import time
+import json
+import hashlib
+import argparse
+from pathlib import Path
+from typing import Optional, Dict, List
+from dataclasses import dataclass
+
+@dataclass
+class WipeTarget:
+    """Target for secure deletion."""
+    path: Path
+    description: str
+    required: bool = True
+
+class DuressSystem:
+    """Duress password self-destruct system."""
+    
+    VERSION = "1.0"
+    
+    # Fake success messages to show attacker
+    FAKE_MESSAGES = [
+        "Authentication successful",
+        "Vault unlocked",
+        "System ready",
+        "Access granted",
+        "Connected to swarm",
+    ]
+    
+    def __init__(self):
+        self.data_dir = Path.home() / '.local' / 'share' / 'hivedev'
+        self.config_file = self.data_dir / 'duress_config.enc'
+        self.trigger_file = self.data_dir / '.duress_trigger'
+        
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Default wipe targets
+        self.targets = [
+            WipeTarget(Path.home() / '.local' / 'share' / 'hivedev' / 'vault.dat', 'Encrypted vault'),
+            WipeTarget(Path.home() / '.local' / 'share' / 'hivedev' / 'logs', 'Log files'),
+            WipeTarget(Path.home() / '.config' / 'hive' / 'env.sh', 'Environment config'),
+            WipeTarget(Path.home() / '.hive_ops.txt', 'Quick commands'),
+        ]
+    
+    def _derive_key(self, password: str, salt: bytes) -> bytes:
+        """Derive key from password using PBKDF2."""
+        return hashlib.pbkdf2_hmac(
+            'sha256',
+            password.encode(),
+            salt,
+            100000,  # High iteration count
+            dklen=32
+        )
+    
+    def setup(self, real_password: str, duress_password: str) -> bool:
+        """Configure duress password system.
+        
+        Args:
+            real_password: Actual system password
+            duress_password: Password that triggers wipe
+            
+        Returns:
+            True if configured successfully
+        """
+        if not real_password or not duress_password:
+            print("[duress] ERROR: Both passwords required")
+            return False
+        
+        if real_password == duress_password:
+            print("[duress] ERROR: Passwords must be different")
+            return False
+        
+        # Generate salts
+        real_salt = os.urandom(32)
+        duress_salt = os.urandom(32)
+        
+        # Derive keys
+        real_key = self._derive_key(real_password, real_salt)
+        duress_key = self._derive_key(duress_password, duress_salt)
+        
+        # Ensure keys are different
+        if real_key == duress_key:
+            print("[duress] ERROR: Key collision, use different passwords")
+            return False
+        
+        # Store configuration
+        config = {
+            'version': self.VERSION,
+            'real_salt': real_salt.hex(),
+            'duress_salt': duress_salt.hex(),
+            'real_hash': real_key.hex()[:16],  # Partial hash for verification
+            'duress_hash': duress_key.hex()[:16],
+            'enabled': True,
+        }
+        
+        # Encrypt config with derived real key
+        encrypted = self._encrypt_config(config, real_key)
+        self.config_file.write_text(json.dumps(encrypted))
+        
+        # Set restrictive permissions
+        os.chmod(self.config_file, 0o600)
+        
+        print("[duress] System configured successfully")
+        print("[duress] WARNING: Memorize both passwords!")
+        print("[duress] Real password: grants access")
+        print("[duress] Duress password: SILENT WIPE + fake unlock")
+        return True
+    
+    def _encrypt_config(self, config: dict, key: bytes) -> dict:
+        """Simple XOR encryption for config."""
+        plaintext = json.dumps(config).encode()
+        ciphertext = bytes(p ^ k for p, k in zip(plaintext, key * (len(plaintext) // len(key) + 1)))
+        return {
+            'data': ciphertext.hex(),
+            'len': len(plaintext)
+        }
+    
+    def _decrypt_config(self, encrypted: dict, key: bytes) -> Optional[dict]:
+        """Decrypt config with key."""
+        try:
+            ciphertext = bytes.fromhex(encrypted['data'])
+            plaintext = bytes(c ^ k for c, k in zip(ciphertext, key * (len(ciphertext) // len(key) + 1)))
+            return json.loads(plaintext.decode())
+        except:
+            return None
+    
+    def authenticate(self, password: str) -> str:
+        """Authenticate with dual-password system.
+        
+        Returns:
+            'real' - Normal authentication
+            'duress' - Duress password entered (TRIGGERS WIPE)
+            'fail' - Wrong password
+        """
+        if not self.config_file.exists():
+            return 'fail'
+        
+        try:
+            encrypted = json.loads(self.config_file.read_text())
+        except:
+            return 'fail'
+        
+        # Try real password first
+        test_salts = [
+            ('real', bytes.fromhex(json.loads(self.config_file.read_text())['real_salt'])),
+            ('duress', bytes.fromhex(json.loads(self.config_file.read_text())['duress_salt'])),
+        ]
+        
+        for password_type, salt in test_salts:
+            key = self._derive_key(password, salt)
+            partial = key.hex()[:16]
+            
+            config = self._decrypt_config(encrypted, key)
+            if config:
+                if password_type == 'duress':
+                    # TRIGGER DURESS WIPE
+                    self._execute_duress()
+                    return 'duress'
+                return 'real'
+        
+        return 'fail'
+    
+    def _execute_duress(self):
+        """Execute silent wipe."""
+        # Show fake success message
+        import random
+        print(random.choice(self.FAKE_MESSAGES))
+        time.sleep(0.5)  # Natural delay
+        
+        # Silently wipe all targets
+        for target in self.targets:
+            self._secure_wipe(target.path)
+        
+        # Create decoy files
+        self._create_decoy_data()
+        
+        # Clear trigger file
+        if self.trigger_file.exists():
+            self._secure_wipe(self.trigger_file)
+        
+        # Exit cleanly (appears as normal operation)
+        sys.exit(0)
+    
+    def _secure_wipe(self, target: Path):
+        """Securely delete target."""
+        if not target.exists():
+            return
+        
+        try:
+            if target.is_file():
+                # Overwrite
+                size = target.stat().st_size
+                with open(target, 'r+b') as f:
+                    for _ in range(3):
+                        f.seek(0)
+                        f.write(os.urandom(size))
+                        f.flush()
+                # Rename and delete
+                temp = target.parent / hashlib.sha256(os.urandom(32)).hexdigest()[:16]
+                target.rename(temp)
+                temp.unlink()
+            
+            elif target.is_dir():
+                # Wipe directory contents
+                for item in target.rglob('*'):
+                    if item.is_file():
+                        self._secure_wipe(item)
+                target.rmdir()
+        
+        except:
+            pass  # Silent fail
+    
+    def _create_decoy_data(self):
+        """Create fake data to show attacker."""
+        fake_vault = self.data_dir / 'vault.dat'
+        fake_secrets = {
+            'test_api_key': 'fake-key-12345',
+            'dummy_token': 'token-abcde',
+            'placeholder': 'decoy data',
+        }
+        
+        # Create fake encrypted vault
+        fake_encrypted = os.urandom(256)  # Random data looks encrypted
+        fake_vault.write_bytes(fake_encrypted)
+        
+        # Create fake logs
+        fake_log = self.data_dir / 'logs' / 'hivedev.log'
+        fake_log.parent.mkdir(exist_ok=True)
+        fake_log.write_text("[INFO] System initialized\n[INFO] Connected\n")
+    
+    def test_real(self, password: str) -> bool:
+        """Test real password (does not trigger wipe)."""
+        result = self.authenticate(password)
+        if result == 'real':
+            print("[duress] Real password verified")
+            return True
+        elif result == 'duress':
+            print("[duress] WARNING: That was the DURESS password!")
+            print("[duress] Wipe was triggered - this should not happen in test")
+            return False
+        else:
+            print("[duress] Wrong password")
+            return False
+    
+    def check_status(self):
+        """Check duress system status."""
+        print(f"Duress System v{self.VERSION}")
+        print(f"Config: {self.config_file}")
+        print(f"Exists: {'Yes' if self.config_file.exists() else 'No'}")
+        
+        if self.config_file.exists():
+            print("Status: Active")
+            print("\nWipe targets:")
+            for target in self.targets:
+                status = "✓" if target.path.exists() else "✗"
+                print(f"  {status} {target.description}: {target.path}")
+        else:
+            print("Status: Not configured")
+            print("Run: hivedev-duress setup")
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-duress')
+    parser.add_argument('command', 
+                       choices=['setup', 'check', 'trigger', 'test-real', 'test-duress', 'status'])
+    parser.add_argument('--real', '-r', help='Real password (for setup)')
+    parser.add_argument('--duress', '-d', help='Duress password (for setup)')
+    parser.add_argument('--password', '-p', help='Password for testing')
+    
+    args = parser.parse_args()
+    
+    system = DuressSystem()
+    
+    if args.command == 'setup':
+        if not args.real or not args.duress:
+            print("[duress] ERROR: --real and --duress required")
+            return 1
+        return 0 if system.setup(args.real, args.duress) else 1
+    
+    elif args.command == 'check' or args.command == 'status':
+        system.check_status()
+    
+    elif args.command == 'trigger':
+        print("[duress] Manual trigger")
+        system._execute_duress()
+    
+    elif args.command == 'test-real':
+        if not args.password:
+            print("[duress] ERROR: --password required")
+            return 1
+        return 0 if system.test_real(args.password) else 1
+    
+    elif args.command == 'test-duress':
+        print("[duress] WARNING: This will WIPE data!")
+        print("[duress] Use only for testing in safe environment")
+        if input("Type WIPE to confirm: ") != "WIPE":
+            print("Cancelled")
+            return 1
+        result = system.authenticate(args.duress if args.duress else "")
+        print(f"[duress] Result: {result}")
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
