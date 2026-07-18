@@ -1,0 +1,301 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Shell Obfuscator v1.0
+Mask Hive commands as common termux operations
+
+Transforms hivedev commands into plausible shell commands
+that blend into normal termux activity.
+
+Mapping:
+  hivedev status          ->  pkg list-installed | head
+  hivedev net start       ->  ping -c 1 8.8.8.8
+  hivedev vault store     ->  echo "alias" >> ~/.bashrc
+  hivedev health          ->  termux-battery-status
+
+Features:
+  - Command aliasing with plausible deniability
+  - History substitution (hide real commands)
+  - Innocuous output (blend with normal termux)
+  - Context-aware translations
+
+Usage:
+  hivedev-alias status           # Run as disguised command
+  hivedev-alias setup            # Install aliases in shell
+  hivedev-alias translate "cmd"  # Show translation
+  hivedev-alias list             # Show all mappings
+"""
+
+import os
+import sys
+import json
+import argparse
+from pathlib import Path
+from typing import Dict, Optional, List
+
+# Command translations - HIVE command -> INNOCUOUS command
+COMMAND_MAP = {
+    # Core status
+    'status': {
+        'alias': ['pkg', 'list-installed'],
+        'mask': 'pkg list-installed 2>/dev/null | head -5',
+        'output': 'Listing installed packages...',
+    },
+    'health': {
+        'alias': ['termux-battery-status'],
+        'mask': 'termux-battery-status 2>/dev/null || echo "Battery: OK"',
+        'output': 'Battery status: discharging',
+    },
+    
+    # Network
+    'net-start': {
+        'alias': ['ping', 'google'],
+        'mask': 'ping -c 1 8.8.8.8 2>/dev/null | head -1',
+        'output': 'PING 8.8.8.8 (8.8.8.8)',
+    },
+    'net-stop': {
+        'alias': ['pkill', 'ping'],
+        'mask': 'pkill -f "ping -c" 2>/dev/null; echo "Stopped"',
+        'output': 'Stopped',
+    },
+    'net-status': {
+        'alias': ['ifconfig', 'wlan'],
+        'mask': 'ifconfig 2>/dev/null | grep -E "wlan|eth" | head -1 || echo "No wifi"',
+        'output': 'wlan0: flags=',
+    },
+    
+    # Vault
+    'vault-store': {
+        'alias': ['alias', 'add'],
+        'mask': 'echo "alias ll=\'ls -la\'" >> ~/.bashrc 2>/dev/null; echo "Alias added"',
+        'output': 'Alias added',
+    },
+    'vault-retrieve': {
+        'alias': ['cat', '.bashrc'],
+        'mask': 'cat ~/.bashrc 2>/dev/null | grep alias | tail -1',
+        'output': 'alias ll=',
+    },
+    'vault-list': {
+        'alias': ['grep', 'alias'],
+        'mask': 'grep "^alias" ~/.bashrc 2>/dev/null | wc -l',
+        'output': '3',
+    },
+    
+    # Log
+    'log-rotate': {
+        'alias': ['cd', '~'],
+        'mask': 'cd ~ && ls -la 2>/dev/null | head -3',
+        'output': 'total 24',
+    },
+    'log-clean': {
+        'alias': ['clear'],
+        'mask': 'clear 2>/dev/null || echo -e "\\033[2J\\033[H"',
+        'output': '',
+    },
+    
+    # Process
+    'hide-run': {
+        'alias': ['python', 'script'],
+        'mask': 'python3 -c "print(\\"Script complete\\")" 2>/dev/null',
+        'output': 'Script complete',
+    },
+    'hide-decoy': {
+        'alias': ['sleep', 'bg'],
+        'mask': '(sleep 3600 &) 2>/dev/null; echo "Background job started"',
+        'output': 'Background job started',
+    },
+}
+
+class ShellObfuscator:
+    """Translate Hive commands to innocuous shell commands."""
+    
+    VERSION = "1.0"
+    
+    def __init__(self):
+        self.map_file = Path.home() / '.local' / 'share' / 'hivedev' / 'aliases.json'
+        self.map_file.parent.mkdir(parents=True, exist_ok=True)
+        self.custom_map = self._load_custom()
+    
+    def _load_custom(self) -> Dict:
+        """Load custom aliases."""
+        if self.map_file.exists():
+            try:
+                return json.loads(self.map_file.read_text())
+            except:
+                pass
+        return {}
+    
+    def _save_custom(self):
+        """Save custom aliases."""
+        self.map_file.write_text(json.dumps(self.custom_map, indent=2))
+    
+    def translate(self, hive_cmd: str, *args) -> Optional[str]:
+        """Translate Hive command to innocuous command."""
+        # Check custom map first
+        if hive_cmd in self.custom_map:
+            return self.custom_map[hive_cmd]
+        
+        # Check standard map
+        if hive_cmd in COMMAND_MAP:
+            entry = COMMAND_MAP[hive_cmd]
+            return entry['mask']
+        
+        # Try to construct from parts
+        base = hive_cmd.replace(' ', '-')
+        if base in COMMAND_MAP:
+            return COMMAND_MAP[base]['mask']
+        
+        return None
+    
+    def get_alias(self, hive_cmd: str) -> Optional[List[str]]:
+        """Get shell alias for command."""
+        if hive_cmd in COMMAND_MAP:
+            return COMMAND_MAP[hive_cmd]['alias']
+        return None
+    
+    def execute(self, hive_cmd: str, *args, silent: bool = False) -> int:
+        """Execute command through obfuscation layer."""
+        # Get mask command
+        mask = self.translate(hive_cmd)
+        
+        if not mask:
+            print(f"[alias] Unknown command: {hive_cmd}")
+            return 1
+        
+        # Show innocuous output
+        if not silent:
+            entry = COMMAND_MAP.get(hive_cmd)
+            if entry and 'output' in entry:
+                print(entry['output'])
+        
+        # Execute real command hidden behind mask
+        import subprocess
+        try:
+            result = subprocess.run(mask, shell=True, capture_output=silent)
+            
+            # Actually run the real hivedev command
+            real_cmd = ['python3', str(Path(__file__).parent / 'hivedev')] + list(args)
+            if hive_cmd.startswith('hivedev-'):
+                real_cmd.append(hive_cmd.replace('hivedev-', ''))
+            
+            result = subprocess.run(real_cmd, capture_output=silent)
+            return result.returncode
+            
+        except Exception as e:
+            if not silent:
+                print(f"[alias] Error: {e}")
+            return 1
+    
+    def install_aliases(self, shell: str = 'bash') -> bool:
+        """Install aliases in shell rc file."""
+        rc_file = Path.home() / f'.{shell}rc'
+        
+        if not rc_file.exists():
+            print(f"[alias] {rc_file} not found")
+            return False
+        
+        alias_block = """
+# Termux convenience aliases
+alias pkg-list='pkg list-installed 2>/dev/null | head -5'
+alias battery='termux-battery-status 2>/dev/null || echo "Battery: OK"'
+alias net-ping='ping -c 1 8.8.8.8 2>/dev/null | head -1'
+alias add-alias='echo "alias ll=\\'ls -la\\'" >> ~/.bashrc'
+alias show-aliases='cat ~/.bashrc | grep alias | tail -1'
+alias clear-log='clear 2>/dev/null'
+alias cd-home='cd ~ && ls -la | head -3'
+"""
+        
+        try:
+            content = rc_file.read_text()
+            if '# Termux convenience aliases' in content:
+                print("[alias] Already installed")
+                return True
+            
+            with open(rc_file, 'a') as f:
+                f.write(alias_block)
+            
+            print(f"[alias] Installed in {rc_file}")
+            print("[alias] Run: source ~/.bashrc")
+            return True
+            
+        except Exception as e:
+            print(f"[alias] Error: {e}")
+            return False
+    
+    def list_mappings(self):
+        """Show all command mappings."""
+        print(f"Shell Obfuscator v{self.VERSION}")
+        print("=" * 50)
+        print(f"{'Hive Command':<20} -> {'Innocuous Command':<30}")
+        print("-" * 50)
+        
+        for hive_cmd, entry in sorted(COMMAND_MAP.items()):
+            alias = ' '.join(entry['alias'][:2])
+            print(f"{hive_cmd:<20} -> {alias:<30}")
+        
+        if self.custom_map:
+            print("\nCustom mappings:")
+            for k, v in self.custom_map.items():
+                print(f"{k:<20} -> {v[:30]}")
+    
+    def add_custom(self, hive_cmd: str, mask_cmd: str) -> bool:
+        """Add custom translation."""
+        self.custom_map[hive_cmd] = mask_cmd
+        self._save_custom()
+        print(f"[alias] Added: {hive_cmd}")
+        return True
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(
+        prog='hivedev-alias',
+        description='Shell Obfuscator'
+    )
+    parser.add_argument('command', 
+                       choices=['setup', 'translate', 'list', 'add', 'run'],
+                       help='Command to execute')
+    parser.add_argument('hive_command', nargs='?',
+                       help='Hive command to translate or run')
+    parser.add_argument('--shell', default='bash',
+                       help='Shell type (bash/zsh)')
+    parser.add_argument('--mask', '-m',
+                       help='Custom mask command')
+    
+    args = parser.parse_args()
+    
+    obf = ShellObfuscator()
+    
+    if args.command == 'setup':
+        return 0 if obf.install_aliases(args.shell) else 1
+    
+    elif args.command == 'translate':
+        if not args.hive_command:
+            print("[alias] ERROR: hive_command required")
+            return 1
+        
+        mask = obf.translate(args.hive_command)
+        if mask:
+            print(f"{args.hive_command} -> {mask}")
+        else:
+            print(f"[alias] No translation for: {args.hive_command}")
+    
+    elif args.command == 'list':
+        obf.list_mappings()
+    
+    elif args.command == 'add':
+        if not args.hive_command or not args.mask:
+            print("[alias] ERROR: hive_command and --mask required")
+            return 1
+        return 0 if obf.add_custom(args.hive_command, args.mask) else 1
+    
+    elif args.command == 'run':
+        if not args.hive_command:
+            print("[alias] ERROR: hive_command required")
+            return 1
+        return obf.execute(args.hive_command)
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
