@@ -1,0 +1,5 @@
+START='python -m http.server 11434'
+PROBE='nc -z 127.0.0.1 11434'
+REQUIRES_NET=1
+USE_PROXY_ENV=1
+WANT_TORSOCKS=0

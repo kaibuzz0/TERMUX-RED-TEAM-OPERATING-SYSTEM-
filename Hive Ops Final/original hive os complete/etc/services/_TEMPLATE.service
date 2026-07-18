@@ -1,0 +1,9 @@
+# Example service template for Hive Spec-Op
+# Required keys:
+# START='command to start service'
+# STOP='command to stop service'   # optional
+# PROBE='health check command'
+# REQUIRES_NET=0|1
+# USE_PROXY_ENV=0|1
+# WANT_TORSOCKS=0|1
+# LOG="$HOME/hive/logs/service.log"

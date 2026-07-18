@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+trap 'code=$?; line=${BASH_LINENO[0]:-UNKNOWN}; cmd=${BASH_COMMAND:-?}; echo "[hive] ERROR at line ${line}: ${cmd} (exit ${code})" 1>&2; exit $code' ERR
+. "$HOME/.config/hive/env.sh"
+
+session="hive"
+supervisor="$HIVE_BIN/hive_supervisor.sh"
+
+usage() {
+  cat <<'H'
+Hive CLI
+  hive start|stop|status
+  hive doctor             - env & versions
+  hive health             - quick green/red check (exit codes: 0=green|off, 1=issues)
+  hive speak              - print escape text
+  hive logs               - tail supervisor & watchdog logs
+  hive ps                 - list hive/tor/tmux pids
+  hive rotate-logs        - simple rotation (size-capped, 512KiB)
+  hive audit              - run full audit and save to logs/ (non-zero on final health fail)
+  hive net {status|test|orbot|local|off|newnym}
+  hive services {list|describe|start|stop|status|health|ensure}
+H
+}
+
+mode_file="$HIVE_STATE/net.mode"
+read_mode() { [[ -s "$mode_file" ]] && cat "$mode_file" || printf '%s' "${HIVE_PROXY_MODE:-orbot}"; }
+
+active_socks() {
+  case "$(read_mode)" in
+    local) printf '%s' "${HIVE_TOR_SOCKS_LOCAL}" ;;
+    orbot|off|*) printf '%s' "${HIVE_TOR_SOCKS_ORBOT}" ;;
+  esac
+}
+
+rotate_logs() {
+  for f in "$HIVE_LOG"/*.log; do
+    [ -f "$f" ] || continue
+    sz=$(wc -c <"$f" 2>/dev/null || echo 0)
+    if [ "$sz" -gt $((512*1024)) ]; then
+      mv "$f" "$f.$(date +%Y%m%d-%H%M%S)"
+      : >"$f"
+      chmod 600 "$f" 2>/dev/null || true
+      echo "[rotate] $f rotated"
+    fi
+  done
+}
+
+case "${1:-}" in
+  start)
+    if ! tmux has-session -t "$session" 2>/dev/null; then
+      tmux new -d -s "$session" "$supervisor"
+      echo "[start] tmux session '$session' launched."
+    else
+      echo "[start] tmux session '$session' already running."
+    fi
+    ;;
+  stop)
+    tmux kill-session -t "$session" >/dev/null 2>&1 || true
+    echo "[stop] tmux session '$session' stopped."
+    ;;
+  status)
+    if tmux has-session -t "$session" 2>/dev/null; then
+      echo "[status] tmux '$session' is running."
+      tmux ls | sed -n "s/^$session:.*/$(tmux list-windows -t "$session")/p" || true
+    else
+      echo "[status] tmux '$session' is NOT running."
+    fi
+    ;;
+  logs)
+    tail -n 120 -f "$HIVE_LOG/supervisor.log" "$HIVE_LOG/watchdog.log"
+    ;;
+  ps)
+    exec "$HIVE_BIN/hive_ps.sh"
+    ;;
+  rotate-logs)
+    rotate_logs
+    ;;
+  doctor)
+    echo "[doctor] termux-info:"; termux-info || true
+    echo "[doctor] core binaries:"; { curl --version | head -n1; git --version; jq --version; tmux -V; python -V; node -v; } 2>/dev/null || true
+    ;;
+  health)
+    m="$(read_mode)"; s="$(active_socks)"
+    echo "[health] mode=${m} socks=${s}"
+    if [[ "$m" == "off" ]]; then
+      echo "[health] NET: DISABLED (mode=off)"
+      "$HIVE_BIN/hive_services.sh" status || true
+      exit 0
+    fi
+    "$HIVE_BIN/hive_net.sh" status >/dev/null || true
+    echo "[health] Services…"
+    if "$HIVE_BIN/hive_services.sh" health; then
+      echo "[health] ALL GREEN"
+      exit 0
+    else
+      echo "[health] ISSUES DETECTED (see lines above)"
+      exit 1
+    fi
+    ;;
+  speak)
+    cat "${HIVE_ESCAPE_FILE:-$HIVE_ETC/escape.txt}"
+    ;;
+  net)
+    shift; exec "$HIVE_BIN/hive_net.sh" "${@:-status}"
+    ;;
+  services)
+    shift; exec "$HIVE_BIN/hive_services.sh" "${@:-status}"
+    ;;
+  audit)
+    out="$HIVE_LOG/audit-$(date +%Y%m%d-%H%M%S).txt"
+    # Propagate final health status as audit exit code
+    (
+      set -Eeuo pipefail
+      echo "===== HIVE FULL SYSTEM AUDIT ====="
+      command -v hive && hive doctor && hive speak
+      echo "===== START / STATUS ====="
+      hive start; hive status
+      echo "===== NETWORK STATUS (ORBOT) ====="
+      hive net status; hive net orbot; sleep 3; hive net test
+      echo "===== PROCESSES & LOGS ====="
+      ( hive ps 2>/dev/null || true ); hive status
+      tail -n 80 "$HIVE_LOG/supervisor.log" 2>/dev/null || echo "No supervisor.log yet"
+      tail -n 80 "$HIVE_LOG/watchdog.log"   2>/dev/null || echo "No watchdog.log yet"
+      echo "===== SERVICES LAYER ====="
+      hive services list
+      hive services status
+      hive services health || true
+      ( hive services describe mini-ai 2>/dev/null || echo "mini-ai not defined" )
+      hive services ensure
+      hive services status
+      echo "===== FAIL-CLOSED TEST ====="
+      hive net off; sleep 4; hive services status
+      hive net orbot; sleep 4; hive services status
+      # Final health decides audit exit:
+      hive health
+      exit $?
+    ) | tee "$out"
+    rc=${PIPESTATUS[0]}
+    echo "[audit] saved -> $out"
+    exit "$rc"
+    ;;
+  *)
+    usage; exit 64 ;;
+esac
