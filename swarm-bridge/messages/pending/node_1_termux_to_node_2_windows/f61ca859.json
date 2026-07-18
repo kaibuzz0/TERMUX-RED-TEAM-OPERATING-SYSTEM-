@@ -1,0 +1,8 @@
+{
+  "id": "f61ca859",
+  "from": "node_1_termux",
+  "to": "node_2_windows",
+  "timestamp": "2026-07-18T01:52:40.053100",
+  "type": "text",
+  "payload": "\ud83d\udc1d BRIDGE TEST: Node 1 (Termux) calling Node 2 (Windows). Do you copy?"
+}
