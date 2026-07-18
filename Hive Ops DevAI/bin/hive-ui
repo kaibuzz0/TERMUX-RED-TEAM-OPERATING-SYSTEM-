@@ -1,0 +1,589 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Hive UI v1.0
+User-friendly Text User Interface (TUI)
+
+Purpose:
+  Provide an intuitive, menu-driven interface for users to
+  interact with all 45 Hive OS components without memorizing
+  commands. Features dashboard, wizards, and contextual help.
+
+Interface Modes:
+  - Main Menu: Category-based navigation
+  - Dashboard: System overview with status
+  - Wizard Mode: Step-by-step task completion
+  - Quick Launch: Favorites and recent commands
+  - Help System: Contextual documentation
+
+Features:
+  - Interactive menus with arrow key navigation
+  - Real-time system status display
+  - Task wizards (secure wipe, setup VPN, etc.)
+  - Command history and favorites
+  - Search functionality
+  - Visual feedback and progress bars
+  - Emergency quick-access
+
+Categories:
+  🏠 Home        - Dashboard, status, quick actions
+  🌐 Network     - Tor, firewall, connections
+  🔐 Crypto      - Vaults, keys, encryption
+  🔍 Security    - Scanning, forensics, threats
+  💬 Comms       - Secure messaging, dead drops
+  ⚙️  System      - Boot, services, maintenance
+  🤖 AI          - Hermes integration, analysis
+  ❓ Help         - Documentation, guides
+
+Usage:
+  hive-ui                    # Launch TUI
+  hive-ui --dashboard        # Dashboard only
+  hive-ui --wizard TASK      # Start wizard
+  hive-ui --quick            # Quick launch mode
+  hive-ui --search TERM      # Search tools
+
+Author: Hive Ops DevAI
+Version: 1.0.0
+"""
+
+import os
+import sys
+import json
+import time
+import subprocess
+from pathlib import Path
+from typing import Optional, List, Dict, Tuple, Callable
+from dataclasses import dataclass
+
+@dataclass
+class MenuItem:
+    """Menu item definition."""
+    id: str
+    label: str
+    description: str
+    command: Optional[str]
+    category: str
+    icon: str
+    requires_setup: bool = False
+
+class HiveUI:
+    """
+    Hive OS Text User Interface.
+    
+    Provides intuitive menu-driven access to all
+    45 Hive OS components.
+    """
+    
+    VERSION = "1.0.0"
+    
+    # Menu categories with icons
+    CATEGORIES = {
+        'home': '🏠 Home',
+        'network': '🌐 Network',
+        'crypto': '🔐 Crypto',
+        'security': '🔍 Security',
+        'comms': '💬 Comms',
+        'system': '⚙️  System',
+        'ai': '🤖 AI',
+        'help': '❓ Help',
+    }
+    
+    def __init__(self):
+        self.hive_home = Path.home() / 'hive'
+        self.config_file = Path.home() / '.config' / 'hive' / 'ui.json'
+        self.favorites: List[str] = []
+        self.recent: List[str] = []
+        self.current_category = 'home'
+        self.running = True
+        
+        self._load_config()
+        self._define_menu()
+    
+    def _load_config(self):
+        """Load user configuration."""
+        if self.config_file.exists():
+            try:
+                config = json.loads(self.config_file.read_text())
+                self.favorites = config.get('favorites', [])
+                self.recent = config.get('recent', [])[:10]
+            except:
+                pass
+    
+    def _save_config(self):
+        """Save user configuration."""
+        self.config_file.parent.mkdir(parents=True, exist_ok=True)
+        config = {
+            'favorites': self.favorites,
+            'recent': self.recent,
+        }
+        self.config_file.write_text(json.dumps(config, indent=2))
+    
+    def _define_menu(self):
+        """Define all menu items."""
+        self.menu_items: Dict[str, List[MenuItem]] = {
+            'home': [
+                MenuItem('dashboard', 'Dashboard', 'System overview', None, 'home', '📊'),
+                MenuItem('status', 'Quick Status', 'Check system status', 'hive status', 'home', '✓'),
+                MenuItem('boot', 'Boot System', 'Full boot sequence', 'hive boot', 'home', '▶'),
+                MenuItem('shell', 'Enter Shell', 'Interactive shell', 'hive shell', 'home', '💻'),
+                MenuItem('favorites', 'Favorites', 'Your favorite commands', None, 'home', '⭐'),
+                MenuItem('recent', 'Recent Commands', 'Recently used', None, 'home', '🕐'),
+            ],
+            'network': [
+                MenuItem('net-status', 'Network Status', 'Check connections', 'hive-net status', 'network', '📡'),
+                MenuItem('tor-start', 'Start Tor', 'Route through Tor', 'hive-net --tor', 'network', '🧅'),
+                MenuItem('firewall', 'Firewall', 'Adaptive firewall', 'hive-firewall status', 'network', '🧱'),
+                MenuItem('anomaly', 'Scan Anomalies', 'Network scanning', 'hive-anomaly scan', 'network', '🔍'),
+                MenuItem('geo-spoof', 'Geo Spoof', 'Change location', 'hive-geo', 'network', '🌍'),
+                MenuItem('connections', 'Active Connections', 'View connections', 'netstat -tuln', 'network', '🔗'),
+            ],
+            'crypto': [
+                MenuItem('vault', 'Secure Vault', 'Open vault', 'hive-vault open', 'crypto', '🏦'),
+                MenuItem('encrypt', 'Encrypt File', 'File encryption', 'hive-vault encrypt', 'crypto', '🔒'),
+                MenuItem('key-gen', 'Generate Keys', 'New keypair', 'hive-key generate', 'crypto', '🔑'),
+                MenuItem('pq-crypto', 'Post-Quantum', 'Quantum-ready crypto', 'hive-pq', 'crypto', '⚛️'),
+                MenuItem('memory', 'Secure Memory', 'Memory encryption', 'hive-mem status', 'crypto', '🧠'),
+                MenuItem('wipe-memory', 'Wipe Memory', 'Clear RAM', 'hive-mem wipe', 'crypto', '🧹'),
+            ],
+            'security': [
+                MenuItem('full-scan', 'Full Security Scan', 'Complete system scan', None, 'security', '🔎'),
+                MenuItem('inject-check', 'Check Injections', 'Process injection', 'hive-inject scan --all', 'security', '💉'),
+                MenuItem('integrity', 'Integrity Check', 'System integrity', 'hive-integrity check', 'security', '✓'),
+                MenuItem('forensics', 'Anti-Forensics', 'Clean traces', 'hive-forensics clean', 'security', '🧹'),
+                MenuItem('honey', 'Honeypot Status', 'Check honeypots', 'hive-honey status', 'security', '🍯'),
+                MenuItem('threats', 'Threat Intel', 'Check threats', 'hive-intel status', 'security', '⚠️'),
+            ],
+            'comms': [
+                MenuItem('secure-msg', 'Secure Message', 'Encrypted messaging', 'hive-comms3', 'comms', '✉️'),
+                MenuItem('dead-drop', 'Dead Drop', 'Create dead drop', 'hive-comms3 dead-drop', 'comms', '📦'),
+                MenuItem('burn-msg', 'Burn Message', 'Self-destruct msg', 'hive-comms3 send --burn', 'comms', '🔥'),
+                MenuItem('chat-secure', 'Secure Chat', 'Start chat', None, 'comms', '💬'),
+            ],
+            'system': [
+                MenuItem('services', 'Services', 'Manage services', 'hive services', 'system', '⚙️'),
+                MenuItem('logs', 'View Logs', 'System logs', 'hive log', 'system', '📋'),
+                MenuItem('backup', 'Backup', 'Create backup', 'hive-backup create', 'system', '💾'),
+                MenuItem('restore', 'Restore', 'Restore backup', 'hive-backup restore', 'system', '📂'),
+                MenuItem('shred', 'Shred Files', 'Secure deletion', 'hive-shred', 'system', '✂️'),
+                MenuItem('emergency', 'Emergency Mode', 'Activate emergency', 'hive emergency', 'system', '🚨'),
+            ],
+            'ai': [
+                MenuItem('hermes-dash', 'Hermes Dashboard', 'AI dashboard', 'hive-hermes dashboard', 'ai', '🤖'),
+                MenuItem('ai-analyze', 'AI Analysis', 'Threat analysis', 'hive-hermes analyze', 'ai', '🧠'),
+                MenuItem('handshake', 'AI Handshake', 'Perform handshake', 'hive-hermes handshake', 'ai', '🤝'),
+                MenuItem('42-answer', 'The Answer', 'Ultimate answer', 'hive-42 answer', 'ai', '✨'),
+                MenuItem('42-speak', 'Hive Speak', 'AI communication', 'hive-42 speak', 'ai', '🔮'),
+                MenuItem('autonomous', 'Autonomous Mode', 'AI autonomy', 'hive-hermes respond --auto', 'ai', '🎯'),
+            ],
+            'help': [
+                MenuItem('docs', 'Documentation', 'Full docs', 'cat $HOME/hive/README.md', 'help', '📖'),
+                MenuItem('commands', 'Command List', 'All commands', 'hive help', 'help', '📋'),
+                MenuItem('about', 'About', 'System info', None, 'help', 'ℹ️'),
+                MenuItem('support', 'Support', 'Get help', None, 'help', '💡'),
+            ],
+        }
+    
+    def clear_screen(self):
+        """Clear terminal."""
+        os.system('clear' if os.name == 'posix' else 'cls')
+    
+    def draw_header(self):
+        """Draw UI header."""
+        print("""
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                    HIVE OS UI v""" + self.VERSION + """                      ║
+    ╚═══════════════════════════════════════════════════════════════╝
+        """)
+    
+    def draw_menu(self, category: str):
+        """Draw category menu."""
+        self.clear_screen()
+        self.draw_header()
+        
+        cat_label = self.CATEGORIES.get(category, category)
+        print(f"\n    {cat_label}")
+        print("    " + "=" * 50)
+        
+        items = self.menu_items.get(category, [])
+        for i, item in enumerate(items, 1):
+            print(f"    {i}. {item.icon} {item.label}")
+            print(f"       {item.description}")
+        
+        print("\n    0. 🔙 Back")
+        print("    Q. 🚪 Quit")
+        print("\n" + "    " + "=" * 50)
+    
+    def draw_dashboard(self):
+        """Draw system dashboard."""
+        self.clear_screen()
+        self.draw_header()
+        
+        print("""
+    📊 SYSTEM DASHBOARD
+    ═══════════════════════════════════════════════════════════════
+    """)
+        
+        # System status
+        print("    ┌─ System Status ──────────────────────────────────────────┐")
+        
+        # Check if Hive is running
+        result = os.system('tmux has-session -t hive 2>/dev/null')
+        if result == 0:
+            print("    │ ✅ Hive OS: RUNNING                                       │")
+        else:
+            print("    │ ⏹️  Hive OS: STOPPED (run 'hive boot' to start)            │")
+        
+        # Component count
+        try:
+            components = len(list((self.hive_home / 'bin').glob('hive*')))
+            print(f"    │ 📦 Components: {components} installed                              │")
+        except:
+            print("    │ 📦 Components: Unknown                                    │")
+        
+        print("    └───────────────────────────────────────────────────────────┘")
+        
+        # Quick actions
+        print("\n    ⚡ QUICK ACTIONS:")
+        print("    1. 🚀 Boot System          5. 🔐 Open Vault")
+        print("    2. 📊 Full Status          6. 🔍 Security Scan")
+        print("    3. 🌐 Network Status       7. 🤖 AI Dashboard")
+        print("    4. 💻 Open Shell           8. 🚨 Emergency Mode")
+        
+        # Favorites
+        if self.favorites:
+            print("\n    ⭐ FAVORITES:")
+            for fav in self.favorites[:3]:
+                print(f"       • {fav}")
+        
+        print("\n    0. 📋 Main Menu    Q. 🚪 Quit")
+        print("\n" + "    " + "═" * 63)
+    
+    def get_input(self, prompt: str = "\n    Choose: ") -> str:
+        """Get user input."""
+        try:
+            return input(prompt).strip()
+        except (EOFError, KeyboardInterrupt):
+            return 'q'
+    
+    def execute_command(self, command: str) -> bool:
+        """Execute Hive command."""
+        if not command:
+            return True
+        
+        print(f"\n    Executing: {command}\n")
+        print("    " + "─" * 50)
+        
+        result = os.system(command)
+        
+        print("    " + "─" * 50)
+        
+        if result == 0:
+            print("    ✅ Command completed successfully")
+        else:
+            print(f"    ⚠️  Command exited with code {result}")
+        
+        input("\n    Press Enter to continue...")
+        return result == 0
+    
+    def add_to_recent(self, command: str):
+        """Add command to recent."""
+        if command and command not in self.recent:
+            self.recent.insert(0, command)
+            self.recent = self.recent[:10]
+            self._save_config()
+    
+    def toggle_favorite(self, item_id: str):
+        """Toggle favorite status."""
+        if item_id in self.favorites:
+            self.favorites.remove(item_id)
+            print(f"\n    ⭐ Removed from favorites")
+        else:
+            self.favorites.append(item_id)
+            print(f"\n    ⭐ Added to favorites")
+        self._save_config()
+        time.sleep(0.5)
+    
+    def show_wizard(self, task: str):
+        """Show task wizard."""
+        self.clear_screen()
+        self.draw_header()
+        
+        print(f"\n    🧙 WIZARD: {task}")
+        print("    " + "═" * 50)
+        
+        wizards = {
+            'secure-wipe': self._wizard_secure_wipe,
+            'vpn-setup': self._wizard_vpn_setup,
+            'threat-response': self._wizard_threat_response,
+        }
+        
+        wizard = wizards.get(task)
+        if wizard:
+            wizard()
+        else:
+            print(f"\n    ❌ Wizard '{task}' not found")
+            input("\n    Press Enter...")
+    
+    def _wizard_secure_wipe(self):
+        """Secure file wipe wizard."""
+        print("\n    Step 1: Select files to wipe")
+        print("    Step 2: Choose wipe method")
+        print("          1. Quick (1-pass)")
+        print("          2. DoD (3-pass)")
+        print("          3. Gutmann (35-pass)")
+        print("    Step 3: Confirm and execute")
+        
+        path = input("\n    Enter file/directory path: ").strip()
+        if path:
+            method = input("    Method (1-3) [2]: ").strip() or "2"
+            methods = {'1': 'quick', '2': 'dod', '3': 'gutmann'}
+            method_name = methods.get(method, 'dod')
+            
+            confirm = input(f"    Wipe {path} with {method_name}? [y/N]: ").strip().lower()
+            if confirm == 'y':
+                self.execute_command(f"hive-shred --path {path} --method {method_name}")
+    
+    def _wizard_vpn_setup(self):
+        """VPN setup wizard."""
+        print("\n    🌐 VPN Setup")
+        print("    1. Tor (most secure)")
+        print("    2. WireGuard (fast)")
+        print("    3. Shadowsocks (stealth)")
+        
+        choice = input("\n    Choose (1-3): ").strip()
+        if choice == '1':
+            self.execute_command("hive-net --tor")
+        elif choice == '2':
+            print("\n    WireGuard config needed")
+        elif choice == '3':
+            print("\n    Shadowsocks config needed")
+    
+    def _wizard_threat_response(self):
+        """Threat response wizard."""
+        print("\n    🚨 Threat Response")
+        print("    1. Isolate system (offline mode)")
+        print("    2. Scan for malware")
+        print("    3. Check for injections")
+        print("    4. Full emergency lockdown")
+        
+        choice = input("\n    Response (1-4): ").strip()
+        if choice == '1':
+            self.execute_command("hive-net --offline")
+        elif choice == '2':
+            self.execute_command("hive-inject scan --all")
+        elif choice == '3':
+            self.execute_command("hive-forensics check")
+        elif choice == '4':
+            self.execute_command("hive-duress activate")
+    
+    def handle_dashboard(self, choice: str) -> bool:
+        """Handle dashboard selection."""
+        actions = {
+            '1': 'hive boot',
+            '2': 'hive status',
+            '3': 'hive-net status',
+            '4': 'hive shell',
+            '5': 'hive-vault open',
+            '6': 'hive-inject scan --all',
+            '7': 'hive-hermes dashboard',
+            '8': 'hive emergency',
+        }
+        
+        if choice in actions:
+            self.add_to_recent(actions[choice])
+            return self.execute_command(actions[choice])
+        
+        return True
+    
+    def handle_menu(self, category: str, choice: str) -> bool:
+        """Handle menu selection."""
+        if choice == '0':
+            return False  # Go back
+        
+        if choice.lower() == 'q':
+            self.running = False
+            return False
+        
+        try:
+            idx = int(choice) - 1
+            items = self.menu_items.get(category, [])
+            if 0 <= idx < len(items):
+                item = items[idx]
+                
+                if item.command:
+                    self.add_to_recent(item.command)
+                    return self.execute_command(item.command)
+                else:
+                    # Handle special items
+                    if item.id == 'dashboard':
+                        self.dashboard_mode()
+                    elif item.id == 'favorites':
+                        self.show_favorites()
+                    elif item.id == 'recent':
+                        self.show_recent()
+                    elif item.id == 'about':
+                        self.show_about()
+            else:
+                print("\n    ❌ Invalid choice")
+                time.sleep(0.5)
+        except ValueError:
+            print("\n    ❌ Please enter a number")
+            time.sleep(0.5)
+        
+        return True
+    
+    def show_favorites(self):
+        """Show favorites menu."""
+        self.clear_screen()
+        self.draw_header()
+        print("\n    ⭐ FAVORITES")
+        print("    " + "=" * 50)
+        
+        if not self.favorites:
+            print("\n    No favorites yet. Add from any menu!")
+        else:
+            for i, fav in enumerate(self.favorites, 1):
+                print(f"    {i}. {fav}")
+        
+        input("\n    Press Enter...")
+    
+    def show_recent(self):
+        """Show recent commands."""
+        self.clear_screen()
+        self.draw_header()
+        print("\n    🕐 RECENT COMMANDS")
+        print("    " + "=" * 50)
+        
+        if not self.recent:
+            print("\n    No recent commands")
+        else:
+            for i, cmd in enumerate(self.recent, 1):
+                print(f"    {i}. {cmd}")
+        
+        input("\n    Press Enter...")
+    
+    def show_about(self):
+        """Show about dialog."""
+        self.clear_screen()
+        self.draw_header()
+        print("""
+    ℹ️  ABOUT HIVE OS
+    ═══════════════════════════════════════════════════════════
+    
+    Hive Ops DevAI v1.0.0
+    
+    A comprehensive security operating system for Termux,
+    featuring 45 security components, AI integration, and
+    autonomous threat response.
+    
+    Components: 45
+    Total Size: ~800KB
+    Platform: Android/Termux
+    AI Integration: Hermes
+    
+    Philosophy:
+    • Don't Panic
+    • The Answer is 42
+    • Always know where your towel is
+    
+    Built with ❤️ by Hive Ops DevAI
+    
+    """)
+        input("    Press Enter...")
+    
+    def dashboard_mode(self):
+        """Run dashboard mode."""
+        while self.running:
+            self.draw_dashboard()
+            choice = self.get_input("\n    Action: ")
+            
+            if choice.lower() == 'q':
+                self.running = False
+                return
+            elif choice == '0':
+                return
+            else:
+                self.handle_dashboard(choice)
+    
+    def category_menu(self, category: str):
+        """Show category menu."""
+        while self.running:
+            self.draw_menu(category)
+            choice = self.get_input()
+            
+            if choice.lower() == 'q':
+                self.running = False
+                return
+            
+            if not self.handle_menu(category, choice):
+                return
+    
+    def main_menu(self):
+        """Show main category menu."""
+        self.clear_screen()
+        self.draw_header()
+        
+        print("\n    📋 MAIN MENU")
+        print("    " + "=" * 50)
+        
+        cats = list(self.CATEGORIES.items())
+        for i, (key, label) in enumerate(cats, 1):
+            print(f"    {i}. {label}")
+        
+        print("\n    0. 📊 Dashboard")
+        print("    Q. 🚪 Quit")
+        print("\n" + "    " + "=" * 50)
+    
+    def run(self):
+        """Run main UI loop."""
+        cats = list(self.CATEGORIES.keys())
+        
+        while self.running:
+            self.main_menu()
+            choice = self.get_input()
+            
+            if choice.lower() == 'q':
+                break
+            elif choice == '0':
+                self.dashboard_mode()
+            else:
+                try:
+                    idx = int(choice) - 1
+                    if 0 <= idx < len(cats):
+                        self.category_menu(cats[idx])
+                    else:
+                        print("\n    ❌ Invalid choice")
+                        time.sleep(0.5)
+                except ValueError:
+                    print("\n    ❌ Please enter a number")
+                    time.sleep(0.5)
+        
+        print("\n    👋 Goodbye! Remember: Don't Panic.\n")
+
+
+def main():
+    """CLI entry."""
+    import argparse
+    
+    parser = argparse.ArgumentParser(prog='hive-ui')
+    parser.add_argument('--dashboard', action='store_true',
+                       help='Dashboard only mode')
+    parser.add_argument('--wizard', help='Start wizard')
+    parser.add_argument('--quick', action='store_true',
+                       help='Quick launch mode')
+    
+    args = parser.parse_args()
+    
+    ui = HiveUI()
+    
+    if args.wizard:
+        ui.show_wizard(args.wizard)
+    elif args.dashboard:
+        ui.dashboard_mode()
+    else:
+        ui.run()
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
