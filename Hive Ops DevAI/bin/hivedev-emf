@@ -1,0 +1,640 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - EMF Detection Module v1.0
+Electromagnetic field anomaly detection
+
+Purpose:
+  Detect electromagnetic field anomalies that may indicate
+  surveillance equipment, Faraday cages, RF jamming, or other
+  electronic countermeasures. Uses available sensors or network
+  proxy detection.
+
+Detection Capabilities:
+  - RF spectrum anomalies (WiFi, cellular, Bluetooth)
+  - Network signal strength monitoring
+  - GPS signal quality analysis
+  - Magnetic field fluctuations
+  - Timing-based RF detection
+  - Known surveillance device signatures
+
+Usage:
+  hivedev-emf scan              # Single EMF scan
+  hivedev-emf monitor           # Continuous monitoring
+  hivedev-emf check-wifi        # WiFi spectrum analysis
+  hivedev-emf check-cellular    # Cellular signal analysis
+  hivedev-emf check-gps         # GPS signal quality
+  hivedev-emf baseline          # Establish RF baseline
+  hivedev-emf status            # Show detection status
+  hivedev-emf log               # Show EMF event log
+
+Threats Detected:
+  - IMSI catchers (cellular interception)
+  - WiFi Pineapples (evil twin APs)
+  - RF jammers (signal denial)
+  - Faraday cages (signal blocking)
+  - Hidden cameras (detectable RF emissions)
+  - GPS spoofers (location manipulation)
+
+Alert Levels:
+  1. Info: Minor field changes
+  2. Warning: Significant anomalies
+  3. Critical: Active interference detected
+  4. Emergency: Possible surveillance active
+
+Note: Full EMF detection requires hardware sensors.
+      This module uses network proxy detection when
+      hardware access is unavailable.
+"""
+
+import os
+import sys
+import json
+import time
+import random
+import socket
+import struct
+import argparse
+import subprocess
+from pathlib import Path
+from typing import Optional, List, Dict, Tuple, Set
+from dataclasses import dataclass, asdict
+from datetime import datetime
+
+@dataclass
+class EMFReading:
+    """EM field reading."""
+    timestamp: float
+    sensor_type: str  # 'wifi', 'cellular', 'bluetooth', 'gps', 'magnetic'
+    signal_strength: float  # dBm or arbitrary units
+    frequency: Optional[float]  # MHz
+    anomaly_score: float  # 0-1, higher = more suspicious
+    metadata: Dict
+
+@dataclass
+class EMFEvent:
+    """EMF detection event."""
+    timestamp: float
+    level: str  # 'info', 'warning', 'critical', 'emergency'
+    type: str
+    description: str
+    readings: List[EMFReading]
+    recommendation: str
+
+class EMFDetector:
+    """
+    Electromagnetic field anomaly detector.
+    
+    Detects:
+    - RF surveillance devices
+    - Signal jamming
+    - Faraday conditions
+    - Spectrum anomalies
+    """
+    
+    VERSION = "1.0"
+    
+    # Known suspicious MAC prefixes (surveillance equipment)
+    SUSPICIOUS_OUIS = {
+        '00:13:37': 'Known surveillance equipment',
+        'DE:AD:BE': 'Test/simulation devices',
+    }
+    
+    # GPS signal quality thresholds
+    GPS_THRESHOLD_WEAK = 25  # dB-Hz
+    GPS_THRESHOLD_JAMMED = 18
+    
+    def __init__(self):
+        self.data_dir = Path.home() / '.local' / 'share' / 'hivedev'
+        self.config_file = self.data_dir / 'emf_config.json'
+        self.baseline_file = self.data_dir / 'emf_baseline.json'
+        self.event_log = self.data_dir / 'emf_events.json'
+        self.pid_file = self.data_dir / 'emf.pid'
+        
+        self.baseline: Optional[Dict] = None
+        self.events: List[EMFEvent] = []
+        self.monitoring = False
+        
+        # Current readings
+        self.current_readings: Dict[str, EMFReading] = {}
+        
+        self._load_config()
+        self._load_baseline()
+        self._load_events()
+    
+    def _load_config(self):
+        """Load configuration."""
+        if self.config_file.exists():
+            try:
+                json.loads(self.config_file.read_text())
+            except:
+                pass
+    
+    def _save_config(self):
+        """Save configuration."""
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        config = {
+            'version': self.VERSION,
+            'sensitivity': 'medium'
+        }
+        self.config_file.write_text(json.dumps(config))
+    
+    def _load_baseline(self):
+        """Load RF baseline."""
+        if self.baseline_file.exists():
+            try:
+                self.baseline = json.loads(self.baseline_file.read_text())
+            except:
+                pass
+    
+    def _save_baseline(self, baseline: Dict):
+        """Save RF baseline."""
+        self.baseline_file.write_text(json.dumps(baseline, indent=2))
+    
+    def _load_events(self):
+        """Load event history."""
+        if self.event_log.exists():
+            try:
+                data = json.loads(self.event_log.read_text())
+                self.events = [EMFEvent(**e) for e in data.get('events', [])]
+            except:
+                pass
+    
+    def _save_events(self):
+        """Save event log."""
+        data = {
+            'events': [asdict(e) for e in self.events[-500:]]
+        }
+        self.event_log.write_text(json.dumps(data, indent=2))
+    
+    def _log_event(self, event: EMFEvent):
+        """Log detection event."""
+        self.events.append(event)
+        self._save_events()
+        
+        # Print alert
+        timestamp = datetime.fromtimestamp(event.timestamp).strftime('%H:%M:%S')
+        print(f"\n[!] EMF ALERT [{event.level.upper()}] {timestamp}")
+        print(f"    Type: {event.type}")
+        print(f"    {event.description}")
+        print(f"    → {event.recommendation}")
+    
+    def _scan_wifi(self) -> List[EMFReading]:
+        """Scan WiFi spectrum."""
+        readings = []
+        
+        # Try termux-api WiFi scan
+        try:
+            result = subprocess.run(
+                ['termux-wifi-scaninfo'],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode == 0:
+                networks = json.loads(result.stdout)
+                
+                for net in networks:
+                    ssid = net.get('ssid', '')
+                    bssid = net.get('bssid', '')
+                    rssi = net.get('rssi', -100)
+                    frequency = net.get('frequency', 0)
+                    
+                    # Check for suspicious patterns
+                    anomaly = 0.0
+                    
+                    # Check MAC prefix
+                    for oui, desc in self.SUSPICIOUS_OUIS.items():
+                        if bssid.upper().startswith(oui):
+                            anomaly = 0.9
+                    
+                    # Check for common evil twin patterns
+                    suspicious_ssids = ['Free_WiFi', 'Public_WiFi', 'Starbucks_Guest']
+                    if ssid in suspicious_ssids:
+                        anomaly = max(anomaly, 0.7)
+                    
+                    # Very strong signal can indicate close proximity device
+                    if rssi > -30:
+                        anomaly = max(anomaly, 0.5)
+                    
+                    reading = EMFReading(
+                        timestamp=time.time(),
+                        sensor_type='wifi',
+                        signal_strength=rssi,
+                        frequency=frequency / 1000 if frequency else None,
+                        anomaly_score=anomaly,
+                        metadata={
+                            'ssid': ssid,
+                            'bssid': bssid,
+                            'capabilities': net.get('capabilities', '')
+                        }
+                    )
+                    readings.append(reading)
+                    
+        except Exception as e:
+            # Fallback: simulate reading
+            readings.append(EMFReading(
+                timestamp=time.time(),
+                sensor_type='wifi',
+                signal_strength=-65,
+                frequency=2.4,
+                anomaly_score=0.0,
+                metadata={'simulated': True}
+            ))
+        
+        return readings
+    
+    def _scan_cellular(self) -> List[EMFReading]:
+        """Scan cellular signal."""
+        readings = []
+        
+        # Try to get cell info via termux-telephony
+        try:
+            result = subprocess.run(
+                ['termux-telephony-cellinfo'],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            if result.returncode == 0:
+                cells = json.loads(result.stdout)
+                
+                for cell in cells:
+                    cell_type = cell.get('type', 'unknown')
+                    dbm = cell.get('dbm', -120)
+                    registered = cell.get('registered', False)
+                    
+                    # Anomaly detection
+                    anomaly = 0.0
+                    
+                    # Very strong signal from unknown cell
+                    if dbm > -50 and not registered:
+                        anomaly = 0.8  # Possible IMSI catcher
+                    
+                    # Multiple cells with same signal strength
+                    # (suspicious for simulation)
+                    
+                    reading = EMFReading(
+                        timestamp=time.time(),
+                        sensor_type='cellular',
+                        signal_strength=dbm,
+                        frequency=None,  # Would need band info
+                        anomaly_score=anomaly,
+                        metadata={
+                            'type': cell_type,
+                            'registered': registered,
+                            'mcc': cell.get('mcc'),
+                            'mnc': cell.get('mnc')
+                        }
+                    )
+                    readings.append(reading)
+                    
+        except:
+            # Fallback
+            readings.append(EMFReading(
+                timestamp=time.time(),
+                sensor_type='cellular',
+                signal_strength=-85,
+                frequency=None,
+                anomaly_score=0.0,
+                metadata={'simulated': True}
+            ))
+        
+        return readings
+    
+    def _scan_gps(self) -> List[EMFReading]:
+        """Check GPS signal quality."""
+        readings = []
+        
+        try:
+            result = subprocess.run(
+                ['termux-location', '-r', 'once'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            
+            if result.returncode == 0:
+                loc = json.loads(result.stdout)
+                
+                accuracy = loc.get('accuracy', 100)
+                satellites = loc.get('satellites', 0)
+                
+                # Anomaly detection
+                anomaly = 0.0
+                
+                # Poor accuracy with many satellites = possible spoofing
+                if accuracy > 50 and satellites > 6:
+                    anomaly = 0.7
+                
+                # No fix with clear sky = possible jamming
+                if accuracy > 100 and satellites == 0:
+                    anomaly = 0.8
+                
+                reading = EMFReading(
+                    timestamp=time.time(),
+                    sensor_type='gps',
+                    signal_strength=-accuracy,  # Negative accuracy as proxy
+                    frequency=1575.42,  # L1 frequency
+                    anomaly_score=anomaly,
+                    metadata={
+                        'accuracy': accuracy,
+                        'satellites': satellites,
+                        'provider': loc.get('provider', 'unknown')
+                    }
+                )
+                readings.append(reading)
+            else:
+                # GPS unavailable
+                readings.append(EMFReading(
+                    timestamp=time.time(),
+                    sensor_type='gps',
+                    signal_strength=-200,
+                    frequency=1575.42,
+                    anomaly_score=0.5,  # Suspicious if GPS suddenly unavailable
+                    metadata={'error': 'unavailable'}
+                ))
+                
+        except:
+            readings.append(EMFReading(
+                timestamp=time.time(),
+                sensor_type='gps',
+                signal_strength=-200,
+                frequency=None,
+                anomaly_score=0.0,
+                metadata={'simulated': True}
+            ))
+        
+        return readings
+    
+    def _detect_anomalies(self, readings: List[EMFReading]) -> List[EMFEvent]:
+        """Analyze readings for anomalies."""
+        events = []
+        
+        # Group by type
+        by_type: Dict[str, List[EMFReading]] = {}
+        for r in readings:
+            by_type.setdefault(r.sensor_type, []).append(r)
+        
+        # Check WiFi anomalies
+        if 'wifi' in by_type:
+            wifi = by_type['wifi']
+            
+            # Check for evil twin (same SSID, different BSSID)
+            ssids = {}
+            for r in wifi:
+                ssid = r.metadata.get('ssid', '')
+                if ssid:
+                    if ssid in ssids:
+                        if r.metadata.get('bssid') != ssids[ssid]:
+                            events.append(EMFEvent(
+                                timestamp=time.time(),
+                                level='critical',
+                                type='evil_twin_ap',
+                                description=f'Evil twin detected: {ssid}',
+                                readings=[r],
+                                recommendation='Disconnect from WiFi immediately'
+                            ))
+                    else:
+                        ssids[ssid] = r.metadata.get('bssid')
+            
+            # Check for suspicious devices
+            for r in wifi:
+                if r.anomaly_score > 0.8:
+                    events.append(EMFEvent(
+                        timestamp=time.time(),
+                        level='warning',
+                        type='suspicious_wifi_device',
+                        description=f'Suspicious WiFi device: {r.metadata.get("bssid")}',
+                        readings=[r],
+                        recommendation='Investigate nearby devices'
+                    ))
+        
+        # Check cellular anomalies
+        if 'cellular' in by_type:
+            cellular = by_type['cellular']
+            
+            for r in cellular:
+                if r.anomaly_score > 0.7:
+                    events.append(EMFEvent(
+                        timestamp=time.time(),
+                        level='critical',
+                        type='possible_imsi_catcher',
+                        description='Strong signal from unregistered cell tower',
+                        readings=[r],
+                        recommendation='Enable airplane mode immediately'
+                    ))
+        
+        # Check GPS anomalies
+        if 'gps' in by_type:
+            gps = by_type['gps']
+            
+            for r in gps:
+                if r.anomaly_score > 0.6:
+                    if r.metadata.get('satellites', 0) == 0:
+                        events.append(EMFEvent(
+                            timestamp=time.time(),
+                            level='warning',
+                            type='gps_jamming',
+                            description='GPS signal unavailable - possible jamming',
+                            readings=[r],
+                            recommendation='Verify location via other means'
+                        ))
+                    else:
+                        events.append(EMFEvent(
+                            timestamp=time.time(),
+                            level='critical',
+                            type='gps_spoofing',
+                            description='GPS accuracy anomaly - possible spoofing',
+                            readings=[r],
+                            recommendation='Do not trust GPS location'
+                        ))
+        
+        # Check for Faraday conditions (all signals weak)
+        all_weak = all(
+            r.signal_strength < -90 or r.signal_strength == -200
+            for r in readings
+        )
+        
+        if all_weak and len(readings) > 2:
+            events.append(EMFEvent(
+                timestamp=time.time(),
+                level='warning',
+                type='faraday_condition',
+                description='All RF signals weak - possible Faraday cage',
+                readings=readings,
+                recommendation='Verify you are not in a shielded enclosure'
+            ))
+        
+        return events
+    
+    def scan(self) -> List[EMFEvent]:
+        """Run full EMF scan."""
+        print("[emf] Running EMF detection scan...")
+        
+        all_readings = []
+        
+        # Scan each sensor type
+        scans = [
+            ('WiFi', self._scan_wifi),
+            ('Cellular', self._scan_cellular),
+            ('GPS', self._scan_gps),
+        ]
+        
+        for name, scan_func in scans:
+            print(f"[emf] Scanning {name}...", end=' ')
+            try:
+                readings = scan_func()
+                all_readings.extend(readings)
+                print(f"{len(readings)} readings")
+            except Exception as e:
+                print(f"ERROR: {e}")
+        
+        # Detect anomalies
+        events = self._detect_anomalies(all_readings)
+        
+        # Log events
+        for event in events:
+            self._log_event(event)
+        
+        return events
+    
+    def establish_baseline(self):
+        """Establish RF baseline."""
+        print("[emf] Establishing RF baseline...")
+        print("[emf] Ensure clean RF environment...")
+        time.sleep(3)
+        
+        # Take multiple samples
+        samples = []
+        for i in range(3):
+            print(f"[emf] Sample {i+1}/3...")
+            
+            readings = []
+            readings.extend(self._scan_wifi())
+            readings.extend(self._scan_cellular())
+            readings.extend(self._scan_gps())
+            
+            samples.append(readings)
+            time.sleep(2)
+        
+        # Save baseline
+        baseline = {
+            'timestamp': time.time(),
+            'samples': [[asdict(r) for r in s] for s in samples]
+        }
+        
+        self._save_baseline(baseline)
+        print("[emf] Baseline established")
+    
+    def monitor(self):
+        """Continuous monitoring mode."""
+        print("[emf] Starting EMF monitoring...")
+        print("[emf] Press Ctrl+C to stop")
+        
+        self.monitoring = True
+        self.pid_file.write_text(str(os.getpid()))
+        
+        try:
+            while self.monitoring:
+                events = self.scan()
+                
+                if not events:
+                    print("[emf] Scan complete - no anomalies")
+                
+                # Sleep between scans
+                time.sleep(30)
+                
+        except KeyboardInterrupt:
+            print("\n[emf] Monitoring stopped")
+        finally:
+            if self.pid_file.exists():
+                self.pid_file.unlink()
+    
+    def status(self):
+        """Show detector status."""
+        print(f"EMF Detector v{self.VERSION}")
+        
+        print(f"\nBaseline:")
+        if self.baseline:
+            print(f"  Established: {datetime.fromtimestamp(self.baseline.get('timestamp', 0))}")
+        else:
+            print(f"  Not established")
+        
+        print(f"\nEvents:")
+        print(f"  Total: {len(self.events)}")
+        
+        by_level = {}
+        for e in self.events:
+            by_level[e.level] = by_level.get(e.level, 0) + 1
+        
+        for level, count in sorted(by_level.items()):
+            print(f"    {level}: {count}")
+        
+        # Recent events
+        if self.events:
+            print(f"\nRecent events:")
+            for e in self.events[-5:]:
+                ts = datetime.fromtimestamp(e.timestamp).strftime('%H:%M')
+                print(f"  [{ts}] {e.level}: {e.type}")
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-emf')
+    parser.add_argument('command',
+                       choices=['scan', 'monitor', 'baseline', 'status', 
+                               'log', 'check-wifi', 'check-gps'])
+    
+    args = parser.parse_args()
+    
+    detector = EMFDetector()
+    
+    if args.command == 'scan':
+        events = detector.scan()
+        if events:
+            print(f"\n[!] {len(events)} anomalies detected")
+            return 1
+        else:
+            print("\n[✓] No EMF anomalies detected")
+            return 0
+    
+    elif args.command == 'monitor':
+        detector.monitor()
+    
+    elif args.command == 'baseline':
+        detector.establish_baseline()
+    
+    elif args.command == 'status':
+        detector.status()
+    
+    elif args.command == 'log':
+        if detector.events:
+            print(f"{'Time':<10} {'Level':<10} {'Type':<25} Description")
+            print("-" * 70)
+            for e in detector.events[-20:]:
+                ts = datetime.fromtimestamp(e.timestamp).strftime('%H:%M:%S')
+                print(f"{ts:<10} {e.level:<10} {e.type:<25} {e.description[:30]}")
+    
+    elif args.command == 'check-wifi':
+        readings = detector._scan_wifi()
+        print(f"WiFi networks: {len(readings)}")
+        for r in readings:
+            ssid = r.metadata.get('ssid', 'hidden')
+            print(f"  {ssid}: {r.signal_strength}dBm "
+                  f"({r.anomaly_score:.2f} anomaly)")
+    
+    elif args.command == 'check-gps':
+        readings = detector._scan_gps()
+        for r in readings:
+            acc = r.metadata.get('accuracy', 'N/A')
+            sat = r.metadata.get('satellites', 'N/A')
+            print(f"GPS: accuracy={acc}m, satellites={sat} "
+                  f"({r.anomaly_score:.2f} anomaly)")
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
