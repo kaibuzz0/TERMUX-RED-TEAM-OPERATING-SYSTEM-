@@ -1,0 +1,362 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Log Sanitizer v1.0
+Auto-clean logs with plausible deniability
+
+Features:
+  - Real-time log rotation (size-based)
+  - Secure deletion (overwrite before unlink)
+  - Plausible deniability: logs appear as normal termux activity
+  - Stealth mode: minimal footprint, no external deps
+  - Configurable retention policies
+  - History sanitization (bash/zsh)
+
+Modes:
+  - normal: Rotate logs, keep recent
+  - paranoid: Aggressive cleaning, short retention
+  - stealth: No logs written, history disabled
+
+Usage:
+  hivedev-log init              # Setup log directory
+  hivedev-log status            # Show log status
+  hivedev-log rotate            # Manual rotation
+  hivedev-log clean             # Secure deletion of old logs
+  hivedev-log sanitize-history  # Clean shell history
+  hivedev-log --mode stealth    # Enable stealth (no logs)
+"""
+
+import os
+import sys
+import time
+import glob
+import argparse
+import hashlib
+from pathlib import Path
+from typing import List, Optional, Dict
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+
+# Plausible log patterns (mimic normal termux activity)
+PLAUSIBLE_PATTERNS = [
+    "pkg install",
+    "apt update",
+    "pip install",
+    "git clone",
+    "cd ~",
+    "ls -la",
+    "python3",
+    "nano ",
+    "cat ",
+    "curl -O",
+    "wget ",
+    "tar -xzf",
+    "chmod +x",
+    "exit",
+]
+
+@dataclass
+class LogPolicy:
+    """Log retention policy."""
+    max_size: int = 1024 * 1024  # 1MB per file
+    max_age_days: int = 7
+    max_files: int = 5
+    secure_wipe: bool = True
+    overwrite_passes: int = 3
+
+class LogSanitizer:
+    """Log management with plausible deniability."""
+    
+    VERSION = "1.0"
+    
+    def __init__(self, base_dir: Path = None):
+        self.base_dir = base_dir or Path.home() / '.local' / 'share' / 'hivedev' / 'logs'
+        self.state_file = self.base_dir / '.sanitizer_state'
+        self.policy = LogPolicy()
+        self.mode = 'normal'
+        
+        self.base_dir.mkdir(parents=True, exist_ok=True)
+        self._load_state()
+    
+    def _load_state(self):
+        """Load sanitizer state."""
+        if self.state_file.exists():
+            try:
+                with open(self.state_file) as f:
+                    data = eval(f.read())  # Safe: only read our own file
+                    self.mode = data.get('mode', 'normal')
+                    self.policy.max_age_days = data.get('max_age', 7)
+            except:
+                pass
+    
+    def _save_state(self):
+        """Save sanitizer state."""
+        state = {
+            'mode': self.mode,
+            'max_age': self.policy.max_age_days,
+            'last_check': time.time(),
+        }
+        with open(self.state_file, 'w') as f:
+            f.write(repr(state))
+    
+    def _secure_wipe(self, filepath: Path) -> bool:
+        """Securely overwrite file before deletion."""
+        if not filepath.exists():
+            return True
+        
+        try:
+            size = filepath.stat().st_size
+            if size == 0:
+                filepath.unlink()
+                return True
+            
+            # Overwrite with random data
+            with open(filepath, 'r+b') as f:
+                for _ in range(self.policy.overwrite_passes):
+                    f.seek(0)
+                    f.write(os.urandom(size))
+                    f.flush()
+                    os.fsync(f.fileno())
+            
+            # Rename to random before delete (obfuscate original name)
+            random_name = hashlib.sha256(os.urandom(32)).hexdigest()[:16]
+            temp_path = filepath.parent / random_name
+            filepath.rename(temp_path)
+            temp_path.unlink()
+            
+            return True
+        except Exception as e:
+            print(f"[log] Wipe error: {e}")
+            return False
+    
+    def _generate_plausible_entry(self) -> str:
+        """Generate plausible log entry."""
+        import random
+        pattern = random.choice(PLAUSIBLE_PATTERNS)
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        return f"[{timestamp}] {pattern}\n"
+    
+    def write(self, message: str, source: str = 'hivedev'):
+        """Write log entry with plausible deniability."""
+        if self.mode == 'stealth':
+            return  # No logging in stealth mode
+        
+        log_file = self.base_dir / f'{source}.log'
+        
+        try:
+            # Check rotation
+            if log_file.exists() and log_file.stat().st_size > self.policy.max_size:
+                self.rotate()
+            
+            # Write with plausible prefix if needed
+            with open(log_file, 'a') as f:
+                if self.mode == 'paranoid':
+                    # Mix real entries with plausible noise
+                    if hash(message) % 3 == 0:  # 1/3 noise
+                        f.write(self._generate_plausible_entry())
+                
+                timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                f.write(f"[{timestamp}] {message}\n")
+        
+        except Exception as e:
+            pass  # Silent fail in stealth
+    
+    def rotate(self):
+        """Rotate logs - archive current, start fresh."""
+        for log_file in self.base_dir.glob('*.log'):
+            if log_file.stat().st_size == 0:
+                continue
+            
+            # Archive with timestamp
+            timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+            archive = self.base_dir / f"{log_file.stem}.{timestamp}.log"
+            
+            try:
+                log_file.rename(archive)
+            except:
+                pass
+        
+        # Clean old archives
+        self.clean()
+    
+    def clean(self):
+        """Securely delete old logs."""
+        cutoff = datetime.now() - timedelta(days=self.policy.max_age_days)
+        
+        for log_file in self.base_dir.glob('*.log.*'):
+            try:
+                mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                if mtime < cutoff:
+                    if self.policy.secure_wipe:
+                        self._secure_wipe(log_file)
+                    else:
+                        log_file.unlink()
+            except:
+                pass
+        
+        # Keep only max_files recent archives per log type
+        archives = {}
+        for log_file in sorted(self.base_dir.glob('*.log.*'), reverse=True):
+            stem = log_file.stem
+            if stem not in archives:
+                archives[stem] = []
+            archives[stem].append(log_file)
+        
+        for stem, files in archives.items():
+            for old_file in files[self.policy.max_files:]:
+                if self.policy.secure_wipe:
+                    self._secure_wipe(old_file)
+                else:
+                    try:
+                        old_file.unlink()
+                    except:
+                        pass
+    
+    def sanitize_history(self):
+        """Clean shell history of Hive references."""
+        history_files = [
+            Path.home() / '.bash_history',
+            Path.home() / '.zsh_history',
+            Path.home() / '.python_history',
+        ]
+        
+        hive_patterns = ['hivedev', 'hive-net', 'hive-vault', 'Hive Ops']
+        
+        for hist_file in history_files:
+            if not hist_file.exists():
+                continue
+            
+            try:
+                lines = hist_file.read_text().split('\n')
+                cleaned = []
+                
+                for line in lines:
+                    # Remove Hive-specific entries
+                    if not any(p.lower() in line.lower() for p in hive_patterns):
+                        cleaned.append(line)
+                    else:
+                        # Replace with plausible entry
+                        cleaned.append(self._generate_plausible_entry().strip())
+                
+                # Write back
+                new_content = '\n'.join(cleaned)
+                
+                # Secure overwrite
+                if self.policy.secure_wipe:
+                    with open(hist_file, 'r+b') as f:
+                        f.write(os.urandom(hist_file.stat().st_size))
+                
+                hist_file.write_text(new_content)
+                
+            except Exception as e:
+                print(f"[log] History error: {e}")
+    
+    def set_mode(self, mode: str):
+        """Set sanitization mode."""
+        if mode not in ['normal', 'paranoid', 'stealth']:
+            print(f"[log] Invalid mode: {mode}")
+            return False
+        
+        self.mode = mode
+        
+        if mode == 'paranoid':
+            self.policy.max_age_days = 1
+            self.policy.secure_wipe = True
+            self.policy.overwrite_passes = 7
+        elif mode == 'stealth':
+            self.policy.max_age_days = 0
+            self.policy.secure_wipe = True
+            # Immediately clean existing logs
+            self.clean()
+        
+        self._save_state()
+        print(f"[log] Mode set to: {mode}")
+        return True
+    
+    def status(self):
+        """Show log status."""
+        print(f"Log Sanitizer v{self.VERSION}")
+        print(f"Mode: {self.mode}")
+        print(f"Directory: {self.base_dir}")
+        
+        if self.base_dir.exists():
+            logs = list(self.base_dir.glob('*.log'))
+            archives = list(self.base_dir.glob('*.log.*'))
+            total_size = sum(f.stat().st_size for f in logs + archives if f.exists())
+            
+            print(f"Active logs: {len(logs)}")
+            print(f"Archives: {len(archives)}")
+            print(f"Total size: {total_size} bytes")
+            print(f"Retention: {self.policy.max_age_days} days")
+            print(f"Secure wipe: {'Yes' if self.policy.secure_wipe else 'No'}")
+        else:
+            print("Log directory: Not initialized")
+    
+    def run_daemon(self):
+        """Run as background daemon (auto-rotate/clean)."""
+        import signal
+        
+        def handler(signum, frame):
+            print("[log] Daemon stopping")
+            sys.exit(0)
+        
+        signal.signal(signal.SIGTERM, handler)
+        signal.signal(signal.SIGINT, handler)
+        
+        print(f"[log] Daemon started (mode: {self.mode})")
+        
+        while True:
+            time.sleep(3600)  # Check every hour
+            self.rotate()
+            self.sanitize_history()
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-log', description='Log Sanitizer')
+    parser.add_argument('command', 
+                       choices=['init', 'status', 'rotate', 'clean', 'sanitize-history', 
+                               'write', 'daemon'])
+    parser.add_argument('--message', '-m', help='Message to write')
+    parser.add_argument('--mode', choices=['normal', 'paranoid', 'stealth'],
+                       help='Set sanitization mode')
+    
+    args = parser.parse_args()
+    
+    sanitizer = LogSanitizer()
+    
+    if args.mode:
+        return 0 if sanitizer.set_mode(args.mode) else 1
+    
+    if args.command == 'init':
+        sanitizer.base_dir.mkdir(parents=True, exist_ok=True)
+        print("[log] Initialized")
+    
+    elif args.command == 'status':
+        sanitizer.status()
+    
+    elif args.command == 'rotate':
+        sanitizer.rotate()
+        print("[log] Rotated")
+    
+    elif args.command == 'clean':
+        sanitizer.clean()
+        print("[log] Cleaned")
+    
+    elif args.command == 'sanitize-history':
+        sanitizer.sanitize_history()
+        print("[log] History sanitized")
+    
+    elif args.command == 'write':
+        if not args.message:
+            print("[log] ERROR: --message required")
+            return 1
+        sanitizer.write(args.message)
+    
+    elif args.command == 'daemon':
+        sanitizer.run_daemon()
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
