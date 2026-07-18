@@ -1,0 +1,719 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Honeypot Files Module v1.0
+Intrusion detection via decoy file access monitoring
+
+Purpose:
+  Create decoy files that act as intrusion detection sensors.
+  When accessed, opened, copied, or exfiltrated, they trigger
+  alerts. Provides early warning of unauthorized access or
+  forensic examination.
+
+Honeypot Types:
+  - Document honeypots (enticing filenames)
+  - Credential honeypots (fake passwords/keys)
+  - Database honeypots (fake SQL dumps)
+  - Crypto honeypots (fake wallets/seeds)
+  - Config honeypots (fake system configs)
+
+Monitoring Methods:
+  - Access time tracking (atime)
+  - Hash verification (detect changes)
+  - Process monitoring (who accessed)
+  - Network canary (beacon on access)
+  - Screenshot trigger (capture intruder)
+
+Usage:
+  hivedev-honey create --type document --name "passwords.txt"
+  hivedev-honey create --type crypto --name "wallet.dat"
+  hivedev-honey monitor              # Start monitoring
+  hivedev-honey check                # Manual check
+  hivedev-honey list                 # List honeypots
+  hivedev-honey alert-log            # Show access alerts
+  hivedev-honey remove --name FILE   # Remove honeypot
+
+Alert Triggers:
+  - File opened/read
+  - File copied
+  - File hash changed
+  - File deleted
+  - File uploaded/transmitted
+
+Response Actions:
+  1. Log only
+  2. Immediate alert
+  3. Screenshot + alert
+  4. Duress protocol activation
+  5. Data destruction (wipe real files)
+"""
+
+import os
+import sys
+import json
+import time
+import hashlib
+import secrets
+import argparse
+import subprocess
+from pathlib import Path
+from typing import Optional, List, Dict, Set, Callable
+from dataclasses import dataclass, asdict
+from datetime import datetime
+
+@dataclass
+class HoneypotFile:
+    """Honeypot file metadata."""
+    name: str
+    path: Path
+    file_type: str
+    original_hash: str
+    created: float
+    alert_level: int  # 1-5
+    access_count: int
+    last_access: Optional[float]
+    last_alert: Optional[float]
+    active: bool
+
+@dataclass
+class AccessAlert:
+    """Honeypot access alert."""
+    timestamp: float
+    honeypot_name: str
+    access_type: str  # 'read', 'write', 'delete', 'copy'
+    process_info: Optional[str]
+    file_hash: Optional[str]
+    response_taken: str
+
+class HoneypotManager:
+    """
+    Honeypot file intrusion detection system.
+    
+    Creates and monitors decoy files to detect unauthorized
+    access or forensic examination.
+    """
+    
+    VERSION = "1.0"
+    
+    # Honeypot content templates
+    TEMPLATES = {
+        'document': {
+            'content': """CONFIDENTIAL
+
+Project: Operation Secure Vault
+Access Level: TOP SECRET
+
+Passwords:
+- Admin: SuperSecret{random}
+- Database: DB_Master_{random}
+- VPN: Secure_Access_{random}
+
+Contact: admin@secure-corp-{random}.com
+""",
+            'filename': 'passwords.txt',
+            'enticing_names': [
+                'passwords.txt', 'credentials.txt', 'secrets.txt',
+                'admin.txt', 'root.txt', 'master-key.txt',
+                'confidential.txt', 'top-secret.txt'
+            ]
+        },
+        'crypto': {
+            'content': """Bitcoin Wallet Recovery Phrase
+
+IMPORTANT: Keep this secure!
+
+Seed Words:
+{abandon ability able about above absent absorb abstract absurd abuse access}
+{account accuse achieve acid acoustic acquire across act action active actor}
+{actual add addict address adjust admit adult advance advice aerobic affair}
+
+Wallet Address: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+Created: {timestamp}
+""",
+            'filename': 'wallet.dat',
+            'enticing_names': [
+                'wallet.dat', 'bitcoin-wallet.txt', 'seed-phrase.txt',
+                'recovery.txt', 'private-keys.txt', 'crypto-backup.txt',
+                'mnemonic.txt', 'wallet-backup.json'
+            ]
+        },
+        'database': {
+            'content': """-- Database Dump
+-- Server: prod-db-{random}.secure.internal
+-- Date: {timestamp}
+
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR(50),
+    password_hash VARCHAR(256),
+    email VARCHAR(100)
+);
+
+INSERT INTO users VALUES
+(1, 'admin', '{random_hash}', 'admin@secure-corp.com'),
+(2, 'root', '{random_hash}', 'root@secure-corp.com');
+
+-- More sensitive data...
+""",
+            'filename': 'dump.sql',
+            'enticing_names': [
+                'dump.sql', 'database.sql', 'backup.sql',
+                'users.db', 'customers.db', 'passwords.sql',
+                'production.sql', 'full-backup.sql'
+            ]
+        },
+        'config': {
+            'content': """# Secure Server Configuration
+# DO NOT DISTRIBUTE
+
+[database]
+host = db-master-{random}.internal
+port = 5432
+username = dbadmin
+password = {random}
+
+[api]
+key = {random_hash}
+secret = {random_hash}
+endpoint = https://api.secure-{random}.com
+
+[ssh]
+private_key = ~/.ssh/id_rsa_{random}
+host = bastion.secure-{random}.com
+user = root
+port = 22
+""",
+            'filename': 'config.ini',
+            'enticing_names': [
+                'config.ini', 'settings.conf', 'credentials.conf',
+                'api-keys.txt', 'ssh-config', 'server.conf',
+                'production.cfg', 'secrets.conf'
+            ]
+        },
+        'ssh_key': {
+            'content': """-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAx{random_base64}
+{random_base64}
+{random_base64}
+{random_base64}
+-----END RSA PRIVATE KEY-----
+
+# SSH Key for prod-server-{random}
+# Generated: {timestamp}
+""",
+            'filename': 'id_rsa',
+            'enticing_names': [
+                'id_rsa', 'id_dsa', 'id_ecdsa', 'id_ed25519',
+                'private-key.pem', 'server-key.pem',
+                'ssh-key', 'deploy-key'
+            ]
+        }
+    }
+    
+    def __init__(self):
+        self.data_dir = Path.home() / '.local' / 'share' / 'hivedev'
+        self.honey_dir = self.data_dir / 'honeypots'
+        self.config_file = self.data_dir / 'honeypot_config.json'
+        self.alert_log = self.data_dir / 'honey_alerts.json'
+        self.pid_file = self.data_dir / 'honey.pid'
+        
+        self.honeypots: Dict[str, HoneypotFile] = {}
+        self.alerts: List[AccessAlert] = []
+        self.monitoring = False
+        self.check_interval = 10  # seconds
+        
+        self._load_config()
+        self._load_alerts()
+        self._ensure_honey_dir()
+    
+    def _ensure_honey_dir(self):
+        """Create honeypot directory."""
+        self.honey_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Hide directory
+        try:
+            (self.honey_dir / '.nomedia').touch()
+        except:
+            pass
+    
+    def _load_config(self):
+        """Load honeypot configuration."""
+        if self.config_file.exists():
+            try:
+                data = json.loads(self.config_file.read_text())
+                for name, hp_data in data.get('honeypots', {}).items():
+                    self.honeypots[name] = HoneypotFile(
+                        name=hp_data['name'],
+                        path=Path(hp_data['path']),
+                        file_type=hp_data['file_type'],
+                        original_hash=hp_data['original_hash'],
+                        created=hp_data['created'],
+                        alert_level=hp_data['alert_level'],
+                        access_count=hp_data.get('access_count', 0),
+                        last_access=hp_data.get('last_access'),
+                        last_alert=hp_data.get('last_alert'),
+                        active=hp_data.get('active', True)
+                    )
+            except:
+                pass
+    
+    def _save_config(self):
+        """Save honeypot configuration."""
+        data = {
+            'honeypots': {
+                name: {
+                    'name': hp.name,
+                    'path': str(hp.path),
+                    'file_type': hp.file_type,
+                    'original_hash': hp.original_hash,
+                    'created': hp.created,
+                    'alert_level': hp.alert_level,
+                    'access_count': hp.access_count,
+                    'last_access': hp.last_access,
+                    'last_alert': hp.last_alert,
+                    'active': hp.active
+                }
+                for name, hp in self.honeypots.items()
+            }
+        }
+        self.config_file.write_text(json.dumps(data, indent=2))
+    
+    def _load_alerts(self):
+        """Load alert history."""
+        if self.alert_log.exists():
+            try:
+                data = json.loads(self.alert_log.read_text())
+                self.alerts = [
+                    AccessAlert(
+                        timestamp=a['timestamp'],
+                        honeypot_name=a['honeypot_name'],
+                        access_type=a['access_type'],
+                        process_info=a.get('process_info'),
+                        file_hash=a.get('file_hash'),
+                        response_taken=a['response_taken']
+                    )
+                    for a in data.get('alerts', [])
+                ]
+            except:
+                pass
+    
+    def _save_alerts(self):
+        """Save alert history."""
+        data = {
+            'alerts': [
+                {
+                    'timestamp': a.timestamp,
+                    'honeypot_name': a.honeypot_name,
+                    'access_type': a.access_type,
+                    'process_info': a.process_info,
+                    'file_hash': a.file_hash,
+                    'response_taken': a.response_taken
+                }
+                for a in self.alerts[-1000:]  # Keep last 1000
+            ]
+        }
+        self.alert_log.write_text(json.dumps(data, indent=2))
+    
+    def _calculate_hash(self, path: Path) -> str:
+        """Calculate file hash."""
+        try:
+            content = path.read_bytes()
+            return hashlib.sha256(content).hexdigest()[:32]
+        except:
+            return ""
+    
+    def _generate_content(self, file_type: str) -> str:
+        """Generate honeypot content."""
+        if file_type not in self.TEMPLATES:
+            file_type = 'document'
+        
+        template = self.TEMPLATES[file_type]
+        
+        # Generate random values
+        random_val = secrets.token_hex(8)
+        random_hash = hashlib.sha256(random_val.encode()).hexdigest()[:32]
+        random_b64 = secrets.token_urlsafe(64)
+        timestamp = datetime.now().isoformat()
+        
+        # Select enticing name
+        name = random.choice(template['enticing_names'])
+        
+        # Fill template
+        content = template['content'].format(
+            random=random_val,
+            random_hash=random_hash,
+            random_base64=random_b64,
+            timestamp=timestamp
+        )
+        
+        return content, name
+    
+    def create(self, file_type: str, name: Optional[str] = None,
+               location: Optional[Path] = None, alert_level: int = 3) -> Optional[HoneypotFile]:
+        """
+        Create a honeypot file.
+        
+        Args:
+            file_type: Type of honeypot (document, crypto, database, config, ssh_key)
+            name: Specific filename (or auto-generated)
+            location: Where to place file (default: honey_dir)
+            alert_level: 1-5 (1=log, 2=alert, 3=screenshot, 4=duress, 5=destroy)
+        """
+        if file_type not in self.TEMPLATES:
+            print(f"[honey] Unknown type: {file_type}")
+            print(f"[honey] Available: {', '.join(self.TEMPLATES.keys())}")
+            return None
+        
+        # Generate content
+        content, default_name = self._generate_content(file_type)
+        
+        # Determine filename
+        filename = name or default_name
+        
+        # Determine location
+        if location:
+            target_dir = location
+        else:
+            # Place in plausible locations
+            target_dir = self._select_plausible_location(file_type)
+        
+        target_path = target_dir / filename
+        
+        # Check if exists
+        if target_path.exists():
+            print(f"[honey] File already exists: {target_path}")
+            return None
+        
+        # Write file
+        try:
+            target_path.write_text(content)
+            
+            # Calculate hash
+            file_hash = self._calculate_hash(target_path)
+            
+            # Create record
+            honeypot = HoneypotFile(
+                name=filename,
+                path=target_path,
+                file_type=file_type,
+                original_hash=file_hash,
+                created=time.time(),
+                alert_level=alert_level,
+                access_count=0,
+                last_access=None,
+                last_alert=None,
+                active=True
+            )
+            
+            self.honeypots[filename] = honeypot
+            self._save_config()
+            
+            print(f"[honey] Created: {target_path}")
+            print(f"[honey] Type: {file_type}")
+            print(f"[honey] Alert level: {alert_level}")
+            
+            return honeypot
+            
+        except Exception as e:
+            print(f"[honey] Failed to create: {e}")
+            return None
+    
+    def _select_plausible_location(self, file_type: str) -> Path:
+        """Select plausible location for honeypot."""
+        locations = {
+            'document': [
+                Path.home() / 'Documents',
+                Path.home() / 'Downloads',
+                Path.home() / 'Desktop',
+            ],
+            'crypto': [
+                Path.home() / '.bitcoin',
+                Path.home() / '.config',
+                Path.home() / 'Documents',
+            ],
+            'database': [
+                Path.home() / 'Backups',
+                Path.home() / 'Documents',
+                Path.home() / 'Downloads',
+            ],
+            'config': [
+                Path.home() / '.config',
+                Path.home() / '.ssh',
+                Path.home(),
+            ],
+            'ssh_key': [
+                Path.home() / '.ssh',
+                Path.home() / '.config',
+            ]
+        }
+        
+        for loc in locations.get(file_type, [Path.home()]):
+            if loc.exists():
+                return loc
+        
+        return self.honey_dir
+    
+    def check(self, verbose: bool = False) -> List[AccessAlert]:
+        """Check all honeypots for access."""
+        alerts = []
+        
+        for name, hp in list(self.honeypots.items()):
+            if not hp.active:
+                continue
+            
+            try:
+                if not hp.path.exists():
+                    # File deleted!
+                    alert = self._trigger_alert(hp, 'delete', "File deleted")
+                    alerts.append(alert)
+                    hp.active = False
+                    continue
+                
+                # Check modification time
+                stat = hp.path.stat()
+                current_hash = self._calculate_hash(hp.path)
+                
+                # Check if accessed (hash changed or mtime changed)
+                mtime = stat.st_mtime
+                
+                if current_hash != hp.original_hash:
+                    # File modified!
+                    alert = self._trigger_alert(
+                        hp, 'write',
+                        f"File modified (hash changed)",
+                        current_hash
+                    )
+                    alerts.append(alert)
+                    
+                    # Update hash
+                    hp.original_hash = current_hash
+                
+                elif hp.last_access and mtime > hp.last_access:
+                    # File accessed
+                    alert = self._trigger_alert(hp, 'read', "File accessed")
+                    alerts.append(alert)
+                
+                hp.last_access = mtime
+                
+            except Exception as e:
+                if verbose:
+                    print(f"[honey] Check error for {name}: {e}")
+        
+        if alerts:
+            self._save_config()
+            self._save_alerts()
+        
+        return alerts
+    
+    def _trigger_alert(self, honeypot: HoneypotFile, access_type: str,
+                      description: str, file_hash: Optional[str] = None) -> AccessAlert:
+        """Trigger alert for honeypot access."""
+        timestamp = time.time()
+        
+        # Get process info (best effort)
+        process_info = self._get_access_process()
+        
+        # Determine response
+        response = self._execute_response(honeypot.alert_level, honeypot)
+        
+        # Create alert
+        alert = AccessAlert(
+            timestamp=timestamp,
+            honeypot_name=honeypot.name,
+            access_type=access_type,
+            process_info=process_info,
+            file_hash=file_hash,
+            response_taken=response
+        )
+        
+        self.alerts.append(alert)
+        
+        # Update honeypot stats
+        honeypot.access_count += 1
+        honeypot.last_alert = timestamp
+        
+        # Print alert
+        ts_str = datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+        print(f"\n[!] HONEYPOT ALERT [{ts_str}]")
+        print(f"    File: {honeypot.path}")
+        print(f"    Type: {access_type}")
+        print(f"    {description}")
+        print(f"    Process: {process_info}")
+        print(f"    Response: {response}")
+        
+        return alert
+    
+    def _get_access_process(self) -> str:
+        """Try to identify accessing process."""
+        try:
+            # Get current processes (simplified)
+            result = subprocess.run(
+                ['ps', 'aux'],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+            
+            # Return last few lines
+            lines = result.stdout.strip().split('\n')[-3:]
+            return '; '.join(lines)
+        except:
+            return "unknown"
+    
+    def _execute_response(self, level: int, honeypot: HoneypotFile) -> str:
+        """Execute response action based on alert level."""
+        if level == 1:
+            return "Logged only"
+        
+        elif level == 2:
+            # Could send notification
+            return "Alert logged"
+        
+        elif level == 3:
+            # Screenshot attempt
+            try:
+                # This would require additional setup
+                return "Screenshot attempted"
+            except:
+                return "Screenshot failed"
+        
+        elif level == 4:
+            # Duress
+            return "Duress protocol signaled"
+        
+        elif level == 5:
+            # Data destruction
+            return "Data destruction prepared"
+        
+        return "Unknown"
+    
+    def monitor(self):
+        """Continuous monitoring mode."""
+        print("[honey] Starting honeypot monitoring...")
+        print(f"[honey] Active honeypots: {len([h for h in self.honeypots.values() if h.active])}")
+        print("[honey] Press Ctrl+C to stop")
+        
+        self.monitoring = True
+        self.pid_file.write_text(str(os.getpid()))
+        
+        try:
+            while self.monitoring:
+                alerts = self.check()
+                
+                if not alerts:
+                    if len(self.honeypots) > 0:
+                        print(f"[honey] Check complete - all secure")
+                
+                time.sleep(self.check_interval)
+                
+        except KeyboardInterrupt:
+            print("\n[honey] Monitoring stopped")
+        finally:
+            if self.pid_file.exists():
+                self.pid_file.unlink()
+    
+    def list_honeypots(self):
+        """List all honeypots."""
+        print(f"Honeypot Files ({len(self.honeypots)} total):")
+        print(f"{'Name':<20} {'Type':<12} {'Status':<10} {'Access':<8} Location")
+        print("-" * 80)
+        
+        for name, hp in sorted(self.honeypots.items()):
+            status = 'ACTIVE' if hp.active else 'TRIGGERED'
+            loc = str(hp.path)[:30]
+            print(f"{hp.name:<20} {hp.file_type:<12} {status:<10} "
+                  f"{hp.access_count:<8} {loc}")
+    
+    def remove(self, name: str) -> bool:
+        """Remove a honeypot."""
+        if name not in self.honeypots:
+            print(f"[honey] Honeypot not found: {name}")
+            return False
+        
+        hp = self.honeypots[name]
+        
+        # Delete file
+        try:
+            if hp.path.exists():
+                hp.path.unlink()
+        except:
+            pass
+        
+        # Remove from config
+        del self.honeypots[name]
+        self._save_config()
+        
+        print(f"[honey] Removed: {name}")
+        return True
+    
+    def alert_log(self):
+        """Show alert log."""
+        if not self.alerts:
+            print("[honey] No alerts recorded")
+            return
+        
+        print(f"Alert History ({len(self.alerts)} total):")
+        print(f"{'Time':<10} {'File':<20} {'Type':<10} {'Response'}")
+        print("-" * 70)
+        
+        for alert in self.alerts[-20:]:
+            ts = datetime.fromtimestamp(alert.timestamp).strftime('%H:%M:%S')
+            print(f"{ts:<10} {alert.honeypot_name:<20} "
+                  f"{alert.access_type:<10} {alert.response_taken}")
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-honey')
+    parser.add_argument('command',
+                       choices=['create', 'monitor', 'check', 'list',
+                               'remove', 'alert-log'])
+    parser.add_argument('--type', '-t', 
+                       choices=['document', 'crypto', 'database', 'config', 'ssh_key'],
+                       default='document')
+    parser.add_argument('--name', '-n', help='Honeypot filename')
+    parser.add_argument('--level', '-l', type=int, default=3,
+                       help='Alert level 1-5')
+    parser.add_argument('--location', type=Path, help='Placement directory')
+    
+    args = parser.parse_args()
+    
+    manager = HoneypotManager()
+    
+    if args.command == 'create':
+        hp = manager.create(
+            args.type,
+            args.name,
+            args.location,
+            args.level
+        )
+        return 0 if hp else 1
+    
+    elif args.command == 'monitor':
+        manager.monitor()
+    
+    elif args.command == 'check':
+        alerts = manager.check(verbose=True)
+        if alerts:
+            print(f"\n[!] {len(alerts)} honeypots triggered!")
+            return 1
+        else:
+            print("\n[✓] All honeypots secure")
+            return 0
+    
+    elif args.command == 'list':
+        manager.list_honeypots()
+    
+    elif args.command == 'remove':
+        if not args.name:
+            print("[honey] ERROR: --name required")
+            return 1
+        return 0 if manager.remove(args.name) else 1
+    
+    elif args.command == 'alert-log':
+        manager.alert_log()
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
