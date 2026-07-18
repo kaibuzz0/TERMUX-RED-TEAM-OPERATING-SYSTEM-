@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS FINAL - Unified Dashboard
+TUI dashboard merging bash network layer + swarm status
+"""
+
+import os
+import sys
+import time
+import json
+import subprocess
+from pathlib import Path
+from datetime import datetime
+from typing import Dict, List, Optional
+
+HIVE_HOME = Path('/root/hive')
+HIVE_SWARM = Path('/root/hive-swarm')
+HIVE_FINAL = Path('/root/Hive Ops Final')
+
+class HiveDashboard:
+    """Unified dashboard for Hive Ops Final."""
+    
+    VERSION = "5.0"
+    
+    def __init__(self):
+        self.running = True
+        self.refresh_rate = 2.0
+    
+    def _run_cmd(self, cmd: List[str]) -> str:
+        """Run command and return output."""
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+            return result.stdout if result.returncode == 0 else result.stderr
+        except:
+            return ""
+    
+    def _check_socks(self, port: int = 9050) -> bool:
+        """Check SOCKS proxy."""
+        try:
+            result = subprocess.run(['nc', '-z', '127.0.0.1', str(port)], 
+                                   capture_output=True, timeout=1)
+            return result.returncode == 0
+        except:
+            return False
+    
+    def _get_mode(self) -> str:
+        """Get network mode."""
+        mode_file = HIVE_HOME / 'state' / 'net.mode'
+        if mode_file.exists():
+            return mode_file.read_text().strip() or 'orbot'
+        return 'orbot'
+    
+    def _get_services(self) -> List[Dict]:
+        """Get service status."""
+        services = []
+        # Try to get from bash script
+        result = self._run_cmd(['bash', str(HIVE_HOME / 'bin' / 'hive_services.sh'), 'list'])
+        for line in result.strip().split('\n'):
+            if line.strip():
+                services.append({'name': line.strip(), 'status': 'unknown'})
+        return services
+    
+    def _get_processes(self) -> List[Dict]:
+        """Get Hive processes."""
+        processes = []
+        result = self._run_cmd(['pgrep', '-a', '-f', 'hive'])
+        for line in result.strip().split('\n')[:5]:
+            if line.strip():
+                parts = line.split(maxsplit=1)
+                if len(parts) == 2:
+                    processes.append({'pid': parts[0], 'cmd': parts[1][:40]})
+        return processes
+    
+    def _get_system_stats(self) -> Dict:
+        """Get basic system stats."""
+        stats = {'cpu': 'N/A', 'mem': 'N/A', 'disk': 'N/A'}
+        
+        # CPU
+        try:
+            with open('/proc/loadavg') as f:
+                load = f.read().split()[0]
+                stats['cpu'] = f"{load}"
+        except:
+            pass
+        
+        # Memory
+        try:
+            with open('/proc/meminfo') as f:
+                lines = f.readlines()
+                total = int(lines[0].split()[1])
+                available = int(lines[2].split()[1])
+                used = total - available
+                stats['mem'] = f"{used//1024}MB / {total//1024}MB"
+        except:
+            pass
+        
+        # Disk
+        try:
+            result = subprocess.run(['df', '-h', '/'], capture_output=True, text=True)
+            lines = result.stdout.strip().split('\n')
+            if len(lines) > 1:
+                parts = lines[1].split()
+                stats['disk'] = f"{parts[2]} / {parts[1]} ({parts[4]})"
+        except:
+            pass
+        
+        return stats
+    
+    def _get_swarm_status(self) -> str:
+        """Get swarm status."""
+        registry = HIVE_SWARM / 'SWARM_REGISTRY.md'
+        if registry.exists():
+            return "[SWARM 🧠 ✓ ⚡ 🔧]"
+        return "[Swarm not active]"
+    
+    def clear_screen(self):
+        """Clear terminal."""
+        os.system('clear')
+    
+    def draw_banner(self):
+        """Draw header banner."""
+        now = datetime.now().strftime('%H:%M:%S')
+        print(f"╔{'═'*58}╗")
+        print(f"║{'HIVE OPS FINAL v5.0':^58}║")
+        print(f"║{now:>58}║")
+        print(f"╠{'═'*58}╣")
+    
+    def draw_network(self):
+        """Draw network status."""
+        mode = self._get_mode()
+        port = 9052 if mode == 'local' else 9050
+        socks_up = self._check_socks(port)
+        icon = "🟢" if socks_up else "🔴"
+        
+        print(f"║ NETWORK [{icon}]                                           ║")
+        print(f"║   Mode: {mode:<10} SOCKS: 127.0.0.1:{port:<5}         ║")
+        print(f"╠{'═'*58}╣")
+    
+    def draw_services(self):
+        """Draw services panel."""
+        print(f"║ SERVICES                                                ║")
+        services = self._get_services()
+        if services:
+            for svc in services[:4]:
+                print(f"║   • {svc['name']:<20} {svc['status']:<20}    ║")
+        else:
+            print(f"║   No services defined                                   ║")
+        print(f"╠{'═'*58}╣")
+    
+    def draw_processes(self):
+        """Draw process panel."""
+        print(f"║ PROCESSES                                               ║")
+        procs = self._get_processes()
+        if procs:
+            for proc in procs[:3]:
+                print(f"║   {proc['pid']>6} {proc['cmd']:<45} ║")
+        else:
+            print(f"║   No Hive processes running                             ║")
+        print(f"╠{'═'*58}╣")
+    
+    def draw_system(self):
+        """Draw system stats."""
+        print(f"║ SYSTEM                                                  ║")
+        stats = self._get_system_stats()
+        print(f"║   CPU Load: {stats['cpu']:<10} Mem: {stats['mem']:<20}    ║")
+        print(f"║   Disk: {stats['disk']:<45} ║")
+        print(f"╠{'═'*58}╣")
+    
+    def draw_swarm(self):
+        """Draw swarm status."""
+        print(f"║ SWARM                                                   ║")
+        status = self._get_swarm_status()
+        print(f"║   {status:<53} ║")
+        print(f"╚{'═'*58}╝")
+    
+    def draw_footer(self):
+        """Draw footer with keybinds."""
+        print(f"\n[q]uit [r]efresh [l]ogs [s]ervices")
+    
+    def render(self):
+        """Render full dashboard."""
+        self.clear_screen()
+        self.draw_banner()
+        self.draw_network()
+        self.draw_services()
+        self.draw_processes()
+        self.draw_system()
+        self.draw_swarm()
+        self.draw_footer()
+    
+    def run(self):
+        """Main dashboard loop."""
+        import select
+        import sys
+        
+        self.render()
+        
+        while self.running:
+            # Check for keypress (non-blocking)
+            try:
+                if select.select([sys.stdin], [], [], self.refresh_rate)[0]:
+                    key = sys.stdin.read(1)
+                    if key == 'q':
+                        self.running = False
+                    elif key == 'r':
+                        self.render()
+                    elif key == 'l':
+                        # Show logs
+                        self.clear_screen()
+                        subprocess.run(['tail', '-n', '30', str(HIVE_HOME / 'logs' / 'supervisor.log')])
+                        input("\nPress Enter...")
+                        self.render()
+                    elif key == 's':
+                        # Toggle service view
+                        self.render()
+            except:
+                pass
+            
+            # Auto-refresh
+            self.render()
+
+
+def main():
+    """Dashboard entry."""
+    dashboard = HiveDashboard()
+    dashboard.run()
+
+
+if __name__ == '__main__':
+    main()

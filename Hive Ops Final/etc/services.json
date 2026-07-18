@@ -1,0 +1,34 @@
+{
+  "services": {
+    "hive-daemon": {
+      "description": "Core Hive daemon",
+      "start": "python3 /root/Hive Ops Final/bin/hive start",
+      "stop": "python3 /root/Hive Ops Final/bin/hive stop",
+      "restart": "python3 /root/Hive Ops Final/bin/hive start",
+      "status": "python3 /root/Hive Ops Final/bin/hive status",
+      "log": "/root/hive/logs/supervisor.log",
+      "requires": ["tmux"],
+      "auto_start": true
+    },
+    "swarm-registry": {
+      "description": "Swarm state registry",
+      "start": "echo 'Registry active'",
+      "stop": "echo 'Registry passive'",
+      "status": "python3 /root/Hive Ops Final/lib/swarm_bridge.py status",
+      "log": "/root/hive/logs/swarm.log",
+      "requires": [],
+      "auto_start": false
+    },
+    "watchdog": {
+      "description": "System watchdog",
+      "start": "bash /root/hive/bin/hive_watchdog.sh",
+      "stop": "pkill -f hive_watchdog",
+      "status": "pgrep -f hive_watchdog > /dev/null && echo 'running' || echo 'stopped'",
+      "log": "/root/hive/logs/watchdog.log",
+      "requires": [],
+      "auto_start": true
+    }
+  },
+  "version": "5.0",
+  "schema": 1
+}
