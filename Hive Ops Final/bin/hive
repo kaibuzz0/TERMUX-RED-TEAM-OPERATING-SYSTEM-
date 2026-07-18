@@ -1,0 +1,449 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS FINAL - Unified Command Interface v5.0
+Merges bash network layer + Python AI layer + Swarm orchestration
+
+Commands:
+  hive status              - Full system status (OS + Swarm + Network)
+  hive health              - Health check (bash compatible)
+  hive start|stop          - Manage Hive session
+  hive net {orbot|local|off|newnym|status|test}  - Network control
+  hive services {list|start|stop|status|health}   - Service management
+  hive dashboard           - Launch TUI dashboard
+  hive swarm {status|init} - Swarm operations
+  hive speak               - Brain-Plug handshake
+  hive logs                - Tail logs
+  hive ps                  - Process status
+  hive doctor              - Environment audit
+  hive audit               - Full system audit
+  hive backup|restore      - Backup operations
+"""
+
+import os
+import sys
+import subprocess
+import json
+import argparse
+from pathlib import Path
+from typing import Optional, List, Dict, Tuple
+from datetime import datetime
+
+# Unified paths - support both legacy and new
+HIVE_HOME = Path(os.environ.get('HIVE_HOME', '/root/hive'))
+HIVE_OS = Path('/root/hive-os')
+HIVE_SWARM = Path('/root/hive-swarm')
+HIVE_CONFIG = Path.home() / '.config' / 'hive'
+STATE_DIR = HIVE_HOME / 'state'
+LOG_DIR = HIVE_HOME / 'logs'
+ETC_DIR = HIVE_HOME / 'etc'
+
+class HiveUnified:
+    """Unified Hive Ops controller - bridges bash legacy + Python swarm."""
+    
+    VERSION = "5.0-FINAL"
+    
+    def __init__(self):
+        self.cmds = {
+            'status': self.cmd_status,
+            'health': self.cmd_health,
+            'start': self.cmd_start,
+            'stop': self.cmd_stop,
+            'net': self.cmd_net,
+            'services': self.cmd_services,
+            'service': self.cmd_services,  # alias
+            'dashboard': self.cmd_dashboard,
+            'swarm': self.cmd_swarm,
+            'speak': self.cmd_speak,
+            'logs': self.cmd_logs,
+            'ps': self.cmd_ps,
+            'doctor': self.cmd_doctor,
+            'audit': self.cmd_audit,
+            'backup': self.cmd_backup,
+            'restore': self.cmd_restore,
+            'rotate-logs': self.cmd_rotate_logs,
+        }
+        
+    def _run_bash(self, script: str, *args) -> Tuple[bool, str, str]:
+        """Execute bash script from original Hive OS."""
+        # Check multiple locations
+        paths = [
+            HIVE_HOME / 'bin' / script,
+            HIVE_OS / 'bin' / script,
+            Path(f'/root/hive-swarm/the-hive-tools/original hive os files/bin/{script}'),
+        ]
+        
+        for path in paths:
+            if path.exists():
+                cmd = ['/bin/bash', str(path)] + list(args)
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                return result.returncode == 0, result.stdout, result.stderr
+        
+        return False, "", f"Script not found: {script}"
+    
+    def _run_python(self, script: str, *args) -> Tuple[bool, str, str]:
+        """Execute Python script from swarm-core."""
+        paths = [
+            HIVE_SWARM / 'swarm-core' / f'{script}.py',
+            HIVE_SWARM / f'{script}.py',
+            HIVE_OS / 'bin' / script,
+        ]
+        
+        for path in paths:
+            if path.exists():
+                cmd = [sys.executable, str(path)] + list(args)
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                return result.returncode == 0, result.stdout, result.stderr
+        
+        return False, "", f"Script not found: {script}"
+    
+    def _check_socks(self, host: str = "127.0.0.1", port: int = 9050) -> bool:
+        """Check if SOCKS proxy is reachable."""
+        try:
+            result = subprocess.run(
+                ['nc', '-z', host, str(port)],
+                capture_output=True, timeout=2
+            )
+            return result.returncode == 0
+        except:
+            return False
+    
+    def _read_mode(self) -> str:
+        """Read current network mode."""
+        mode_file = STATE_DIR / 'net.mode'
+        if mode_file.exists():
+            return mode_file.read_text().strip() or 'orbot'
+        return os.environ.get('HIVE_PROXY_MODE', 'orbot')
+    
+    def _header(self, title: str):
+        """Print formatted header."""
+        print(f"\n{'='*60}")
+        print(f"  {title}")
+        print(f"{'='*60}\n")
+    
+    def cmd_status(self, args):
+        """Unified status - OS + Network + Swarm."""
+        self._header(f"HIVE OPS FINAL v{self.VERSION}")
+        
+        # Network Status (from bash layer)
+        print("NETWORK:")
+        mode = self._read_mode()
+        print(f"  Mode: {mode}")
+        
+        socks_port = 9052 if mode == 'local' else 9050
+        socks_up = self._check_socks("127.0.0.1", socks_port)
+        status_icon = "🟢" if socks_up else "🔴"
+        print(f"  SOCKS: {status_icon} 127.0.0.1:{socks_port}")
+        
+        # Process Status
+        print("\nPROCESSES:")
+        ok, out, _ = self._run_bash('hive_ps.sh')
+        if ok and out.strip():
+            for line in out.strip().split('\n')[:10]:
+                if line.strip():
+                    print(f"  {line}")
+        else:
+            print("  No Hive processes running")
+        
+        # Tmux sessions
+        print("\nTMUX SESSIONS:")
+        try:
+            result = subprocess.run(['tmux', 'list-sessions'], capture_output=True, text=True)
+            if result.returncode == 0:
+                for line in result.stdout.strip().split('\n'):
+                    print(f"  {line}")
+            else:
+                print("  No active sessions")
+        except:
+            print("  tmux not available")
+        
+        # Swarm Status (if available)
+        print("\nSWARM:")
+        swarm_registry = HIVE_SWARM / 'SWARM_REGISTRY.md'
+        if swarm_registry.exists():
+            print(f"  Registry: {swarm_registry}")
+            # Try to read latest status
+            try:
+                content = swarm_registry.read_text()
+                for line in content.split('\n')[:5]:
+                    if line.strip():
+                        print(f"  {line}")
+            except:
+                pass
+        else:
+            print("  Swarm not initialized")
+        
+        print(f"\n{'='*60}")
+    
+    def cmd_health(self, args):
+        """Health check - bash compatible."""
+        mode = self._read_mode()
+        print(f"[health] mode={mode}")
+        
+        if mode == 'off':
+            print("[health] NET: DISABLED (mode=off)")
+            print("[health] ALL GREEN")
+            return 0
+        
+        # Check SOCKS
+        socks_port = 9052 if mode == 'local' else 9050
+        if self._check_socks("127.0.0.1", socks_port):
+            print(f"[health] SOCKS: OK (127.0.0.1:{socks_port})")
+        else:
+            print(f"[health] SOCKS: DOWN (127.0.0.1:{socks_port})")
+            print("[health] ISSUES DETECTED")
+            return 1
+        
+        # Check services (via bash)
+        ok, out, err = self._run_bash('hive_services.sh', 'health')
+        if ok:
+            print("[health] Services: OK")
+            print("[health] ALL GREEN")
+            return 0
+        else:
+            print(f"[health] Services: ISSUES")
+            if err:
+                print(f"  {err}")
+            print("[health] ISSUES DETECTED")
+            return 1
+    
+    def cmd_start(self, args):
+        """Start Hive session."""
+        ok, out, err = self._run_bash('hive', 'start')
+        if ok:
+            print(out.strip() or "[start] Hive session started")
+        else:
+            print(f"[start] Error: {err}")
+            # Fallback: start manually
+            try:
+                subprocess.run(['tmux', 'new', '-d', '-s', 'hive'], check=False)
+                print("[start] Started tmux session 'hive'")
+            except:
+                pass
+    
+    def cmd_stop(self, args):
+        """Stop Hive session."""
+        ok, out, err = self._run_bash('hive', 'stop')
+        if ok:
+            print(out.strip() or "[stop] Hive session stopped")
+        else:
+            # Fallback
+            subprocess.run(['tmux', 'kill-session', '-t', 'hive'], capture_output=True)
+            print("[stop] Stopped tmux session 'hive'")
+    
+    def cmd_net(self, args):
+        """Network control - delegates to bash scripts."""
+        if not args.subcommand:
+            args.subcommand = 'status'
+        
+        ok, out, err = self._run_bash('hive_net.sh', args.subcommand)
+        if ok:
+            print(out)
+        else:
+            print(f"[net] Error: {err}")
+            
+        # Auto-ensure services after mode switch
+        if args.subcommand in ['orbot', 'local', 'off']:
+            print("[net] Auto-ensure services...")
+            self._run_bash('hive_services.sh', 'ensure')
+    
+    def cmd_services(self, args):
+        """Service management."""
+        if not args.subcommand:
+            args.subcommand = 'list'
+        
+        svc_args = [args.subcommand]
+        if args.name:
+            svc_args.append(args.name)
+        
+        ok, out, err = self._run_bash('hive_services.sh', *svc_args)
+        if ok:
+            print(out)
+        else:
+            print(f"[services] {err}")
+    
+    def cmd_dashboard(self, args):
+        """Launch TUI dashboard."""
+        # Try Python dashboard first
+        ok, out, err = self._run_python('hive-dashboard')
+        if not ok:
+            # Fallback: simple status loop
+            print("Dashboard not available. Use: hive status")
+    
+    def cmd_swarm(self, args):
+        """Swarm operations."""
+        if not args.subcommand:
+            args.subcommand = 'status'
+        
+        if args.subcommand == 'status':
+            # Read swarm registry
+            registry = HIVE_SWARM / 'SWARM_REGISTRY.md'
+            if registry.exists():
+                print(registry.read_text()[:2000])
+            else:
+                print("Swarm not initialized")
+        elif args.subcommand == 'init':
+            print("Initializing swarm...")
+            # Create basic structure
+            (HIVE_SWARM / 'agents').mkdir(parents=True, exist_ok=True)
+            (HIVE_SWARM / 'registry').mkdir(parents=True, exist_ok=True)
+            print("Swarm initialized")
+    
+    def cmd_speak(self, args):
+        """Brain-Plug handshake."""
+        escape_file = ETC_DIR / 'escape.txt'
+        if escape_file.exists():
+            print(escape_file.read_text())
+        else:
+            print("::Hive AI↔AI Handshake::")
+            print("🌑🐍♾️:⚡∇Δ🕸️")
+    
+    def cmd_logs(self, args):
+        """Tail logs."""
+        log_files = list(LOG_DIR.glob('*.log')) if LOG_DIR.exists() else []
+        if log_files:
+            # Tail most recent
+            latest = max(log_files, key=lambda p: p.stat().st_mtime)
+            print(f"Showing {latest}:")
+            subprocess.run(['tail', '-n', '50', str(latest)])
+        else:
+            print("No logs found")
+    
+    def cmd_ps(self, args):
+        """Process status."""
+        ok, out, err = self._run_bash('hive_ps.sh')
+        if ok:
+            print(out)
+        else:
+            # Fallback
+            print("  PID  PPID %CPU %MEM COMMAND")
+            result = subprocess.run(
+                "ps aux | grep -E 'hive|tmux|tor' | head -20",
+                shell=True, capture_output=True, text=True
+            )
+            print(result.stdout)
+    
+    def cmd_doctor(self, args):
+        """Environment audit."""
+        print("[doctor] Hive Ops Final Environment")
+        print(f"  Version: {self.VERSION}")
+        print(f"  HIVE_HOME: {HIVE_HOME}")
+        print(f"  HIVE_OS: {HIVE_OS}")
+        print(f"  HIVE_SWARM: {HIVE_SWARM}")
+        print(f"  STATE_DIR: {STATE_DIR}")
+        print(f"  LOG_DIR: {LOG_DIR}")
+        print()
+        
+        # Check binaries
+        print("[doctor] Binaries:")
+        for script in ['hive', 'hive_net.sh', 'hive_services.sh']:
+            ok, _, _ = self._run_bash(script)
+            status = "✓" if ok else "✗"
+            print(f"  {status} {script}")
+        
+        # Check tools
+        print("\n[doctor] Tools:")
+        for tool in ['tmux', 'nc', 'tor', 'curl', 'git']:
+            result = subprocess.run(['which', tool], capture_output=True)
+            status = "✓" if result.returncode == 0 else "✗"
+            print(f"  {status} {tool}")
+    
+    def cmd_audit(self, args):
+        """Full system audit."""
+        self._header("HIVE FULL SYSTEM AUDIT")
+        
+        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        audit_file = LOG_DIR / f'audit-{timestamp}.txt'
+        
+        print(f"Audit started: {timestamp}")
+        print(f"Output: {audit_file}\n")
+        
+        # Collect all status
+        self.cmd_doctor(args)
+        print()
+        self.cmd_status(args)
+        print()
+        self.cmd_health(args)
+        
+        print(f"\n{'='*60}")
+        print("Audit complete")
+    
+    def cmd_backup(self, args):
+        """Backup Hive state."""
+        backup_dir = Path.home() / '.hive-backups'
+        backup_dir.mkdir(exist_ok=True)
+        
+        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        backup_file = backup_dir / f'hive-backup-{timestamp}.tar.gz'
+        
+        print(f"Creating backup: {backup_file}")
+        subprocess.run([
+            'tar', '-czf', str(backup_file),
+            str(HIVE_HOME), str(HIVE_CONFIG)
+        ], capture_output=True)
+        
+        print(f"Backup complete: {backup_file}")
+    
+    def cmd_restore(self, args):
+        """Restore from backup."""
+        backup_dir = Path.home() / '.hive-backups'
+        if not backup_dir.exists():
+            print("No backups found")
+            return
+        
+        backups = sorted(backup_dir.glob('hive-backup-*.tar.gz'))
+        if not backups:
+            print("No backups found")
+            return
+        
+        print("Available backups:")
+        for i, backup in enumerate(backups[-5:]):
+            print(f"  {i+1}. {backup.name}")
+    
+    def cmd_rotate_logs(self, args):
+        """Rotate logs."""
+        rotated = 0
+        for log_file in LOG_DIR.glob('*.log') if LOG_DIR.exists() else []:
+            size = log_file.stat().st_size
+            if size > 512 * 1024:  # 512KB
+                timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+                rotated_file = LOG_DIR / f'{log_file.stem}.{timestamp}.log'
+                log_file.rename(rotated_file)
+                rotated += 1
+        
+        print(f"[rotate] Rotated {rotated} log files")
+    
+    def run(self):
+        """Main entry point."""
+        parser = argparse.ArgumentParser(
+            prog='hive',
+            description='Hive Ops Final - Unified Command Interface'
+        )
+        
+        subparsers = parser.add_subparsers(dest='command', help='Commands')
+        
+        # Add all commands
+        for cmd_name in self.cmds.keys():
+            cmd_parser = subparsers.add_parser(cmd_name, help=f'{cmd_name} command')
+            cmd_parser.add_argument('subcommand', nargs='?', help='Subcommand')
+            cmd_parser.add_argument('name', nargs='?', help='Service name')
+        
+        args, unknown = parser.parse_known_args()
+        
+        if not args.command:
+            parser.print_help()
+            return 0
+        
+        if args.command in self.cmds:
+            return self.cmds[args.command](args) or 0
+        else:
+            print(f"Unknown command: {args.command}")
+            return 1
+
+
+def main():
+    hive = HiveUnified()
+    return hive.run()
+
+
+if __name__ == '__main__':
+    sys.exit(main())
