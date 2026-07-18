@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Minimal Core v1.0
+Red Team / Spec Ops Operating System Core
+- Stealth mode by default
+- Plausible deniability
+- Minimal footprint (~10KB)
+
+Usage: hivedev [command]
+       hivedev --stealth-on    # Hide all traces
+       hivedev --stealth-off   # Normal operation
+"""
+
+import os
+import sys
+import subprocess
+import json
+import argparse
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+from datetime import datetime
+
+# Stealth import - graceful fallback
+try:
+    sys.path.insert(0, str(Path(__file__).parent.parent / 'lib'))
+    from stealth import WhitespaceSteg
+except ImportError:
+    # Minimal fallback if stealth.py missing
+    class WhitespaceSteg:
+        @staticmethod
+        def load_config(path):
+            return {}
+        @staticmethod
+        def encode(data, cover):
+            return cover
+        @staticmethod
+        def decode(text):
+            return ""
+
+class HiveDevCore:
+    """Minimal secure Hive controller."""
+    
+    VERSION = "1.0-DEVAI"
+    STEALTH_MODE = False
+    
+    # Plausible deniability paths - look like normal termux files
+    CONFIG_PATHS = [
+        Path.home() / '.termux' / 'termux.properties',      # Looks normal
+        Path.home() / '.config' / 'pip' / 'pip.conf',      # Looks like pip config
+        Path.home() / '.bashrc',                            # Shell config
+    ]
+    
+    # Actual data hidden here (in whitespace of above)
+    DATA_DIR = Path.home() / '.local' / 'share' / 'termux'
+    
+    def __init__(self):
+        self.DATA_DIR.mkdir(parents=True, exist_ok=True)
+        self._load_config()
+        self._check_stealth()
+    
+    def _load_config(self):
+        """Load config from steganographic sources."""
+        self.config = {
+            'mode': 'normal',
+            'network': 'tor',
+            'autostart': False,
+        }
+        self.secrets = {}
+        
+        # Try to decode from each config path
+        for path in self.CONFIG_PATHS:
+            if path.exists():
+                try:
+                    config = WhitespaceSteg.load_config(path)
+                    # Visible config
+                    self.config.update({k: v for k, v in config.items() 
+                                       if not k.startswith('_')})
+                    # Hidden secrets
+                    self.secrets.update({k[1:]: v for k, v in config.items() 
+                                        if k.startswith('_')})
+                except:
+                    pass
+    
+    def _check_stealth(self):
+        """Check if running in stealth mode."""
+        # Stealth activated by environment or file marker
+        if os.environ.get('HIVE_STEALTH') == '1':
+            self.STEALTH_MODE = True
+        
+        marker = self.DATA_DIR / '.stealth'
+        if marker.exists():
+            self.STEALTH_MODE = True
+    
+    def _hide_traces(self):
+        """Hide all Hive activity traces."""
+        # Clear shell history
+        history_files = [
+            Path.home() / '.bash_history',
+            Path.home() / '.zsh_history',
+        ]
+        for hf in history_files:
+            if hf.exists():
+                # Remove hivedev commands from history
+                lines = hf.read_text().split('\n')
+                filtered = [l for l in lines if 'hivedev' not in l]
+                hf.write_text('\n'.join(filtered))
+        
+        # Set stealth marker
+        (self.DATA_DIR / '.stealth').touch()
+        self.STEALTH_MODE = True
+        
+        print("[stealth] Traces hidden. History sanitized.")
+    
+    def _reveal_traces(self):
+        """Allow normal operation."""
+        marker = self.DATA_DIR / '.stealth'
+        if marker.exists():
+            marker.unlink()
+        self.STEALTH_MODE = False
+        print("[stealth] Normal operation restored.")
+    
+    def cmd_status(self, args):
+        """Show status - innocuous output."""
+        if self.STEALTH_MODE:
+            # Plausible deniability output
+            print("Termux environment ready.")
+            print(f"Python {sys.version.split()[0]}")
+            return
+        
+        print(f"Hive Ops DevAI v{self.VERSION}")
+        print(f"Mode: {'STEALTH' if self.STEALTH_MODE else 'normal'}")
+        print(f"Config sources: {len([p for p in self.CONFIG_PATHS if p.exists()])}")
+        print(f"Secrets loaded: {len(self.secrets)}")
+    
+    def cmd_config(self, args):
+        """Manage configuration with steganography."""
+        if args.action == 'set':
+            # Encode secret into config file
+            cover = f"# Termux configuration\n# Last updated {datetime.now().isoformat()}\n"
+            
+            if args.key and args.value:
+                secret = f"{args.key}={args.value}"
+                encoded = WhitespaceSteg.encode(secret, cover)
+                
+                # Save to first available config path
+                for path in self.CONFIG_PATHS:
+                    if path.parent.exists():
+                        path.write_text(encoded)
+                        print(f"[config] Stored in {path}")
+                        break
+        
+        elif args.action == 'get':
+            if args.key in self.secrets:
+                print(f"{args.key}={self.secrets[args.key]}")
+            else:
+                print(f"[config] {args.key} not found")
+        
+        elif args.action == 'list':
+            print("Visible config:")
+            for k, v in self.config.items():
+                print(f"  {k}={v}")
+            print("\nHidden secrets:")
+            for k in self.secrets:
+                print(f"  {k}=*hidden*")
+    
+    def cmd_network(self, args):
+        """Network control - Tor/Proxy."""
+        if self.STEALTH_MODE:
+            print("Network: Ready")
+            return
+        
+        mode = args.mode if args else 'status'
+        
+        if mode == 'tor':
+            print("[net] Switching to Tor...")
+            subprocess.run(['bash', str(Path.home() / 'hive' / 'bin' / 'hive_net.sh'), 'orbot'], 
+                         capture_output=True)
+        elif mode == 'off':
+            print("[net] Network disabled")
+        else:
+            print("[net] Status: Active")
+    
+    def cmd_shell(self, args):
+        """Launch stealth shell."""
+        if self.STEALTH_MODE:
+            # Disguised as normal termux shell
+            print("Starting Termux shell...")
+        else:
+            print(f"[shell] Hive Ops DevAI v{self.VERSION}")
+        
+        # Launch actual shell
+        os.system(os.environ.get('SHELL', '/bin/bash'))
+    
+    def run(self):
+        """Main entry."""
+        parser = argparse.ArgumentParser(
+            prog='hivedev',
+            description='Hive Ops DevAI - Red Team OS',
+            add_help=False  # Don't show help by default (stealth)
+        )
+        
+        parser.add_argument('command', nargs='?', default='status',
+                           choices=['status', 'config', 'net', 'shell', 
+                                   'help', '--stealth-on', '--stealth-off'])
+        parser.add_argument('--action', '-a', help='Config action')
+        parser.add_argument('--key', '-k', help='Config key')
+        parser.add_argument('--value', '-v', help='Config value')
+        parser.add_argument('--mode', '-m', help='Network mode')
+        
+        args = parser.parse_args()
+        
+        # Handle stealth toggles
+        if args.command == '--stealth-on':
+            self._hide_traces()
+            return 0
+        elif args.command == '--stealth-off':
+            self._reveal_traces()
+            return 0
+        elif args.command == 'help':
+            parser.print_help()
+            return 0
+        
+        # Route commands
+        cmds = {
+            'status': self.cmd_status,
+            'config': self.cmd_config,
+            'net': self.cmd_network,
+            'shell': self.cmd_shell,
+        }
+        
+        if args.command in cmds:
+            return cmds[args.command](args) or 0
+        else:
+            print(f"Unknown command: {args.command}")
+            return 1
+
+
+def main():
+    hive = HiveDevCore()
+    return hive.run()
+
+
+if __name__ == '__main__':
+    sys.exit(main())
