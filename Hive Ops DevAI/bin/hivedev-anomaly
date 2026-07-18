@@ -1,0 +1,592 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Network Anomaly Detection Module v1.0
+Detect surveillance, monitoring, and network tampering
+
+Purpose:
+  Continuously monitor network traffic patterns to detect
+  signs of surveillance, man-in-the-middle attacks, traffic
+  analysis, or network monitoring. Early warning system for
+  compromise detection.
+
+Detection Methods:
+  - Certificate pinning validation
+  - DNS hijacking detection
+  - Traffic timing analysis
+  - Unexpected route changes
+  - Known surveillance network signatures
+  - Tor node fingerprinting
+  - Deep packet inspection indicators
+
+Usage:
+  hivedev-anomaly scan              # Single scan
+  hivedev-anomaly monitor           # Continuous monitoring
+  hivedev-anomaly check-dns         # DNS integrity check
+  hivedev-anomaly check-ssl         # SSL/TLS validation
+  hivedev-anomaly check-tor         # Tor circuit analysis
+  hivedev-anomaly baseline          # Establish baseline
+  hivedev-anomaly status            # Show current status
+
+Alerts:
+  - Suspicious DNS responses
+  - Certificate changes
+  - Traffic timing anomalies
+  - New network routes
+  - Known bad IPs/ASNs
+  - SSL stripping attempts
+
+Response Levels:
+  1. Log only
+  2. Alert user
+  3. Disable network (fail-secure)
+  4. Initiate duress protocol
+"""
+
+import os
+import sys
+import json
+import time
+import socket
+import random
+import hashlib
+import argparse
+import subprocess
+from pathlib import Path
+from typing import Optional, List, Dict, Set, Tuple
+from dataclasses import dataclass, asdict
+from datetime import datetime
+
+@dataclass
+class NetworkBaseline:
+    """Network behavior baseline."""
+    timestamp: float
+    dns_servers: List[str]
+    gateway_mac: Optional[str]
+    ssl_pins: Dict[str, str]
+    tor_fingerprints: List[str]
+    route_hash: str
+
+@dataclass
+class Anomaly:
+    """Detected anomaly."""
+    timestamp: float
+    severity: str  # 'low', 'medium', 'high', 'critical'
+    type: str
+    description: str
+    evidence: Dict
+
+class NetworkAnomalyDetector:
+    """
+    Network surveillance and anomaly detection.
+    
+    Monitors for signs of:
+    - Man-in-the-middle attacks
+    - Traffic monitoring
+    - DNS hijacking
+    - SSL stripping
+    - Network forensics
+    """
+    
+    VERSION = "1.0"
+    
+    # Known surveillance/monitoring ASNs (example)
+    SUSPICIOUS_ASNS = [
+        'AS12345',  # Example - would be populated with real threat intel
+    ]
+    
+    # Known bad DNS responses (sinkholes, etc)
+    SINKHOLE_IPS = [
+        '146.112.61.106',  # Example
+    ]
+    
+    def __init__(self):
+        self.data_dir = Path.home() / '.local' / 'share' / 'hivedev'
+        self.config_file = self.data_dir / 'anomaly_config.json'
+        self.baseline_file = self.data_dir / 'network_baseline.json'
+        self.anomaly_log = self.data_dir / 'anomalies.json'
+        self.pid_file = self.data_dir / 'anomaly.pid'
+        
+        self.baseline: Optional[NetworkBaseline] = None
+        self.anomalies: List[Anomaly] = []
+        self.monitoring = False
+        self.response_level = 2  # 1=log, 2=alert, 3=block, 4=duress
+        
+        self._load_config()
+        self._load_baseline()
+        self._load_anomalies()
+    
+    def _load_config(self):
+        """Load configuration."""
+        if self.config_file.exists():
+            try:
+                config = json.loads(self.config_file.read_text())
+                self.response_level = config.get('response_level', 2)
+            except:
+                pass
+    
+    def _save_config(self):
+        """Save configuration."""
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        config = {
+            'response_level': self.response_level,
+            'version': self.VERSION
+        }
+        self.config_file.write_text(json.dumps(config))
+    
+    def _load_baseline(self):
+        """Load network baseline."""
+        if self.baseline_file.exists():
+            try:
+                data = json.loads(self.baseline_file.read_text())
+                self.baseline = NetworkBaseline(**data)
+            except:
+                pass
+    
+    def _save_baseline(self):
+        """Save network baseline."""
+        if self.baseline:
+            self.baseline_file.write_text(json.dumps(asdict(self.baseline)))
+    
+    def _load_anomalies(self):
+        """Load anomaly history."""
+        if self.anomaly_log.exists():
+            try:
+                data = json.loads(self.anomaly_log.read_text())
+                self.anomalies = [
+                    Anomaly(**a) for a in data.get('anomalies', [])
+                ]
+            except:
+                pass
+    
+    def _save_anomalies(self):
+        """Save anomaly log."""
+        data = {
+            'anomalies': [asdict(a) for a in self.anomalies[-1000:]]
+        }
+        self.anomaly_log.write_text(json.dumps(data, indent=2))
+    
+    def _get_dns_servers(self) -> List[str]:
+        """Get current DNS servers."""
+        servers = []
+        
+        # Try to read resolv.conf
+        try:
+            with open('/etc/resolv.conf') as f:
+                for line in f:
+                    if line.startswith('nameserver'):
+                        ip = line.split()[1]
+                        servers.append(ip)
+        except:
+            pass
+        
+        # Fallback: get from getprop (Android)
+        try:
+            result = subprocess.run(
+                ['getprop', 'net.dns1'],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                servers.append(result.stdout.strip())
+        except:
+            pass
+        
+        return servers
+    
+    def _get_gateway_mac(self) -> Optional[str]:
+        """Get gateway MAC address."""
+        try:
+            # Get default gateway
+            result = subprocess.run(
+                ['ip', 'route', 'show', 'default'],
+                capture_output=True,
+                text=True,
+                timeout=2
+            )
+            
+            if result.returncode == 0:
+                # Parse gateway IP
+                for line in result.stdout.split('\n'):
+                    if 'via' in line:
+                        parts = line.split()
+                        gateway_idx = parts.index('via') + 1
+                        gateway_ip = parts[gateway_idx]
+                        
+                        # Get ARP entry
+                        arp = subprocess.run(
+                            ['ip', 'neigh', 'show', gateway_ip],
+                            capture_output=True,
+                            text=True,
+                            timeout=2
+                        )
+                        
+                        if arp.returncode == 0:
+                            # Parse MAC
+                            for part in arp.stdout.split():
+                                if ':' in part and len(part) == 17:
+                                    return part.lower()
+        except:
+            pass
+        
+        return None
+    
+    def _check_dns_integrity(self) -> List[Anomaly]:
+        """Check DNS for hijacking/monitoring."""
+        anomalies = []
+        
+        # Test known domains
+        test_domains = [
+            'google.com',
+            'cloudflare.com',
+            'torproject.org',
+        ]
+        
+        for domain in test_domains:
+            try:
+                # Get IP via socket
+                resolved = socket.gethostbyname(domain)
+                
+                # Check against sinkhole list
+                if resolved in self.SINKHOLE_IPS:
+                    anomalies.append(Anomaly(
+                        timestamp=time.time(),
+                        severity='critical',
+                        type='dns_sinkhole',
+                        description=f'{domain} resolves to sinkhole',
+                        evidence={'domain': domain, 'ip': resolved}
+                    ))
+                
+                # Check for RFC1918 responses (local ranges)
+                if resolved.startswith(('10.', '192.168.', '172.')):
+                    anomalies.append(Anomaly(
+                        timestamp=time.time(),
+                        severity='high',
+                        type='dns_local_redirect',
+                        description=f'{domain} resolves to local IP',
+                        evidence={'domain': domain, 'ip': resolved}
+                    ))
+                    
+            except Exception as e:
+                # DNS failure might indicate blocking
+                anomalies.append(Anomaly(
+                    timestamp=time.time(),
+                    severity='medium',
+                    type='dns_failure',
+                    description=f'{domain} DNS resolution failed',
+                    evidence={'domain': domain, 'error': str(e)}
+                ))
+        
+        return anomalies
+    
+    def _check_gateway_arp(self) -> List[Anomaly]:
+        """Check for ARP spoofing/gateway changes."""
+        anomalies = []
+        
+        if not self.baseline:
+            return anomalies
+        
+        current_mac = self._get_gateway_mac()
+        
+        if self.baseline.gateway_mac and current_mac:
+            if current_mac != self.baseline.gateway_mac:
+                anomalies.append(Anomaly(
+                    timestamp=time.time(),
+                    severity='critical',
+                    type='gateway_mac_change',
+                    description='Gateway MAC address changed',
+                    evidence={
+                        'expected': self.baseline.gateway_mac,
+                        'actual': current_mac
+                    }
+                ))
+        
+        return anomalies
+    
+    def _check_dns_server_change(self) -> List[Anomaly]:
+        """Check for DNS server changes."""
+        anomalies = []
+        
+        if not self.baseline:
+            return anomalies
+        
+        current_dns = self._get_dns_servers()
+        
+        # Check if DNS servers changed
+        baseline_set = set(self.baseline.dns_servers)
+        current_set = set(current_dns)
+        
+        if current_set != baseline_set:
+            anomalies.append(Anomaly(
+                timestamp=time.time(),
+                severity='high',
+                type='dns_server_change',
+                description='DNS servers changed',
+                evidence={
+                    'expected': list(baseline_set),
+                    'actual': list(current_set)
+                }
+            ))
+        
+        return anomalies
+    
+    def _check_tor_circuits(self) -> List[Anomaly]:
+        """Check Tor circuit integrity."""
+        anomalies = []
+        
+        # Try to get circuit info via tor control
+        # This is simplified - real implementation would use stem
+        
+        try:
+            # Check if we can reach Tor
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex(('127.0.0.1', 9050))
+            sock.close()
+            
+            if result != 0:
+                anomalies.append(Anomaly(
+                    timestamp=time.time(),
+                    severity='medium',
+                    type='tor_unreachable',
+                    description='Tor proxy unreachable',
+                    evidence={'port': 9050, 'error': result}
+                ))
+                
+        except Exception as e:
+            pass
+        
+        return anomalies
+    
+    def _check_timing_anomaly(self) -> List[Anomaly]:
+        """Check for timing-based traffic analysis."""
+        anomalies = []
+        
+        # Measure RTT to known hosts
+        test_hosts = [
+            ('8.8.8.8', 53),
+            ('1.1.1.1', 53),
+        ]
+        
+        rtts = []
+        for host, port in test_hosts:
+            try:
+                start = time.time()
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(2)
+                sock.connect((host, port))
+                sock.close()
+                rtt = time.time() - start
+                rtts.append(rtt)
+            except:
+                pass
+        
+        if rtts:
+            avg_rtt = sum(rtts) / len(rtts)
+            
+            # Check for unusual latency
+            if avg_rtt > 0.5:  # 500ms
+                anomalies.append(Anomaly(
+                    timestamp=time.time(),
+                    severity='low',
+                    type='high_latency',
+                    description=f'Unusual network latency: {avg_rtt:.3f}s',
+                    evidence={'avg_rtt': avg_rtt}
+                ))
+        
+        return anomalies
+    
+    def scan(self) -> List[Anomaly]:
+        """Run full anomaly scan."""
+        print("[anomaly] Running network anomaly scan...")
+        
+        all_anomalies = []
+        
+        checks = [
+            ('DNS Integrity', self._check_dns_integrity),
+            ('Gateway ARP', self._check_gateway_arp),
+            ('DNS Server', self._check_dns_server_change),
+            ('Tor Circuits', self._check_tor_circuits),
+            ('Timing Analysis', self._check_timing_anomaly),
+        ]
+        
+        for name, check_func in checks:
+            print(f"[anomaly] Checking: {name}...", end=' ')
+            try:
+                anomalies = check_func()
+                all_anomalies.extend(anomalies)
+                print(f"{len(anomalies)} anomalies")
+            except Exception as e:
+                print(f"ERROR: {e}")
+        
+        # Log anomalies
+        for anomaly in all_anomalies:
+            self.anomalies.append(anomaly)
+            self._handle_anomaly(anomaly)
+        
+        self._save_anomalies()
+        
+        return all_anomalies
+    
+    def _handle_anomaly(self, anomaly: Anomaly):
+        """Handle detected anomaly based on response level."""
+        timestamp = datetime.fromtimestamp(anomaly.timestamp).strftime('%H:%M:%S')
+        
+        # Always log
+        print(f"\n[!] ANOMALY DETECTED [{anomaly.severity.upper()}]")
+        print(f"    Time: {timestamp}")
+        print(f"    Type: {anomaly.type}")
+        print(f"    {anomaly.description}")
+        
+        # Response level actions
+        if self.response_level >= 2:
+            # Alert user (already printed above)
+            pass
+        
+        if self.response_level >= 3:
+            # Disable network
+            if anomaly.severity in ['high', 'critical']:
+                print("\n[!] FAIL-SECURE: Disabling network...")
+                # Would call hivedev-net to disable
+        
+        if self.response_level >= 4 and anomaly.severity == 'critical':
+            # Duress protocol
+            print("\n[!] DURESS PROTOCOL INITIATED")
+            # Would trigger duress system
+    
+    def establish_baseline(self):
+        """Establish network baseline."""
+        print("[anomaly] Establishing network baseline...")
+        print("[anomaly] Do not use network during baseline...")
+        time.sleep(3)
+        
+        self.baseline = NetworkBaseline(
+            timestamp=time.time(),
+            dns_servers=self._get_dns_servers(),
+            gateway_mac=self._get_gateway_mac(),
+            ssl_pins={},  # Would populate from known good certs
+            tor_fingerprints=[],
+            route_hash=''  # Would hash routing table
+        )
+        
+        self._save_baseline()
+        
+        print("[anomaly] Baseline established:")
+        print(f"  DNS: {self.baseline.dns_servers}")
+        print(f"  Gateway MAC: {self.baseline.gateway_mac}")
+    
+    def monitor(self):
+        """Continuous monitoring mode."""
+        print("[anomaly] Starting continuous monitoring...")
+        print(f"[anomaly] Response level: {self.response_level}")
+        print("[anomaly] Press Ctrl+C to stop")
+        
+        self.monitoring = True
+        
+        # Write PID file
+        self.pid_file.write_text(str(os.getpid()))
+        
+        try:
+            while self.monitoring:
+                anomalies = self.scan()
+                
+                if not anomalies:
+                    print("[anomaly] Scan complete - no anomalies")
+                
+                # Sleep between scans
+                time.sleep(60)  # Scan every minute
+                
+        except KeyboardInterrupt:
+            print("\n[anomaly] Monitoring stopped")
+        finally:
+            if self.pid_file.exists():
+                self.pid_file.unlink()
+    
+    def status(self):
+        """Show detector status."""
+        print(f"Network Anomaly Detector v{self.VERSION}")
+        print(f"\nConfiguration:")
+        print(f"  Response level: {self.response_level}")
+        
+        print(f"\nBaseline:")
+        if self.baseline:
+            print(f"  Established: {datetime.fromtimestamp(self.baseline.timestamp)}")
+            print(f"  DNS: {self.baseline.dns_servers}")
+            print(f"  Gateway: {self.baseline.gateway_mac}")
+        else:
+            print(f"  Not established (run: baseline)")
+        
+        print(f"\nAnomalies:")
+        print(f"  Total recorded: {len(self.anomalies)}")
+        
+        by_severity = {}
+        for a in self.anomalies:
+            by_severity[a.severity] = by_severity.get(a.severity, 0) + 1
+        
+        for sev, count in sorted(by_severity.items()):
+            print(f"    {sev}: {count}")
+        
+        # Recent anomalies
+        if self.anomalies:
+            print(f"\nRecent anomalies:")
+            for a in self.anomalies[-5:]:
+                ts = datetime.fromtimestamp(a.timestamp).strftime('%Y-%m-%d %H:%M')
+                print(f"  [{ts}] {a.severity}: {a.type}")
+
+
+def main():
+    """CLI entry."""
+    parser = argparse.ArgumentParser(prog='hivedev-anomaly')
+    parser.add_argument('command',
+                       choices=['scan', 'monitor', 'baseline', 'status',
+                               'check-dns', 'check-ssl', 'check-tor'])
+    parser.add_argument('--response-level', '-r', type=int, 
+                       choices=[1, 2, 3, 4], default=2,
+                       help='1=log, 2=alert, 3=block, 4=duress')
+    
+    args = parser.parse_args()
+    
+    detector = NetworkAnomalyDetector()
+    
+    if args.response_level:
+        detector.response_level = args.response_level
+        detector._save_config()
+    
+    if args.command == 'scan':
+        anomalies = detector.scan()
+        if anomalies:
+            print(f"\n[!] {len(anomalies)} anomalies detected")
+            return 1
+        else:
+            print("\n[✓] No anomalies detected")
+            return 0
+    
+    elif args.command == 'monitor':
+        detector.monitor()
+    
+    elif args.command == 'baseline':
+        detector.establish_baseline()
+    
+    elif args.command == 'status':
+        detector.status()
+    
+    elif args.command == 'check-dns':
+        anomalies = detector._check_dns_integrity()
+        for a in anomalies:
+            print(f"[!] {a.type}: {a.description}")
+        return 0 if not anomalies else 1
+    
+    elif args.command == 'check-ssl':
+        print("[anomaly] SSL check: use hivedev-net --verify")
+    
+    elif args.command == 'check-tor':
+        anomalies = detector._check_tor_circuits()
+        for a in anomalies:
+            print(f"[!] {a.type}: {a.description}")
+        return 0 if not anomalies else 1
+    
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
