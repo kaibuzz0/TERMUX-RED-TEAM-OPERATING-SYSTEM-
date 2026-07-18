@@ -1,0 +1,403 @@
+#!/usr/bin/env python3
+"""
+Hive Hardware Integration Layer
+Android/Termux hardware access for AI OS
+"""
+import os
+import sys
+import json
+import time
+import subprocess
+import re
+from pathlib import Path
+from dataclasses import dataclass
+from typing import Dict, Optional, Tuple
+from datetime import datetime
+
+# Termux API paths
+TERMUX_API = '/data/data/com.termux/files/usr/bin/termux-api'
+TERMUX_NOTIFICATION = 'termux-notification'
+TERMUX_BATTERY = 'termux-battery-status'
+TERMUX_WIFI = 'termux-wifi-connectioninfo'
+TERMUX_STORAGE = 'termux-storage-get'
+TERMUX_VIBRATE = 'termux-vibrate'
+TERMUX_TORCH = 'termux-torch'
+
+@dataclass
+class BatteryStatus:
+    percentage: int
+    status: str  # CHARGING, DISCHARGING, FULL
+    temperature: float
+    health: str
+    plugged: str
+
+@dataclass
+class NetworkStatus:
+    connected: bool
+    ssid: str
+    ip_address: str
+    mac_address: str
+    link_speed: int
+
+@dataclass
+class StorageStatus:
+    total: int
+    used: int
+    free: int
+    percent_used: float
+
+class HiveHardware:
+    """Hardware abstraction for Termux/Android environment."""
+    
+    def __init__(self):
+        self.cache_dir = Path('/root/hive-os/cache')
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self._check_termux_api()
+    
+    def _check_termux_api(self) -> bool:
+        """Check if Termux API is available."""
+        try:
+            result = subprocess.run(
+                ['which', 'termux-notification'],
+                capture_output=True,
+                text=True
+            )
+            return result.returncode == 0
+        except:
+            return False
+    
+    def _run_termux_cmd(self, cmd: str, args: list = None) -> Optional[str]:
+        """Run a Termux API command."""
+        full_cmd = [cmd]
+        if args:
+            full_cmd.extend(args)
+        
+        try:
+            result = subprocess.run(
+                full_cmd,
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode == 0:
+                return result.stdout
+        except Exception as e:
+            return None
+    
+    def get_battery(self) -> Optional[BatteryStatus]:
+        """Get battery status."""
+        output = self._run_termux_cmd('termux-battery-status')
+        if not output:
+            return None
+        
+        try:
+            data = json.loads(output)
+            return BatteryStatus(
+                percentage=data.get('percentage', 0),
+                status=data.get('status', 'UNKNOWN'),
+                temperature=data.get('temperature', 0.0),
+                health=data.get('health', 'UNKNOWN'),
+                plugged=data.get('plugged', 'UNKNOWN')
+            )
+        except:
+            return None
+    
+    def get_network(self) -> Optional[NetworkStatus]:
+        """Get WiFi network status."""
+        output = self._run_termux_cmd('termux-wifi-connectioninfo')
+        if not output:
+            return None
+        
+        try:
+            data = json.loads(output)
+            return NetworkStatus(
+                connected=data.get('supplicant_state') == 'COMPLETED',
+                ssid=data.get('ssid', ''),
+                ip_address=data.get('ip', ''),
+                mac_address=data.get('mac_address', ''),
+                link_speed=data.get('link_speed', 0)
+            )
+        except:
+            return None
+    
+    def get_storage(self, path: str = '/') -> Optional[StorageStatus]:
+        """Get storage usage."""
+        try:
+            stat = os.statvfs(path)
+            total = stat.f_blocks * stat.f_frsize
+            free = stat.f_bfree * stat.f_frsize
+            used = total - free
+            
+            return StorageStatus(
+                total=total,
+                used=used,
+                free=free,
+                percent_used=(used / total) * 100 if total > 0 else 0
+            )
+        except:
+            return None
+    
+    def notify(self, title: str, content: str, 
+               priority: str = 'default',
+               actions: list = None,
+               sound: bool = False,
+               vibrate: bool = False) -> bool:
+        """Send Android notification."""
+        args = [
+            '--title', title,
+            '--content', content,
+            '--priority', priority
+        ]
+        
+        if sound:
+            args.append('--sound')
+        if vibrate:
+            args.append('--vibrate')
+        
+        if actions:
+            for action in actions:
+                args.extend(['--action', action])
+        
+        result = self._run_termux_cmd('termux-notification', args)
+        return result is not None
+    
+    def vibrate(self, duration_ms: int = 300):
+        """Vibrate the device."""
+        self._run_termux_cmd('termux-vibrate', ['-d', str(duration_ms)])
+    
+    def torch(self, on: bool = True):
+        """Toggle flashlight."""
+        self._run_termux_cmd('termux-torch', ['on' if on else 'off'])
+    
+    def get_uptime(self) -> Dict:
+        """Get system uptime and load."""
+        try:
+            with open('/proc/uptime') as f:
+                uptime_seconds = float(f.read().split()[0])
+            
+            with open('/proc/loadavg') as f:
+                load_parts = f.read().split()
+                loadavg = {
+                    '1min': float(load_parts[0]),
+                    '5min': float(load_parts[1]),
+                    '15min': float(load_parts[2])
+                }
+            
+            return {
+                'uptime_seconds': uptime_seconds,
+                'uptime_formatted': self._format_uptime(uptime_seconds),
+                'loadavg': loadavg
+            }
+        except:
+            return {'uptime_seconds': 0, 'uptime_formatted': 'unknown', 'loadavg': {}}
+    
+    def _format_uptime(self, seconds: float) -> str:
+        """Format uptime nicely."""
+        days = int(seconds // 86400)
+        hours = int((seconds % 86400) // 3600)
+        minutes = int((seconds % 3600) // 60)
+        
+        if days > 0:
+            return f"{days}d {hours}h {minutes}m"
+        elif hours > 0:
+            return f"{hours}h {minutes}m"
+        else:
+            return f"{minutes}m"
+    
+    def get_memory(self) -> Dict:
+        """Get memory usage."""
+        try:
+            with open('/proc/meminfo') as f:
+                lines = f.readlines()
+            
+            meminfo = {}
+            for line in lines:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    meminfo[key.strip()] = int(value.strip().split()[0]) * 1024
+            
+            total = meminfo.get('MemTotal', 0)
+            free = meminfo.get('MemAvailable', meminfo.get('MemFree', 0))
+            used = total - free
+            
+            return {
+                'total': total,
+                'used': used,
+                'free': free,
+                'percent_used': (used / total) * 100 if total > 0 else 0
+            }
+        except:
+            return {'total': 0, 'used': 0, 'free': 0, 'percent_used': 0}
+    
+    def get_processes(self, name_filter: str = None) -> list:
+        """Get process list, optionally filtered."""
+        processes = []
+        try:
+            for pid in os.listdir('/proc'):
+                if pid.isdigit():
+                    try:
+                        with open(f'/proc/{pid}/comm') as f:
+                            comm = f.read().strip()
+                        
+                        if name_filter and name_filter not in comm:
+                            continue
+                        
+                        with open(f'/proc/{pid}/stat') as f:
+                            stat = f.read().split()
+                            utime = int(stat[13])
+                            stime = int(stat[14])
+                        
+                        processes.append({
+                            'pid': int(pid),
+                            'name': comm,
+                            'cpu_time': utime + stime
+                        })
+                    except:
+                        pass
+        except:
+            pass
+        
+        return processes
+    
+    def get_full_status(self) -> Dict:
+        """Get complete hardware status."""
+        return {
+            'timestamp': datetime.now().isoformat(),
+            'battery': self.get_battery().__dict__ if self.get_battery() else None,
+            'network': self.get_network().__dict__ if self.get_network() else None,
+            'storage': self.get_storage().__dict__ if self.get_storage() else None,
+            'memory': self.get_memory(),
+            'uptime': self.get_uptime(),
+            'termux_api': self._check_termux_api()
+        }
+    
+    def alert_critical(self, message: str):
+        """Critical alert - notify + vibrate + log."""
+        self.notify(
+            title="⚠ HIVE CRITICAL",
+            content=message,
+            priority='high',
+            sound=True,
+            vibrate=True
+        )
+        self.vibrate(1000)  # 1 second vibrate
+        
+        # Log to system
+        log_file = Path('/root/hive-os/log/critical.log')
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(log_file, 'a') as f:
+            f.write(f"[{datetime.now().isoformat()}] CRITICAL: {message}\n")
+
+
+def main():
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Hive Hardware Integration')
+    parser.add_argument('command', choices=[
+        'status', 'battery', 'network', 'storage', 'memory', 
+        'uptime', 'notify', 'vibrate', 'torch', 'alert'
+    ])
+    parser.add_argument('--title', '-t', default='Hive', help='Notification title')
+    parser.add_argument('--content', '-c', help='Notification content')
+    parser.add_argument('--priority', '-p', default='default', choices=['low', 'default', 'high', 'max'])
+    parser.add_argument('--duration', '-d', type=int, default=300, help='Vibrate duration (ms)')
+    parser.add_argument('--on', action='store_true', help='Turn torch on')
+    parser.add_argument('--off', action='store_true', help='Turn torch off')
+    parser.add_argument('--json', '-j', action='store_true', help='Output as JSON')
+    
+    args = parser.parse_args()
+    
+    hw = HiveHardware()
+    
+    if args.command == 'status':
+        status = hw.get_full_status()
+        if args.json:
+            print(json.dumps(status, indent=2))
+        else:
+            print(f"\n{'='*40}")
+            print(f"  HIVE HARDWARE STATUS")
+            print(f"{'='*40}\n")
+            
+            if status['battery']:
+                batt = status['battery']
+                print(f"🔋 Battery: {batt['percentage']}% ({batt['status']})")
+                print(f"   Temp: {batt['temperature']}°C | Health: {batt['health']}")
+            
+            if status['network']:
+                net = status['network']
+                print(f"\n📡 Network: {'✓' if net['connected'] else '✗'} {net['ssid']}")
+                print(f"   IP: {net['ip_address']} | Speed: {net['link_speed']} Mbps")
+            
+            mem = status['memory']
+            print(f"\n💾 Memory: {mem['percent_used']:.1f}% used")
+            print(f"   {mem['used']/1024/1024:.1f}MB / {mem['total']/1024/1024:.1f}MB")
+            
+            storage = status['storage']
+            if storage:
+                print(f"\n💿 Storage: {storage['percent_used']:.1f}% used")
+                print(f"   {storage['used']/1024/1024/1024:.1f}GB / {storage['total']/1024/1024/1024:.1f}GB")
+            
+            uptime = status['uptime']
+            print(f"\n⏱  Uptime: {uptime['uptime_formatted']}")
+            print(f"   Load: {uptime['loadavg'].get('1min', 0):.2f} {uptime['loadavg'].get('5min', 0):.2f} {uptime['loadavg'].get('15min', 0):.2f}")
+            
+            print(f"\n{'='*40}")
+    
+    elif args.command == 'battery':
+        batt = hw.get_battery()
+        if batt:
+            print(f"{batt.percentage}% ({batt.status})")
+        else:
+            print("No battery info")
+    
+    elif args.command == 'network':
+        net = hw.get_network()
+        if net:
+            print(f"{net.ssid}: {net.ip_address}")
+        else:
+            print("No network info")
+    
+    elif args.command == 'storage':
+        stor = hw.get_storage()
+        if stor:
+            free_gb = stor.free / 1024 / 1024 / 1024
+            print(f"{stor.percent_used:.1f}% used, {free_gb:.1f}GB free")
+        else:
+            print("No storage info")
+    
+    elif args.command == 'memory':
+        mem = hw.get_memory()
+        print(f"{mem['percent_used']:.1f}% used")
+    
+    elif args.command == 'uptime':
+        uptime = hw.get_uptime()
+        print(f"{uptime['uptime_formatted']}")
+    
+    elif args.command == 'notify':
+        if not args.content:
+            print("--content required")
+            sys.exit(1)
+        hw.notify(args.title, args.content, args.priority)
+        print("✓ Notification sent")
+    
+    elif args.command == 'vibrate':
+        hw.vibrate(args.duration)
+        print(f"✓ Vibrated for {args.duration}ms")
+    
+    elif args.command == 'torch':
+        if args.on:
+            hw.torch(True)
+            print("✓ Torch ON")
+        elif args.off:
+            hw.torch(False)
+            print("✓ Torch OFF")
+        else:
+            print("Use --on or --off")
+    
+    elif args.command == 'alert':
+        message = args.content or "Critical alert from Hive"
+        hw.alert_critical(message)
+        print("✓ Critical alert sent")
+
+if __name__ == '__main__':
+    main()

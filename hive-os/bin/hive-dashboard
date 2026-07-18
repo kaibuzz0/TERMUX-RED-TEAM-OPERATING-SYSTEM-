@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""
+Hive TUI Dashboard
+Terminal User Interface for Hive OS monitoring
+"""
+import os
+import sys
+import time
+import json
+import subprocess
+import psutil
+from pathlib import Path
+from datetime import datetime
+from typing import Dict, List, Optional
+
+# Try to import rich for TUI
+try:
+    from rich.console import Console
+    from rich.table import Table
+    from rich.panel import Panel
+    from rich.layout import Layout
+    from rich.live import Live
+    from rich.text import Text
+    from rich import box
+    HAS_RICH = True
+except ImportError:
+    HAS_RICH = False
+    print("Rich not installed. Install with: pip install rich")
+    print("Falling back to basic display...")
+
+class HiveDashboard:
+    """Real-time TUI dashboard for Hive OS."""
+    
+    def __init__(self):
+        self.console = Console() if HAS_RICH else None
+        self.running = True
+        self.refresh_rate = 1.0  # seconds
+        
+        # Paths
+        self.hive_root = Path('/root/hive-os')
+        self.swarm_root = Path('/root/hive-swarm')
+        self.log_dir = self.hive_root / 'log'
+        self.run_dir = self.hive_root / 'run'
+    
+    def get_service_status(self) -> List[Dict]:
+        """Get status of all Hive services."""
+        services = []
+        service_script = self.hive_root / 'bin/hive-service'
+        
+        if service_script.exists():
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(service_script), 'status'],
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                # Parse output
+                for line in result.stdout.split('\n')[2:]:  # Skip header
+                    if line.strip() and '---' not in line:
+                        parts = line.split()
+                        if len(parts) >= 2:
+                            services.append({
+                                'name': parts[0],
+                                'state': parts[1] if len(parts) > 1 else 'unknown',
+                                'pid': parts[2] if len(parts) > 2 else '-',
+                                'cpu': parts[3] if len(parts) > 3 else '-',
+                                'mem': parts[4] if len(parts) > 4 else '-'
+                            })
+            except:
+                pass
+        
+        return services
+    
+    def get_ledger_status(self) -> Dict:
+        """Get resonance ledger status."""
+        ledger_script = self.swarm_root / 'services/resonance_ledger.py'
+        if ledger_script.exists():
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(ledger_script), 'status'],
+                    capture_output=True,
+                    text=True,
+                    timeout=3
+                )
+                return json.loads(result.stdout)
+            except:
+                pass
+        return {'status': 'unknown', 'events': 0}
+    
+    def get_system_resources(self) -> Dict:
+        """Get system resource usage."""
+        return {
+            'cpu_percent': psutil.cpu_percent(interval=0.1),
+            'memory': psutil.virtual_memory()._asdict(),
+            'disk': psutil.disk_usage('/')._asdict(),
+            'boot_time': datetime.fromtimestamp(psutil.boot_time()).isoformat()
+        }
+    
+    def get_recent_logs(self, lines: int = 10) -> List[str]:
+        """Get recent log entries."""
+        logs = []
+        log_files = list(self.log_dir.glob('*.log')) if self.log_dir.exists() else []
+        
+        for log_file in log_files[-3:]:  # Last 3 log files
+            try:
+                with open(log_file) as f:
+                    file_lines = f.readlines()
+                    for line in file_lines[-lines:]:
+                        logs.append(f"{log_file.stem}: {line.strip()}")
+            except:
+                pass
+        
+        return logs[-lines:]
+    
+    def get_cron_status(self) -> List[Dict]:
+        """Get scheduled cron jobs."""
+        try:
+            from hermes_tools import cronjob
+            jobs = cronjob(action='list')
+            if isinstance(jobs, dict) and 'jobs' in jobs:
+                return jobs['jobs']
+        except:
+            pass
+        return []
+    
+    def render_rich(self):
+        """Render with Rich TUI."""
+        from rich.columns import Columns
+        
+        def generate_layout():
+            # Services panel
+            services = self.get_service_status()
+            service_table = Table(box=box.ROUNDED, expand=True)
+            service_table.add_column("Service", style="cyan")
+            service_table.add_column("State", style="green")
+            service_table.add_column("PID", style="blue")
+            service_table.add_column("CPU%", style="yellow")
+            service_table.add_column("Mem", style="magenta")
+            
+            for svc in services:
+                state_color = "green" if svc['state'] == 'running' else "red"
+                service_table.add_row(
+                    svc['name'],
+                    f"[{state_color}]{svc['state']}[/{state_color}]",
+                    svc['pid'],
+                    svc['cpu'],
+                    svc['mem']
+                )
+            
+            if not services:
+                service_table.add_row("No services", "-", "-", "-", "-")
+            
+            services_panel = Panel(service_table, title="[bold cyan]Services[/bold cyan]", border_style="cyan")
+            
+            # Resources panel
+            resources = self.get_system_resources()
+            mem = resources['memory']
+            disk = resources['disk']
+            
+            resource_text = Text()
+            resource_text.append(f"CPU: {resources['cpu_percent']:.1f}%\n", style="yellow")
+            resource_text.append(f"RAM: {mem['percent']:.1f}% ({mem['used']/1024/1024/1024:.1f}GB / {mem['total']/1024/1024/1024:.1f}GB)\n", style="magenta")
+            resource_text.append(f"Disk: {disk['percent']:.1f}% free\n", style="green")
+            resource_text.append(f"Boot: {resources['boot_time'][:10]}\n", style="blue")
+            
+            resources_panel = Panel(resource_text, title="[bold yellow]Resources[/bold yellow]", border_style="yellow")
+            
+            # Ledger panel
+            ledger = self.get_ledger_status()
+            ledger_text = Text()
+            ledger_text.append(f"Status: {ledger.get('status', 'unknown')}\n", style="green" if ledger.get('status') == 'HEALTHY' else "red")
+            ledger_text.append(f"Events: {ledger.get('events', 0)}\n", style="cyan")
+            ledger_text.append(f"Hash: {ledger.get('last_hash', 'N/A')[:16]}...", style="blue")
+            
+            ledger_panel = Panel(ledger_text, title="[bold magenta]Resonance Ledger[/bold magenta]", border_style="magenta")
+            
+            # Logs panel
+            logs = self.get_recent_logs(8)
+            log_text = Text("\n".join(logs) if logs else "No recent logs", style="dim")
+            logs_panel = Panel(log_text, title="[bold green]Recent Logs[/bold green]", border_style="green")
+            
+            # Header
+            header = Panel(
+                Text(f"Hive OS Dashboard v3.0 | {datetime.now().strftime('%H:%M:%S')}", 
+                     style="bold cyan", justify="center"),
+                border_style="cyan"
+            )
+            
+            # Create layout
+            layout = Layout()
+            layout.split_column(
+                Layout(header, size=3),
+                Layout(name="main"),
+                Layout(logs_panel, size=8)
+            )
+            
+            layout["main"].split_row(
+                Layout(services_panel, ratio=2),
+                Layout(name="right")
+            )
+            
+            layout["right"].split_column(
+                Layout(resources_panel, ratio=1),
+                Layout(ledger_panel, ratio=1)
+            )
+            
+            return layout
+        
+        try:
+            with Live(generate_layout(), refresh_per_second=1, screen=True) as live:
+                while self.running:
+                    time.sleep(self.refresh_rate)
+                    live.update(generate_layout())
+        except KeyboardInterrupt:
+            self.running = False
+            self.console.clear()
+            self.console.print("[green]Dashboard exited[/green]")
+    
+    def render_basic(self):
+        """Render basic text output."""
+        while self.running:
+            os.system('clear' if os.name != 'nt' else 'cls')
+            
+            print(f"\n{'='*60}")
+            print(f"  HIVE OS DASHBOARD v3.0 - {datetime.now().strftime('%H:%M:%S')}")
+            print(f"{'='*60}\n")
+            
+            # Services
+            print("SERVICES:")
+            services = self.get_service_status()
+            for svc in services:
+                status = "✓" if svc['state'] == 'running' else "✗"
+                print(f"  [{status}] {svc['name']:<20} {svc['state']:<10} {svc['pid']}")
+            
+            # Resources
+            print("\nRESOURCES:")
+            resources = self.get_system_resources()
+            print(f"  CPU: {resources['cpu_percent']:.1f}%")
+            print(f"  RAM: {resources['memory']['percent']:.1f}%")
+            print(f"  Disk: {resources['disk']['percent']:.1f}% used")
+            
+            # Ledger
+            print("\nLEDGER:")
+            ledger = self.get_ledger_status()
+            print(f"  Status: {ledger.get('status', 'unknown')}")
+            print(f"  Events: {ledger.get('events', 0)}")
+            
+            # Logs
+            print("\nRECENT LOGS:")
+            logs = self.get_recent_logs(5)
+            for log in logs:
+                print(f"  {log}")
+            
+            print(f"\n{'='*60}")
+            print("  Press Ctrl+C to exit")
+            print(f"{'='*60}")
+            
+            try:
+                time.sleep(self.refresh_rate)
+            except KeyboardInterrupt:
+                self.running = False
+                print("\nDashboard exited")
+    
+    def run(self):
+        """Run the dashboard."""
+        if HAS_RICH:
+            self.render_rich()
+        else:
+            self.render_basic()
+
+
+def main():
+    dashboard = HiveDashboard()
+    dashboard.run()
+
+if __name__ == '__main__':
+    main()

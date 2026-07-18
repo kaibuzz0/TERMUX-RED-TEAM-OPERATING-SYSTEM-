@@ -1,0 +1,461 @@
+#!/usr/bin/env python3
+"""
+Hive OS Service Manager
+Systemd-like service management for Termux/Android
+"""
+import os
+import sys
+import json
+import signal
+import psutil
+import argparse
+import logging
+import subprocess
+import time
+from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Optional, Tuple
+from enum import Enum
+
+# Hive OS paths
+HIVE_ROOT = Path('/root/hive-os')
+SERVICE_DIR = HIVE_ROOT / 'services'
+RUN_DIR = HIVE_ROOT / 'run'
+LOG_DIR = HIVE_ROOT / 'log'
+CONFIG_DIR = HIVE_ROOT / 'etc'
+PID_DIR = RUN_DIR / 'pids'
+SOCKET_DIR = RUN_DIR / 'sockets'
+
+class ServiceState(Enum):
+    STOPPED = "stopped"
+    STARTING = "starting"
+    RUNNING = "running"
+    STOPPING = "stopping"
+    FAILED = "failed"
+    RESTARTING = "restarting"
+
+@dataclass
+class ServiceConfig:
+    name: str
+    command: str
+    description: str = ""
+    autostart: bool = False
+    restart: str = "no"  # no, always, on-failure
+    restart_delay: int = 5
+    max_restarts: int = 5
+    working_dir: str = str(HIVE_ROOT)
+    env: Dict[str, str] = None
+    log_file: str = ""
+    pid_file: str = ""
+    
+    def __post_init__(self):
+        if self.env is None:
+            self.env = {}
+        if not self.log_file:
+            self.log_file = str(LOG_DIR / f"{self.name}.log")
+        if not self.pid_file:
+            self.pid_file = str(PID_DIR / f"{self.name}.pid")
+
+class HiveServiceManager:
+    """Systemd-like service manager for Termux."""
+    
+    def __init__(self):
+        self._ensure_dirs()
+        self.services: Dict[str, ServiceConfig] = {}
+        self._load_all_services()
+        
+    def _ensure_dirs(self):
+        """Create necessary directories."""
+        for d in [SERVICE_DIR, RUN_DIR, LOG_DIR, CONFIG_DIR, PID_DIR, SOCKET_DIR]:
+            d.mkdir(parents=True, exist_ok=True)
+    
+    def _load_all_services(self):
+        """Load all service definitions."""
+        config_file = CONFIG_DIR / 'services.json'
+        if config_file.exists():
+            with open(config_file) as f:
+                data = json.load(f)
+                for svc_data in data.get('services', []):
+                    cfg = ServiceConfig(**svc_data)
+                    self.services[cfg.name] = cfg
+    
+    def _save_services(self):
+        """Persist service definitions."""
+        config_file = CONFIG_DIR / 'services.json'
+        data = {'services': [asdict(s) for s in self.services.values()]}
+        with open(config_file, 'w') as f:
+            json.dump(data, f, indent=2)
+    
+    def _get_pid(self, service_name: str) -> Optional[int]:
+        """Get PID from file."""
+        pid_file = PID_DIR / f"{service_name}.pid"
+        if pid_file.exists():
+            try:
+                with open(pid_file) as f:
+                    return int(f.read().strip())
+            except:
+                pass
+        return None
+    
+    def _is_running(self, service_name: str) -> bool:
+        """Check if service is actually running."""
+        pid = self._get_pid(service_name)
+        if pid:
+            try:
+                proc = psutil.Process(pid)
+                return proc.is_running()
+            except psutil.NoSuchProcess:
+                pass
+        return False
+    
+    def _write_pid(self, service_name: str, pid: int):
+        """Write PID to file."""
+        pid_file = PID_DIR / f"{service_name}.pid"
+        with open(pid_file, 'w') as f:
+            f.write(str(pid))
+    
+    def _remove_pid(self, service_name: str):
+        """Remove PID file."""
+        pid_file = PID_DIR / f"{service_name}.pid"
+        if pid_file.exists():
+            pid_file.unlink()
+    
+    def _log(self, service_name: str, message: str):
+        """Log message to service log."""
+        log_file = LOG_DIR / f"{service_name}.log"
+        timestamp = datetime.now().isoformat()
+        with open(log_file, 'a') as f:
+            f.write(f"[{timestamp}] {message}\n")
+    
+    def _create_service_script(self, config: ServiceConfig) -> str:
+        """Create wrapper script for service."""
+        script_content = f'''#!/data/data/com.termux/files/usr/bin/bash
+# Hive OS Service: {config.name}
+# Generated: {datetime.now().isoformat()}
+
+cd {config.working_dir}
+
+# Set environment
+'''
+        for key, val in config.env.items():
+            script_content += f'export {key}="{val}"\n'
+        
+        script_content += f'''
+# Execute service
+echo "Starting {config.name}..."
+exec {config.command}
+'''
+        return script_content
+    
+    def start(self, service_name: str, foreground: bool = False) -> bool:
+        """Start a service."""
+        if service_name not in self.services:
+            print(f"Service not found: {service_name}")
+            return False
+        
+        config = self.services[service_name]
+        
+        if self._is_running(service_name):
+            print(f"Service {service_name} is already running")
+            return True
+        
+        print(f"Starting {service_name}...")
+        self._log(service_name, "STARTING")
+        
+        try:
+            if foreground:
+                # Run in foreground
+                process = subprocess.Popen(
+                    config.command,
+                    shell=True,
+                    cwd=config.working_dir,
+                    env={**os.environ, **config.env}
+                )
+                self._write_pid(service_name, process.pid)
+                process.wait()
+            else:
+                # Run as daemon
+                process = subprocess.Popen(
+                    config.command,
+                    shell=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    cwd=config.working_dir,
+                    env={**os.environ, **config.env}
+                )
+                self._write_pid(service_name, process.pid)
+                time.sleep(1)  # Give it time to start
+            
+            if self._is_running(service_name):
+                print(f"✓ {service_name} started (PID {self._get_pid(service_name)})")
+                self._log(service_name, "RUNNING")
+                return True
+            else:
+                print(f"✗ {service_name} failed to start")
+                self._log(service_name, "FAILED")
+                return False
+                
+        except Exception as e:
+            print(f"✗ Failed to start {service_name}: {e}")
+            self._log(service_name, f"ERROR: {e}")
+            return False
+    
+    def stop(self, service_name: str) -> bool:
+        """Stop a service."""
+        if not self._is_running(service_name):
+            print(f"Service {service_name} is not running")
+            return True
+        
+        pid = self._get_pid(service_name)
+        if not pid:
+            print(f"No PID found for {service_name}")
+            return False
+        
+        print(f"Stopping {service_name} (PID {pid})...")
+        self._log(service_name, "STOPPING")
+        
+        try:
+            process = psutil.Process(pid)
+            process.terminate()
+            
+            # Wait for graceful shutdown
+            try:
+                process.wait(timeout=5)
+            except psutil.TimeoutExpired:
+                print(f"Force killing {service_name}...")
+                process.kill()
+                process.wait(timeout=2)
+            
+            self._remove_pid(service_name)
+            print(f"✓ {service_name} stopped")
+            self._log(service_name, "STOPPED")
+            return True
+            
+        except psutil.NoSuchProcess:
+            self._remove_pid(service_name)
+            print(f"✓ {service_name} was already stopped")
+            return True
+        except Exception as e:
+            print(f"✗ Error stopping {service_name}: {e}")
+            return False
+    
+    def restart(self, service_name: str) -> bool:
+        """Restart a service."""
+        print(f"Restarting {service_name}...")
+        self.stop(service_name)
+        time.sleep(1)
+        return self.start(service_name)
+    
+    def status(self, service_name: Optional[str] = None) -> Dict:
+        """Get status of service(s)."""
+        results = {}
+        services = [service_name] if service_name else list(self.services.keys())
+        
+        for name in services:
+            if name not in self.services:
+                continue
+            
+            config = self.services[name]
+            pid = self._get_pid(name)
+            running = self._is_running(name)
+            
+            # Get process info if running
+            cpu = mem = uptime = None
+            if running and pid:
+                try:
+                    proc = psutil.Process(pid)
+                    cpu = proc.cpu_percent(interval=0.1)
+                    mem = proc.memory_info().rss / 1024 / 1024  # MB
+                    uptime = time.time() - proc.create_time()
+                except:
+                    pass
+            
+            results[name] = {
+                'state': 'running' if running else 'stopped',
+                'pid': pid,
+                'cpu_percent': cpu,
+                'memory_mb': mem,
+                'uptime_seconds': uptime,
+                'autostart': config.autostart,
+                'restart_policy': config.restart
+            }
+        
+        return results
+    
+    def enable(self, service_name: str) -> bool:
+        """Enable autostart for service."""
+        if service_name not in self.services:
+            print(f"Service not found: {service_name}")
+            return False
+        
+        self.services[service_name].autostart = True
+        self._save_services()
+        print(f"✓ {service_name} enabled")
+        return True
+    
+    def disable(self, service_name: str) -> bool:
+        """Disable autostart for service."""
+        if service_name not in self.services:
+            print(f"Service not found: {service_name}")
+            return False
+        
+        self.services[service_name].autostart = False
+        self._save_services()
+        print(f"✓ {service_name} disabled")
+        return True
+    
+    def logs(self, service_name: str, lines: int = 50, follow: bool = False):
+        """Show service logs."""
+        log_file = LOG_DIR / f"{service_name}.log"
+        if not log_file.exists():
+            print(f"No logs for {service_name}")
+            return
+        
+        if follow:
+            # Tail -f equivalent
+            import subprocess
+            subprocess.run(['tail', '-f', str(log_file)])
+        else:
+            with open(log_file) as f:
+                all_lines = f.readlines()
+                for line in all_lines[-lines:]:
+                    print(line.rstrip())
+    
+    def register(self, name: str, command: str, description: str = "",
+                 autostart: bool = False, restart: str = "no"):
+        """Register a new service."""
+        config = ServiceConfig(
+            name=name,
+            command=command,
+            description=description,
+            autostart=autostart,
+            restart=restart
+        )
+        self.services[name] = config
+        self._save_services()
+        print(f"✓ Registered service: {name}")
+    
+    def unregister(self, name: str):
+        """Unregister a service."""
+        if name in self.services:
+            self.stop(name)
+            del self.services[name]
+            self._save_services()
+            print(f"✓ Unregistered service: {name}")
+    
+    def start_all(self):
+        """Start all autostart services."""
+        for name, config in self.services.items():
+            if config.autostart:
+                self.start(name)
+    
+    def stop_all(self):
+        """Stop all running services."""
+        for name in list(self.services.keys()):
+            self.stop(name)
+    
+    def watch(self):
+        """Watchdog - restart failed services."""
+        print("Starting service watchdog...")
+        while True:
+            for name, config in self.services.items():
+                if config.restart == "always" or (
+                    config.restart == "on-failure" and not self._is_running(name)
+                ):
+                    if not self._is_running(name):
+                        print(f"Watchdog: restarting {name}")
+                        self.start(name)
+            time.sleep(5)
+
+def main():
+    parser = argparse.ArgumentParser(description='Hive OS Service Manager')
+    parser.add_argument('command', choices=[
+        'start', 'stop', 'restart', 'status', 'logs',
+        'enable', 'disable', 'register', 'unregister',
+        'start-all', 'stop-all', 'watch'
+    ])
+    parser.add_argument('service', nargs='?', help='Service name')
+    parser.add_argument('--command', '-c', help='Command for register')
+    parser.add_argument('--description', '-d', help='Description for register')
+    parser.add_argument('--autostart', '-a', action='store_true', help='Enable autostart')
+    parser.add_argument('--restart', '-r', choices=['no', 'always', 'on-failure'], default='no')
+    parser.add_argument('--lines', '-n', type=int, default=50, help='Number of log lines')
+    parser.add_argument('--follow', '-f', action='store_true', help='Follow logs')
+    
+    args = parser.parse_args()
+    
+    mgr = HiveServiceManager()
+    
+    if args.command == 'start':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.start(args.service)
+    
+    elif args.command == 'stop':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.stop(args.service)
+    
+    elif args.command == 'restart':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.restart(args.service)
+    
+    elif args.command == 'status':
+        status = mgr.status(args.service)
+        print(f"{'Service':<20} {'State':<10} {'PID':<8} {'CPU%':<8} {'Mem(MB)':<10}")
+        print("-" * 60)
+        for name, info in status.items():
+            cpu = f"{info['cpu_percent']:.1f}" if info['cpu_percent'] else "-"
+            mem = f"{info['memory_mb']:.1f}" if info['memory_mb'] else "-"
+            pid = str(info['pid']) if info['pid'] else "-"
+            print(f"{name:<20} {info['state']:<10} {pid:<8} {cpu:<8} {mem:<10}")
+    
+    elif args.command == 'logs':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.logs(args.service, args.lines, args.follow)
+    
+    elif args.command == 'enable':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.enable(args.service)
+    
+    elif args.command == 'disable':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.disable(args.service)
+    
+    elif args.command == 'register':
+        if not args.service or not args.command:
+            print("Service name and --command required")
+            sys.exit(1)
+        mgr.register(
+            args.service, args.command, args.description or "",
+            args.autostart, args.restart
+        )
+    
+    elif args.command == 'unregister':
+        if not args.service:
+            print("Service name required")
+            sys.exit(1)
+        mgr.unregister(args.service)
+    
+    elif args.command == 'start-all':
+        mgr.start_all()
+    
+    elif args.command == 'stop-all':
+        mgr.stop_all()
+    
+    elif args.command == 'watch':
+        mgr.watch()
+
+if __name__ == '__main__':
+    main()

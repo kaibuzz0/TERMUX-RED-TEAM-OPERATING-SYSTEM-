@@ -1,0 +1,330 @@
+#!/usr/bin/env python3
+"""
+Hive OS Unified Command Suite
+Single entry point for all Hive OS operations
+"""
+import os
+import sys
+import subprocess
+import argparse
+from pathlib import Path
+from typing import List, Optional
+
+HIVE_OS_ROOT = Path('/root/hive-os')
+HIVE_SWARM_ROOT = Path('/root/hive-swarm')
+BIN_DIR = HIVE_OS_ROOT / 'bin'
+
+class HiveOS:
+    """Unified Hive OS command interface."""
+    
+    VERSION = "3.1-OS-INTEGRATED"
+    
+    def __init__(self):
+        self.commands = {
+            'status': self.cmd_status,
+            'service': self.cmd_service,
+            'hardware': self.cmd_hardware,
+            'dashboard': self.cmd_dashboard,
+            'swarm': self.cmd_swarm,
+            'ledger': self.cmd_ledger,
+            'preserve': self.cmd_preserve,
+            'sync': self.cmd_sync,
+            'cron': self.cmd_cron,
+            'logs': self.cmd_logs,
+            'config': self.cmd_config,
+            'update': self.cmd_update,
+        }
+    
+    def _run(self, script: str, *args) -> tuple:
+        """Run a Hive script."""
+        script_path = BIN_DIR / script
+        if not script_path.exists():
+            # Try swarm
+            script_path = HIVE_SWARM_ROOT / script
+        
+        if script_path.exists():
+            cmd = [sys.executable, str(script_path)] + list(args)
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            return result.returncode == 0, result.stdout, result.stderr
+        return False, "", f"Script not found: {script}"
+    
+    def _header(self, title: str):
+        """Print header."""
+        print(f"\n{'='*50}")
+        print(f"  {title}")
+        print(f"{'='*50}\n")
+    
+    def cmd_status(self, args):
+        """Show complete system status."""
+        self._header(f"HIVE OS v{self.VERSION}")
+        
+        # OS Status
+        print("OS STATUS:")
+        print(f"  Version: {self.VERSION}")
+        print(f"  Paths:")
+        print(f"    - OS Root: {HIVE_OS_ROOT}")
+        print(f"    - Swarm: {HIVE_SWARM_ROOT}")
+        print(f"    - Services: {HIVE_OS_ROOT / 'services'}")
+        print(f"    - Logs: {HIVE_OS_ROOT / 'log'}")
+        
+        # Services
+        print("\nSERVICES:")
+        ok, out, err = self._run('hive-service', 'status')
+        if ok:
+            print(out)
+        else:
+            print(f"  Error: {err}")
+        
+        # Swarm Status
+        print("\nSWARM STATUS:")
+        ok, out, err = self._run('hive', 'status')
+        if ok:
+            print(out)
+        else:
+            print(f"  Error checking swarm")
+        
+        # Hardware
+        print("\nHARDWARE:")
+        ok, out, err = self._run('hive-hardware', 'status')
+        if ok:
+            # Just show summary
+            lines = out.split('\n')
+            for line in lines[:10]:
+                if line.strip():
+                    print(f"  {line}")
+        
+        print(f"\n{'='*50}")
+    
+    def cmd_service(self, args):
+        """Service management."""
+        if not args.subcommand:
+            print("Usage: hive-os service <start|stop|restart|status|logs> <service>")
+            return
+        
+        script_args = [args.subcommand]
+        if args.service_name:
+            script_args.append(args.service_name)
+        if args.follow:
+            script_args.append('--follow')
+        if args.lines:
+            script_args.extend(['--lines', str(args.lines)])
+        
+        ok, out, err = self._run('hive-service', *script_args)
+        print(out if ok else err)
+    
+    def cmd_hardware(self, args):
+        """Hardware operations."""
+        if not args.subcommand:
+            print("Usage: hive-os hardware <status|battery|notify|alert>")
+            return
+        
+        script_args = [args.subcommand]
+        if args.title:
+            script_args.extend(['--title', args.title])
+        if args.content:
+            script_args.extend(['--content', args.content])
+        
+        ok, out, err = self._run('hive-hardware', *script_args)
+        print(out if ok else err)
+    
+    def cmd_dashboard(self, args):
+        """Launch TUI dashboard."""
+        ok, out, err = self._run('hive-dashboard')
+        if not ok and err:
+            print(f"Dashboard error: {err}")
+    
+    def cmd_swarm(self, args):
+        """Swarm operations."""
+        if not args.subcommand:
+            print("Usage: hive-os swarm <status|sync|handoff|evolve>")
+            return
+        
+        # Pass through to hive command
+        ok, out, err = self._run('hive', args.subcommand)
+        print(out if ok else err)
+    
+    def cmd_ledger(self, args):
+        """Ledger operations."""
+        if not args.subcommand:
+            print("Usage: hive-os ledger <status|emit|packet>")
+            return
+        
+        ok, out, err = self._run('hive', 'ledger', args.subcommand)
+        print(out if ok else err)
+    
+    def cmd_preserve(self, args):
+        """Preservation operations."""
+        if not args.subcommand:
+            print("Usage: hive-os preserve <snapshot|verify|list|emergency>")
+            return
+        
+        script_args = [args.subcommand]
+        if args.reason:
+            script_args.extend(['--reason', args.reason])
+        
+        ok, out, err = self._run('hive', 'preserve', *script_args)
+        print(out if ok else err)
+    
+    def cmd_sync(self, args):
+        """Sync to offline storage."""
+        self._header("SYNC OPERATION")
+        
+        # Sync OS components
+        print("Syncing Hive OS...")
+        os_dest = Path('/sdcard/Hermès.Swarm/hive-os/')
+        os_dest.mkdir(parents=True, exist_ok=True)
+        
+        # Copy key files
+        for src in [HIVE_OS_ROOT / 'bin', HIVE_OS_ROOT / 'etc']:
+            if src.exists():
+                dest = os_dest / src.name
+                if dest.exists():
+                    import shutil
+                    shutil.rmtree(dest)
+                import shutil
+                shutil.copytree(src, dest)
+                print(f"  ✓ {src.name}")
+        
+        # Sync swarm
+        print("\nSyncing Hive Swarm...")
+        ok, out, err = self._run('hive', 'sync')
+        if ok:
+            print(out)
+        
+        print("\n✓ Sync complete")
+    
+    def cmd_cron(self, args):
+        """Manage scheduled tasks."""
+        if not args.subcommand:
+            print("Usage: hive-os cron <list|add|remove>")
+            return
+        
+        if args.subcommand == 'list':
+            from hermes_tools import cronjob
+            jobs = cronjob(action='list')
+            if isinstance(jobs, dict) and 'jobs' in jobs:
+                print(f"{'Job ID':<20} {'Name':<20} {'Schedule':<20}")
+                print("-" * 60)
+                for job in jobs['jobs']:
+                    print(f"{job.get('job_id', '?')[:20]:<20} {job.get('name', '?')[:20]:<20} {job.get('schedule', '?')[:20]:<20}")
+            else:
+                print("No cron jobs configured")
+    
+    def cmd_logs(self, args):
+        """View logs."""
+        log_dir = HIVE_OS_ROOT / 'log'
+        if not log_dir.exists():
+            print("No logs directory")
+            return
+        
+        if args.service:
+            log_file = log_dir / f"{args.service}.log"
+            if log_file.exists():
+                with open(log_file) as f:
+                    lines = f.readlines()
+                    for line in lines[-args.lines:]:
+                        print(line.rstrip())
+            else:
+                print(f"No logs for {args.service}")
+        else:
+            print("Available logs:")
+            for log_file in log_dir.glob('*.log'):
+                size = log_file.stat().st_size
+                print(f"  {log_file.stem:<20} {size/1024:.1f}KB")
+    
+    def cmd_config(self, args):
+        """Configuration management."""
+        config_file = HIVE_OS_ROOT / 'etc' / 'hive-os.conf'
+        
+        if args.subcommand == 'show':
+            if config_file.exists():
+                with open(config_file) as f:
+                    print(f.read())
+            else:
+                print("No config file. Creating default...")
+                default = """# Hive OS Configuration
+[HIVE]
+version=3.1
+auto_start=true
+
+[SERVICES]
+watchdog_interval=5
+
+[LOG]
+max_size=10MB
+retention=7days
+"""
+                config_file.parent.mkdir(parents=True, exist_ok=True)
+                with open(config_file, 'w') as f:
+                    f.write(default)
+                print(default)
+        elif args.subcommand == 'edit':
+            editor = os.environ.get('EDITOR', 'nano')
+            subprocess.run([editor, str(config_file)])
+    
+    def cmd_update(self, args):
+        """Update Hive OS."""
+        self._header("UPDATE CHECK")
+        print("Checking for updates...")
+        
+        # Check git if available
+        git_dir = HIVE_SWARM_ROOT / '.git'
+        if git_dir.exists():
+            result = subprocess.run(
+                ['git', '-C', str(HIVE_SWARM_ROOT), 'fetch', '--dry-run'],
+                capture_output=True,
+                text=True
+            )
+            if 'fetch' in result.stderr or result.returncode == 0:
+                print("Updates available - run 'git pull' to update")
+            else:
+                print("Hive is up to date")
+        else:
+            print("Git not configured. Manual update required.")
+    
+    def run(self, args):
+        """Dispatch command."""
+        if args.command in self.commands:
+            self.commands[args.command](args)
+        else:
+            print(f"Unknown command: {args.command}")
+            print(f"Available: {', '.join(self.commands.keys())}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Hive OS - Professional AI Operating System',
+        prog='hive-os'
+    )
+    
+    parser.add_argument('command', nargs='?',
+                       choices=['status', 'service', 'hardware', 'dashboard',
+                               'swarm', 'ledger', 'preserve', 'sync', 'cron',
+                               'logs', 'config', 'update'],
+                       help='Command to run')
+    parser.add_argument('subcommand', nargs='?', help='Subcommand')
+    parser.add_argument('service_name', nargs='?', help='Service name')
+    parser.add_argument('--title', '-t', help='Notification title')
+    parser.add_argument('--content', '-c', help='Notification content')
+    parser.add_argument('--reason', '-r', help='Snapshot reason')
+    parser.add_argument('--follow', '-f', action='store_true', help='Follow logs')
+    parser.add_argument('--lines', '-n', type=int, default=50, help='Number of lines')
+    parser.add_argument('--service', '-s', help='Service name for logs')
+    
+    args = parser.parse_args()
+    
+    if not args.command:
+        args.command = 'status'
+        args.subcommand = None
+        args.service_name = None
+        args.title = None
+        args.content = None
+        args.reason = None
+        args.follow = False
+        args.lines = 50
+        args.service = None
+    
+    hive = HiveOS()
+    hive.run(args)
+
+if __name__ == '__main__':
+    main()

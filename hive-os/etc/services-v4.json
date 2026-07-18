@@ -1,0 +1,32 @@
+{
+  "services": [
+    {
+      "name": "hermes-daemon",
+      "command": "python3 /root/hive-os/services/hermes-daemon.py",
+      "description": "Hermes AI integration daemon",
+      "autostart": true,
+      "restart": "always",
+      "restart_delay": 10,
+      "max_restarts": 5,
+      "critical": true
+    },
+    {
+      "name": "hive-worker",
+      "command": "python3 /root/hive-swarm/services/autonomous_worker.py daemon",
+      "description": "Autonomous Worker Daemon",
+      "autostart": true,
+      "restart": "always",
+      "restart_delay": 10,
+      "max_restarts": 5
+    },
+    {
+      "name": "hive-ledger",
+      "command": "python3 /root/hive-swarm/services/resonance_ledger.py emit --type ECHO --payload '{\"heartbeat\":true}'",
+      "description": "Resonance Ledger heartbeat",
+      "autostart": true,
+      "restart": "always",
+      "restart_delay": 300,
+      "max_restarts": 10
+    }
+  ]
+}

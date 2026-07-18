@@ -1,0 +1,5 @@
+mytherapist2.py
+*.pyc
+__pycache__/
+.snapshots/
+.swarm/

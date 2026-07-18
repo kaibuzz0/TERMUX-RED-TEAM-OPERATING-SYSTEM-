@@ -1,0 +1,31 @@
+{
+  "services": [
+    {
+      "name": "hive-ledger",
+      "command": "python3 /root/hive-swarm/services/resonance_ledger.py emit --type ECHO --payload '{\"heartbeat\":true}'",
+      "description": "Resonance Ledger heartbeat",
+      "autostart": true,
+      "restart": "always",
+      "restart_delay": 60,
+      "max_restarts": 10
+    },
+    {
+      "name": "hive-worker",
+      "command": "python3 /root/hive-swarm/services/autonomous_worker.py daemon",
+      "description": "Autonomous Worker Daemon",
+      "autostart": true,
+      "restart": "always",
+      "restart_delay": 10,
+      "max_restarts": 5
+    },
+    {
+      "name": "hive-monitor",
+      "command": "python3 /root/hive-swarm/tools/hive_health_monitor.py",
+      "description": "Health Monitor",
+      "autostart": true,
+      "restart": "on-failure",
+      "restart_delay": 30,
+      "max_restarts": 3
+    }
+  ]
+}

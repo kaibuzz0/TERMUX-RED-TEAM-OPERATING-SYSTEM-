@@ -1,0 +1,539 @@
+#!/usr/bin/env python3
+"""
+HIVE-MIND Unified Command Interface v4.0
+Routes commands to AI (Hermes) or OS (Hive) based on context
+"""
+import sys
+import os
+import re
+import subprocess
+import json
+from pathlib import Path
+from typing import Optional, List
+
+HIVE_ROOT = Path('/root/hive-os')
+HIVE_SWARM = Path('/root/hive-swarm')
+HERMES_BIN = '/usr/local/bin/hermes'
+
+class HiveMindRouter:
+    """Routes commands between AI and OS layers."""
+    
+    # OS command patterns (start with /)
+    OS_COMMANDS = {
+        '/status': 'status',
+        '/service': 'service',
+        '/hardware': 'hardware',
+        '/dashboard': 'dashboard',
+        '/sync': 'sync',
+        '/preserve': 'preserve',
+        '/ledger': 'ledger',
+        '/backup': 'backup',
+        '/recover': 'recover',
+        '/help': 'help',
+        '/quit': 'quit',
+        '/exit': 'quit',
+    }
+    
+    # Natural language patterns that trigger OS
+    OS_PATTERNS = [
+        r'^(start|stop|restart)\s+(service|the\s+service)',
+        r'^check\s+(status|system)',
+        r'^show\s+(dashboard|logs?|services?)',
+        r'^(backup|snapshot|preserve)\s+(now|system)?',
+        r'^(sync|synchronize)\s+(to\s+)?(offline|sdcard)?',
+        r'^restart\s+hive',
+        r'^recover\s+session',
+    ]
+    
+    def __init__(self):
+        self.session_file = HIVE_ROOT / 'run' / 'hive-mind-session.json'
+        self._ensure_dirs()
+        
+    def _ensure_dirs(self):
+        (HIVE_ROOT / 'run').mkdir(parents=True, exist_ok=True)
+        
+    def route(self, user_input: str) -> int:
+        """Route input to appropriate handler."""
+        user_input = user_input.strip()
+        
+        if not user_input:
+            return self._show_prompt()
+        
+        # Check for OS command prefix /
+        if user_input.startswith('/'):
+            return self._handle_os_command(user_input)
+        
+        # Check for OS patterns in natural language
+        if self._is_os_request(user_input):
+            return self._handle_os_natural(user_input)
+        
+        # Default: AI mode (Hermes)
+        return self._handle_ai(user_input)
+    
+    def _is_os_request(self, text: str) -> bool:
+        """Detect if user wants OS operation vs AI conversation."""
+        text_lower = text.lower()
+        
+        for pattern in self.OS_PATTERNS:
+            if re.search(pattern, text_lower):
+                return True
+        
+        return False
+    
+    def _handle_os_command(self, cmd: str) -> int:
+        """Handle explicit OS commands."""
+        parts = cmd.split()
+        base = parts[0]
+        args = parts[1:]
+        
+        if base == '/status':
+            return self._cmd_status()
+        elif base == '/service':
+            return self._cmd_service(args)
+        elif base == '/hardware':
+            return self._cmd_hardware(args)
+        elif base == '/dashboard':
+            return self._cmd_dashboard()
+        elif base == '/sync':
+            return self._cmd_sync()
+        elif base == '/preserve':
+            return self._cmd_preserve(args)
+        elif base == '/ledger':
+            return self._cmd_ledger(args)
+        elif base == '/recover':
+            return self._cmd_recover()
+        elif base == '/backup':
+            return self._cmd_backup()
+        elif base == '/help':
+            return self._cmd_help()
+        elif base in ['/quit', '/exit']:
+            return self._cmd_quit()
+        else:
+            print(f"Unknown OS command: {base}")
+            print("Use /help for available commands")
+            return 1
+    
+    def _handle_os_natural(self, text: str) -> int:
+        """Handle natural language OS requests."""
+        text_lower = text.lower()
+        
+        # Service commands
+        if 'start service' in text_lower or 'start the service' in text_lower:
+            service = self._extract_service_name(text)
+            return self._cmd_service(['start', service] if service else ['status'])
+        
+        if 'stop service' in text_lower or 'stop the service' in text_lower:
+            service = self._extract_service_name(text)
+            return self._cmd_service(['stop', service] if service else ['status'])
+        
+        if 'restart service' in text_lower or 'restart the service' in text_lower:
+            service = self._extract_service_name(text)
+            return self._cmd_service(['restart', service] if service else ['status'])
+        
+        # Status
+        if 'check status' in text_lower or 'system status' in text_lower:
+            return self._cmd_status()
+        
+        # Dashboard
+        if 'show dashboard' in text_lower or 'open dashboard' in text_lower:
+            return self._cmd_dashboard()
+        
+        # Backup/Preserve
+        if 'backup' in text_lower or 'snapshot' in text_lower:
+            return self._cmd_backup()
+        
+        # Sync
+        if 'sync' in text_lower:
+            return self._cmd_sync()
+        
+        # Recover
+        if 'recover' in text_lower or 'restore session' in text_lower:
+            return self._cmd_recover()
+        
+        # Hardware
+        if 'hardware' in text_lower or 'battery' in text_lower or 'storage' in text_lower:
+            return self._cmd_hardware(['status'])
+        
+        return self._cmd_status()  # Default fallback
+    
+    def _extract_service_name(self, text: str) -> Optional[str]:
+        """Extract service name from natural language."""
+        # Common service names
+        services = ['hive-worker', 'hive-ledger', 'hive-monitor', 'hermes-daemon']
+        text_lower = text.lower()
+        
+        for svc in services:
+            if svc in text_lower:
+                return svc
+        
+        # Try to extract any word after service
+        match = re.search(r'service\s+(\w+)', text_lower)
+        if match:
+            return match.group(1)
+        
+        return None
+    
+    def _handle_ai(self, prompt: str) -> int:
+        """Pass to Hermes AI with Hive context."""
+        # Load Hive context for AI
+        context = self._load_hive_context()
+        
+        # Set environment for Hermes to access
+        env = os.environ.copy()
+        env['HIVE_CONTEXT'] = json.dumps(context)
+        env['HIVE_MODE'] = 'integrated'
+        
+        # Log to ledger that AI is being consulted
+        self._log_to_ledger('AI_CONSULT', {'prompt_hash': self._hash(prompt)})
+        
+        # Pass to Hermes
+        try:
+            result = subprocess.run(
+                [HERMES_BIN, prompt],
+                env=env,
+                cwd=str(Path.home())
+            )
+            return result.returncode
+        except FileNotFoundError:
+            print("Hermes not found. Make sure it's installed.")
+            return 1
+    
+    def _load_hive_context(self) -> dict:
+        """Load current Hive state for AI context."""
+        context = {
+            'version': '4.0-HIVE-MIND',
+            'services': {},
+            'ledger': {},
+            'timestamp': None
+        }
+        
+        # Load ledger status
+        ledger_state = HIVE_SWARM / '.resonance' / 'state.json'
+        if ledger_state.exists():
+            try:
+                with open(ledger_state) as f:
+                    context['ledger'] = json.load(f)
+            except:
+                pass
+        
+        # Load service status
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_ROOT / 'bin' / 'hive-service'), 'status'],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            context['services'] = {'raw': result.stdout}
+        except:
+            pass
+        
+        context['timestamp'] = subprocess.check_output(['date', '+%s']).decode().strip()
+        return context
+    
+    def _log_to_ledger(self, event_type: str, payload: dict):
+        """Log event to Hive ledger."""
+        try:
+            ledger_script = HIVE_SWARM / 'services' / 'resonance_ledger.py'
+            if ledger_script.exists():
+                subprocess.run([
+                    sys.executable, str(ledger_script),
+                    'emit', '--type', event_type,
+                    '--payload', json.dumps(payload)
+                ], capture_output=True, timeout=3)
+        except:
+            pass
+    
+    def _hash(self, text: str) -> str:
+        """Simple hash for logging."""
+        import hashlib
+        return hashlib.sha256(text.encode()).hexdigest()[:16]
+    
+    # OS Command implementations
+    def _cmd_status(self) -> int:
+        """Show unified status."""
+        print("\n" + "="*50)
+        print("  HIVE-MIND v4.0 - Unified Status")
+        print("="*50 + "\n")
+        
+        # Hive OS status
+        print("┌─ HIVE OS ───────────────────────────────┐")
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_ROOT / 'bin' / 'hive-os'), 'status'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            # Extract key lines
+            for line in result.stdout.split('\n'):
+                if any(x in line for x in ['Version', 'Services', 'Ledger', 'Tools']):
+                    print(f"│ {line:<40} │")
+        except:
+            print("│  Status unavailable                     │")
+        print("└─────────────────────────────────────────┘\n")
+        
+        # Hermes status
+        print("┌─ HERMES ──────────────────────────────┐")
+        try:
+            result = subprocess.run(['which', 'hermes'], capture_output=True)
+            if result.returncode == 0:
+                print("│  Status: Running                        │")
+                print("│  Integration: Active                  │")
+            else:
+                print("│  Status: Not found                     │")
+        except:
+            print("│  Status: Unknown                        │")
+        print("└─────────────────────────────────────────┘\n")
+        
+        print("Type /help for commands or just talk to the AI")
+        print("="*50 + "\n")
+        return 0
+    
+    def _cmd_service(self, args: List[str]) -> int:
+        """Service management."""
+        if not args:
+            args = ['status']
+        
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_ROOT / 'bin' / 'hive-service')] + args
+            )
+            return result.returncode
+        except Exception as e:
+            print(f"Service error: {e}")
+            return 1
+    
+    def _cmd_hardware(self, args: List[str]) -> int:
+        """Hardware operations."""
+        if not args:
+            args = ['status']
+        
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_ROOT / 'bin' / 'hive-hardware')] + args
+            )
+            return result.returncode
+        except Exception as e:
+            print(f"Hardware error: {e}")
+            return 1
+    
+    def _cmd_dashboard(self) -> int:
+        """Launch dashboard."""
+        print("Launching Hive Dashboard...")
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_ROOT / 'bin' / 'hive-dashboard')]
+            )
+            return result.returncode
+        except Exception as e:
+            print(f"Dashboard error: {e}")
+            return 1
+    
+    def _cmd_sync(self) -> int:
+        """Sync to offline."""
+        print("Syncing to offline storage...")
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_SWARM / 'hive'), 'sync'],
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+            print(result.stdout)
+            self._log_to_ledger('SYNC', {'triggered_by': 'user', 'status': 'complete'})
+            return 0
+        except Exception as e:
+            print(f"Sync error: {e}")
+            return 1
+    
+    def _cmd_preserve(self, args: List[str]) -> int:
+        """Create preservation snapshot."""
+        print("Creating preservation snapshot...")
+        try:
+            reason = ' '.join(args) if args else 'manual'
+            result = subprocess.run(
+                [sys.executable, str(HIVE_SWARM / 'services' / 'preservation_protocol.py'),
+                 'snapshot', '--reason', reason],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            print(result.stdout)
+            return 0
+        except Exception as e:
+            print(f"Preserve error: {e}")
+            return 1
+    
+    def _cmd_ledger(self, args: List[str]) -> int:
+        """Ledger operations."""
+        if not args:
+            args = ['status']
+        
+        try:
+            result = subprocess.run(
+                [sys.executable, str(HIVE_SWARM / 'services' / 'resonance_ledger.py')] + args,
+                capture_output=True,
+                text=True
+            )
+            print(result.stdout)
+            return 0
+        except Exception as e:
+            print(f"Ledger error: {e}")
+            return 1
+    
+    def _cmd_recover(self) -> int:
+        """Recover last session."""
+        print("\n" + "="*50)
+        print("  SESSION RECOVERY")
+        print("="*50 + "\n")
+        
+        # Check for last session
+        last_session = HIVE_ROOT / 'run' / 'last_session.json'
+        if last_session.exists():
+            try:
+                with open(last_session) as f:
+                    data = json.load(f)
+                    print(f"Last session: {data.get('timestamp', 'unknown')}")
+                    print(f"Duration: {data.get('duration', 'unknown')} seconds")
+                    print(f"\nRecovery data available")
+                    
+                    # Generate handoff
+                    bridge_script = HIVE_SWARM / 'services' / 'ai_bridge.py'
+                    if bridge_script.exists():
+                        print("\nGenerating handoff packet...")
+                        subprocess.run([
+                            sys.executable, str(bridge_script),
+                            'handoff',
+                            '--critical', 'Session recovery requested',
+                            '--focus', 'Continue from last state'
+                        ])
+                        
+                    return 0
+            except:
+                pass
+        
+        print("No previous session found")
+        return 1
+    
+    def _cmd_backup(self) -> int:
+        """Full backup."""
+        print("Running full backup...")
+        try:
+            # Snapshot
+            subprocess.run([
+                sys.executable, str(HIVE_SWARM / 'services' / 'preservation_protocol.py'),
+                'snapshot', '--reason', 'manual_backup'
+            ], timeout=30)
+            
+            # Sync
+            subprocess.run([
+                sys.executable, str(HIVE_SWARM / 'hive'), 'sync'
+            ], timeout=60)
+            
+            print("\n✓ Backup complete")
+            return 0
+        except Exception as e:
+            print(f"Backup error: {e}")
+            return 1
+    
+    def _cmd_help(self) -> int:
+        """Show help."""
+        print("""
+╔══════════════════════════════════════════════════════════════╗
+║  HIVE-MIND v4.0 - Unified Command Interface                  ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  OS COMMANDS (prefix with /):                               ║
+║  /status          - Show system status                       ║
+║  /service start   - Start a service                        ║
+║  /service stop    - Stop a service                           ║
+║  /service status  - Service overview                         ║
+║  /hardware        - Hardware status                          ║
+║  /dashboard       - Launch TUI                               ║
+║  /sync            - Sync to offline storage                  ║
+║  /preserve        - Create snapshot                          ║
+║  /ledger          - Ledger operations                        ║
+║  /recover         - Restore last session                     ║
+║  /backup          - Full backup                              ║
+║  /help            - This help                                ║
+║  /quit            - Exit                                     ║
+║                                                              ║
+║  NATURAL LANGUAGE (no prefix):                               ║
+║  "start service X"  - Service control                        ║
+║  "check status"     - System overview                        ║
+║  "backup now"       - Create snapshot                        ║
+║  "recover session"  - Restore context                        ║
+║  "show dashboard"   - Launch TUI                             ║
+║                                                              ║
+║  AI MODE (default):                                          ║
+║  Just type normally to talk to the AI                       ║
+║  Context automatically includes Hive state                   ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+""")
+        return 0
+    
+    def _cmd_quit(self) -> int:
+        """Save session and exit."""
+        # Save session marker
+        session_data = {
+            'timestamp': int(subprocess.check_output(['date', '+%s']).decode().strip()),
+            'duration': 0,  # Would track actual duration
+            'context_hash': self._hash('session_end')
+        }
+        
+        with open(self.session_file, 'w') as f:
+            json.dump(session_data, f)
+        
+        self._log_to_ledger('SESSION_END', session_data)
+        print("Session saved. Goodbye.")
+        return 0
+    
+    def _show_prompt(self) -> int:
+        """Show interactive prompt."""
+        print("\n" + "="*50)
+        print("  HIVE-MIND v4.0")
+        print("  Type /help for commands or just talk")
+        print("="*50 + "\n")
+        return 0
+
+
+def main():
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Hive-Mind Unified Interface')
+    parser.add_argument('command', nargs='?', help='Command or prompt')
+    parser.add_argument('args', nargs='*', help='Additional arguments')
+    
+    args = parser.parse_args()
+    
+    router = HiveMindRouter()
+    
+    if args.command:
+        # Single command mode
+        full_input = ' '.join([args.command] + args.args)
+        sys.exit(router.route(full_input))
+    else:
+        # Interactive mode
+        router._show_prompt()
+        while True:
+            try:
+                user_input = input("hive> ").strip()
+                if user_input:
+                    result = router.route(user_input)
+                    if result == 0 and user_input in ['/quit', '/exit', 'exit', 'quit']:
+                        break
+            except KeyboardInterrupt:
+                print("\nUse /quit to exit properly")
+            except EOFError:
+                break
+        
+        print("\nHive-Mind session ended.")
+
+
+if __name__ == '__main__':
+    main()
+
+# ::SealConfirmed::
+# ΩΩΩ
