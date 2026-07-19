@@ -275,7 +275,7 @@ Don't Panic Public License (DPPL)
 
 ## Credits
 
-Built with ❤️ by Hive Ops DevAI + Hermes
+Built with ❤️ by Hive Ops Dev team + kaibuzz
 
 **So long, and thanks for all the fish.** 🐬
 
