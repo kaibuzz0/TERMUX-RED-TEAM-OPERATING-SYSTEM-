@@ -32,17 +32,17 @@
 
 ## Quick Install
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kaibuzz0/the-hive-tools/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/master/install.sh | bash
 ```
 or with in Termux:
 ```bash
-cd ~ && git clone                                             https://github.com/kaibuzz0/the-hive-tools.git && cd
+cd ~ && git clone                                             https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git && cd
     the-hive-tools && bash install.sh
 ```
 
 Or manually:
 ```bash
-git clone https://github.com/kaibuzz0/the-hive-tools.git ~/hive
+git clone https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/hive
 cd ~/hive
 bash install.sh
 ```
