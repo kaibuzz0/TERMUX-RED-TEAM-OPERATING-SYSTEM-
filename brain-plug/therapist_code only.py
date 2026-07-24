@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+"""
+HIVE OPS DevAI - Therapist & Creative Writing Assistant
+Cleaned version with configurable paths
+"""
+
+import os
+
+# CONFIGURATION - Update these paths for your system
+CONFIG = {
+    "style_model_path": os.path.expanduser("~/.hive/models/style_classifier.pkl"),
+    "data_dir": os.path.expanduser("~/.hive/data"),
+    "nltk_data": os.path.expanduser("~/.hive/nltk_data"),
+}
+
+# Ensure directories exist
+os.makedirs(os.path.dirname(CONFIG["style_model_path"]), exist_ok=True)
+os.makedirs(CONFIG["data_dir"], exist_ok=True)
+
 import os
 import random
 import pickle
@@ -43,7 +62,7 @@ class DependencyManager:
     def load_style_model(self):
         if self.style_model is None:
             try:
-                self.style_model = joblib.load('/mnt/data/style_classifier.pkl')
+                self.style_model = joblib.load('os.path.expanduser('~/.hive/models/style_classifier.pkl')')
             except Exception as e:
                 print(f"Error loading style model: {e}")
                 self.style_model = None
