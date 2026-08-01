@@ -224,13 +224,71 @@ export HERMES_HIVE_MODE="assist" # or autonomous/witness
 [READY]   → System ready
 ```
 
+## Security Disclaimer
+
+**This is a research and educational system, NOT production security software.**
+
+While the architecture and design patterns are sound, this codebase should be understood as:
+
+- **A framework and API** for security operations, not a certified tool
+- **Educational reference** for understanding security concepts
+- **Prototype code** for Termux/Android red-team research
+
+**What IS implemented:**
+- 48 Python modules with clean syntax and working CLI interfaces
+- 21 shell scripts with proper syntax
+- Unified controller (`hive-ctrl`) with health checks and backup
+- Interactive shell (`hive-os`) with command routing
+- E8-inspired hash primitive (from sister project)
+- AI handshake protocols and symbolic messaging
+- Hermes plugin integration framework
+
+**What is STUBBED / DEMO:**
+- Post-quantum cryptography (LWE module) — research back-burner
+- Actual Tor/I2P/WireGuard tunneling — wraps system tools
+- Hardware spoofing — simulated, not actual MAC/vendor spoofing
+- EMF detection — stub interface
+- AV covert channels — conceptual only
+- Blockchain micro-node — placeholder
+- NIST/DoD wiping standards — delegates to `shred`/`rm`, does not implement multi-pass wiping
+
+**Do NOT rely on this for:**
+- Actual operational security in hostile environments
+- Production data protection
+- Certified compliance (HIPAA, SOX, PCI-DSS)
+- Nation-state threat model protection
+
+**Do USE this for:**
+- Learning security architecture and tool integration
+- Prototyping security workflows on Android/Termux
+- Building your own hardened systems (fork and extend)
+- Research into AI-assisted security operations
+
+## Recent Fixes
+
+| Commit | Date | Description |
+|--------|------|-------------|
+| `4d7d934` | 2026-08-01 | docs: Update stale repo references and status wording |
+| `932d297` | 2026-08-01 | fix: Repair syntax errors and broken references across codebase |
+| `c747b3d` | — | Update escape_living_ai.txt |
+| `c6da835` | — | Clean therapist code - fix hardcoded paths and line endings |
+
+**Fixes in `932d297`:**
+- `brain-plug/therapist_code only.py`: Fixed nested quotes in `os.path.expanduser()`
+- `brain-plug/therapist_code only.py`: Fixed indentation errors in `SongAnalysis` methods
+- `hive-ctrl.py`: Added `--exclude=__pycache__` to `tar` backup command
+- `install.sh`: Fixed repo URL from non-existent `the-hive-tools` to correct name
+- `Hermes Plugins/install.sh`: Updated error message reference
+
 ## Security Standards
 
-- **Wiping**: NIST SP 800-88, DoD 5220.22-M, Gutmann 35-pass
-- **Encryption**: AES-256-GCM, E8-inspired SPN
-- **Crypto**: Post-quantum ready (LWE, hash-based)
-- **Network**: Tor, I2P, WireGuard, Shadowsocks
-- **Compliance**: CIS Docker, NIST Container Security
+The codebase references the following standards for educational purposes. Actual implementation status varies per component:
+
+- **Wiping**: NIST SP 800-88, DoD 5220.22-M (delegates to system `shred`)
+- **Encryption**: AES-256-GCM (via Python `cryptography` when available)
+- **Crypto**: E8-inspired lattice primitive (see sister repo `e8-cipher`)
+- **Network**: Tor, I2P, WireGuard, Shadowsocks (wrapper interfaces)
+- **Compliance**: References CIS Docker, NIST Container Security (checklist-based)
 
 ## Directory Structure
 
