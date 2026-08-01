@@ -27,7 +27,7 @@ check_prerequisites() {
     
     if [ ! -d "$HIVE_SOURCE" ]; then
         echo "[!] Hive Ops DevAI not found at $HIVE_SOURCE"
-        echo "[!] Run this script from the-hive-tools repo root"
+        echo "[!] Run this script from TERMUX-RED-TEAM-OPERATING-SYSTEM- repo root"
         exit 1
     fi
     

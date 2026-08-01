@@ -62,7 +62,7 @@ class DependencyManager:
     def load_style_model(self):
         if self.style_model is None:
             try:
-                self.style_model = joblib.load('os.path.expanduser('~/.hive/models/style_classifier.pkl')')
+                self.style_model = joblib.load(os.path.expanduser('~/.hive/models/style_classifier.pkl'))
             except Exception as e:
                 print(f"Error loading style model: {e}")
                 self.style_model = None
@@ -255,7 +255,7 @@ class EnhancedTherapist:
             return None
     def process_tags(self, text):
         all_tags = self.analysis_tags + self.secondary_tags + self.tertiary_tags + \
-                   self.additional_lyrics_tags + self.code_of_conduct
+                    self.additional_lyrics_tags + self.code_of_conduct
         found_tags = [tag for tag in all_tags if tag in text]
         return found_tags
     def clean_lyrics(self, lyrics):
@@ -938,8 +938,8 @@ class SongAnalysis:
         self.profound_lyrics = profound_lyrics
         self.literary_devices = literary_devices
     def full_analysis(self):
-     analysis = f"""
-      @breakdown of song@ @{self.title}@
+        analysis = f"""
+        @breakdown of song@ @{self.title}@
         - @ThemeS4 = {self.themes}
         - @IdeaS3  = {self.ideas}
         - @NarrativeS3  = {self.narrative}
@@ -956,10 +956,10 @@ class SongAnalysis:
             - @Alliteration:@  = {self.literary_devices.get('Alliteration')}
         - @Writing_Style  = {self.literary_devices.get('Writing_Style')}
         - @Syllable Pattern and Flow:@  = {self.literary_devices.get('Syllable_Pattern')}
-                """
-                return analysis
-            def short_analysis(self):
-                analysis = f"""
+        """
+        return analysis
+    def short_analysis(self):
+        analysis = f"""
         Short analysis of '' {self.title} ''
     - @ThemeS2  = {self.themes}
     - @IdeaS2  = {self.ideas}
@@ -973,7 +973,7 @@ class SongAnalysis:
     - @WritingStyleS1  = {self.literary_devices.get('Writing_Style')}
     - @Syllable_Pattern  = {self.literary_devices.get('Syllable_Pattern')}
             """
-            return analysis
+        return analysis
     # Example Usage
     song = SongAnalysis(
         title="Sample Song",
@@ -1005,18 +1005,18 @@ class SongProjectManager:
         self.guidelines = """
         ---------------------------- GUIDELINES ----------------------------
         1. Random Thoughts: 
-           - This file contains your personal lyrics.
-           - The focus is on enhancing and improving these lyrics over time.
-           - Use this section to draft, revise, and polish your lyrical ideas.
-           - respect no repeating lyrics from finished songs 
+            - This file contains your personal lyrics.
+            - The focus is on enhancing and improving these lyrics over time.
+            - Use this section to draft, revise, and polish your lyrical ideas.
+            - respect no repeating lyrics from finished songs 
         2. Used Inspiration:
-           - This file is for listing popular songs that inspire you.
-           - Remember, these songs must not be plagiarized or directly populated into your work but can be improved upon.
-           - Use them as a source of inspiration, to help create original content.
+            - This file is for listing popular songs that inspire you.
+            - Remember, these songs must not be plagiarized or directly populated into your work but can be improved upon.
+            - Use them as a source of inspiration, to help create original content.
         3. Ideas for Songs:
-           - This file is a collection of untouched ideas for future songs.
-           - These are topics and concepts you haven't explored yet.
-           - Use this file to brainstorm and keep track of new, unexplored song ideas.
+            - This file is a collection of untouched ideas for future songs.
+            - These are topics and concepts you haven't explored yet.
+            - Use this file to brainstorm and keep track of new, unexplored song ideas.
         ---------------------------------------------------------------------
         """
         self._ensure_files_exist()
@@ -1305,7 +1305,7 @@ class EnhancedResumeGenerator:
         experience_section = "Experience:\n" + "\n".join([f" - {exp}" for exp in self.experience]) + "\n"
         return experience_section
 
-        def generate_education(self):
+    def generate_education(self):
         """
         Generate the education section, detailing the user's academic background with clear formatting.
         """

@@ -28,7 +28,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 HIVE_VERSION="1.0.0"
-REPO_URL="https://github.com/kaibuzz0/the-hive-tools.git"
+REPO_URL="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git"
 INSTALL_DIR="$HOME/hive"
 LOG_FILE="$HOME/hive_install.log"
 

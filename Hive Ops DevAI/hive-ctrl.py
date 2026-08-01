@@ -274,7 +274,8 @@ class HiveController:
         
         try:
             result = subprocess.run(
-                ['tar', '-czf', str(backup_file), '-C', str(self.hive_dir.parent), 
+                ['tar', '--exclude=__pycache__', '--exclude=*.pyc', '-czf', 
+                 str(backup_file), '-C', str(self.hive_dir.parent), 
                  self.hive_dir.name],
                 capture_output=True,
                 timeout=60
