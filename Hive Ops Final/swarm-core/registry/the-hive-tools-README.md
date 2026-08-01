@@ -3,7 +3,7 @@
 Cross-platform tool suite for the Hive Swarm.
 
 ## Repositories
-- `kaibuzz0/the-hive-tools` - This unified tools repo
+- `kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-` - This unified tools repo
 - `kaibuzz0/hive-develoment` - Development workspace
 
 ## Swarm Bridge Protocol

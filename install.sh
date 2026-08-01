@@ -3,14 +3,14 @@
 # One-command setup for Hive OS + Hermes integration in Termux
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/kaibuzz0/the-hive-tools/master/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/master/install.sh | bash
 #   OR
 #   bash install.sh
 #
 # This installer:
 #   1. Checks Termux environment
 #   2. Installs dependencies
-#   3. Clones the-hive-tools repository
+#   3. Clones TERMUX-RED-TEAM-OPERATING-SYSTEM- repository
 #   4. Sets up Hive OS directory structure
 #   5. Installs all 43 components
 #   6. Configures Hermes integration

@@ -36,8 +36,7 @@ curl -fsSL https://raw.githubusercontent.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-
 ```
 or with in Termux:
 ```bash
-cd ~ && git clone                                             https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git && cd
-    the-hive-tools && bash install.sh
+cd ~ && git clone https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git && cd TERMUX-RED-TEAM-OPERATING-SYSTEM- && bash install.sh
 ```
 
 Or manually:
@@ -284,4 +283,4 @@ Built with ❤️ by Hive Ops Dev team + kaibuzz
 **Version:** 1.0.0  
 **Components:** 45  
 **Size:** ~800KB  
-**Status:** Production Ready ✅
+**Status:** Functional Research System — 48 Python files, 21 shell scripts verified. See Security Disclaimer below.
