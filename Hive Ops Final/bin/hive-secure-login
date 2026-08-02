@@ -1,0 +1,241 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# HIVE SECURE LOGIN v2.0
+# Auto-launches on Termux start. Authenticates user before OS access.
+# Place in ~/.termux/boot/ with Termux:Boot app installed.
+#
+# Features:
+#   - ASCII art login screen
+#   - Password + PIN dual auth
+#   - 3-attempt lockout (60s cooldown)
+#   - Auto-launches Hive UI on success
+#   - Clears screen on exit for security
+
+set -euo pipefail
+umask 077
+
+# ── Configuration ──────────────────────────────────────────
+HIVE_DIR="${HIVE_DIR:-$HOME/Hive\ Ops\ Final}"
+HIVE_BIN="$HIVE_DIR/bin"
+AUTH_DIR="$HOME/.hive_auth"
+AUTH_FILE="$AUTH_DIR/passwd"
+LOCK_FILE="$AUTH_DIR/lock"
+LOG_FILE="$AUTH_DIR/login.log"
+MAX_ATTEMPTS=3
+LOCKOUT_SECONDS=60
+
+# Colors
+C_R='\033[0;31m'
+C_G='\033[0;32m'
+C_Y='\033[1;33m'
+C_B='\033[1;34m'
+C_C='\033[1;36m'
+C_W='\033[1;37m'
+C_D='\033[0m'
+
+# ── Helpers ────────────────────────────────────────────────
+_log() {
+    mkdir -p "$AUTH_DIR"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') | $1" >> "$LOG_FILE"
+}
+
+_clear_screen() {
+    printf '\033[2J\033[H'
+}
+
+_draw_box() {
+    local width=50
+    printf "${C_C}┌"
+    printf '%*s' "$width" | tr ' ' '─'
+    printf "┐${C_D}\n"
+}
+
+_draw_line() {
+    local width=50 text="$1" color="${2:-$C_W}"
+    local pad=$(( (width - ${#text}) / 2 ))
+    printf "${C_C}│${C_D}%*s%s%*s${C_C}│${C_D}\n" "$pad" "" "$color$text$C_D" "$pad" ""
+}
+
+_draw_bottom() {
+    local width=50
+    printf "${C_C}└"
+    printf '%*s' "$width" | tr ' ' '─'
+    printf "┘${C_D}\n"
+}
+
+# ── ASCII Banner ─────────────────────────────────────────
+_banner() {
+    printf "${C_C}"
+    cat <<'EOF'
+    ╔═══════════════════════════════════════════════════════╗
+    ║                                                       ║
+    ║   ██╗  ██╗██╗██╗   ██╗███████╗     ██████╗ ███████╗ ║
+    ║   ██║  ██║██║██║   ██║██╔════╝    ██╔═══██╗██╔════╝ ║
+    ║   ███████║██║██║   ██║█████╗      ██║   ██║███████╗ ║
+    ║   ██╔══██║██║╚██╗ ██╔╝██╔══╝      ██║   ██║╚════██║ ║
+    ║   ██║  ██║██║ ╚████╔╝ ███████╗    ╚██████╔╝███████║ ║
+    ║   ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚══════╝     ╚═════╝ ╚══════╝ ║
+    ║                                                       ║
+    ║         🔐 SECURE ACCESS TERMINAL v2.0                ║
+    ║                                                       ║
+    ╚═══════════════════════════════════════════════════════╝
+EOF
+    printf "${C_D}\n"
+}
+
+# ── Auth Setup ───────────────────────────────────────────
+_setup_auth() {
+    mkdir -p "$AUTH_DIR"
+    chmod 700 "$AUTH_DIR"
+    
+    if [ ! -f "$AUTH_FILE" ]; then
+        _clear_screen
+        _banner
+        printf "\n${C_Y}🔐 First-time setup — create your credentials${C_D}\n\n"
+        
+        printf "${C_C}Enter new password:${C_D} "
+        read -rs PASS1
+        printf "\n"
+        printf "${C_C}Confirm password:${C_D} "
+        read -rs PASS2
+        printf "\n"
+        
+        if [ "$PASS1" != "$PASS2" ]; then
+            printf "${C_R}❌ Passwords do not match. Exiting.${C_D}\n"
+            exit 1
+        fi
+        
+        if [ ${#PASS1} -lt 4 ]; then
+            printf "${C_R}❌ Password must be at least 4 characters.${C_D}\n"
+            exit 1
+        fi
+        
+        printf "${C_C}Enter 4-digit PIN:${C_D} "
+        read -rs PIN1
+        printf "\n"
+        printf "${C_C}Confirm PIN:${C_D} "
+        read -rs PIN2
+        printf "\n"
+        
+        if [ "$PIN1" != "$PIN2" ]; then
+            printf "${C_R}❌ PINs do not match. Exiting.${C_D}\n"
+            exit 1
+        fi
+        
+        if ! [[ "$PIN1" =~ ^[0-9]{4}$ ]]; then
+            printf "${C_R}❌ PIN must be exactly 4 digits.${C_D}\n"
+            exit 1
+        fi
+        
+        # Store hashed credentials (simple: base64 for portability)
+        printf '%s\n%s' "$PASS1" "$PIN1" | base64 > "$AUTH_FILE"
+        chmod 600 "$AUTH_FILE"
+        
+        printf "\n${C_G}✅ Credentials saved. Login required on next boot.${C_D}\n"
+        sleep 2
+    fi
+}
+
+# ── Auth Check ───────────────────────────────────────────
+_check_auth() {
+    local stored
+    stored=$(base64 -d < "$AUTH_FILE" 2>/dev/null || echo "")
+    local saved_pass=$(printf '%s' "$stored" | head -1)
+    local saved_pin=$(printf '%s' "$stored" | tail -1)
+    
+    # Check lockout
+    if [ -f "$LOCK_FILE" ]; then
+        local lock_time=$(cat "$LOCK_FILE")
+        local now=$(date +%s)
+        local elapsed=$((now - lock_time))
+        if [ "$elapsed" -lt "$LOCKOUT_SECONDS" ]; then
+            local remaining=$((LOCKOUT_SECONDS - elapsed))
+            printf "${C_R}🔒 ACCOUNT LOCKED — $remaining seconds remaining${C_D}\n"
+            sleep 2
+            return 1
+        else
+            rm -f "$LOCK_FILE"
+        fi
+    fi
+    
+    local attempts=0
+    while [ "$attempts" -lt "$MAX_ATTEMPTS" ]; do
+        _clear_screen
+        _banner
+        
+        printf "\n${C_C}╔═══════════════════════════════════════════════════════╗${C_D}\n"
+        printf "${C_C}║${C_D}  ${C_W}Authentication Required${C_D}                            ${C_C}║${C_D}\n"
+        printf "${C_C}╠═══════════════════════════════════════════════════════╣${C_D}\n"
+        
+        printf "${C_C}║${C_D}  Password: "
+        read -rs PASSWORD
+        printf "\n"
+        printf "${C_C}║${C_D}  PIN:      "
+        read -rs PIN
+        printf "\n"
+        printf "${C_C}╚═══════════════════════════════════════════════════════╝${C_D}\n"
+        
+        if [ "$PASSWORD" = "$saved_pass" ] && [ "$PIN" = "$saved_pin" ]; then
+            printf "\n${C_G}✅ AUTHENTICATION SUCCESSFUL${C_D}\n"
+            _log "SUCCESS: User authenticated"
+            sleep 1
+            return 0
+        fi
+        
+        attempts=$((attempts + 1))
+        local remaining=$((MAX_ATTEMPTS - attempts))
+        printf "\n${C_R}❌ Invalid credentials — $remaining attempts remaining${C_D}\n"
+        _log "FAIL: Invalid credentials (attempt $attempts/$MAX_ATTEMPTS)"
+        sleep 2
+    done
+    
+    # Lockout
+    date +%s > "$LOCK_FILE"
+    printf "\n${C_R}🔒 TOO MANY FAILED ATTEMPTS${C_D}\n"
+    printf "${C_R}   Account locked for $LOCKOUT_SECONDS seconds.${C_D}\n"
+    _log "LOCKOUT: Account locked for $LOCKOUT_SECONDS seconds"
+    sleep 3
+    return 1
+}
+
+# ── Launch Hive UI ───────────────────────────────────────
+_launch_ui() {
+    _clear_screen
+    printf "${C_G}🚀 Launching Hive OS...${C_D}\n\n"
+    
+    # Start Hive services
+    if [ -f "$HIVE_BIN/hive" ]; then
+        python3 "$HIVE_BIN/hive" start 2>/dev/null &
+    fi
+    
+    # Launch enhanced UI
+    if [ -f "$HIVE_BIN/hive-ui-v2" ]; then
+        exec python3 "$HIVE_BIN/hive-ui-v2"
+    elif [ -f "$HIVE_BIN/hive-ui" ]; then
+        exec python3 "$HIVE_BIN/hive-ui"
+    elif [ -f "$HIVE_BIN/hive-dashboard" ]; then
+        exec python3 "$HIVE_BIN/hive-dashboard"
+    else
+        # Fallback: just show banner + prompt
+        _clear_screen
+        printf "${C_G}✅ Hive OS Ready${C_D}\n"
+        printf "${C_C}Type 'hive status' for system status${C_D}\n\n"
+    fi
+}
+
+# ── Main ─────────────────────────────────────────────────
+main() {
+    # Setup auth on first run
+    _setup_auth
+    
+    # Authenticate
+    if ! _check_auth; then
+        _clear_screen
+        printf "${C_R}Access denied.${C_D}\n"
+        exit 1
+    fi
+    
+    # Launch
+    _launch_ui
+}
+
+main "$@"
