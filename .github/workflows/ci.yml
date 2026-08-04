@@ -22,7 +22,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Cache pip packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -45,7 +45,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pytest "Hive Ops DevAI" -v --cov=. --cov-report=xml --cov-report=term-missing || echo "No tests yet"
+        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing || echo "No tests yet"
 
   security:
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
         bandit -r "Hive Ops DevAI" -ll || true
     
     - name: Upload security scan results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: security-scan
         path: bandit-report.json
@@ -90,7 +90,7 @@ jobs:
           "Hive Ops DevAI" "Hive Ops Final" "Hermes Plugins" brain-plug install.sh README.md requirements.txt
     
     - name: Upload build artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: hive-ops-package
         path: dist/hive-ops-devai.tar.gz
