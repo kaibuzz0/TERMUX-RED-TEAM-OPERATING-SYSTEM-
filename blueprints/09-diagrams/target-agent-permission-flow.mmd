@@ -1,0 +1,16 @@
+```mermaid
+flowchart TD
+    A[Agent task manifest] --> B{Schema validation}
+    B -->|invalid| C[Reject]
+    B -->|valid| D[Repository identity check]
+    D -->|mismatch| C
+    D -->|match| E[Path normalization]
+    E -->|outside scope| C
+    E -->|inside scope| F[Spawn child process]
+    F --> G[Apply resource limits]
+    G --> H[Log tool calls]
+    H --> I[Enforce timeout]
+    I -->|timeout| J[Terminate tree]
+    I -->|complete| K[Diff changed files]
+    K -->|exceeds limit| C
+    K -->|within limit| L[Return result]

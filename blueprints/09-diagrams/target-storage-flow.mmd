@@ -1,0 +1,11 @@
+```mermaid
+flowchart TD
+    A[Runtime distribution] --> B[Versioned runtime prefix]
+    B --> C[Active runtime symlink]
+    C --> D[core/bin/hive]
+    E[User config] --> F[~/.config/hive/config.yaml]
+    G[State] --> H[~/.local/share/hive/state/]
+    I[Vault] --> J[~/.local/share/hive/vault/]
+    K[Workspaces] --> L[~/.local/share/hive/workspaces/]
+    M[Backups] --> N[~/.local/share/hive/backups/]
+    O[Logs] --> P[~/.local/share/hive/logs/]

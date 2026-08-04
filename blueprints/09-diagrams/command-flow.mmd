@@ -1,0 +1,17 @@
+```mermaid
+flowchart TD
+    A[User types command] --> B{Which CLI?}
+    B -->|hive| C["Hive Ops Final/bin/hive"]
+    B -->|hive-os / hive-ctrl| D["Hive Ops DevAI/bin/hive-os or hive-ctrl.py"]
+    C --> E[hive-legacy scripts]
+    C --> F[Python logic in hive]
+    C --> G[swarm_bridge.py]
+    D --> H[hivedev-* scripts]
+    D --> I[hive-orchestrator.py]
+    D --> J[hive_agents.py]
+    C --> K{Subcommand}
+    K -->|status| L[collect status]
+    K -->|net| M[orbot/local/off]
+    K -->|services| N[service definitions]
+    K -->|dashboard| O[TUI]
+    K -->|doctor| P[environment audit]

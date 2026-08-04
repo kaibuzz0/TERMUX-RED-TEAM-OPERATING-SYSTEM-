@@ -1,0 +1,13 @@
+```mermaid
+flowchart LR
+    A[Operator input] --> B{Hive CLI dispatcher}
+    B -->|read-only| C[Execute directly]
+    B -->|state mutation| D[Acquire lock]
+    B -->|destructive| E[Confirm + validate paths]
+    B -->|security-critical| F[Session gate / vault unlock]
+    D --> G[Policy engine]
+    E --> G
+    F --> G
+    G -->|BROKER-ENFORCED| H[Execute through Hive]
+    G -->|ADVISORY| I[Warn; cannot prevent bypass]
+    H --> J[Log event]

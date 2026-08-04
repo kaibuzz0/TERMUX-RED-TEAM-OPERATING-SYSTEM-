@@ -1,0 +1,21 @@
+```mermaid
+flowchart LR
+    User[User keyboard]
+    Auth[~/.hive_auth/passwd base64 password+PIN]
+    Backup[~/.hive_backup/ <ts>]
+    Rescue[~/.hive_rescue/]
+    Repo[~/Hive-Ops/ via git]
+    Bashrc[~/.bashrc]
+    Boot[~/.termux/boot/]
+    Bin[~/bin/hive* symlinks]
+
+    User -- password+PIN --> install-termux.sh
+    install-termux.sh -- base64 --> Auth
+    install-termux.sh -- appends source --> Bashrc
+    install-termux.sh -- copies boot script --> Boot
+    install-termux.sh -- symlinks --> Bin
+    update.sh -- backs up --> Backup
+    update.sh -- pulls --> Repo
+    update.sh -- restores --> Auth
+    emergency-repair.sh -- preserves --> Rescue
+    emergency-repair.sh -- re-clones --> Repo

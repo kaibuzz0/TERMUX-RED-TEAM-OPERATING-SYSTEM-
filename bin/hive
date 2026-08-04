@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Hive OS repository-level compatibility launcher (Milestone 3).
+
+Thin dispatcher that:
+  1. Resolves repository root.
+  2. Loads and validates canonical metadata.
+  3. Resolves canonical source and launcher using lib/hive_path.
+  4. Invokes the launcher with the correct explicit interpreter.
+  5. Forwards arguments unchanged and preserves exit code.
+"""
+
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+LIB_DIR = REPO_ROOT / "lib"
+if str(LIB_DIR) not in sys.path:
+    sys.path.insert(0, str(LIB_DIR))
+
+from hive_path import (
+    resolve_repository_root,
+    load_metadata,
+    resolve_canonical_source,
+    resolve_canonical_launcher,
+    PathResolutionError,
+    CanonicalMetadataError,
+    LauncherTypeError,
+)
+
+
+def _fail(message: str, code: int = 1) -> int:
+    print(f"hive-launcher: {message}", file=sys.stderr)
+    return code
+
+
+def _resolve_interpreter(launcher_type: str) -> list[str]:
+    """Return the invocation prefix for the launcher type."""
+    if launcher_type == "python":
+        return [sys.executable]
+    if launcher_type == "bash":
+        bash = shutil.which("bash")
+        if not bash:
+            raise LauncherTypeError("bash interpreter not found")
+        return [bash]
+    if launcher_type == "posix-shell":
+        sh = shutil.which("sh")
+        if not sh:
+            raise LauncherTypeError("sh interpreter not found")
+        return [sh]
+    if launcher_type == "direct-executable":
+        return []
+    raise LauncherTypeError(f"unknown launcher type: {launcher_type}")
+
+
+def _resolve_mode(repo_root: Path, metadata: dict) -> bool:
+    """Print diagnostic resolution information after validating it."""
+    source = metadata["current_canonical_source"]
+    launcher = metadata["current_canonical_launcher"]
+    launcher_type = metadata.get("current_canonical_launcher_type", "unknown")
+
+    try:
+        target = resolve_canonical_launcher(repo_root, metadata)
+        valid = True
+    except (PathResolutionError, CanonicalMetadataError, LauncherTypeError) as exc:
+        target = (repo_root / launcher).resolve()
+        valid = False
+        error = str(exc)
+
+    print("Hive OS launcher resolution")
+    print(f"  repository_root: {repo_root}")
+    print(f"  metadata_path:   {repo_root / 'hive-canonical.json'}")
+    print(f"  canonical_source:   {source}")
+    print(f"  canonical_launcher: {launcher}")
+    print(f"  launcher_type:      {launcher_type}")
+    print(f"  resolved_path:      {target}")
+    print(f"  exists:             {target.is_file()}")
+    print(f"  valid:              {valid}")
+    print(f"  runtime_validation: {metadata.get('runtime_validation', 'unknown')}")
+    if not valid:
+        print(f"  error:              {error}")
+    return valid
+
+
+def main(argv: list[str]) -> int:
+    import shutil
+
+    # Repository root is derived from this script's location: bin/hive lives at <repo>/bin/hive.
+    repo_root = Path(__file__).resolve().parent.parent
+
+    try:
+        metadata = load_metadata(repo_root)
+    except (CanonicalMetadataError, LauncherTypeError) as exc:
+        return _fail(str(exc))
+
+    if "--resolve" in argv[1:]:
+        return 0 if _resolve_mode(repo_root, metadata) else 1
+
+    if "--runtime-info" in argv[1:] and "--json" in argv[1:]:
+        from hive_runtime import build_report
+        import json
+        report = build_report()
+        print(json.dumps({
+            "platform": report.platform,
+            "tools": report.tools,
+            "environment": report.environment,
+            "is_root": report.is_root.value if isinstance(report.is_root, object) else report.is_root,
+        }, indent=2, default=lambda o: o.value if isinstance(o, object) and hasattr(o, "value") else str(o)))
+        return 0
+
+    if "--validate-services-json" in argv[1:]:
+        try:
+            from hive_service_loader import validate_services_file, ServiceLoaderError
+            import json
+            target = resolve_canonical_source(repo_root) / "etc" / "services.json"
+            report = validate_services_file(target)
+            print(json.dumps(report, indent=2))
+            return 0 if not report.get("errors") else 2
+        except ServiceLoaderError as e:
+            print(f"[validate-services-json] {e}", file=sys.stderr)
+            return 2
+
+    try:
+        target = resolve_canonical_launcher(repo_root, metadata)
+    except (PathResolutionError, CanonicalMetadataError) as exc:
+        return _fail(str(exc))
+
+    launcher_type = metadata.get("current_canonical_launcher_type")
+    try:
+        prefix = _resolve_interpreter(launcher_type)
+    except LauncherTypeError as exc:
+        return _fail(str(exc))
+
+    cmd = prefix + [str(target)] + argv[1:]
+
+    try:
+        result = subprocess.run(cmd, cwd=os.getcwd())
+        return result.returncode
+    except FileNotFoundError as exc:
+        return _fail(f"failed to execute canonical launcher: {exc}")
+    except PermissionError as exc:
+        return _fail(f"permission denied executing canonical launcher: {exc}")
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

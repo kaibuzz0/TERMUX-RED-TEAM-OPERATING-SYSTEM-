@@ -1,0 +1,17 @@
+```mermaid
+flowchart TD
+    subgraph Standard["Standard Termux"]
+        A[Shell command broker]
+        B[File permission discipline]
+        C[Local-only services]
+        D[State/lock/audit]
+        E[Integrity manifests]
+        F[Transactional updates]
+    end
+    subgraph Optional["Optional / future"]
+        G[PRoot]
+        H[Root-enhanced]
+        I[Custom ROM]
+        J[Hardware VM]
+    end
+    Standard -.standard product.-> Optional

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "project": "Hive OS",
+  "repository": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
+  "current_canonical_source": "Hive Ops Final",
+  "future_target_runtime": "core",
+  "reference_sources": [
+    "Hive Ops DevAI"
+  ],
+  "entrypoint_status": "existing-entrypoints-pending-consolidation",
+  "migration_state": "canonical-source-declared-interpreter-proven",
+  "supported_primary_platform": "termux",
+  "runtime_validation": "unverified-on-termux",
+  "generated": false,
+  "current_canonical_launcher": "Hive Ops Final/bin/hive",
+  "current_canonical_launcher_type": "python",
+  "launcher_execution_policy": "explicit-interpreter"
+}

@@ -1,0 +1,17 @@
+```mermaid
+flowchart LR
+    Device[Termux device]
+    Orbot[Orbot proxy 127.0.0.1:9050]
+    LocalTor[Bundled Tor 127.0.0.1:9052]
+    GitHub[GitHub]
+    TermuxRepo[Termux package repo]
+    PyPI[PyPI]
+    Listener[possible Flask/http.server]
+
+    Device -- hive net orbot --> Orbot
+    Device -- hive net local --> LocalTor
+    Device -- git clone/pull --> GitHub
+    Device -- pkg install --> TermuxRepo
+    Device -- pip install --> PyPI
+    Device -. possible .-> Listener
+    Listener -. should bind loopback only .-> Device

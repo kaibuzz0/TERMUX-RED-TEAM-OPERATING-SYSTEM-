@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "description": "Known duplicate entrypoints as of Milestone 1. New undocumented duplicates must be added here or fixed.",
+  "known_duplicates": {
+    "install.sh": [
+      "install.sh",
+      "Hermes Plugins/install.sh"
+    ],
+    "hive-swarm.py": [
+      "Hive Ops DevAI/hive-swarm.py",
+      "Hive Ops Final/swarm-core/hive-swarm.py"
+    ],
+    "hive_swarm_integration.py": [
+      "Hive Ops DevAI/hive_swarm_integration.py",
+      "Hive Ops Final/swarm-core/hive_swarm_integration.py"
+    ],
+    "hive": [
+      "Hive Ops Final/bin/hive",
+      "Hive Ops Final/original hive os complete/bin/hive",
+      "bin/hive"
+    ]
+  },
+  "migration_state": "canonical-source-declared"
+}

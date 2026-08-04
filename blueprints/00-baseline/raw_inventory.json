@@ -1,0 +1,1397 @@
+[
+  {
+    "path": ".gitignore",
+    "size": 60,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "ENTRY",
+    "size": 0,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "EOF",
+    "size": 0,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "README.md",
+    "size": 16835,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "emergency-repair.sh",
+    "size": 7405,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "install-termux.sh",
+    "size": 9839,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "install.sh",
+    "size": 11636,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/bin/bash"
+  },
+  {
+    "path": "requirements.txt",
+    "size": 723,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".txt",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "update.sh",
+    "size": 4823,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "size": 2713,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".yml",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hermes Plugins/install.sh",
+    "size": 8101,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/bin/bash"
+  },
+  {
+    "path": "Hermes Plugins/hive-ops-plugin/__init__.py",
+    "size": 10045,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hermes Plugins/hive-ops-plugin/brain_plug.py",
+    "size": 8304,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hermes Plugins/hive-ops-plugin/agents/__init__.py",
+    "size": 7593,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops DevAI/hive-ctrl.py",
+    "size": 13353,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/hive-gateway.py",
+    "size": 16202,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/hive-orchestrator.py",
+    "size": 17851,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/hive-swarm.py",
+    "size": 10031,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/hive_agents.py",
+    "size": 26194,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/hive_state.json",
+    "size": 1031,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".json",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops DevAI/hive_swarm_integration.py",
+    "size": 12222,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/swarm_orchestrator.py",
+    "size": 13961,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/swarm_pet.py",
+    "size": 7217,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hive-42",
+    "size": 18119,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hive-boot",
+    "size": 18193,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hive-hermes",
+    "size": 20469,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hive-os",
+    "size": 20429,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hive-ui",
+    "size": 23112,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev",
+    "size": 8395,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-alias",
+    "size": 10027,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-anchor",
+    "size": 17751,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-anomaly",
+    "size": 19984,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-av",
+    "size": 14821,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-backup",
+    "size": 15499,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-clipboard",
+    "size": 18100,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-comms",
+    "size": 14989,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-comms3",
+    "size": 18511,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-container",
+    "size": 30149,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-duress",
+    "size": 12168,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-emf",
+    "size": 22520,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-exfil",
+    "size": 12909,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-firewall",
+    "size": 18597,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-forensics",
+    "size": 10498,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-gateway",
+    "size": 9315,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-geo",
+    "size": 15768,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-hide",
+    "size": 8490,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-honey",
+    "size": 23572,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-inject",
+    "size": 22702,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-integrity",
+    "size": 11674,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-intel",
+    "size": 20963,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-key",
+    "size": 16917,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-log",
+    "size": 12207,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-mem",
+    "size": 19284,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-net",
+    "size": 11832,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-node",
+    "size": 17305,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-pet",
+    "size": 7217,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-pq",
+    "size": 18316,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-secureboot",
+    "size": 13869,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-shred",
+    "size": 19319,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-spoof",
+    "size": 12038,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-swarm",
+    "size": 13961,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-swarm-integration",
+    "size": 12222,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-swarm-manager",
+    "size": 10031,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-temporal",
+    "size": 18015,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-vault",
+    "size": 13821,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/bin/hivedev-volume",
+    "size": 15727,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops DevAI/docs/THREAT_MATRIX.md",
+    "size": 6799,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops DevAI/lib/stealth.py",
+    "size": 5240,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/README.md",
+    "size": 2075,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/.termux/boot/00-hive-ops.sh",
+    "size": 1206,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/.termux/boot/00-hive-secure.sh",
+    "size": 1230,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/bin/hive",
+    "size": 16023,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/bin/hive-dashboard",
+    "size": 7806,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/bin/hive-secure-login",
+    "size": 9220,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/bin/hive-ui-v2",
+    "size": 11810,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/etc/bash-integration.sh",
+    "size": 3863,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/etc/env.sh",
+    "size": 1640,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/etc/services.json",
+    "size": 1176,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".json",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/lib/swarm_bridge.py",
+    "size": 6587,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/hive_bootstrap.sh",
+    "size": 8021,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/.config/hive/env.sh",
+    "size": 934,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh",
+    "size": 530,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive",
+    "size": 4746,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_logrotate.sh",
+    "size": 518,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_net.core.sh",
+    "size": 5329,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_net.sh",
+    "size": 614,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_orbot_ui.sh",
+    "size": 355,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_proxy_run.sh",
+    "size": 1334,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_ps.sh",
+    "size": 663,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_restart.sh",
+    "size": 121,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_rotator.sh",
+    "size": 434,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_services.sh",
+    "size": 4572,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_supervisor.sh",
+    "size": 642,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/hive_watchdog.sh",
+    "size": 2253,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/bin/step5.1_fix_health.sh",
+    "size": 3100,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": "bash",
+    "shebang": "#!/usr/bin/env bash"
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/dev.aliases.sh",
+    "size": 543,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".sh",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/escape.txt",
+    "size": 342,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".txt",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/mini-ai.env",
+    "size": 102,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".env",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.service",
+    "size": 277,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".service",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.svc",
+    "size": 549,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".svc",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/services/mini-ai.svc",
+    "size": 118,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".svc",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/original hive os complete/etc/tor/torrc",
+    "size": 248,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/shell/.bashrc",
+    "size": 3677,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": "bash",
+    "shebang": "#!/data/data/com.termux/files/usr/bin/bash"
+  },
+  {
+    "path": "Hive Ops Final/shell/.zshrc",
+    "size": 385,
+    "mode": "0666",
+    "executable": false,
+    "ext": "",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/shell/notes.txt",
+    "size": 144,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".txt",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/gateway_bridge.py",
+    "size": 9315,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/hive-swarm.py",
+    "size": 10031,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/hive_state.json",
+    "size": 1031,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".json",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/hive_swarm_integration.py",
+    "size": 12222,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/swarm_orchestrator.py",
+    "size": 13961,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/swarm_pet.py",
+    "size": 7217,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/agents/architect_agent.py",
+    "size": 14277,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/agents/assistant_agent.py",
+    "size": 12850,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_PHASE_3.md",
+    "size": 6847,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_REPORT.md",
+    "size": 4213,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/FINAL_ATTRIBUTION_REPORT.md",
+    "size": 3974,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/FINAL_REVISED_REPORT.md",
+    "size": 5448,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/HSL_DEFINITION.md",
+    "size": 569,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/REBUILD_REPORT.md",
+    "size": 4135,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md",
+    "size": 7733,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/SWARM_REGISTRY.md",
+    "size": 3025,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/correlation_matrix.md",
+    "size": 1500,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/protocol.md",
+    "size": 974,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/swarm-core/registry/the-hive-tools-README.md",
+    "size": 980,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/tools/README.md",
+    "size": 2086,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/tools/batch_job_runner.py",
+    "size": 7378,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/blockchain_batch_checker.py",
+    "size": 6956,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/blockchain_monitor.py",
+    "size": 3684,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/condition_simulator.py",
+    "size": 7581,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/deep_disassembler_sqvi.py",
+    "size": 15308,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/heap_scanner.py",
+    "size": 582,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/hive_health_monitor.py",
+    "size": 5628,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/hive_menu.py",
+    "size": 645,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/hive_tool_builder.py",
+    "size": 3820,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/inject_payload.py",
+    "size": 1126,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/tools/multi_address_generator.py",
+    "size": 6701,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/obfuscation_layer.py",
+    "size": 7979,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/parallel-scanner.py",
+    "size": 646,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/recon_node.py",
+    "size": 1443,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/tools/resonance_scanner.py",
+    "size": 5328,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sci_deep_disassembler.py",
+    "size": 11332,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sci_emulator.py",
+    "size": 3158,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "Hive Ops Final/tools/sci_script_layout_validator.py",
+    "size": 1770,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sci_selector_tracker.py",
+    "size": 620,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/series-comparator.py",
+    "size": 648,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/series-evolution-analyzer.py",
+    "size": 660,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sq_investigation_suite.py",
+    "size": 9468,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sq_series_scanner.py",
+    "size": 7800,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/sqvi-deep-scanner.py",
+    "size": 636,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/variable_tracer.py",
+    "size": 620,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/wallet_crypto_simulator.py",
+    "size": 7835,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "Hive Ops Final/tools/wallet_extractor.py",
+    "size": 636,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  },
+  {
+    "path": "brain-plug/README.md",
+    "size": 5841,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".md",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "brain-plug/escape_living_ai.txt",
+    "size": 244302,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".txt",
+    "interpreter": null,
+    "shebang": null
+  },
+  {
+    "path": "brain-plug/therapist_code only.py",
+    "size": 81439,
+    "mode": "0666",
+    "executable": false,
+    "ext": ".py",
+    "interpreter": "python3",
+    "shebang": "#!/usr/bin/env python3"
+  }
+]

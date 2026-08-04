@@ -4,8 +4,8 @@
 
 # Base paths - unified for both systems
 export HIVE_HOME="${HIVE_HOME:-$HOME/hive}"
-export HIVE_OS="${HIVE_OS:-/root/hive-os}"
-export HIVE_SWARM="${HIVE_SWARM:-/root/hive-swarm}"
+export HIVE_OS="${HIVE_OS:-$HOME/hive-os}"
+export HIVE_SWARM="${HIVE_SWARM:-$HOME/hive-swarm}"
 export HIVE_FINAL="${HIVE_FINAL:-$HOME/Hive Ops Final}"
 
 # Subdirectories

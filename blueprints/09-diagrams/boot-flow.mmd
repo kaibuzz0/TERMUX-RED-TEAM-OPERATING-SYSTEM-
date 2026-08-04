@@ -1,0 +1,17 @@
+```mermaid
+flowchart TD
+    A[Android boots / Termux:Boot app triggers] --> B["~/.termux/boot/00-hive-session-gate.sh"]
+    B --> C[hive session-gate]
+    C --> D{~/.hive_auth/passwd exists?}
+    D -->|No| E[First-time setup: prompt password+PIN]
+    E --> F[base64 encode & store]
+    D -->|Yes| G[Prompt password+PIN]
+    G --> H{3 failures?}
+    H -->|Yes| I[60-second lockout]
+    H -->|No| J[Compare base64-decoded values]
+    J -->|Fail| K[Log attempt]
+    K --> G
+    J -->|Success| L[Clear screen]
+    L --> M[hive-ui-v2 TUI]
+    M --> N[User selects hive subcommand]
+    N --> O[hive CLI dispatch]

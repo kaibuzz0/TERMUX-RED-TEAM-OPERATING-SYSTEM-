@@ -1,0 +1,13 @@
+```mermaid
+flowchart LR
+    A[Hermes Agent] --> B[Hive Hermes Plugin]
+    B -->|tool call| C[hive_status]
+    B -->|tool call| D[hive_task_run]
+    B -->|tool call| E[hive_emergency_stop]
+    C --> F[hive status --json]
+    D --> G[hive agent run TASK --json]
+    E --> H[hive emergency-stop --json]
+    F --> I[JSON response]
+    G --> I
+    H --> I
+    I --> B

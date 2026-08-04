@@ -1,0 +1,69 @@
+```mermaid
+flowchart TD
+    subgraph ROOT["TERMUX-RED-TEAM-OPERATING-SYSTEM- root"]
+        R_README[README.md]
+        R_INSTALL1[install-termux.sh]
+        R_INSTALL2[install.sh]
+        R_UPDATE[update.sh]
+        R_REPAIR[emergency-repair.sh]
+        R_REQS[requirements.txt]
+        R_GIT[.github/workflows/ci.yml]
+        R_ENTRY[ENTRY]
+        R_EOF[EOF]
+    end
+
+    subgraph HOF["Hive Ops Final/"]
+        HOF_BIN["bin/
+hive, hive-ui-v2, hive-secure-login, hive-dashboard, hive-legacy"]
+        HOF_ETC["etc/
+env.sh, bash-integration.sh, services.json"]
+        HOF_BOOT[".termux/boot/
+00-hive-ops.sh, 00-hive-secure.sh"]
+        HOF_LIB["lib/swarm_bridge.py"]
+        HOF_TOOLS["tools/
+27 security/research scripts"]
+        HOF_ORIG["original hive os complete/
+legacy subtree"]
+        HOF_SHELL["shell/.bashrc"]
+    end
+
+    subgraph HOD["Hive Ops DevAI/"]
+        HOD_BIN["bin/
+45+ hive-*/hivedev-* scripts"]
+        HOD_PY["Python modules
+hive-ctrl.py, hive-orchestrator.py, hive_agents.py, ..."]
+        HOD_DOCS["docs/"]
+    end
+
+    subgraph PLUG["Hermes Plugins/"]
+        PLUG_INSTALL[install.sh]
+        PLUG_INIT[hive-ops-plugin/__init__.py]
+        PLUG_BRAIN[hive-ops-plugin/brain_plug.py]
+    end
+
+    subgraph BRAIN["brain-plug/"]
+        B_THER[therapist_code only.py]
+        B_ESC[escape_living_ai.txt]
+    end
+
+    subgraph TERMUX["Termux runtime"]
+        T_BASHRC[~/.bashrc]
+        T_BOOT[~/.termux/boot/00-hive-secure.sh]
+        T_BIN[~~/bin hive* symlinks]
+        T_AUTH[~/.hive_auth/passwd]
+    end
+
+    R_INSTALL1 -->|clones into| T_HIVE["~/Hive-Ops"]
+    R_INSTALL1 -->|symlinks| T_BIN
+    R_INSTALL1 -->|copies| T_BOOT
+    R_INSTALL1 -->|creates| T_AUTH
+    R_INSTALL1 -->|appends source| T_BASHRC
+
+    T_BOOT --> HOF_BIN
+    T_BASHRC --> HOF_ETC
+
+    HOF_BIN -->|launches| HOF_TOOLS
+    HOF_BIN -->|delegates| HOF_LIB
+    HOD_PY -->|spawns| HOD_BIN
+    PLUG_INSTALL -->|copies into| HERMES_HOME["~/.hermes/plugins/"]
+    B_THER -->|Flask API| B_API["/api endpoints"]

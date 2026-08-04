@@ -1,0 +1,11 @@
+```mermaid
+flowchart LR
+    A[hive recovery diagnose] --> B[Inspection report]
+    C[hive recovery repair level=1] --> D[Fix links/permissions]
+    E[hive recovery rollback] --> F[Restore previous runtime]
+    G[hive recovery repair level=6] --> H[Typed confirmation phrase]
+    H -->|wrong| I[Cancel]
+    H -->|correct| J[Validate target paths]
+    J -->|invalid| I
+    J -->|valid| K[Offer backup]
+    K --> L[Destructive reset]

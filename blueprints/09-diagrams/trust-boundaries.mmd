@@ -1,0 +1,41 @@
+```mermaid
+flowchart TD
+    subgraph Android["Android OS"]
+        subgraph Termux["Termux app (single UID)"]
+            subgraph Hive["Hive OS user-space"]
+                A[Operator]
+                B[hive-secure-login]
+                C[hive-ui-v2]
+                D[hive CLI]
+                E[Tools]
+                F[Agent/Orchestrator]
+                G[brain-plug]
+                H[~/.hive_auth/passwd]
+                I[~/.hive_backup/]
+                J[~/.hermes/plugins/]
+            end
+            K[Other Termux processes]
+        end
+    end
+    L[GitHub]
+    M[Termux package repos]
+    N[PyPI]
+    O[Orbot/Tor]
+
+    A --> B
+    B -- reads --> H
+    B -- launches --> C
+    C -- invokes --> D
+    D -- spawns --> E
+    D -- delegates --> F
+    G -- optional HTTP API --> E
+    D -- updates from --> L
+    Hive -- installs packages from --> M
+    Hive -- installs Python deps from --> N
+    Hive -- routes through --> O
+
+    K -.same UID.-> H
+    style H fill:#f99,stroke:#900
+    style L fill:#f99,stroke:#900
+    style M fill:#f99,stroke:#900
+    style N fill:#f99,stroke:#900

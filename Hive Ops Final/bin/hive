@@ -28,14 +28,48 @@ from pathlib import Path
 from typing import Optional, List, Dict, Tuple
 from datetime import datetime
 
-# Unified paths - support both legacy and new
-HIVE_HOME = Path(os.environ.get('HIVE_HOME', '/root/hive'))
-HIVE_OS = Path('/root/hive-os')
-HIVE_SWARM = Path('/root/hive-swarm')
-HIVE_CONFIG = Path.home() / '.config' / 'hive'
-STATE_DIR = HIVE_HOME / 'state'
-LOG_DIR = HIVE_HOME / 'logs'
-ETC_DIR = HIVE_HOME / 'etc'
+# Resolve repository root from this script's location: <repo>/Hive Ops Final/bin/hive
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+
+# Load shared path authority if available; do not manipulate sys.path broadly.
+_LIB_PATH = REPO_ROOT / "lib" / "hive_path.py"
+if _LIB_PATH.is_file():
+    import importlib.util
+    _spec = importlib.util.spec_from_file_location("hive_path", str(_LIB_PATH))
+    _hp = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_hp)
+else:
+    _hp = None
+
+def _resolve_root(env_name: str, default_callable, legacy_default: str):
+    """Return path root honoring HIVE_*_ROOT overrides, then defaults."""
+    env_val = os.environ.get(env_name)
+    if env_val:
+        p = Path(env_val)
+        if not p.is_absolute():
+            raise ValueError(f"{env_name} must be absolute: {p}")
+        return p
+    if _hp:
+        try:
+            return default_callable()
+        except Exception:
+            pass
+    legacy = Path(legacy_default)
+    return legacy
+
+# Legacy compatibility fallbacks: only used when lib/hive_path.py is unavailable
+# and no environment override is set. These will be removed in a future milestone.
+HIVE_HOME = _resolve_root("HIVE_HOME", _hp.resolve_data_root if _hp else None, "/root/hive")
+HIVE_OS = _resolve_root("HIVE_OS_ROOT", _hp.resolve_data_root if _hp else None, "/root/hive-os")
+HIVE_SWARM = _resolve_root("HIVE_SWARM_ROOT", _hp.resolve_data_root if _hp else None, "/root/hive-swarm")
+HIVE_CONFIG = _resolve_root("HIVE_CONFIG_ROOT", _hp.resolve_config_root if _hp else None, str(Path.home() / ".config" / "hive"))
+STATE_DIR = _resolve_root("HIVE_STATE_ROOT", _hp.resolve_state_root if _hp else None, str(HIVE_HOME / "state"))
+LOG_DIR = _resolve_root("HIVE_LOG_ROOT", _hp.resolve_log_root if _hp else None, str(HIVE_HOME / "logs"))
+ETC_DIR = _resolve_root("HIVE_ETC_ROOT", None, str(HIVE_HOME / "etc"))
+
+# Repository-relative canonical paths
+REPO_HIVE_FINAL = REPO_ROOT / "Hive Ops Final"
+REPO_BIN = REPO_HIVE_FINAL / "bin"
 
 class HiveUnified:
     """Unified Hive Ops controller - bridges bash legacy + Python swarm."""
@@ -69,7 +103,7 @@ class HiveUnified:
         paths = [
             HIVE_HOME / 'bin' / script,
             HIVE_OS / 'bin' / script,
-            Path(f'/root/hive-swarm/the-hive-tools/original hive os files/bin/{script}'),
+            REPO_HIVE_FINAL / 'original hive os complete' / 'bin' / script,
         ]
         
         for path in paths:

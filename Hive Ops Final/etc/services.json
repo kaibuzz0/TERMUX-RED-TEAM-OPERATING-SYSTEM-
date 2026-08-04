@@ -1,34 +1,117 @@
 {
+  "version": "5.0",
+  "schema": 2,
   "services": {
     "hive-daemon": {
       "description": "Core Hive daemon",
-      "start": "python3 /root/Hive Ops Final/bin/hive start",
-      "stop": "python3 /root/Hive Ops Final/bin/hive stop",
-      "restart": "python3 /root/Hive Ops Final/bin/hive start",
-      "status": "python3 /root/Hive Ops Final/bin/hive status",
-      "log": "/root/hive/logs/supervisor.log",
-      "requires": ["tmux"],
+      "start": {
+        "interpreter": "python",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "start"
+        ]
+      },
+      "stop": {
+        "interpreter": "python",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "stop"
+        ]
+      },
+      "restart": {
+        "interpreter": "python",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "start"
+        ]
+      },
+      "status": {
+        "interpreter": "python",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "status"
+        ]
+      },
+      "log": {
+        "base": "log-root",
+        "path": "supervisor.log"
+      },
+      "requires": [
+        "tmux"
+      ],
       "auto_start": true
     },
     "swarm-registry": {
       "description": "Swarm state registry",
-      "start": "echo 'Registry active'",
-      "stop": "echo 'Registry passive'",
-      "status": "python3 /root/Hive Ops Final/lib/swarm_bridge.py status",
-      "log": "/root/hive/logs/swarm.log",
+      "status": {
+        "interpreter": "python",
+        "base": "canonical-source",
+        "path": "lib/swarm_bridge.py",
+        "args": [
+          "status"
+        ]
+      },
+      "start": {
+        "interpreter": "sh",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "--service-noop",
+          "registry-start"
+        ]
+      },
+      "stop": {
+        "interpreter": "sh",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "--service-noop",
+          "registry-stop"
+        ]
+      },
+      "log": {
+        "base": "log-root",
+        "path": "swarm.log"
+      },
       "requires": [],
       "auto_start": false
     },
     "watchdog": {
       "description": "System watchdog",
-      "start": "bash /root/hive/bin/hive_watchdog.sh",
-      "stop": "pkill -f hive_watchdog",
-      "status": "pgrep -f hive_watchdog > /dev/null && echo 'running' || echo 'stopped'",
-      "log": "/root/hive/logs/watchdog.log",
+      "start": {
+        "interpreter": "bash",
+        "base": "data-root",
+        "path": "bin/hive_watchdog.sh",
+        "args": []
+      },
+      "stop": {
+        "interpreter": "sh",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "--service-noop",
+          "watchdog-stop"
+        ]
+      },
+      "status": {
+        "interpreter": "sh",
+        "base": "canonical-source",
+        "path": "bin/hive",
+        "args": [
+          "--service-noop",
+          "watchdog-status"
+        ]
+      },
+      "log": {
+        "base": "log-root",
+        "path": "watchdog.log"
+      },
       "requires": [],
       "auto_start": true
     }
-  },
-  "version": "5.0",
-  "schema": 1
+  }
 }

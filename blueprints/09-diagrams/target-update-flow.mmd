@@ -1,0 +1,19 @@
+```mermaid
+flowchart TD
+    A[hive update check] --> B[Query signed release metadata]
+    B --> C[Report available update]
+    D[hive update stage] --> E[Download archive]
+    E --> F[Verify digest/signature]
+    F -->|fail| G[Abort]
+    F -->|pass| H[Unpack to versioned prefix]
+    H --> I[Run schema migration preview]
+    I --> J[Run tests against staged files]
+    J -->|fail| G
+    J -->|pass| K[Preserve current runtime as rollback]
+    L[hive update apply] --> M[Operator confirmation]
+    M -->|decline| G
+    M -->|confirm| N[Backup state/config]
+    N --> O[Atomic switch active prefix]
+    O --> P[Health check]
+    P -->|fail| Q[Rollback]
+    P -->|pass| R[Update journal entry]
