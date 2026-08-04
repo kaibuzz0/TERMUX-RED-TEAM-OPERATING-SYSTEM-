@@ -18,6 +18,9 @@
       "Hive Ops Final/bin/hive",
       "Hive Ops Final/original hive os complete/bin/hive",
       "bin/hive"
+    ],
+    "install": [
+      "installer/install.py"
     ]
   },
   "migration_state": "canonical-source-declared"

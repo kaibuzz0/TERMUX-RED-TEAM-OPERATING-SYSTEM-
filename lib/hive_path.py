@@ -221,6 +221,21 @@ def resolve_legacy_root(env_override: str = "HIVE_LEGACY_ROOT") -> Path:
     return Path("/root/hive")
 
 
+def ensure_inside_repo(path: Path, repo_root: Path | None = None) -> None:
+    """Raise RuntimeError if *path* resolves outside the repository.
+
+    This is a centralized guard to prevent staged files or resolved paths from
+    escaping the project tree.  It is intentionally conservative: any path that
+    cannot be proven to live under *repo_root* is rejected.
+    """
+    target = Path(path).resolve()
+    root = repo_root.resolve() if repo_root else resolve_repository_root()
+    try:
+        target.relative_to(root)
+    except ValueError:
+        raise RuntimeError(f"Path escapes repository root: {path}")
+
+
 def resolve_future_state_dirs(prefix: Path | None = None, home: Path | None = None) -> dict:
     """Return the future Hive state-directory model without creating them.
 

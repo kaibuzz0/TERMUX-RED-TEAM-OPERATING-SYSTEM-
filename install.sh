@@ -17,6 +17,12 @@
 #   7. Sets up Termux:Boot
 #   8. Performs first boot
 
+#
+# STATUS: LEGACY / UNVERIFIED / NONTRANSACTIONAL / PENDING REPLACEMENT
+# This installer is retained for compatibility only.
+# A new safe transactional installer is under development in installer/.
+# Do not use this installer for production deployments until it is replaced.
+#
 set -e
 
 # Colors for output

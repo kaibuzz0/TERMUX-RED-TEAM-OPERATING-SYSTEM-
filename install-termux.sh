@@ -5,6 +5,12 @@
 #
 # Installs: Hive OS + Secure Login + Enhanced UI + Termux:Boot support
 
+#
+# STATUS: LEGACY / UNVERIFIED / NONTRANSACTIONAL / PENDING REPLACEMENT
+# This installer is retained for compatibility only.
+# A new safe transactional installer is under development in installer/.
+# Do not use this installer for production deployments until it is replaced.
+#
 set -euo pipefail
 umask 077
 
