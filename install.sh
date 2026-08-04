@@ -23,6 +23,26 @@
 # A new safe transactional installer is under development in installer/.
 # Do not use this installer for production deployments until it is replaced.
 #
+
+# Milestone 7 legacy bridge
+# The legacy installer no longer runs destructive steps by default.
+# Use the new installer:
+#   python3 -m installer.install --check
+#   python3 -m installer.install --plan
+#   python3 -m installer.install --dry-run
+# To run the old unsafe installer anyway, set HIVE_LEGACY_UNSAFE=1 or pass --legacy-unsafe.
+if [ "$HIVE_LEGACY_UNSAFE" != "1" ] && [ "$1" != "--legacy-unsafe" ]; then
+    echo "[HIVE] This installer is LEGACY / UNVERIFIED / NONTRANSACTIONAL / PENDING REPLACEMENT."
+    echo "[HIVE] Use the new safe installer instead:"
+    echo "         python3 -m installer.install --check"
+    echo "         python3 -m installer.install --plan"
+    echo "         python3 -m installer.install --dry-run"
+    echo "[HIVE] To run the old installer anyway, set HIVE_LEGACY_UNSAFE=1 or pass --legacy-unsafe."
+    exit 0
+fi
+if [ "$1" = "--legacy-unsafe" ]; then
+    shift
+fi
 set -e
 
 # Colors for output

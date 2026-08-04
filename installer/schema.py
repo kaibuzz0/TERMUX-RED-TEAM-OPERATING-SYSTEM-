@@ -1,8 +1,9 @@
-"""Installation plan and journal schemas."""
+"""Installation plan, activation, and journal schemas."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Optional
@@ -30,6 +31,38 @@ class PackageCategory(Enum):
     OPTIONAL = "optional"
     UNSUPPORTED = "unsupported"
     ALREADY_AVAILABLE = "already_available"
+    UNKNOWN = "unknown"
+
+
+class ActivationState(Enum):
+    """Lifecycle states for a staged release before, during, and after activation."""
+
+    STAGED = "staged"
+    VERIFIED = "verified"
+    READY_TO_ACTIVATE = "ready_to_activate"
+    ACTIVE = "active"
+    ACTIVATION_FAILED = "activation_failed"
+    ROLLBACK_AVAILABLE = "rollback_available"
+    ROLLED_BACK = "rolled_back"
+
+
+class LegacyStatus(Enum):
+    """Classification of legacy installation presence."""
+
+    NO_LEGACY_INSTALLATION = "no_legacy_installation"
+    LEGACY_DETECTED = "legacy_detected"
+    LEGACY_CONFLICT = "legacy_conflict"
+    LEGACY_PARTIAL = "legacy_partial"
+    LEGACY_UNSUPPORTED = "legacy_unsupported"
+    UNKNOWN = "unknown"
+
+
+class MigrationRisk(Enum):
+    """Risk classification for items in a migration plan."""
+
+    SAFE = "safe"
+    MANUAL_REVIEW = "manual_review"
+    NEVER_COPY = "never_copy"
     UNKNOWN = "unknown"
 
 
@@ -75,6 +108,44 @@ class InstallPlan:
     existing_status: InstallStatus = InstallStatus.UNKNOWN
     required_packages: list[dict[str, Any]] = field(default_factory=list)
     proposed_shell_startup_entries: list[str] = field(default_factory=list)
+
+
+@dataclass
+class ReleaseInfo:
+    """Metadata for a single versioned release under the data root."""
+
+    release_id: str
+    transaction_id: str
+    state: ActivationState
+    repository: str
+    commit: str
+    canonical_source: str
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    manifest_digest: str = ""
+    previous_release_id: str = ""
+
+
+@dataclass
+class ActivePointer:
+    """Pointer to the currently active release."""
+
+    active_release_id: str
+    active_runtime: str
+    previous_release_id: str
+    updated_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+@dataclass
+class MigrationPlan:
+    """Non-executable migration plan from a legacy installation."""
+
+    legacy_status: LegacyStatus
+    legacy_root: Optional[str]
+    classification_reason: str
+    safe_items: list[dict[str, Any]] = field(default_factory=list)
+    manual_review_items: list[dict[str, Any]] = field(default_factory=list)
+    never_copy_items: list[dict[str, Any]] = field(default_factory=list)
+    rollback_strategy: str = ""
 
 
 def plan_to_dict(plan: InstallPlan) -> dict:
@@ -124,4 +195,42 @@ def plan_to_dict(plan: InstallPlan) -> dict:
         "existing_status": plan.existing_status.value,
         "required_packages": plan.required_packages,
         "proposed_shell_startup_entries": plan.proposed_shell_startup_entries,
+    }
+
+
+def release_to_dict(release: ReleaseInfo) -> dict:
+    return {
+        "schema_version": 1,
+        "release_id": release.release_id,
+        "transaction_id": release.transaction_id,
+        "state": release.state.value,
+        "repository": release.repository,
+        "commit": release.commit,
+        "canonical_source": release.canonical_source,
+        "created_at": release.created_at,
+        "manifest_digest": release.manifest_digest,
+        "previous_release_id": release.previous_release_id,
+    }
+
+
+def active_pointer_to_dict(pointer: ActivePointer) -> dict:
+    return {
+        "schema_version": 1,
+        "active_release_id": pointer.active_release_id,
+        "active_runtime": pointer.active_runtime,
+        "previous_release_id": pointer.previous_release_id,
+        "updated_at": pointer.updated_at,
+    }
+
+
+def migration_plan_to_dict(plan: MigrationPlan) -> dict:
+    return {
+        "schema_version": 1,
+        "legacy_status": plan.legacy_status.value,
+        "legacy_root": plan.legacy_root,
+        "classification_reason": plan.classification_reason,
+        "safe_items": plan.safe_items,
+        "manual_review_items": plan.manual_review_items,
+        "never_copy_items": plan.never_copy_items,
+        "rollback_strategy": plan.rollback_strategy,
     }
