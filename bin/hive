@@ -104,6 +104,16 @@ def main(argv: list[str]) -> int:
         except FileNotFoundError as exc:
             return _fail(f"installer package not available: {exc}")
 
+    # Milestone 8: vault subcommands delegate to the security vault package.
+    if argv[1:] and argv[1] == "vault":
+        vault_args = argv[2:]
+        cmd = [sys.executable, "-m", "security.vault.cli"] + vault_args
+        try:
+            result = subprocess.run(cmd, cwd=os.getcwd())
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"security vault package not available: {exc}")
+
     if "--resolve" in argv[1:]:
         return 0 if _resolve_mode(repo_root, metadata) else 1
 
