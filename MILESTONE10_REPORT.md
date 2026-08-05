@@ -179,3 +179,114 @@ Milestone 9 status: DEFERRED  PHYSICAL DEVICE REQUIRED
 ## Recommended next milestone
 
 Milestone 11: Service-system modernization and supervisor integration.
+
+
+---
+
+## Final verification and release result
+
+- Commit SHA: `23b0a314ec23c6e975aee3bda8896d27a8cb3741`
+- Branch: `master`
+- Push result: success (`51a659c..23b0a31  master -> master`)
+- Local full test suite: **251 passed** (up from 236 baseline after adding 15 new security-focused tests)
+- Targeted Milestone 10 tests: **40 passed**
+- `compileall`: success
+- `git diff --check`: clean
+
+Static security scan (production code under `updates/`, `installer/`, `lib/`, `bin/`, `security/`):
+
+| Pattern | Result |
+|---|---|
+| `shell=True` | None |
+| `os.system` | None |
+| `eval(` | None |
+| `exec(` | None |
+| `curl`/`wget` | None |
+| `git pull` / `git reset --hard` / `git clean` | None |
+| `.extractall()` | None |
+| `BEGIN PRIVATE KEY` / `BEGIN OPENSSH PRIVATE KEY` | None |
+| Private signing key in production code | None |
+| Hardcoded secret | None |
+
+Private-key grep across the full repository found only unrelated content in `Hive Ops DevAI/`, `Hive Ops Final/`, `brain-plug/`, and `Hermes Plugins/` — none of which are part of the Milestone 10 production commit. No private key material was staged or committed in `updates/`, `tests/`, `bin/hive`, or the milestone docs.
+
+### Signing and canonicalization
+
+- Algorithm: Ed25519
+- Canonical serialization: `json.dumps(..., sort_keys=True, separators=(",", ":"))` over UTF-8
+- Floats rejected in canonical JSON
+- Signature field (`signing.signature`) set to empty string before signing and verification
+- Same logical metadata signed twice produces identical signature bytes
+- Reloading metadata with whitespace/indentation and re-verifying succeeds
+- Modifying any signed field invalidates verification (covered by tests)
+
+### Trust store
+
+- Trust store accepts Ed25519 public keys only
+- Unknown key IDs fail closed
+- Revoked keys fail closed
+- Revoked releases fail closed
+- Duplicate key IDs with different material fail
+- Malformed PEM fails with clear error
+- Empty trust store cannot verify a signed release
+- Key rotation is offline/manual (`TrustStore.add_key` / `revoke_key`); no trust-on-first-use behavior
+
+### Anti-rollback
+
+- Security sequence is an integer, non-negative, with a defined upper bound
+- Lower sequence rejected
+- Equal sequence with conflicting `release_id` rejected
+- Equal sequence with same `release_id` allowed (replay-safe)
+- Revoked sequences rejected
+- `--emergency` flag is explicit and scoped to verification only
+
+### Bundle extraction safety
+
+- Absolute paths rejected
+- `..` traversal rejected (including nested forms)
+- Windows drive-letter paths rejected
+- UNC paths rejected
+- Backslash separators rejected
+- Symlinks and hardlinks rejected
+- FIFOs and sockets rejected
+- Device entries rejected
+- Expanded-size and file-count limits enforced
+- Extraction occurs under a validated staging root; paths cannot escape it
+- ZIP path traversal rejected
+
+### State preservation
+
+- Manifest excludes `.git`, `blueprints`, `tests`, caches, logs, `.hermes`, `.hive`, `.hive_auth`, `vault.json`, and dotfiles
+- Update planner is non-mutating
+- No production code overwrites configuration, mutable state, vault, session data, user repositories, logs, backups, or Hermes state
+
+### Recovery
+
+- Level 0 diagnosis is non-mutating
+- Level 1 repair only removes stale `.lock` files
+- Levels 2–6 are documented; Levels 2–3 delegate to installer activation engine (deferred wiring)
+- Level 4 restores from verified offline bundle via `Updater.stage`
+- Level 6 remains explicit and destructive (not implemented in this milestone)
+
+### CLI safety
+
+- `bin/hive` delegates to `python -m updates.cli` / `updates.recovery_cli`
+- Arguments preserved via `subprocess.run`
+- Exit codes preserved
+- No bundle applies automatically
+- `hive update apply` is not implemented in this milestone (no activation engine wiring yet)
+- No network used by default
+- No `shell=True`, no arbitrary command strings, no private key required for verification
+
+### CI status
+
+CI workflow monitoring is pending. The repository has been pushed to `origin/master`. The GitHub Actions workflow ID and URL will be added once the run completes.
+
+### Milestone 9 physical validation
+
+- Status: `DEFERRED  PHYSICAL DEVICE VALIDATION PENDING`
+- Physical Termux validation: `UNVERIFIED`
+
+### Ready for Milestone 11
+
+- YES, after CI is fully green. Do not begin Milestone 11 until all CI jobs pass.
