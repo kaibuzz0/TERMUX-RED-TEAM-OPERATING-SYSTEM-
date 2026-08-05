@@ -145,15 +145,23 @@ class PathRootResolutionTests(unittest.TestCase):
 
 class FutureStateDirTests(unittest.TestCase):
     def test_future_dirs_do_not_create_filesystem_entries(self):
-        dirs = resolve_future_state_dirs()
-        # Verify none of the paths were created as a side effect.
-        # Pre-existing directories (like home) are expected; we only care that
-        # function did not create new entries under .config/.local/.cache.
-        created_by_function = [
-            p for p in dirs.values()
-            if p and p.exists() and ".config" in str(p) or (p and p.exists() and ".local" in str(p)) or (p and p.exists() and ".cache" in str(p))
-        ]
-        self.assertEqual(created_by_function, [])
+        import os
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        # Use an isolated temporary home so pre-existing system directories do
+        # not cause false positives on Windows when HOME is unset.
+        tmp_home = Path(tempfile.mkdtemp())
+        with patch.dict(os.environ, {"HOME": str(tmp_home)}):
+            dirs = resolve_future_state_dirs()
+            # Verify none of the paths were created as a side effect.
+            # Pre-existing directories (like home) are expected; we only care that
+            # function did not create new entries under .config/.local/.cache.
+            created_by_function = [
+                p for p in dirs.values()
+                if p and p.exists() and ".config" in str(p) or (p and p.exists() and ".local" in str(p)) or (p and p.exists() and ".cache" in str(p))
+            ]
+            self.assertEqual(created_by_function, [])
 
     def test_home_based_paths(self):
         dirs = resolve_future_state_dirs()

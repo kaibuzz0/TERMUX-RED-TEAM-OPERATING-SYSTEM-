@@ -19,10 +19,10 @@ class AuditLog:
 
     def __init__(self, log_root: Path):
         self.log_dir = log_root / "broker"
-        self.log_dir.mkdir(parents=True, exist_ok=True)
         self._path = self.log_dir / "audit.jsonl"
 
     def write(self, record: dict[str, Any]) -> str:
+        self.log_dir.mkdir(parents=True, exist_ok=True)
         audit_id = f"audit-{uuid.uuid4().hex}"
         record["audit_id"] = audit_id
         record["timestamp"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())

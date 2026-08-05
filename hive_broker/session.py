@@ -24,15 +24,12 @@ class BrokerSession:
 
     def add_transaction(self, txn_id: str) -> None:
         self.active_transactions.add(txn_id)
-        self._persist()
 
     def remove_transaction(self, txn_id: str) -> None:
         self.active_transactions.discard(txn_id)
-        self._persist()
 
     def stop(self) -> None:
         self.stopped = True
-        self._persist()
 
     def is_stopped(self) -> bool:
         return self.stopped
@@ -41,7 +38,6 @@ class BrokerSession:
         if txn_id not in self.active_transactions:
             return False
         self.active_transactions.discard(txn_id)
-        self._persist()
         return True
 
     def _persist(self) -> None:

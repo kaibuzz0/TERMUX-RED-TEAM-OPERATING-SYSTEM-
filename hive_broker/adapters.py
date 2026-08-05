@@ -16,12 +16,19 @@ class AdapterError(Exception):
 
 def _run_services_argv(argv: list[str]) -> dict[str, Any]:
     import io
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
     stdout = io.StringIO()
     stderr = io.StringIO()
     try:
+        sys.stdout = stdout
+        sys.stderr = stderr
         code = services_main(argv)
     except SystemExit as exc:
         code = exc.code if isinstance(exc.code, int) else 1
+    finally:
+        sys.stdout = old_stdout
+        sys.stderr = old_stderr
     return {"exit_code": code, "stdout": stdout.getvalue(), "stderr": stderr.getvalue()}
 
 
