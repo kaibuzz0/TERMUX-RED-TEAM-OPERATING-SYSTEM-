@@ -114,6 +114,19 @@ def main(argv: list[str]) -> int:
         except FileNotFoundError as exc:
             return _fail(f"security vault package not available: {exc}")
 
+    # Milestone 10: update and recovery subcommands delegate to the updates package.
+    if argv[1:] and argv[1] in ("update", "recovery"):
+        update_args = argv[2:]
+        if argv[1] == "update":
+            cmd = [sys.executable, "-m", "updates.cli"] + update_args
+        else:
+            cmd = [sys.executable, "-m", "updates.recovery_cli"] + update_args
+        try:
+            result = subprocess.run(cmd, cwd=os.getcwd())
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"updates package not available: {exc}")
+
     if "--resolve" in argv[1:]:
         return 0 if _resolve_mode(repo_root, metadata) else 1
 
