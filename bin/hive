@@ -137,6 +137,16 @@ def main(argv: list[str]) -> int:
         except FileNotFoundError as exc:
             return _fail(f"services package not available: {exc}")
 
+    # Milestone 12: broker subcommands delegate to the hive_broker package.
+    if argv[1:] and argv[1] == "broker":
+        broker_args = argv[2:]
+        cmd = [sys.executable, "-m", "hive_broker.cli"] + broker_args
+        try:
+            result = subprocess.run(cmd, cwd=os.getcwd())
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"hive_broker package not available: {exc}")
+
     if "--resolve" in argv[1:]:
         return 0 if _resolve_mode(repo_root, metadata) else 1
 

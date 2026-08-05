@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "task_id": "test-task-001",
+  "requestor": "hermes",
+  "intent": "inspect-service-status",
+  "required_capabilities": [
+    "service.status",
+    "service.health"
+  ],
+  "allowed_actions": [
+    "service.status"
+  ],
+  "target_services": [],
+  "target_paths": [],
+  "read_only": true,
+  "timeout_seconds": 30,
+  "audit_level": "normal"
+}
