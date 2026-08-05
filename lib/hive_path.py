@@ -22,21 +22,53 @@ ALLOWED_LAUNCHER_TYPES = {"python", "bash", "posix-shell", "direct-executable"}
 ALLOWED_EXECUTION_POLICIES = {"explicit-interpreter", "direct-execution"}
 
 
-def resolve_repository_root(from_path: Path | str | None = None) -> Path:
-    """Resolve repository root from a path inside the repository.
-
-    Defaults to the current working directory. Walks upward until
-    hive-canonical.json is found or filesystem root is reached.
-    """
-    start = Path(from_path or os.getcwd()).resolve()
+def _walk_to_repository_root(start: Path) -> Path:
+    """Walk upward from a file or directory until a valid hive-canonical.json is found."""
+    start = start.resolve()
     if start.is_file():
         start = start.parent
-
     for candidate in [start, *start.parents]:
-        if (candidate / METADATA_FILE).is_file():
-            return candidate
-
+        meta_path = candidate / METADATA_FILE
+        if meta_path.is_file():
+            try:
+                load_metadata(candidate)
+                return candidate
+            except CanonicalMetadataError:
+                # Invalid metadata here is not our root; keep walking.
+                continue
     raise PathResolutionError(f"could not locate repository root from {start}")
+
+
+def resolve_repository_root(from_path: Path | str | None = None) -> Path:
+    """Resolve repository root using a trusted precedence.
+
+    Precedence:
+    1. HIVE_REPO_ROOT environment variable (absolute path to the real root).
+    2. Explicit caller-provided path (development override).
+    3. Current working directory, but only if it resolves to a valid root.
+    """
+    env_root = os.environ.get("HIVE_REPO_ROOT")
+    if env_root:
+        p = Path(env_root).resolve()
+        if (p / METADATA_FILE).is_file():
+            return p
+        raise PathResolutionError(f"HIVE_REPO_ROOT does not contain {METADATA_FILE}: {p}")
+
+    if from_path is not None:
+        return _walk_to_repository_root(Path(from_path))
+
+    try:
+        return _walk_to_repository_root(Path(os.getcwd()))
+    except PathResolutionError as e:
+        raise PathResolutionError(
+            "Could not locate repository root. "
+            "Set HIVE_REPO_ROOT or run from inside the repository."
+        ) from e
+
+
+def resolve_repository_root_from_file(file_path: Path | str) -> Path:
+    """Resolve repository root from a known file location (e.g. __file__)."""
+    return _walk_to_repository_root(Path(file_path))
 
 
 class PathResolutionError(ValueError):

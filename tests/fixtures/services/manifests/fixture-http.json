@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "name": "fixture-http",
+  "description": "Fixture loopback HTTP server for tests",
+  "enabled": false,
+  "classification": "NATIVE",
+  "command": {
+    "interpreter": "python",
+    "base": "repository",
+    "path": "tests/fixtures/services/http_server.py",
+    "args": [
+      "127.0.0.1",
+      "0"
+    ]
+  },
+  "working_directory": {
+    "base": "temp-root",
+    "path": "."
+  },
+  "environment": {
+    "allow": [],
+    "set": {}
+  },
+  "dependencies": [],
+  "health_check": {
+    "type": "tcp-local",
+    "host": "127.0.0.1",
+    "port": 0,
+    "interval_seconds": 1,
+    "timeout_seconds": 2,
+    "failure_threshold": 3
+  },
+  "restart": {
+    "policy": "on-failure",
+    "max_attempts": 3,
+    "window_seconds": 60,
+    "backoff_initial_seconds": 2,
+    "backoff_max_seconds": 30
+  },
+  "shutdown": {
+    "signal": "TERM",
+    "timeout_seconds": 5,
+    "kill_after_timeout": true
+  },
+  "logging": {
+    "stdout": "fixture-http.out.log",
+    "stderr": "fixture-http.err.log"
+  }
+}
