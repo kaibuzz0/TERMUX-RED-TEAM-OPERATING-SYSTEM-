@@ -2,7 +2,7 @@
 
 ## Unified Policy & Permission Engine
 
-**Status:** READY FOR RELEASE PENDING USER APPROVAL
+**Status:** COMMITTED AND PUSHED; AWAITING CI
 
 **Baseline:** Milestone 14 commit `02daca72e01d5a80f809539d379cd8767f4fc930` (CI workflow #26 green)
 
@@ -54,3 +54,27 @@
 ### Pending
 
 Awaiting explicit user approval to commit and push. CI workflow will be run after push and before Milestone 16 begins.
+
+
+### Release Metadata
+
+- Commit SHA: `25ee0f0ab8252ebea7484e68b1eb61c48e9182f4`
+- Branch: `master`
+- Push result: success (`02daca7..25ee0f0` on origin/master)
+- Repository: https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-
+- CI workflow: pending (will be monitored)
+
+### Final release report fields (to complete after CI)
+
+Workflow run ID: TBD
+Workflow URL: TBD
+
+Jobs:
+- test 3.9: TBD
+- test 3.10: TBD
+- test 3.11: TBD
+- test 3.12: TBD
+- security: TBD
+- build: TBD
+
+Ready for Milestone 16: NO until CI is fully green.
