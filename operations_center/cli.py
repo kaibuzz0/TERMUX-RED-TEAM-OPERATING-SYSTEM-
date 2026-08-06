@@ -24,6 +24,7 @@ _VIEWS: dict[str, CallableFactory] = {
     "diagnostics": lambda c: c.collect_overview(),  # diagnostics are embedded in overview
     "events": lambda c: c.collect_overview(),
     "config": lambda c: c.collect_overview(),
+    "policy": lambda c: _collect_policy(c),
 }
 
 
@@ -35,6 +36,12 @@ class CallableFactory:
 
     def __call__(self, collector: Collector) -> dict[str, Any]:
         return self.fn(collector)
+
+
+def _collect_policy(collector: Collector) -> dict[str, Any]:
+    """Read-only policy status view via broker."""
+    from operations_center.collectors import collect_policy
+    return collect_policy(collector.state_root)
 
 
 def _collect(view: str, timeout: int, verbose: bool) -> dict[str, Any]:

@@ -39,6 +39,9 @@ BROKER_CAPABILITIES: tuple[Capability, ...] = (
     Capability("broker.capabilities", False, "none"),
     Capability("broker.status", False, "none"),
     Capability("broker.stop", False, "none"),
+    Capability("policy.status", False, "none"),
+    Capability("policy.profiles", False, "none"),
+    Capability("policy.explain", False, "policy"),
 )
 
 _CAPABILITY_NAMES = frozenset(c.name for c in BROKER_CAPABILITIES)

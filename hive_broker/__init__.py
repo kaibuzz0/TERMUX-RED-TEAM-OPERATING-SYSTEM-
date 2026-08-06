@@ -53,6 +53,28 @@ class Broker:
             "policy": self.policy.name,
         }
 
+
+    def _policy_context(self, manifest: dict[str, Any], txn) -> dict[str, Any]:
+        """Build the secret-free policy context for this broker dispatch."""
+        from config_engine.config import get_config
+        runtime = get_config("runtime")
+        policy_cfg = get_config("policy")
+        profile_map = policy_cfg.get("profile_map", {})
+        cfg_profile = profile_map.get(runtime.get("profile", "default"), "operator")
+        return {
+            "configuration_profile": cfg_profile,
+            "runtime_mode": "normal",
+            "maintenance_mode": False,
+            "recovery_mode": False,
+            "vault_state": "LOCKED",
+            "rollback_available": True,
+            "physical_validation_status": "DEFERRED",
+            "manifest_digest": manifest_digest(manifest),
+            "transaction_id": txn.transaction_id,
+            "broker_version": "1.0",
+            "policy_version": 1,
+        }
+
     def run(self, raw: dict[str, Any]) -> dict[str, Any]:
         validated = validate_task_manifest(raw, self.policy)
         check_allowed_since_commit(validated)
@@ -70,8 +92,32 @@ class Broker:
         txn = generate_transaction(validated["task_id"], self.session.session_id, audit_id)
         self.session.add_transaction(txn.transaction_id)
 
+        # Milestone 15: Policy Engine authorization before any adapter dispatch.
+        policy_context = self._policy_context(validated, txn)
+        from hive_broker.policy import validate_actions_for_policy
+        try:
+            validate_actions_for_policy(validated["allowed_actions"], self.policy, policy_context)
+        except Exception as e:
+            self.session.remove_transaction(txn.transaction_id)
+            return {
+                "schema_version": 1,
+                "transaction_id": txn.transaction_id,
+                "task_id": txn.task_id,
+                "session_id": txn.session_id,
+                "audit_id": audit_id,
+                "intent": validated["intent"],
+                "status": "denied",
+                "results": [],
+                "errors": [f"policy denial: {e}"],
+                "duration_ms": 0,
+                "policy_decision": "DENY",
+                "execution_performed": False,
+            }
+
         try:
             result = self.dispatcher.run(validated, txn)
+            result["policy_decision"] = "ALLOW"
+            result["execution_performed"] = True
             self.audit.write({
                 "transaction_id": txn.transaction_id,
                 "task_id": txn.task_id,
@@ -81,6 +127,7 @@ class Broker:
                 "intent": validated["intent"],
                 "status": result["status"],
                 "duration_ms": result["duration_ms"],
+                "policy_decision": result["policy_decision"],
             })
             return result
         except BrokerError as e:

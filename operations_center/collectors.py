@@ -151,3 +151,36 @@ def _extract_broker(source: dict[str, Any] | None) -> dict[str, Any]:
     if not source:
         return {"status": "UNKNOWN"}
     return {"status": "ok" if source.get("status") == "AVAILABLE" else "unknown"}
+
+
+def collect_policy(state_root: Path) -> dict[str, Any]:
+    """Collect read-only policy status through the Hive Broker.
+
+    The Operations Center never imports the Policy Engine directly;
+    it requests the broker read-only capability ``policy.status``.
+    """
+    from hive_broker import Broker
+    broker = Broker(state_root, state_root / "logs")
+    result = broker.run({
+        "schema_version": 1,
+        "task_id": "ops-policy-status",
+        "requestor": "operations_center",
+        "intent": "policy-status",
+        "required_capabilities": ["policy.status"],
+        "allowed_actions": ["policy.status"],
+        "target_services": [],
+        "target_paths": [],
+        "read_only": True,
+        "timeout_seconds": 30,
+        "audit_level": "normal",
+    })
+    if result.get("status") != "success":
+        return {"status": "failure", "errors": [result.get("message", "policy access denied")]}
+    policy_data = result.get("results", {}).get("policy", {})
+    return {
+        "status": "success",
+        "active_profile": policy_data.get("default_profile"),
+        "available_profiles": policy_data.get("profiles", []),
+        "total_rules": policy_data.get("total_rules"),
+        "policy_digest": policy_data.get("policy_digest"),
+    }

@@ -11,6 +11,8 @@ from hive_broker import Broker
 from hive_broker.errors import BrokerError
 
 
+
+
 def _broker() -> Broker:
     from config_engine import get_config
     runtime = get_config("runtime")
@@ -88,6 +90,19 @@ def cmd_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_policy_check(args):
+    """Broker-facing read-only policy check."""
+    decision = _check_policy(
+        actor_type=args.actor,
+        capability=args.capability,
+        resource_type=args.resource,
+        resource_id=args.resource_id,
+    )
+    decision["execution_performed"] = False
+    _print_json(decision)
+    return 0 if decision["decision"] == "ALLOW" else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="hive broker")
     sub = parser.add_subparsers(dest="command")
@@ -104,6 +119,11 @@ def main(argv: list[str] | None = None) -> int:
     stop_p.add_argument("--transaction", default=None)
     audit_p = sub.add_parser("audit", help="Look up audit records by transaction")
     audit_p.add_argument("--transaction", required=True)
+    policy_p = sub.add_parser("policy-check", help="Evaluate a capability through the Policy Engine (read-only check)")
+    policy_p.add_argument("capability", help="Capability to evaluate")
+    policy_p.add_argument("--actor", default="broker", help="Actor type")
+    policy_p.add_argument("--resource", default="service", help="Resource type")
+    policy_p.add_argument("--resource-id", default="default", help="Resource ID")
 
     args = parser.parse_args(argv)
     if args.command is None:
@@ -118,6 +138,7 @@ def main(argv: list[str] | None = None) -> int:
         "status": cmd_status,
         "stop": cmd_stop,
         "audit": cmd_audit,
+        "policy-check": cmd_policy_check,
     }
     return handlers[args.command](args)
 

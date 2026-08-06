@@ -237,3 +237,181 @@ class VersionCompatibilityTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------- Milestone 15: Policy Enforcement Tests ----------------
+
+class PolicyEnforcementTests(unittest.TestCase):
+    def setUp(self):
+        self.state, self.logs, self.tmp = _tmp_dirs()
+        os.environ["HIVE_REPO_ROOT"] = str(REPO_ROOT)
+        from hive_broker import policy as policy_mod
+        from config_engine import config as ce_config
+        if hasattr(policy_mod._engine, "_instance"):
+            delattr(policy_mod._engine, "_instance")
+        ce_config._engine = None
+
+    def tearDown(self):
+        os.environ.pop("HIVE_REPO_ROOT", None)
+        from hive_broker import policy as policy_mod
+        from config_engine import config as ce_config
+        if hasattr(policy_mod._engine, "_instance"):
+            delattr(policy_mod._engine, "_instance")
+        ce_config._engine = None
+
+    def test_read_only_action_allowed_and_executed(self):
+        from hive_broker import Broker
+        from hive_broker import dispatcher as dispatcher_mod
+        calls = []
+        original = dispatcher_mod.dispatch_adapter
+        def spy(capability, txn, params):
+            calls.append(capability)
+            return {"exit_code": 0, "stdout": "ok", "stderr": ""}
+        dispatcher_mod.dispatch_adapter = spy
+        try:
+            broker = Broker(self.state, self.logs)
+            result = broker.run({
+                "schema_version": 1,
+                "task_id": "t1",
+                "requestor": "hermes",
+                "intent": "list-services",
+                "required_capabilities": ["service.list"],
+                "allowed_actions": ["service.list"],
+                "target_services": [],
+                "target_paths": [],
+                "read_only": True,
+                "timeout_seconds": 30,
+                "audit_level": "normal",
+            })
+        finally:
+            dispatcher_mod.dispatch_adapter = original
+        self.assertEqual(result["status"], "success")
+        self.assertEqual(result["policy_decision"], "ALLOW")
+        self.assertEqual(result["execution_performed"], True)
+        self.assertIn("service.list", calls)
+
+    def test_denied_action_never_dispatches(self):
+        from hive_broker import Broker
+        from hive_broker import dispatcher as dispatcher_mod
+        from config_engine.config import ConfigEngine
+        from pathlib import Path
+        import json
+        calls = []
+        original = dispatcher_mod.dispatch_adapter
+        def spy(capability, txn, params):
+            calls.append(capability)
+            return {"exit_code": 0, "stdout": "ok", "stderr": ""}
+        dispatcher_mod.dispatch_adapter = spy
+        # Isolate policy config in a temp HERMES_HOME.
+        hermes_home = self.tmp / "hermes_home"
+        hermes_home.mkdir()
+        config_path = hermes_home / "config.json"
+        config_path.write_text(json.dumps({
+            "policy": {
+                "active_profile": "observer",
+                "rules": [
+                    {
+                        "rule_id": "test-deny-service-list",
+                        "priority": 11000,
+                        "effect": "DENY",
+                        "capabilities": ["service.list"],
+                        "reason_code": "CAPABILITY_NOT_PERMITTED",
+                    }
+                ],
+            }
+        }), encoding="utf-8")
+        import os
+        old_cfg = os.environ.get("HIVE_CONFIG_ROOT")
+        os.environ["HIVE_CONFIG_ROOT"] = str(hermes_home)
+        from hive_broker import policy as policy_mod
+        from config_engine import config as ce_config
+        if hasattr(policy_mod._engine, "_instance"):
+            delattr(policy_mod._engine, "_instance")
+        ce_config._engine = None
+        try:
+            broker = Broker(self.state, self.logs)
+            result = broker.run({
+                "schema_version": 1,
+                "task_id": "t1",
+                "requestor": "hermes",
+                "intent": "list-services",
+                "required_capabilities": ["service.list"],
+                "allowed_actions": ["service.list"],
+                "target_services": [],
+                "target_paths": [],
+                "read_only": True,
+                "timeout_seconds": 30,
+                "audit_level": "normal",
+            })
+        finally:
+            dispatcher_mod.dispatch_adapter = original
+            if old_cfg is None:
+                os.environ.pop("HIVE_CONFIG_ROOT", None)
+            else:
+                os.environ["HIVE_CONFIG_ROOT"] = old_cfg
+            if hasattr(policy_mod._engine, "_instance"):
+                delattr(policy_mod._engine, "_instance")
+        self.assertEqual(result["status"], "denied")
+        self.assertEqual(result["execution_performed"], False)
+        self.assertEqual(calls, [])
+
+    def test_confirm_action_never_dispatches_without_approval(self):
+        from hive_broker import Broker
+        from hive_broker import policy as policy_mod
+        # service.start under operator profile returns CONFIRM. The broker bridge
+        # must reject CONFIRM before dispatch.
+        with self.assertRaises(Exception) as ctx:
+            policy_mod.validate_actions_for_policy(["service.start"], policy_mod.get_policy("operator"))
+        self.assertIn("requires further authorization", str(ctx.exception))
+
+    def test_policy_error_fails_closed(self):
+        from hive_broker import Broker
+        from hive_broker import policy as policy_mod
+        original_engine = getattr(policy_mod._engine, "_instance", None)
+        class BadEngine:
+            def evaluate(self, *a, **kw):
+                raise RuntimeError("policy engine unavailable")
+        policy_mod._engine._instance = BadEngine()
+        try:
+            broker = Broker(self.state, self.logs)
+            result = broker.run({
+                "schema_version": 1,
+                "task_id": "t1",
+                "requestor": "hermes",
+                "intent": "list-services",
+                "required_capabilities": ["service.list"],
+                "allowed_actions": ["service.list"],
+                "target_services": [],
+                "target_paths": [],
+                "read_only": True,
+                "timeout_seconds": 30,
+                "audit_level": "normal",
+            })
+        finally:
+            if original_engine is not None:
+                policy_mod._engine._instance = original_engine
+            else:
+                delattr(policy_mod._engine, "_instance")
+        self.assertEqual(result["status"], "denied")
+        self.assertIn("policy denial", result["errors"][0])
+        self.assertEqual(result["execution_performed"], False)
+
+    def test_transaction_id_propagated_to_audit(self):
+        from hive_broker import Broker
+        broker = Broker(self.state, self.logs)
+        result = broker.run({
+            "schema_version": 1,
+            "task_id": "t1",
+            "requestor": "hermes",
+            "intent": "list-services",
+            "required_capabilities": ["service.list"],
+            "allowed_actions": ["service.list"],
+            "target_services": [],
+            "target_paths": [],
+            "read_only": True,
+            "timeout_seconds": 30,
+            "audit_level": "normal",
+        })
+        records = broker.audit.read_transaction(result["transaction_id"])
+        self.assertTrue(len(records) >= 1)
+        self.assertEqual(records[0].get("transaction_id"), result["transaction_id"])

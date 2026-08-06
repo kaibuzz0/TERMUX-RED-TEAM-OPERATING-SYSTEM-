@@ -25,6 +25,7 @@ def build_registry() -> SchemaRegistry:
             "temp_root": FieldSpec("temp_root", str, default="${tmp}/hive"),
             "max_log_size_mb": FieldSpec("max_log_size_mb", int, default=10, min_value=1, max_value=1024),
             "max_log_count": FieldSpec("max_log_count", int, default=5, min_value=1, max_value=100),
+            "repo_root": FieldSpec("repo_root", str, default=""),
         },
     ))
 
@@ -132,6 +133,37 @@ def build_registry() -> SchemaRegistry:
             "sandbox": FieldSpec("sandbox", str, default="process", allowed_values={"process", "none"}),
             "capability_whitelist": FieldSpec("capability_whitelist", list, default=[]),
             "max_plugin_memory_mb": FieldSpec("max_plugin_memory_mb", int, default=256, min_value=16, max_value=4096),
+        },
+    ))
+
+    # Policy Engine schema
+    registry.register(ConfigSchema(
+        name="policy",
+        version=1,
+        fields={
+            "schema_version": FieldSpec("schema_version", int, required=True, default=1),
+            "active_profile": FieldSpec("active_profile", str, default="observer", allowed_values={
+                "observer", "operator", "administrator", "maintenance", "recovery", "development"
+            }),
+            "default_profile": FieldSpec("default_profile", str, default="observer", allowed_values={
+                "observer", "operator", "administrator", "maintenance", "recovery", "development"
+            }),
+            "audit_enabled": FieldSpec("audit_enabled", bool, default=True),
+            "cache_enabled": FieldSpec("cache_enabled", bool, default=False),
+            "strict_mode": FieldSpec("strict_mode", bool, default=True),
+            "allowed_environment_overrides": FieldSpec("allowed_environment_overrides", list, default=["HIVE_POLICY_PROFILE"]),
+            "rules": FieldSpec("rules", list, default=[]),
+            "emergency": FieldSpec("emergency", dict, default={}),
+            "profile_map": FieldSpec("profile_map", dict, default={
+                "default": "operator",
+                "minimal": "observer",
+                "development": "development",
+                "portable": "operator",
+                "production": "administrator",
+                "termux": "operator",
+                "desktop-linux": "operator",
+                "windows": "operator",
+            }),
         },
     ))
 

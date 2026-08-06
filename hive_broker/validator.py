@@ -7,7 +7,7 @@ from typing import Any
 from hive_broker.capabilities import validate_required, is_mutation
 from hive_broker.errors import CapabilityError, ManifestError, PolicyError, ApprovalError
 from hive_broker.intents import get_intent
-from hive_broker.policy import PolicyProfile, validate_actions_for_policy
+from hive_broker.policy import PolicyProfile
 from hive_broker.schema import validate_manifest
 
 
@@ -39,9 +39,6 @@ def validate_task_manifest(raw: dict[str, Any], policy: PolicyProfile) -> dict[s
     # Timeout within intent limit
     if manifest["timeout_seconds"] > intent.max_timeout:
         raise ManifestError(f"timeout_seconds exceeds intent limit {intent.max_timeout}")
-
-    # Policy check
-    validate_actions_for_policy(manifest["allowed_actions"], policy)
 
     # Approval requirement for mutating actions
     if has_mutation and intent.requires_approval:
