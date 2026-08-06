@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from lib.hive_path import resolve_log_root, resolve_state_root
+from config_engine import get_config
 from operations_center.collectors import Collector
 from operations_center.redaction import redact_value
 from operations_center.render import render_json, render_text
@@ -38,8 +38,9 @@ class CallableFactory:
 
 
 def _collect(view: str, timeout: int, verbose: bool) -> dict[str, Any]:
-    state_root = resolve_state_root()
-    log_root = resolve_log_root()
+    runtime = get_config("runtime")
+    state_root = Path(runtime["state_root"])
+    log_root = Path(runtime["log_root"])
     collector = Collector(state_root, log_root, source_timeout=float(timeout))
     if view not in _VIEWS:
         return {"status": "failure", "errors": [f"Unknown view: {view}"]}

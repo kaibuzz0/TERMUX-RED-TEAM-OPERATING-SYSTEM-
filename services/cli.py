@@ -22,21 +22,23 @@ def _repo_root() -> Path:
 
 
 def _make_registry() -> ServiceRegistry:
-    from lib.hive_path import resolve_state_root
+    from config_engine import get_config
+    svc_cfg = get_config("services")
     repo_root = _repo_root()
-    state_root = resolve_state_root()
+    state_root = Path(svc_cfg["state_root"])
     registry = ServiceRegistry(repo_root, state_root)
-    repo_manifest_dir = repo_root / "Hive Ops Final" / "etc" / "services.d"
-    user_manifest_dir = resolve_state_root().parent.parent / ".config" / "hive" / "services.d"
-    registry.load([repo_manifest_dir], [user_manifest_dir])
+    repo_manifest_dirs = [Path(d) for d in svc_cfg.get("manifest_dirs", [])]
+    user_manifest_dirs = [Path(d) for d in svc_cfg.get("user_override_dirs", [])]
+    registry.load(repo_manifest_dirs, user_manifest_dirs)
     return registry
 
 
 def _make_supervisor() -> Supervisor:
-    from lib.hive_path import resolve_state_root, resolve_log_root
+    from config_engine import get_config
     registry = _make_registry()
-    state_root = resolve_state_root()
-    log_root = resolve_log_root()
+    svc_cfg = get_config("services")
+    state_root = Path(svc_cfg["state_root"])
+    log_root = Path(svc_cfg["log_root"])
     return Supervisor(registry.native, state_root, log_root, {})
 
 

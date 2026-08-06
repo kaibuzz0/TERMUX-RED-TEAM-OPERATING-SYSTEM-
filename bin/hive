@@ -157,6 +157,16 @@ def main(argv: list[str]) -> int:
         except FileNotFoundError as exc:
             return _fail(f"operations_center package not available: {exc}")
 
+    # Milestone 14: configuration subcommands delegate to the config_engine package.
+    if argv[1:] and argv[1] == "config":
+        config_args = argv[2:]
+        cmd = [sys.executable, "-m", "config_engine.cli"] + config_args
+        try:
+            result = subprocess.run(cmd, cwd=os.getcwd())
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"config_engine package not available: {exc}")
+
     if "--resolve" in argv[1:]:
         return 0 if _resolve_mode(repo_root, metadata) else 1
 

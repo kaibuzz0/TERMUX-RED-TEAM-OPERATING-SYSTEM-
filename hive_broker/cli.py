@@ -12,8 +12,11 @@ from hive_broker.errors import BrokerError
 
 
 def _broker() -> Broker:
-    from lib.hive_path import resolve_log_root, resolve_state_root
-    return Broker(resolve_state_root(), resolve_log_root())
+    from config_engine import get_config
+    runtime = get_config("runtime")
+    state_root = Path(runtime["state_root"])
+    log_root = Path(runtime["log_root"])
+    return Broker(state_root, log_root)
 
 
 def _load_manifest(path: str) -> dict:
