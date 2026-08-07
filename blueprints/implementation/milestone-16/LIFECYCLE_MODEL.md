@@ -1,0 +1,21 @@
+# Lifecycle Model
+
+Default state: DISABLED.
+
+## Valid Transitions
+
+- DISCOVERED → VALIDATED, INCOMPATIBLE, DISABLED, REMOVED
+- VALIDATED → DISABLED, INCOMPATIBLE, REMOVED
+- INCOMPATIBLE → REMOVED, DISABLED
+- DISABLED → ENABLED, REMOVED, ERROR
+- ENABLED → DISABLED, DEGRADED, ERROR, QUARANTINED
+- DEGRADED → DISABLED, ENABLED, ERROR, QUARANTINED
+- ERROR → DISABLED, QUARANTINED
+- QUARANTINED → DISABLED, REMOVED
+- REMOVED → terminal
+
+
+## Registry Persistence
+
+The plugin registry is currently **in-memory / testable / non-persistent**.
+Persistence is deferred to Milestone 17.

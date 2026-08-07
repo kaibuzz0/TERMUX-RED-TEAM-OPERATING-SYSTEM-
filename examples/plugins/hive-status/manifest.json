@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "plugin": {
+    "id": "hive.status-example",
+    "name": "Hive Status Example Plugin",
+    "version": "1.0.0",
+    "sdk_version": "1.0",
+    "entrypoint": "hive_status_example.main",
+    "type": "client"
+  },
+  "compatibility": {
+    "minimum_hive_version": "1.0.0-dev",
+    "required_broker_version": "1.0",
+    "required_capabilities": [
+      "service.status",
+      "broker.status"
+    ]
+  },
+  "permissions": {
+    "requested_capabilities": [
+      "service.status",
+      "broker.status"
+    ],
+    "filesystem": [],
+    "network": "deny",
+    "secrets": []
+  },
+  "lifecycle": {
+    "auto_start": false
+  }
+}
