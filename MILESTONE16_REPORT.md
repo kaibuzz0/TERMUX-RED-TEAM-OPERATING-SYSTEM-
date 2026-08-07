@@ -2,7 +2,7 @@
 
 ## Plugin / Extension SDK, Capability Contracts, Lifecycle, and Safe Extension Boundaries
 
-**Status:** IN PROGRESS — not yet committed.
+**Status:** COMMITTED, PUSHED, CI GREEN
 
 **Baseline:** Milestone 15 commit `e54feeb19794cdbe07f15499b67a4153534f992a`
 
@@ -110,6 +110,25 @@
 ### Files Deferred
 
 - `services/` — conditional, not required in Milestone 16
+
+### Release metadata
+
+- Commit SHA: `b3ca5867de0a60adbde09810b639978dc8413925`
+- Branch: `master`
+- Push result: success (`e54feeb..b3ca586` on origin/master)
+- Workflow run ID: `31211616615`
+- Workflow URL: https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/actions/runs/31211616615
+
+### CI results
+
+| Job | Result |
+|---|---|
+| test 3.9 | success |
+| test 3.10 | success |
+| test 3.11 | success |
+| test 3.12 | success |
+| security | success |
+| build | success |
 
 ### Safety Declarations
 
