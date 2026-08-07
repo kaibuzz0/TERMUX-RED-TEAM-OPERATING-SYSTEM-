@@ -80,25 +80,26 @@
 ### Release metadata
 
 - Commit SHA: `25ee0f0ab8252ebea7484e68b1eb61c48e9182f4` (policy engine implementation)
-- Cleanup/test-fix commit: TBD
+- Cleanup/test-fix commit: `232a446c7882464ef1e1c1508c52eb81d7fd5bd1`
 - Branch: `master`
-- Push result: success
+- Push result: success (`a3984ec..232a446` on origin/master)
 - Repository: https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-
 
-### CI results (to be updated after workflow run)
+### CI results
 
-Workflow run ID: TBD
-Workflow URL: TBD
+Workflow run ID: 31210005464
+Workflow URL: https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/actions/runs/31210005464
 
 Jobs:
-- test 3.9: TBD
-- test 3.10: TBD
-- test 3.11: TBD
-- test 3.12: TBD
-- security: TBD
-- build: TBD
+- test 3.9: success
+- test 3.10: success
+- test 3.11: success
+- test 3.12: success
+- security: success
+- build: success
 
-Ready for Milestone 16: NO until CI is fully green.
+Ready for Milestone 16: YES — once explicitly directed by the user.
+
 
 ### Policy authority summary
 
