@@ -177,6 +177,16 @@ def main(argv: list[str]) -> int:
         except FileNotFoundError as exc:
             return _fail(f"plugin_sdk package not available: {exc}")
 
+    # Milestone 17: release subcommands delegate to the release_engine package.
+    if argv[1:] and argv[1] == "release":
+        release_args = argv[2:]
+        cmd = [sys.executable, "-m", "release_engine.cli"] + release_args
+        try:
+            result = subprocess.run(cmd, cwd=os.getcwd())
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"release_engine package not available: {exc}")
+
     if "--resolve" in argv[1:]:
         return 0 if _resolve_mode(repo_root, metadata) else 1
 

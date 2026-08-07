@@ -1,20 +1,9 @@
-# Hive OS Release Signing
+# Release Signing
 
-## Algorithm
+Reuses Milestone 10 Ed25519 signing.
 
-Ed25519 via the `cryptography` library.
+```bash
+hive release sign --metadata dist/hive-os-1.0.0-local.metadata.json                   --private-key /secure/release.key                   --key-id release-1                   --output dist/hive-os-1.0.0-local.signed.json
+```
 
-## Key management
-
-- Release signing private key is held offline.
-- Runtime trust store contains PEM-encoded public keys with key IDs.
-- Key rotation is supported by adding new public keys and revoking old ones.
-- Revocation is tracked by `revocation.sequence`.
-
-## Signing canonicalization
-
-Metadata is serialized deterministically with sorted keys and compact separators before signing.
-
-## Security boundary
-
-Private keys are never read by the runtime. The runtime only verifies signatures.
+Private keys are never committed and never required on the target device.

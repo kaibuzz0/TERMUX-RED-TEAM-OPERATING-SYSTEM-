@@ -44,7 +44,7 @@ class TrustStore:
         keys: dict[str, TrustedKey] = {}
         # Accept concatenated PEM blocks separated by key_id comments
         entries = raw.split("-----BEGIN PUBLIC KEY-----")
-        for entry in entries[1:]:
+        for idx, entry in enumerate(entries[1:], start=1):
             block = "-----BEGIN PUBLIC KEY-----" + entry
             try:
                 pub = load_pem_public_key(block.encode("utf-8"))
@@ -52,7 +52,7 @@ class TrustStore:
                     continue
                 # key_id from preceding comment line if present
                 key_id = f"key-{len(keys) + 1}"
-                preceding = entries[entries.index("-----BEGIN PUBLIC KEY-----" + entry) - 1]
+                preceding = entries[idx - 1]
                 for line in preceding.splitlines():
                     if line.strip().startswith("# key_id:"):
                         key_id = line.split(":", 1)[1].strip()

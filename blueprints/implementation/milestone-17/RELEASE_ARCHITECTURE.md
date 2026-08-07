@@ -1,0 +1,14 @@
+# Release Architecture
+
+```
+SOURCE
+  DETERMINISTIC BUILD
+    MANIFEST
+      ARTIFACT DIGESTS
+        SIGNED RELEASE METADATA
+          TRUST VERIFICATION
+            OFFLINE PACKAGE
+              TRANSACTIONAL INSTALL/STAGE
+                ACTIVATION
+                  ROLLBACK
+```

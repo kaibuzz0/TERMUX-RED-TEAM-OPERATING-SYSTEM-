@@ -51,6 +51,13 @@ MUTATING_CAPABILITIES: FrozenSet[str] = frozenset({
     "recovery.restore",
     "config.commit",
     "vault.secret.get",
+    "release.install",
+    "release.activate",
+    "release.rollback",
+    "plugin.install",
+    "plugin.enable",
+    "plugin.disable",
+    "plugin.remove",
 })
 
 

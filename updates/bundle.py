@@ -85,12 +85,22 @@ def _validate_and_extract_members(members, dest_dir: Path, opener) -> None:
         raw_name = m.name if isinstance(m, tarfile.TarInfo) else m.filename
         name = _safe_name(raw_name)
         # Reject symlinks, hardlinks, devices, FIFOs, and sockets.
-        if m.issym() or m.islnk():
-            raise BundleError(f"Bundle contains symlink/hardlink: {name}")
-        if callable(getattr(m, "isdev", None)) and m.isdev():
-            raise BundleError(f"Bundle contains device entry: {name}")
-        if (callable(getattr(m, "isfifo", None)) and m.isfifo()) or (callable(getattr(m, "issock", None)) and m.issock()):
-            raise BundleError(f"Bundle contains FIFO/socket: {name}")
+        if isinstance(m, tarfile.TarInfo):
+            # Use tar type bits; issym/issock may not exist on all Python builds.
+            if m.type in (tarfile.SYMTYPE, tarfile.LNKTYPE):
+                raise BundleError(f"Bundle contains symlink/hardlink: {name}")
+            if m.type in (tarfile.CHRTYPE, tarfile.BLKTYPE):
+                raise BundleError(f"Bundle contains device entry: {name}")
+            if m.type == tarfile.FIFOTYPE:
+                raise BundleError(f"Bundle contains FIFO: {name}")
+            if m.type not in (tarfile.REGTYPE, tarfile.AREGTYPE, tarfile.DIRTYPE):
+                raise BundleError(f"Bundle contains unsupported entry type: {name}")
+        else:
+            mode = getattr(m, "external_attr", 0) >> 16
+            if mode & 0o120000:
+                raise BundleError(f"Bundle contains symlink/hardlink: {name}")
+            if mode & 0o070000:
+                raise BundleError(f"Bundle contains special file: {name}")
         target = (dest_dir / name).resolve()
         # Ensure resolved target remains inside dest_dir and does not pass through a symlink.
         try:

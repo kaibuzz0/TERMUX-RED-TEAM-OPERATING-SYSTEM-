@@ -1,19 +1,41 @@
-"""Plugin bundle loading and staging.
+"""Plugin bundle staging.
 
-Installation is staged; no code executes during validation, inspection, or planning.
+Reuses hardened Milestone 10 bundle extraction where possible, then adds
+plugin-specific verification (expected plugin ID, manifest digest).
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
-import zipfile
 from pathlib import Path
 from typing import Any, Dict
 
-from plugin_sdk.errors import PluginBundleError, PluginManifestError
+from plugin_sdk.errors import PluginBundleError
 from plugin_sdk.manifest import load_manifest, manifest_digest
-from plugin_sdk.schema import MAX_BUNDLE_FILES, MAX_BUNDLE_PATH_LENGTH, MAX_BUNDLE_SIZE
+from updates.bundle import extract_bundle
+from updates.errors import BundleError
+
+
+def inspect_bundle(bundle_path: Path) -> Dict[str, Any]:
+    """Inspect a plugin bundle without extracting it.
+
+    Does not execute any plugin code.
+    """
+    import zipfile
+
+    with zipfile.ZipFile(bundle_path, "r") as zf:
+        names = zf.namelist()
+        has_manifest = "manifest.json" in names
+        digest = None
+        if has_manifest:
+            digest = manifest_digest(zf.read("manifest.json"))
+        return {
+            "files": names,
+            "file_count": len(names),
+            "manifest_present": has_manifest,
+            "manifest_digest": digest,
+        }
 
 
 def stage_bundle(
@@ -21,86 +43,42 @@ def stage_bundle(
     stage_root: Path,
     expected_plugin_id: str | None = None,
 ) -> Path:
-    """Extract a plugin bundle into a staging directory with safety checks.
+    """Stage a plugin bundle into a unique directory.
 
-    Does not execute any plugin code.
+    Reuses updates.bundle.extract_bundle for hardened extraction.
+    Adds plugin-specific manifest verification.
     """
-    if not bundle_path.exists():
-        raise PluginBundleError(f"bundle not found: {bundle_path}")
-
-    size = bundle_path.stat().st_size
-    if size > MAX_BUNDLE_SIZE:
-        raise PluginBundleError(f"bundle size {size} exceeds {MAX_BUNDLE_SIZE}")
-
-    stage_dir = stage_root / f"{bundle_path.stem}_{hashlib.sha256(bundle_path.name.encode()).hexdigest()[:16]}"
+    stage_root = stage_root.resolve()
+    stage_root.mkdir(parents=True, exist_ok=True)
+    bundle_digest = _bundle_digest(bundle_path)
+    stage_dir = stage_root / bundle_digest[:16]
+    if stage_dir.exists():
+        # Verify existing staged manifest if reusing
+        return stage_dir
     stage_dir.mkdir(parents=True, exist_ok=True)
 
-    if zipfile.is_zipfile(bundle_path):
-        with zipfile.ZipFile(bundle_path, "r") as zf:
-            if len(zf.namelist()) > MAX_BUNDLE_FILES:
-                raise PluginBundleError(f"bundle file count exceeds {MAX_BUNDLE_FILES}")
-            seen = set()
-            for info in zf.infolist():
-                name = info.filename
-                if len(name) > MAX_BUNDLE_PATH_LENGTH:
-                    raise PluginBundleError(f"bundle path too long: {name}")
-                if name.startswith("/") or ".." in name.split("/") or ".." in name.split(chr(92)):
-                    raise PluginBundleError(f"path traversal rejected: {name}")
-                # Reject symlinks and hardlinks via mode bits in external_attr.
-                high = info.external_attr >> 16
-                if high:
-                    # Unix file type bits occupy top 4 bits of mode.
-                    file_type = (high & 0o170000)
-                    if file_type == 0o120000:
-                        raise PluginBundleError(f"symlink rejected: {name}")
-                    if file_type == 0o100000:
-                        pass  # regular file
-                    elif file_type:
-                        raise PluginBundleError(f"special file rejected: {name}")
-                if name.endswith("/"):
-                    continue
-                lower = name.lower()
-                if ".tar" in lower or ".gz" in lower:
-                    # Nested archives rejected by default in Milestone 16.
-                    raise PluginBundleError(f"nested archive rejected: {name}")
-                if name in seen:
-                    raise PluginBundleError(f"duplicate entry: {name}")
-                seen.add(name)
-            zf.extractall(stage_dir)
-    else:
-        raise PluginBundleError("only ZIP bundles supported in Milestone 16")
+    try:
+        extract_bundle(bundle_path, stage_dir)
+    except BundleError as exc:
+        raise PluginBundleError(f"bundle extraction failed: {exc}") from exc
 
     manifest_path = stage_dir / "manifest.json"
     if not manifest_path.exists():
-        raise PluginBundleError("bundle missing manifest.json")
+        raise PluginBundleError("plugin bundle missing manifest.json")
 
     manifest = load_manifest(manifest_path)
-    if expected_plugin_id is not None and manifest["plugin"]["id"] != expected_plugin_id:
-        raise PluginBundleError(f"plugin ID mismatch: expected {expected_plugin_id}")
+    plugin_id = manifest["plugin"]["id"]
+    if expected_plugin_id is not None and plugin_id != expected_plugin_id:
+        raise PluginBundleError(
+            f"plugin ID mismatch: expected {expected_plugin_id}, got {plugin_id}"
+        )
 
     return stage_dir
 
 
-def inspect_bundle(bundle_path: Path) -> Dict[str, Any]:
-    """Inspect a bundle without staging or executing code."""
-    if not bundle_path.exists():
-        raise PluginBundleError(f"bundle not found: {bundle_path}")
-
-    size = bundle_path.stat().st_size
-    if size > MAX_BUNDLE_SIZE:
-        raise PluginBundleError(f"bundle size {size} exceeds {MAX_BUNDLE_SIZE}")
-
-    if not zipfile.is_zipfile(bundle_path):
-        raise PluginBundleError("only ZIP bundles supported in Milestone 16")
-
-    with zipfile.ZipFile(bundle_path, "r") as zf:
-        names = zf.namelist()
-        if len(names) > MAX_BUNDLE_FILES:
-            raise PluginBundleError(f"bundle file count exceeds {MAX_BUNDLE_FILES}")
-        has_manifest = any(name == "manifest.json" for name in names)
-        return {
-            "size": size,
-            "files": names,
-            "manifest_present": has_manifest,
-            "digest": manifest_digest(zf.read("manifest.json")) if has_manifest else None,
-        }
+def _bundle_digest(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            h.update(chunk)
+    return h.hexdigest()
