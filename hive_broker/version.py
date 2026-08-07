@@ -47,6 +47,9 @@ def check_allowed_since_commit(manifest: dict[str, Any]) -> None:
     allowed = manifest.get("allowed_since_commit")
     if not allowed:
         return
+    # Null commit means "no minimum required commit"; always valid.
+    if allowed == "0" * 40:
+        return
     current = _resolve_commit()
     if not current:
         # Packaged runtime without Git cannot validate; allow if capability negotiation passed.

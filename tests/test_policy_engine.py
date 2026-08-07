@@ -393,7 +393,9 @@ def test_emergency_restriction_cannot_grant():
 
 def test_cli_status_runs():
     import subprocess, sys
-    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "status"], cwd=r'D:\Hermes-USB-Portable-main\TERMUX-RED-TEAM-OPERATING-SYSTEM-', capture_output=True, text=True)
+    from pathlib import Path
+    repo_root = Path(__file__).resolve().parent.parent
+    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "status"], cwd=str(repo_root), capture_output=True, text=True)
     assert r.returncode == 0
     data = json.loads(r.stdout)
     assert data["default_profile"] == "observer"
@@ -401,13 +403,17 @@ def test_cli_status_runs():
 
 def test_cli_validate_runs():
     import subprocess, sys
-    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "validate"], cwd=r'D:\Hermes-USB-Portable-main\TERMUX-RED-TEAM-OPERATING-SYSTEM-', capture_output=True, text=True)
+    from pathlib import Path
+    repo_root = Path(__file__).resolve().parent.parent
+    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "validate"], cwd=str(repo_root), capture_output=True, text=True)
     assert r.returncode == 0
 
 
 def test_cli_explain_runs():
     import subprocess, sys
-    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "explain", "service.status"], cwd=r'D:\Hermes-USB-Portable-main\TERMUX-RED-TEAM-OPERATING-SYSTEM-', capture_output=True, text=True)
+    from pathlib import Path
+    repo_root = Path(__file__).resolve().parent.parent
+    r = subprocess.run([sys.executable, "-m", "policy_engine.cli", "explain", "service.status"], cwd=str(repo_root), capture_output=True, text=True)
     assert r.returncode == 0
     data = json.loads(r.stdout)
     assert data["decision"] == "ALLOW"
