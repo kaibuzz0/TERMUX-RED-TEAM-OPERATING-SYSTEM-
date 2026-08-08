@@ -40,6 +40,8 @@ class TrustStore:
         """Load PEM public keys. Private keys are never accepted here."""
         if not path.exists():
             return cls({})
+        if path.is_symlink():
+            return cls({})
         raw = path.read_text(encoding="utf-8")
         keys: dict[str, TrustedKey] = {}
         # Accept concatenated PEM blocks separated by key_id comments

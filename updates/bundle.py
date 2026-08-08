@@ -109,7 +109,8 @@ def _validate_and_extract_members(members, dest_dir: Path, opener) -> None:
             raise BundleError(f"Bundle path escapes destination: {name}")
         if any(part == ".." for part in target.parts):
             raise BundleError(f"Bundle path escapes destination: {name}")
-        total_size += getattr(m, "size", 0)
+        member_size = getattr(m, "size", getattr(m, "file_size", 0))
+        total_size += member_size
         if total_size > MAX_EXPANDED_SIZE:
             raise BundleError("Bundle expanded size exceeds safety limit")
         file_count += 1

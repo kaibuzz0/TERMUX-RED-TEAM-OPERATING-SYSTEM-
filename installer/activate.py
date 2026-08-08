@@ -10,6 +10,9 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from config_engine.persistence import FileLock
+from config_engine.errors import ConfigTransactionError
+
 from installer.journal import InstallJournal
 from installer.schema import (
     ActivationState,
@@ -55,7 +58,9 @@ class ActiveState:
         self.releases_dir = data_root / "releases"
         self.active_pointer_path = data_root / "active.json"
         self.lock_path = state_root / ".install-lock"
+        self._dirlock_path = state_root / ".install-lock.dir"
         self.transaction_id = transaction_id
+        self._file_lock = None
 
     # ------------------------------------------------------------------
     # Lock helpers
@@ -83,18 +88,45 @@ class ActiveState:
         return bool(lock.get("stale"))
 
     def acquire_lock(self, transaction_id: str, force: bool = False) -> None:
-        """Acquire the installation transaction lock."""
-        lock = self._read_lock()
-        if lock and not self._is_stale_lock(lock):
-            current = lock.get("transaction_id")
-            if current and current != transaction_id and not force:
-                raise ActivationSafetyError(
-                    f"Installation lock held by transaction {current}; use --force-stale-lock to recover a stale lock"
-                )
+        """Acquire the installation transaction lock using atomic FileLock."""
+        if not force:
+            # Use directory-based advisory lock for atomicity
+            lock = FileLock(self._dirlock_path, timeout=10.0)
+            try:
+                lock.__enter__()
+                self._file_lock = lock
+            except ConfigTransactionError as e:
+                # Lock held by another process — check if it's stale
+                existing = self._read_lock()
+                if existing and not self._is_stale_lock(existing):
+                    current = existing.get("transaction_id")
+                    raise ActivationSafetyError(
+                        f"Installation lock held by transaction {current}; use --force-stale-lock to recover a stale lock"
+                    ) from e
+                # Stale lock — proceed to overwrite
+                self._file_lock = lock
+                self._file_lock.__enter__()
+
+            # Now that we hold the FileLock, check for conflicting transaction
+            existing = self._read_lock()
+            if existing and not self._is_stale_lock(existing):
+                current = existing.get("transaction_id")
+                if current and current != transaction_id and not force:
+                    # Release FileLock before raising
+                    lock.__exit__(None, None, None)
+                    self._file_lock = None
+                    raise ActivationSafetyError(
+                        f"Installation lock held by transaction {current}; use --force-stale-lock to recover a stale lock"
+                    )
+
+        # Write lock metadata for diagnostics
         self._write_lock(transaction_id)
 
     def release_lock(self) -> None:
         self._remove_lock()
+        if self._file_lock is not None:
+            self._file_lock.__exit__(None, None, None)
+            self._file_lock = None
 
     def recover_stale_lock(self) -> dict[str, Any] | None:
         """Return stale lock contents and remove it. Caller must decide whether to proceed."""

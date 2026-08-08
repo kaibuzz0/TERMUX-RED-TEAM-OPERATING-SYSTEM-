@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List
 
+from config_engine.persistence import FileLock
 from release_engine.errors import RegistryError
 
 
@@ -32,10 +33,16 @@ class PluginRegistryRecord:
 
 
 class PersistentPluginRegistry:
-    """Atomic JSON-backed plugin registry under the state root."""
+    """Atomic JSON-backed plugin registry under the state root.
+
+    Uses FileLock advisory locking so concurrent mutating operations
+    serialize. Exactly one writer wins for duplicate-key races;
+    others reload inside the lock and see the committed state.
+    """
 
     def __init__(self, path: Path):
         self.path = path.resolve()
+        self._lock_path = self.path.parent / f".{self.path.name}.lock.dir"
         self._data = self._load()
 
     def _load(self) -> Dict[str, Any]:
@@ -60,15 +67,19 @@ class PersistentPluginRegistry:
         return self._record(raw) if raw else None
 
     def register(self, record: PluginRegistryRecord) -> None:
-        plugins = self._data.setdefault("plugins", {})
-        if record.plugin_id in plugins:
-            raise RegistryError(f"plugin already registered: {record.plugin_id}")
-        plugins[record.plugin_id] = record.__dict__
-        self._save()
+        with FileLock(self._lock_path, timeout=5.0):
+            self._data = self._load()
+            plugins = self._data.setdefault("plugins", {})
+            if record.plugin_id in plugins:
+                raise RegistryError(f"plugin already registered: {record.plugin_id}")
+            plugins[record.plugin_id] = record.__dict__
+            self._save()
 
     def set_state(self, plugin_id: str, state: str) -> None:
-        plugins = self._data.get("plugins", {})
-        if plugin_id not in plugins:
-            raise RegistryError(f"plugin not registered: {plugin_id}")
-        plugins[plugin_id]["state"] = state
-        self._save()
+        with FileLock(self._lock_path, timeout=5.0):
+            self._data = self._load()
+            plugins = self._data.get("plugins", {})
+            if plugin_id not in plugins:
+                raise RegistryError(f"plugin not registered: {plugin_id}")
+            plugins[plugin_id]["state"] = state
+            self._save()
