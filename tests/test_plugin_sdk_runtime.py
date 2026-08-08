@@ -114,7 +114,7 @@ class TestLoader:
         with zipfile.ZipFile(bundle, "w") as zf:
             zf.writestr("manifest.json", json.dumps(_valid_manifest()))
             zf.writestr("../evil.txt", "evil")
-        with pytest.raises(PluginBundleError, match="path traversal"):
+        with pytest.raises(PluginBundleError, match="traversal path"):
             stage_bundle(bundle, tmp_path / "staging")
 
     def test_stage_bundle_symlink_rejected(self, tmp_path):

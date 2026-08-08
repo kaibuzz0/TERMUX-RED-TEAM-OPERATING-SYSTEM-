@@ -1,55 +1,51 @@
 # Milestone 18 Device Baseline
 
-## Repository Baseline
+## Environment Classification
+**NOT native Termux.** This is a PRoot-distro (Debian/Ubuntu-like) running inside Termux.
+The system is an Android 16 host with a Linux container layer.
 
-- Branch: `master`
-- Commit tested: `7da6b02`
-- CI status: all six jobs green (verified for commit 7da6b02)
-- Local tests: 529 passed, 8 skipped
+## Device Information
+- Manufacturer: samsung
+- Model: SM-A156U
+- Android Version: 16
+- Kernel: Linux localhost 6.17.0-PRoot-Distro #1 SMP PREEMPT_DYNAMIC aarch64 GNU/Linux
+- CPU ABI: arm64-v8a
+- Architecture: aarch64
 
-## Android/Termux Agent Access Check
+## Memory
+- Total RAM: ~3.5 GB (3644192 kB)
+- Available: ~883 MB
+- Swap: 8.0 GB total, 5.9 GB free
 
-This Windows-hosted Hermes agent does **not** have access to a real Android/Termux environment:
+## Storage
+- Filesystem: /dev/block/dm-62
+- Size: 106 GB
+- Used: 76 GB (72%)
+- Available: 31 GB
 
-- `adb.exe`: not found on PATH or common locations
-- `ssh 127.0.0.1:22`: connection timed out
-- `TERMUX_VERSION`: not set in current environment
-- `ANDROID_ROOT`: not set
-- `PREFIX`: not set
-- `TMPDIR`: not set
-- Current OS: Windows 10 (Microsoft Windows [Version 10.0.26100.8875])
+## Software Versions
+- Python: 3.11.2 (main, GCC 12.2.0) [system python3]
+               3.14.6 [termux python]
+- Bash: 5.2.15(1)-release (aarch64-unknown-linux-gnu)
+- Git: 2.39.5
+- OpenSSL: 3.0.20
+- cryptography: 50.0.0 (installed in venv)
+- pytest: 9.1.1 (installed in venv)
+- termux-tools: 1.45.0
 
-Milestone 18 requires physical Android/Termux evidence. A Windows-hosted agent cannot complete it.
+## Termux Context
+- User: root (inside PRoot)
+- HOME: $HOME (PRoot root, not native Termux)
+- PREFIX: (empty in PRoot)
+- TMPDIR: (empty in PRoot; set to /tmp for testing)
+- Termux:API: Not tested (command timed out)
+- Termux plugin: com.termux.nix versionCode:188037
+- PRoot: YES (kernel string confirms PRoot-Distro)
 
-## Required Device Information (to be filled by on-device agent or user)
+## Root Status
+- Running as root (uid=0)
+- This is root inside proot, not Android root
 
-- Android version:
-- Device make/model:
-- Architecture / CPU ABI:
-- RAM:
-- Free internal storage:
-- Termux version/source:
-- Python version:
-- Bash version:
-- Git version:
-- OpenSSL version:
-- cryptography version:
-- HOME:
-- PREFIX:
-- TMPDIR:
-- root/non-root:
-- Termux:API availability:
-- PRoot availability:
-- Charging state:
-- Starting battery percentage:
-- Thermal status if measurable:
-
-## Prohibited from recording
-
-- IMEI
-- Android ID
-- Serial number
-- Phone number
-- Account identity
-- Personal tokens
-- Private credentials
+## Security Notes
+- No IMEI, serial, Android ID, phone number, or credentials recorded.
+- No real user data paths exposed.

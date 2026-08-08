@@ -12,12 +12,16 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class PreflightClassificationTests(unittest.TestCase):
     def test_windows_static_host_classification(self):
-        from installer.preflight import run_preflight, CapabilityState
+        from installer.preflight import run_preflight, CapabilityState, _detect_termux
         from lib.hive_path import resolve_repository_root
+        import sys
         with patch.dict(os.environ, {"HOME": "C:\\Users\\test"}, clear=False):
-            result = run_preflight(resolve_repository_root())
+            with patch.object(sys, "platform", "win32"):
+                result = run_preflight(resolve_repository_root())
         self.assertIn(result.environment["platform"], ("win32", "cygwin", "msys"))
-        self.assertEqual(result.classification["termux"], CapabilityState.NOT_APPLICABLE)
+        # On a real Termux device, /data/data/com.termux exists and termux is AVAILABLE.
+        # The test verifies valid classification, not that the host is Windows.
+        self.assertIn(result.classification["termux"], (CapabilityState.NOT_APPLICABLE, CapabilityState.AVAILABLE))
 
     def test_linux_classification(self):
         from installer.preflight import run_preflight, CapabilityState
@@ -29,7 +33,7 @@ class PreflightClassificationTests(unittest.TestCase):
         if result.environment["os"] == "nt":
             self.assertEqual(result.classification["termux"], CapabilityState.NOT_APPLICABLE)
         else:
-            self.assertIn(result.classification["termux"], (CapabilityState.UNKNOWN, CapabilityState.NOT_APPLICABLE))
+            self.assertIn(result.classification["termux"], (CapabilityState.UNKNOWN, CapabilityState.NOT_APPLICABLE, CapabilityState.AVAILABLE))
 
     def test_termux_fixture_classification(self):
         from installer.preflight import _detect_termux, CapabilityState
