@@ -16,17 +16,33 @@ by OUT-OF-BAND VERIFICATION, not by a self-referential signature.
 4. The trust store does NOT sign itself. It is a plaintext PEM file with
    metadata comments. Its authenticity is derived from repository integrity.
 5. On first install, the trust-store file is copied into the runtime
-   environment as part of the installation bundle. The installer verifies
-   the bundle signature against an embedded bootstrap key (see below).
+   environment as part of the installation bundle.
 
-### 1.2 Bootstrap Key (Embedded)
+The initial trusted production release public key is distributed with the
+Hive source / release package. It is bound to:
 
-- A single Ed25519 bootstrap public key is embedded in the installer binary.
-- This key is NOT in the trust store. It exists only in the installer source.
-- The bootstrap key signs the initial release bundle, which contains the
-  first production trust store.
-- After initial installation, the bootstrap key is NEVER used again.
-- The bootstrap key fingerprint is published independently (see section 7).
+- key_id: human-readable identifier (e.g. hive-release-prod-2026-01)
+- Ed25519 public key (SubjectPublicKeyInfo PEM)
+- pinned SHA-256 fingerprint (computed over raw 32-byte Ed25519 public key)
+- purpose: release
+
+The fingerprint SHOULD be independently published and verified through an
+out-of-band channel (project website, signed email, hardware token attestation)
+where practical.
+
+Release verification subsequently uses that pinned trust anchor.
+
+### 1.2 EMBEDDED INSTALLER BOOTSTRAP KEY
+
+**STATUS: NOT IMPLEMENTED**
+
+There is currently NO embedded bootstrap public key in the installer binary.
+
+A future design may embed a single Ed25519 bootstrap public key in the
+installer to verify the initial release bundle independently of the
+source-code repository, but that mechanism does not exist in Hive OS 1.0.
+
+Do not rely on documentation that claims otherwise.
 
 ### 1.3 Trust Store Update Path
 
@@ -36,12 +52,9 @@ by OUT-OF-BAND VERIFICATION, not by a self-referential signature.
 - The verifier checks the bundle signature, then replaces the trust store.
 - Anti-rollback prevents downgrading to a revoked trust-store version.
 
-### 1.4 Chain of Trust Summary
+### 1.4 Chain of Trust Summary (Actual Model)
 
-    Bootstrap key (installer only)
-         |
-         v
-    Signed release bundle v1.0.0
+    Hive source / release package (with pinned trust anchor)
          |
          +---> Trust store T1 (production key A)
          |

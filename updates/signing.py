@@ -73,7 +73,7 @@ def export_private_key_pem(private_key: Ed25519PrivateKey) -> str:
     ).decode("utf-8")
 
 
-def load_private_key_pem(text: str) -> Ed25519PrivateKey:
+def load_private_key_pem(data: bytes | str, password: bytes | None = None) -> Ed25519PrivateKey:
     """Load an Ed25519 private key from PEM text.
 
     Supports:
@@ -81,18 +81,20 @@ def load_private_key_pem(text: str) -> Ed25519PrivateKey:
     - OpenSSH private key format via load_ssh_private_key()
 
     Production keys MUST be encrypted at rest.
+    The password is never logged, returned, or persisted.
     """
     from cryptography.hazmat.primitives.serialization import (
         load_pem_private_key,
         load_ssh_private_key,
     )
-    data = text.encode("utf-8")
+    if isinstance(data, str):
+        data = data.encode("utf-8")
     # Try PKCS#8 PEM first
     try:
-        key = load_pem_private_key(data, password=None)
+        key = load_pem_private_key(data, password=password)
     except Exception:
         # OpenSSH format as alternative
-        key = load_ssh_private_key(data, password=None)
+        key = load_ssh_private_key(data, password=password)
     if not isinstance(key, Ed25519PrivateKey):
         raise ValueError("private key is not Ed25519")
     return key

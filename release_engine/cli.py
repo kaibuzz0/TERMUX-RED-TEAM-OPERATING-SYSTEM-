@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import getpass
 import json
 import sys
 from pathlib import Path
@@ -17,6 +18,23 @@ from release_engine.sbom import generate_sbom
 from release_engine.signing import load_private_key, sign_release_metadata
 from release_engine.verifier import inspect_release, verify_release_bundle
 from release_engine.version import parse_release_version
+
+
+# List of exceptions that indicate a password is needed or wrong.
+# Cryptography raises TypeError when password=None on encrypted PEM,
+# and ValueError on wrong password.
+_ENCRYPTION_ERRORS = (TypeError, ValueError)
+
+
+def _load_private_key_with_prompt(path: Path) -> Ed25519PrivateKey:
+    """Load a private key, prompting securely if it is encrypted."""
+    try:
+        return load_private_key(path, password=None)
+    except _ENCRYPTION_ERRORS:
+        pass
+    # Encrypted key detected; prompt securely.
+    passphrase = getpass.getpass("Private key passphrase: ")
+    return load_private_key(path, password=passphrase.encode("utf-8"))
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -104,7 +122,7 @@ def main(argv: List[str] | None = None) -> int:
 
         if args.command == "sign":
             metadata = json.loads(args.metadata.read_text(encoding="utf-8"))
-            key = load_private_key(args.private_key)
+            key = _load_private_key_with_prompt(args.private_key)
             signed = sign_release_metadata(metadata, key, args.key_id, metadata.get("manifest_digest", ""))
             args.output.write_text(json.dumps(signed, indent=2, sort_keys=True), encoding="utf-8")
             return 0

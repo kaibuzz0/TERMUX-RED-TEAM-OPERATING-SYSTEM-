@@ -15,7 +15,7 @@ from updates.signing import generate_keypair, sign_metadata, verify_metadata
 from updates.trust import TrustStore
 
 
-def load_private_key(path: Path) -> Ed25519PrivateKey:
+def load_private_key(path: Path, password: bytes | None = None) -> Ed25519PrivateKey:
     """Load an Ed25519 private key from file.
 
     Supports:
@@ -23,6 +23,7 @@ def load_private_key(path: Path) -> Ed25519PrivateKey:
     - OpenSSH private key format via load_ssh_private_key()
 
     Private keys are never committed; this loader is for offline signing only.
+    The password is never logged, returned, or persisted.
     """
     from cryptography.hazmat.primitives.serialization import (
         load_pem_private_key,
@@ -30,9 +31,9 @@ def load_private_key(path: Path) -> Ed25519PrivateKey:
     )
     pem = path.read_bytes()
     try:
-        key = load_pem_private_key(pem, password=None)
+        key = load_pem_private_key(pem, password=password)
     except Exception:
-        key = load_ssh_private_key(pem, password=None)
+        key = load_ssh_private_key(pem, password=password)
     if not isinstance(key, Ed25519PrivateKey):
         raise ValueError("private key is not Ed25519")
     return key
