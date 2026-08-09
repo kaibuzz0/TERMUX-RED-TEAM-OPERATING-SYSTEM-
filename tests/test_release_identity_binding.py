@@ -113,7 +113,7 @@ def test_tampered_manifest_digest_fails(tmp_path):
 def test_revoked_key_fails(tmp_path):
     private, pem = _gen_key_pair()
     store = TrustStore.from_pem_file(_write_trust(tmp_path, {"k1": pem}))
-    store.keys["k1"].revoked = True
+    store.keys["k1"].status = "revoked"
     bundle, _, signed = _build_and_sign(tmp_path, private, "k1")
     _inject_signed(bundle, signed, tmp_path / "signed.tar.gz")
     with pytest.raises(Exception):

@@ -92,12 +92,12 @@ class TestTrustStoreTampering:
             ts.verify("bad", b"msg", b"sig")
 
     def test_trusted_key_fields_are_immutable(self):
-        """TrustedKey dataclass fields are set at construction; revocation is mutable."""
+        """TrustedKey status transitions via revoke_key only."""
         priv = Ed25519PrivateKey.generate()
         key = TrustedKey(key_id="test", public_key=priv.public_key())
-        assert key.revoked is False
-        key.revoked = True
-        assert key.revoked is True
+        assert key.status == "active"
+        key.status = "revoked"
+        assert key.status == "revoked"
         # Other fields are frozen implicitly by dataclass(frozen not set)
         # but key_id and public_key are not expected to change
 
@@ -180,10 +180,10 @@ class TestTrustStoreTampering:
         ts = TrustStore()
         ts.add_key("rev-key", export_public_key_pem(priv.public_key(), "rev-key"))
         ts.revoke_key("rev-key")
-        assert ts.keys["rev-key"].revoked is True
+        assert ts.keys["rev-key"].status == "revoked"
         # Second revoke succeeds silently (idempotent)
         ts.revoke_key("rev-key")
-        assert ts.keys["rev-key"].revoked is True
+        assert ts.keys["rev-key"].status == "revoked"
 
     def test_revoke_unknown_key_raises(self):
         """Revoking a key never added raises TrustError."""
@@ -261,7 +261,7 @@ class TestTrustStoreTampering:
             assert len(ts.keys) == 2
 
     def test_duplicate_key_id_comment_in_file(self):
-        """Two PEM blocks with same key_id — last loaded overwrites (dict semantics)."""
+        """Two PEM blocks with same key_id but different keys — fail closed."""
         priv_a = Ed25519PrivateKey.generate()
         priv_b = Ed25519PrivateKey.generate()
         pem_a = export_public_key_pem(priv_a.public_key(), "same-key")
@@ -269,10 +269,8 @@ class TestTrustStoreTampering:
         with tempfile.TemporaryDirectory() as tmp:
             pem_path = Path(tmp) / "trust.pem"
             pem_path.write_text(pem_a + "\n" + pem_b)
-            ts = TrustStore.from_pem_file(pem_path)
-            # Last one wins
-            assert len(ts.keys) == 1
-            assert ts.keys["same-key"].public_key != priv_a.public_key()
+            with pytest.raises(TrustError, match="Duplicate key_id"):
+                TrustStore.from_pem_file(pem_path)
 
     # ------------------------------------------------------------------
     # Verify: wrong signature / tampered metadata
@@ -335,7 +333,7 @@ class TestTrustStoreTampering:
         assert ts1.keys["shared"] is ts2.keys["shared"]
         ts2.revoke_key("shared")
         # ts1 sees the change because values are shared (shallow copy)
-        assert ts1.keys["shared"].revoked is True
+        assert ts1.keys["shared"].status == "revoked"
 
     # ------------------------------------------------------------------
     # Empty key_id rejected

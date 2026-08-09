@@ -232,7 +232,10 @@ class TestSecurityRegression:
         from cryptography.hazmat.primitives.asymmetric import rsa
         rsa_priv = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         # TrustStore.add_key checks for Ed25519 and rejects RSA
-        pub_pem = export_public_key_pem(rsa_priv.public_key(), "rsa-key")
+        from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+        pub_pem = rsa_priv.public_key().public_bytes(
+            Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
+        ).decode("utf-8")
         store = TrustStore()
         with pytest.raises(TrustError, match="Only Ed25519"):
             store.add_key("rsa-key", pub_pem)

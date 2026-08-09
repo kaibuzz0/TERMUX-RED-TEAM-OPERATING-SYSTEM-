@@ -22,7 +22,7 @@ from cryptography.hazmat.primitives.serialization import (
 )
 
 from updates.metadata import canonical_json
-from updates.trust import TrustStore
+from updates.trust import TrustStore, _compute_fingerprint
 from updates.errors import TrustError
 
 
@@ -41,7 +41,11 @@ def sign_metadata(metadata: dict[str, Any], private_key: Ed25519PrivateKey, key_
     return signed
 
 
-def verify_metadata(metadata: dict[str, Any], trust_store: TrustStore) -> None:
+def verify_metadata(
+    metadata: dict[str, Any],
+    trust_store: TrustStore,
+    expected_purpose: str | None = None,
+) -> None:
     sig_block = metadata.get("signing", {})
     algorithm = sig_block.get("algorithm")
     key_id = sig_block.get("key_id")
@@ -54,12 +58,13 @@ def verify_metadata(metadata: dict[str, Any], trust_store: TrustStore) -> None:
     signed["signing"] = {"algorithm": algorithm, "key_id": key_id, "signature": ""}
     message = canonical_json(signed).encode("utf-8")
     signature = base64.urlsafe_b64decode(signature_b64.encode("ascii"))
-    trust_store.verify(key_id, message, signature)
+    trust_store.verify(key_id, message, signature, expected_purpose=expected_purpose)
 
 
-def export_public_key_pem(public_key: Ed25519PublicKey, key_id: str) -> str:
+def export_public_key_pem(public_key: Ed25519PublicKey, key_id: str, purpose: str = "release") -> str:
     pem = public_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo).decode("utf-8")
-    return f"# key_id: {key_id}\n{pem}"
+    fp = _compute_fingerprint(public_key)
+    return f"# key_id: {key_id}\n# fingerprint_sha256: {fp}\n# purpose: {purpose}\n{pem}"
 
 
 def export_private_key_pem(private_key: Ed25519PrivateKey) -> str:
@@ -69,9 +74,25 @@ def export_private_key_pem(private_key: Ed25519PrivateKey) -> str:
 
 
 def load_private_key_pem(text: str) -> Ed25519PrivateKey:
-    # Only for release-tooling tests; production never reads private keys.
-    from cryptography.hazmat.primitives.serialization import load_pem_private_key
-    key = load_pem_private_key(text.encode("utf-8"), password=None)
+    """Load an Ed25519 private key from PEM text.
+
+    Supports:
+    - PKCS#8 PEM (unencrypted or encrypted) via load_pem_private_key()
+    - OpenSSH private key format via load_ssh_private_key()
+
+    Production keys MUST be encrypted at rest.
+    """
+    from cryptography.hazmat.primitives.serialization import (
+        load_pem_private_key,
+        load_ssh_private_key,
+    )
+    data = text.encode("utf-8")
+    # Try PKCS#8 PEM first
+    try:
+        key = load_pem_private_key(data, password=None)
+    except Exception:
+        # OpenSSH format as alternative
+        key = load_ssh_private_key(data, password=None)
     if not isinstance(key, Ed25519PrivateKey):
-        raise TrustError("Not an Ed25519 private key")
+        raise ValueError("private key is not Ed25519")
     return key

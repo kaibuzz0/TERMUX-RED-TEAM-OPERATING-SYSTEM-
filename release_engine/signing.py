@@ -16,13 +16,23 @@ from updates.trust import TrustStore
 
 
 def load_private_key(path: Path) -> Ed25519PrivateKey:
-    """Load a PEM Ed25519 private key from an external path.
+    """Load an Ed25519 private key from file.
+
+    Supports:
+    - PKCS#8 PEM (unencrypted or encrypted) via load_pem_private_key()
+    - OpenSSH private key format via load_ssh_private_key()
 
     Private keys are never committed; this loader is for offline signing only.
     """
-    from cryptography.hazmat.primitives.serialization import load_pem_private_key
+    from cryptography.hazmat.primitives.serialization import (
+        load_pem_private_key,
+        load_ssh_private_key,
+    )
     pem = path.read_bytes()
-    key = load_pem_private_key(pem, password=None)
+    try:
+        key = load_pem_private_key(pem, password=None)
+    except Exception:
+        key = load_ssh_private_key(pem, password=None)
     if not isinstance(key, Ed25519PrivateKey):
         raise ValueError("private key is not Ed25519")
     return key
@@ -40,6 +50,10 @@ def sign_release_metadata(
     return sign_metadata(metadata, private_key, key_id)
 
 
-def verify_release_metadata(metadata: Dict[str, Any], trust_store: TrustStore) -> None:
+def verify_release_metadata(
+    metadata: Dict[str, Any],
+    trust_store: TrustStore,
+    expected_purpose: str | None = "release",
+) -> None:
     """Verify a release metadata signature against the trust store."""
-    verify_metadata(metadata, trust_store)
+    verify_metadata(metadata, trust_store, expected_purpose=expected_purpose)
