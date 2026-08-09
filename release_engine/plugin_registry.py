@@ -6,6 +6,7 @@ Resolves Milestone 16 in-memory limitation.
 from __future__ import annotations
 
 import json
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List
@@ -52,7 +53,7 @@ class PersistentPluginRegistry:
 
     def _save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = self.path.parent / f".{self.path.name}.tmp"
+        tmp = self.path.parent / f".{self.path.name}.tmp-{uuid.uuid4().hex}"
         tmp.write_text(json.dumps(self._data, indent=2, sort_keys=True), encoding="utf-8")
         tmp.replace(self.path)
 

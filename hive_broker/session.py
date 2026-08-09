@@ -53,7 +53,7 @@ class BrokerSession:
                 "stopped": self.stopped,
                 "history": self.history[-100:],
             }
-            tmp = target.with_suffix(".tmp")
+            tmp = target.with_suffix(f".tmp-{uuid.uuid4().hex}")
             tmp.write_text(json.dumps(data), encoding="utf-8")
             tmp.replace(target)
         except OSError as e:

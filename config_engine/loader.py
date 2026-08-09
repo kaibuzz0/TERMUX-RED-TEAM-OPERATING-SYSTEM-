@@ -9,6 +9,8 @@ from typing import Any
 
 import yaml
 
+import uuid
+
 from config_engine.errors import ConfigNotFoundError, ConfigValidationError
 
 
@@ -100,6 +102,6 @@ def discover_user_configs(config_root: Path) -> list[Path]:
 def atomic_write_json(path: Path, data: dict[str, Any]) -> None:
     """Atomically write JSON data to path."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(f"{path.suffix}.tmp")
+    tmp = path.with_suffix(f"{path.suffix}.tmp-{uuid.uuid4().hex}")
     tmp.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
     tmp.replace(path)

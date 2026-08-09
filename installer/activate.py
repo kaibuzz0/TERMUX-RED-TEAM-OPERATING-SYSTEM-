@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
+import time
+import uuid
 from dataclasses import asdict
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -164,7 +166,7 @@ class ActiveState:
         return self._release_path(release_id) / ".release.json"
 
     def _write_active_pointer(self, pointer: ActivePointer) -> None:
-        tmp = self.active_pointer_path.with_suffix(".tmp")
+        tmp = self.active_pointer_path.with_suffix(f".tmp-{uuid.uuid4().hex}")
         tmp.parent.mkdir(parents=True, exist_ok=True)
         tmp.write_text(json.dumps(active_pointer_to_dict(pointer), indent=2), encoding="utf-8")
         tmp.replace(self.active_pointer_path)
@@ -172,7 +174,7 @@ class ActiveState:
     def _write_release_metadata(self, release: ReleaseInfo) -> None:
         path = self._release_metadata_path(release.release_id)
         path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(".tmp")
+        tmp = path.with_suffix(f".tmp-{uuid.uuid4().hex}")
         tmp.write_text(json.dumps(release_to_dict(release), indent=2), encoding="utf-8")
         tmp.replace(path)
 
