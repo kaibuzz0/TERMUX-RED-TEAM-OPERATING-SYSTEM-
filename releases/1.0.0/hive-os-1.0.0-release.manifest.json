@@ -1,0 +1,5623 @@
+[
+  {
+    "executable": false,
+    "path": "ENTRY",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "EOF",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hermes Plugins/hive-ops-plugin/__init__.py",
+    "sha256": "d2915dabd1e59ba20d5af8683c19bb34a66d77990928c8cc6a41027cdae1abb4",
+    "size": 10045,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hermes Plugins/hive-ops-plugin/agents/__init__.py",
+    "sha256": "bbb04deed77e8e45ac32c9df211830ca04420c84ccb02eddbe585527c7c9b1c2",
+    "size": 7593,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hermes Plugins/hive-ops-plugin/brain_plug.py",
+    "sha256": "d52be496a23a089bde20a86b1708c2d9a8094b6c2766eeef363d8999edde4c60",
+    "size": 8304,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hermes Plugins/install.sh",
+    "sha256": "0f835c69c7f75497f6a403852262078ee322d40b9681ca66f2d102ae1b134a4e",
+    "size": 8101,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hive-42",
+    "sha256": "ab079ce06086de5ef65b8a98c2be056eed07aa645ce874fbd42afb43c3a614d9",
+    "size": 18119,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hive-boot",
+    "sha256": "a1c9f22f679b2a2355e98bb074730a7715459ebcc3f2d5e86e94cd57c964eb90",
+    "size": 18193,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hive-hermes",
+    "sha256": "e23111a60ba317dc5764a2fc89f7d952bac6cf04c1e7782cf3adbceefd20a6b0",
+    "size": 20469,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hive-os",
+    "sha256": "ea5e6efbdf161503280325b99a0ac6bebe9bba78cee4381a80b311940c230889",
+    "size": 20429,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hive-ui",
+    "sha256": "d98b4c6142e855ba9a7160215446debb0eada62df02bf93cefbcde52f2cbe8c4",
+    "size": 23112,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev",
+    "sha256": "6df1da9e030f0ba957ea604ae3b561c116bbbd0aaa6ee4d40231d9cb85194a75",
+    "size": 8395,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-alias",
+    "sha256": "a080f4fe490ac903930fc86e96035fc68f0f8e5ae9e2ef5354102a7a3491341f",
+    "size": 10027,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-anchor",
+    "sha256": "190f229bfe3dd8f2dc1be506df024761a27ab5bd3e96f499428952ebc4d179c7",
+    "size": 17751,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-anomaly",
+    "sha256": "78cf03c0430d9a84002dc3e65a2007f3a433c6486af523e0d26132a170fa52d2",
+    "size": 19984,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-av",
+    "sha256": "74f5064d032ca6d5ab0aae9390dc2ceddc2f372518713f00a13f8a0ced0132a6",
+    "size": 14821,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-backup",
+    "sha256": "c747ff9cd8cbbb1c5c229c85073d10cceff43f540c35804dc16f92530e8e9e2e",
+    "size": 15499,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-clipboard",
+    "sha256": "7db5a1db1ddb9c78704e52e77d460a9193b489742a3ea774caa413ec937e89b5",
+    "size": 18100,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-comms",
+    "sha256": "0d8b767d0a13ec6758536cb1db4c04898ab97a02094e3b4c26a18e602966b85c",
+    "size": 14989,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-comms3",
+    "sha256": "70c1d709c851af9db3367bea93ffadae0ddd5af8d15a8c079286d3519c0fb1a7",
+    "size": 18511,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-container",
+    "sha256": "c023c6aeced3af3a8cd939070e949f30d81129d941fecfc8cf836f427eea4865",
+    "size": 30149,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-duress",
+    "sha256": "5dfa454e3bd98f2509b6d2e2be113f8cbadce4a16abdafc9247bdec286394c4b",
+    "size": 12168,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-emf",
+    "sha256": "0208e8e9aa151cacfffe0dfa19f176ead9ebb2759cc8c786e33a5df97d08d738",
+    "size": 22520,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-exfil",
+    "sha256": "3ffe675281301845eef4d689f9d65820aeb453db14ec5f1c65d83a1366550ac2",
+    "size": 12909,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-firewall",
+    "sha256": "f9bc709fbda4061f16764e4f5a295582987998d9023e2dced03036be3563a3db",
+    "size": 18597,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-forensics",
+    "sha256": "ec57e8b5b79cc573310b1d72e134e03cdf1794d63b0700875bffb5f052436e42",
+    "size": 10498,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-gateway",
+    "sha256": "ae4d807edb113fb1ad880916affd28bc75027f30c1fd3072d627f291a9bfdecb",
+    "size": 9315,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-geo",
+    "sha256": "e8d1e1770e2f30ecb13649c2189ecf60556fda8934e117b53d4058dff1827631",
+    "size": 15768,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-hide",
+    "sha256": "82d1d68163a03a940316d906085d5bf7d06144e456203fd6a474573f69d82a0d",
+    "size": 8490,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-honey",
+    "sha256": "0b387ca08167aaa1ae82d024da2d5778f9b2094b1643a6bbdac11277783d2a90",
+    "size": 23572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-inject",
+    "sha256": "2c360104ae0a87a58c832a3ee88f92c5adc0803f97e13c2b5d64ecee6fe7b411",
+    "size": 22702,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-integrity",
+    "sha256": "710b9568270d2cc7faf97713b01a06fd5c590969a7732aa10a85855610b869fa",
+    "size": 11674,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-intel",
+    "sha256": "9261964add23433ce808b3c5725489765f3e5c84c945a13350051057a6c9f38b",
+    "size": 20963,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-key",
+    "sha256": "c267dd9ed1b0ad7138e9b43a681be1e04b18a5d46148a3a33ae358c84070b625",
+    "size": 16917,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-log",
+    "sha256": "c286c4de2f96864f493991768a34322c32ad8c15cf199fc576a83a22bd05200a",
+    "size": 12207,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-mem",
+    "sha256": "8b0f162f2611bf56cac14a7f9b611f7233fa0ad79ce4ec4f01da26cc6fee8e8a",
+    "size": 19284,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-net",
+    "sha256": "f3503a2eb7cc1351042219df32d6f8f6cae87450efde673677c7cb009d295597",
+    "size": 11832,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-node",
+    "sha256": "ef9f35225748ee3b342534a949c867a4dac485af9699d7cd677d42407129274d",
+    "size": 17305,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-pet",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-pq",
+    "sha256": "555fd9823e0e7b529bb38b14acba9427daa7f71f49fec83b755d5df050482776",
+    "size": 18316,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-secureboot",
+    "sha256": "a14964110f0815dddf5eeb2abc46740c86359b6b085149a02127e28a5bc6b6b8",
+    "size": 13869,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-shred",
+    "sha256": "23cebb7b75a3402089d3d7d8946490b9c9de696c562c2880af4d6af4fd1f56d8",
+    "size": 19319,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-spoof",
+    "sha256": "1d5469c17070f2de49382a03483d29348dda0c864c9130fb3bdcda3dd009183e",
+    "size": 12038,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-swarm",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-swarm-integration",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-swarm-manager",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-temporal",
+    "sha256": "58049af6b9d4dfe0c65baf2fd72f79bd8f60cdc437bbcfa764a4fa441390f675",
+    "size": 18015,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-vault",
+    "sha256": "c419cccd9493ef5bd793db2e1dfee6c397b2b0178d757528f90573a2f4e0efd7",
+    "size": 13821,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/bin/hivedev-volume",
+    "sha256": "61674528b781809f7b2626c95c3b6f0ed5182a79e4b832f395ebb4288ad79ba7",
+    "size": 15727,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/docs/THREAT_MATRIX.md",
+    "sha256": "b7aa4a8eb4f1f4c29ae6437f437ab1934a84e08c4f29392141be0d6c4b3d0bd9",
+    "size": 6799,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive-ctrl.py",
+    "sha256": "eaae7fc6ac881a8969a6b189b59fa76d246cd2546b6f7d0ed569997fb2ed1375",
+    "size": 13353,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive-gateway.py",
+    "sha256": "13c005462ac51f0385d948e6d0a0ac37a93b6938f7998951fa55d2067ecfd0ac",
+    "size": 16202,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive-orchestrator.py",
+    "sha256": "e54289e708fd1868d8f6c6d16dd8d77efa011190785534b152bce9cb666e75ad",
+    "size": 17851,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive-swarm.py",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive_agents.py",
+    "sha256": "b4c2aa08af6d1ad21df2932d052ae9e77493405e8e61c1067aab5ea634d7bc86",
+    "size": 26194,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive_state.json",
+    "sha256": "93dcec64a92c2b8ba6baa4d249ea11777b8700befdf80a00c9aec3019b991366",
+    "size": 1031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/hive_swarm_integration.py",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/lib/stealth.py",
+    "sha256": "21fb25643a0aab889a5f480b500bf45f36f966ac9ffcb450598df7266799cbc4",
+    "size": 5240,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/swarm_orchestrator.py",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops DevAI/swarm_pet.py",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/.termux/boot/00-hive-ops.sh",
+    "sha256": "98a45facbf1249ecf3540214b09dd83160439b5265a1175e511b8569b130ddcc",
+    "size": 1206,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/.termux/boot/00-hive-secure.sh",
+    "sha256": "ac6fb34fcd64b187902bff8c48ca88a86588ea1d3537cbe6dcfa0b1c85101350",
+    "size": 1230,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/README.md",
+    "sha256": "f7c8ed51da89400189cf824406e9a51d5518de0c1533e2a4c895445893c676f7",
+    "size": 2075,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/bin/hive",
+    "sha256": "c3c1b285d62385d4350ef8e1fbfd397840567c05754f696e52ed6a8b0a54e0b6",
+    "size": 17737,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/bin/hive-dashboard",
+    "sha256": "bb339c5c52f3ba8e5ae3107577d59070ce33bb0100644f10cd16b6aa4c55447c",
+    "size": 7806,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/bin/hive-secure-login",
+    "sha256": "c473f2a460c2e39bc898a8a8138517fde24cb1616cedf32cc2d63a7b142788e0",
+    "size": 9220,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/bin/hive-ui-v2",
+    "sha256": "8df5352fe10515d8d5f6601604a704e884992d612ec12838f7398b3ef5ff22d5",
+    "size": 11810,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/etc/bash-integration.sh",
+    "sha256": "76e3fc218dcb6f29b029503c8bba1db97eb18cb70fe1ab88fca2fca123125f94",
+    "size": 3863,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/etc/env.sh",
+    "sha256": "598f01da16ac077fd4579d1d3b9ecc579b21ca684c78ba8a0f97a2b7d214e44b",
+    "size": 1640,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/etc/services.json",
+    "sha256": "c2b64f1be159f74de71f54cf17cbdded198df73d5a879692ac18daa7fbc46f0b",
+    "size": 2606,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/lib/swarm_bridge.py",
+    "sha256": "297b9d728f2596eb581c7ebe18d942c042192867b14a43902a2fa303e403e8f2",
+    "size": 6587,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/.config/hive/env.sh",
+    "sha256": "4f1d73fe4d1faffeb22edb7b85fe522b8e2133f3615b715b2ce2f7c79981e213",
+    "size": 934,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh",
+    "sha256": "64a6b2270cd079632b07fa0dc9dbaf4e392c07027d213b2718a2e6f3b876939a",
+    "size": 530,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive",
+    "sha256": "5c70fcfb64f8edbe764afa25ac250d40de207a7b0083570307174ade577d9cad",
+    "size": 4746,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_logrotate.sh",
+    "sha256": "e7e86e205cc71f18514b2be907ac5a85da5427cde7030bc78ddf799e500caeab",
+    "size": 518,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_net.core.sh",
+    "sha256": "9bd72d0a40d95fe3b2791eec47707e1f51057b799cd30c90afbbacc0e333762a",
+    "size": 5329,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_net.sh",
+    "sha256": "a7abebc0065983ac026d1249fc83b261b12f6a3e82e0b4a114e6b33fdcad3328",
+    "size": 614,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_orbot_ui.sh",
+    "sha256": "d04b8e8c1019890e2579842197f29865a599f978142a03637c3f091a825ca79d",
+    "size": 355,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_proxy_run.sh",
+    "sha256": "2e0d0be164fd0e040742736d221d3f742181a996400089e16aa52d34c2471a81",
+    "size": 1334,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_ps.sh",
+    "sha256": "e861a4f7f702c05a660ad94042f98a2cb622205b24bb215ff1f03af7e34d232e",
+    "size": 663,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_restart.sh",
+    "sha256": "5227b1954a43c2ad02886d1c24ef598bbca0af274d567522b8545e0cc71cc706",
+    "size": 121,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_rotator.sh",
+    "sha256": "66fe3d13cc0e019c06b94edef40dc8a6555048f587fb53857b0d2d84229c42c4",
+    "size": 434,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_services.sh",
+    "sha256": "87881bfde0735ed477a007b53255ffbbc276e2ce3e72eeb28d9f63afb7080082",
+    "size": 4572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_supervisor.sh",
+    "sha256": "f9bbdb1544dbb04b7196b8ec27e292add3a2a93890b0cee5c5dd55a5ba13de01",
+    "size": 642,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/hive_watchdog.sh",
+    "sha256": "eeb8ecbe9a2bf95aebcd728fb7d2d98a5bceee48f4db5ffa990f2261f9e0a5b7",
+    "size": 2253,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/bin/step5.1_fix_health.sh",
+    "sha256": "3482117c81d4b8d6b5ad161fa265a42861e69aaac7232fc54daf14eb89638079",
+    "size": 3100,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/dev.aliases.sh",
+    "sha256": "9f9ce14378a2eaa13a9277b00bf804266cdc12f202f123756c070fffab9a1670",
+    "size": 543,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/escape.txt",
+    "sha256": "8185b218bd61a585f4a02557b40739dd79b97be8392f9857374acc72e17c1bf8",
+    "size": 342,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.service",
+    "sha256": "699902359b42cfd6c71aa4f713a82f3769b7d829077eadca651378848e254ff2",
+    "size": 277,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.svc",
+    "sha256": "0019e21aaf84b543ab673bc195601dafd7660a17b386f6ba37fe5be73a7ba117",
+    "size": 549,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/services/mini-ai.svc",
+    "sha256": "49e1c2acc6419768f5c636bda59bc7909be08521aa59d0d53fcd324087ac9d79",
+    "size": 118,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/etc/tor/torrc",
+    "sha256": "91d0c4e323654e0782bc2a3af20b1573b2119bc98c2fa7110915078ca357c2b4",
+    "size": 248,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/original hive os complete/hive_bootstrap.sh",
+    "sha256": "9e22306bff07bb14703971a6690d43c917190218331ffd6f6d3d8bf8a6367941",
+    "size": 8021,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/shell/notes.txt",
+    "sha256": "9e2eab6fe17e994e6ddfd3da3eabc2fa3b659e15e6f8c8af8ccc0b335a981b42",
+    "size": 144,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/agents/architect_agent.py",
+    "sha256": "6c5f842031c607841c50e19ec64e53fd04f4e78a000bbe4480d45960005d93cb",
+    "size": 14277,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/agents/assistant_agent.py",
+    "sha256": "f02bc97fb2501f1ce85aedcf819d21b43accbd1c9dbbb5d7bb54ff2cd5d5dfdf",
+    "size": 12850,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/gateway_bridge.py",
+    "sha256": "ae4d807edb113fb1ad880916affd28bc75027f30c1fd3072d627f291a9bfdecb",
+    "size": 9315,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/hive-swarm.py",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/hive_state.json",
+    "sha256": "93dcec64a92c2b8ba6baa4d249ea11777b8700befdf80a00c9aec3019b991366",
+    "size": 1031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/hive_swarm_integration.py",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_PHASE_3.md",
+    "sha256": "08f4bc4db7b1717c38dd676f678d9e2e290a96d165eedd70e3ce80ab2456166e",
+    "size": 6847,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_REPORT.md",
+    "sha256": "9b58653610306aa2f059778e191573284ce0ad62a64185cc2973a532bed35c02",
+    "size": 4213,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/FINAL_ATTRIBUTION_REPORT.md",
+    "sha256": "e40e56e58397543d2e7e7e6973b9ac75e0bb0e0d397830e7d5d4c9d3088df210",
+    "size": 3974,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/FINAL_REVISED_REPORT.md",
+    "sha256": "921f2ee13e330d29bb8daec992ad52557ef93c4ff2e363bcf29189dcd35b4dac",
+    "size": 5448,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/HSL_DEFINITION.md",
+    "sha256": "914405be709f1e670bbfbb204086998e0526b530bddb42b372d937777179c6e1",
+    "size": 569,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/REBUILD_REPORT.md",
+    "sha256": "26c4bb6de9ddf8aa4e30f0c0d88fccad9435fffd416532849b753290c7939ccf",
+    "size": 4135,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md",
+    "sha256": "21a1ce0086332a82a678dadff5c48f83d9e2c0ee08abdf7892b6a6199461279f",
+    "size": 7733,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/SWARM_REGISTRY.md",
+    "sha256": "b52c81e6c62a9cb02b1b0292dcb0baf605d2f1a5c2193b33af80c1203cad3083",
+    "size": 3025,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/correlation_matrix.md",
+    "sha256": "e23606d7e8e7817da5d23e418b42d864935f835451af0ecd76361f106d203fb2",
+    "size": 1500,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/protocol.md",
+    "sha256": "0dcd6bd029da7e7afe3f71797d05d3c1bb67f93dbf78365e1b321e7195aec181",
+    "size": 974,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/registry/the-hive-tools-README.md",
+    "sha256": "f81c78866cc4f3613c958b9332c4b8b0aa3c04594e227a63e73efe05506897be",
+    "size": 980,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/swarm_orchestrator.py",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/swarm-core/swarm_pet.py",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/README.md",
+    "sha256": "8e16a5970e6f998b539f027b049ff6e002f4efa9a2569807810bf0ba6523dc40",
+    "size": 2086,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/batch_job_runner.py",
+    "sha256": "31687fa6f857012a7850b9a4e33284213dfdde76fbe007b7fb6ec8e0aea286c4",
+    "size": 7378,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/blockchain_batch_checker.py",
+    "sha256": "d458a9f8e6102b9d28f16e3d191a56a062eaeac2425265f4ce1b47b0eb884a2b",
+    "size": 6956,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/blockchain_monitor.py",
+    "sha256": "d720c53d7466ccc7f3b211ae42576a80f925233c1b88ed1929072ce5a786a33c",
+    "size": 3684,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/condition_simulator.py",
+    "sha256": "95c9493d3bae6b824f36aa3ffc687506d77c08e042024199e113673b3e037c35",
+    "size": 7581,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/deep_disassembler_sqvi.py",
+    "sha256": "6093927681c45845d7e68dca4d4ff23d99f67d14292c193d526c6c26aed0753b",
+    "size": 15308,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/heap_scanner.py",
+    "sha256": "5e8337be3a21a5f32bca18fa4c65c1134a187710525def9424d1058e4bf06933",
+    "size": 582,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/hive_health_monitor.py",
+    "sha256": "c0f4debaed78ac326149c8487e79694a1bab1143bfb711a31135fe80169d6f03",
+    "size": 5628,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/hive_menu.py",
+    "sha256": "09c5afcfcb2a094018c03e55a694627f19a601673a5a94b4e119119027ffbea7",
+    "size": 645,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/hive_tool_builder.py",
+    "sha256": "cd836c404bef07a77baafb18ef46e7ed3898343f15720ed3661c27a56fcf94bd",
+    "size": 3820,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/inject_payload.py",
+    "sha256": "9cd7f4fba26f6f4300039f2fab23ecbd3dc9ab48896cc91e57ba446b32962792",
+    "size": 1126,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/multi_address_generator.py",
+    "sha256": "20c8362ca3be57429f6768b5c35404153ce3db830421c3525d64f19223e6a2e1",
+    "size": 6701,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/obfuscation_layer.py",
+    "sha256": "6ea4c6f19ec58c6b742f2f01393558bc1f438a8dc07cc744cbb460e349cae29d",
+    "size": 7979,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/parallel-scanner.py",
+    "sha256": "10dd976495155500a49c1edde7bd6285ba514b4d40dc6766adaffcee6ad51fcc",
+    "size": 646,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/recon_node.py",
+    "sha256": "44ab7ed8479be5eae0b6d48996844f485453ea1cbdf1ff0839eb52b69993c877",
+    "size": 1443,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/resonance_scanner.py",
+    "sha256": "256cd80b1602e0cd9f7c2e048436b4ffc43d24be1b04b2993b90377eedcc0638",
+    "size": 5328,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sci_deep_disassembler.py",
+    "sha256": "4580c946a7ecb0bb233a4990b0b5a116514a89e170f34d07daee2e2b2bd392ec",
+    "size": 11332,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sci_emulator.py",
+    "sha256": "068452e41d7063770a924594a05449b3ef0c08678f3ebef8dab7947bedfdda8b",
+    "size": 3158,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sci_script_layout_validator.py",
+    "sha256": "b64e59d6dce8831f333d6aeacaf57a7ac9e9369d2a428284b69c3a0eff78a3a3",
+    "size": 1770,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sci_selector_tracker.py",
+    "sha256": "614f20eabbeb1d08191309e020194ebe497c73e363db05b7a5293d2d1a9a55c5",
+    "size": 620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/series-comparator.py",
+    "sha256": "bd137e25efcdd738c74aa24f0d50f2f54631156110b2246ff698631044a4b3f7",
+    "size": 648,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/series-evolution-analyzer.py",
+    "sha256": "0f6d4d760a770df332f12ca0bd2b006dcba612e4ca703baa868073093a7b6725",
+    "size": 660,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sq_investigation_suite.py",
+    "sha256": "620ae3e96e4b230d590c8466ee3215b511eb35e555be2644ad58ad43aaa580e5",
+    "size": 9468,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sq_series_scanner.py",
+    "sha256": "f9d34ed6542da9a1a81cfd3954850e3e498b8888181cf7a462cae106c7b01665",
+    "size": 7800,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/sqvi-deep-scanner.py",
+    "sha256": "f0a42769efd5b376ad01c71cc162c6374dcf70febe306925a67e4ebd4c71acbd",
+    "size": 636,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/variable_tracer.py",
+    "sha256": "3109bcc061b98ef0b15ef81781d83c5398db154a088f5a943767cf397364fa97",
+    "size": 620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/wallet_crypto_simulator.py",
+    "sha256": "83c082c8034cf060287db2a3c237936e2379b712706629ea3e04afd98bf21ece",
+    "size": 7835,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "Hive Ops Final/tools/wallet_extractor.py",
+    "sha256": "d26effba6409623b29246a2ea654a5c776f180bfc05541829586551950b6a3d4",
+    "size": 636,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE10_REPORT.md",
+    "sha256": "7b184101e29a35b862d3a8982a16c67ce056be9079b076970efe438046e8bc45",
+    "size": 9899,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE11_REPORT.md",
+    "sha256": "a24f2817a91acd3108ccb0aad174e4ba2015865e7449d7a1b5cbc8f6e1f5ea8e",
+    "size": 3401,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE12_REPORT.md",
+    "sha256": "627bbe7d950ea7dcd5db165c1fef6e42d5e9da2d5b6b80156c8d10d1f20d7afa",
+    "size": 1296,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE13_REPORT.md",
+    "sha256": "a4bd8acfa3caa967a6e76cb087a7dec894e7262714f9bd1bb8a7e8786915446d",
+    "size": 3843,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE14_REPORT.md",
+    "sha256": "95e14c0fc9f4952dd42e8b4d8e2c2fe1af0863bca8776cff3dcee3df8b1e8cbb",
+    "size": 6803,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE15_REPORT.md",
+    "sha256": "6380ecf688d668b7e0c60f8c66da42bf02f9ae01e6f7fc0d5c005ece390efec7",
+    "size": 5411,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE16_REPORT.md",
+    "sha256": "052406d888db8f368a02bdc55ed5f8ad61e9e309ac1fa5d2242cf4aa473087bc",
+    "size": 3651,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE17_REPORT.md",
+    "sha256": "60c41b0c4fb0491b51e98e7335d5f46071745906663dbd63167351592c5765e1",
+    "size": 5614,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE18_REPORT.md",
+    "sha256": "844baefa2133943fc4b8d7b066693241e98667a6da0c7f1b7cae6c716f099a4d",
+    "size": 3419,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE19_REPORT.md",
+    "sha256": "f897be300e43771add0556f0d91c5acbb1f5aac4490d0e058a37be988f16222e",
+    "size": 7759,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE1_REPORT.md",
+    "sha256": "7f695cd3306c4f05e8a82465994c3370ad7c53712b84add71b2b200e44355ed8",
+    "size": 4654,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE2_REPORT.md",
+    "sha256": "6983f7f546fc6313711ac1b0d7adec87630a295cbf295e987fdee62d06c79960",
+    "size": 6125,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE3_REPORT.md",
+    "sha256": "ffc7b9409c58b25dfb07660083f3b77ef138a4d687cc0915d1ecfea0a28b148d",
+    "size": 8574,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE4_REPORT.md",
+    "sha256": "41ff9937dfcdc784b567c85cd25d7a1506b6e18c3842849a54f19738e1d64be5",
+    "size": 8390,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE6_REPORT.md",
+    "sha256": "ba8bfdf7c8109c3e7d5486ca8735ef405931c05f7489c1e1cda4a3fbd00b9d1d",
+    "size": 9449,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE7_REPORT.md",
+    "sha256": "5a180ff16ef42fdbef308ab4053189daf3a7026c9b814006b1cbd8c4010ef575",
+    "size": 6166,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "MILESTONE8_REPORT.md",
+    "sha256": "9d6a0ee61da33e8469a005f25dcc2e12ac0529796c03872ff56c5b4d746cb599",
+    "size": 6762,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "RC_API_SCHEMA_INVENTORY.md",
+    "sha256": "043e6d12ef20c6e4fb611e70973f379763e9048d2524577ebc31f1062f82d5dc",
+    "size": 10082,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "RC_API_SCHEMA_INVENTORY_MIN.md",
+    "sha256": "01b777510862fa0665a8e8f73be871bf77328d18d1a48360699dc2610884df0c",
+    "size": 2137,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "README.md",
+    "sha256": "85c634f4545d9431fec9d3eabaf7bc374dcb29fee19d5ec796482ed9b9d2244e",
+    "size": 16835,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "bin/hive",
+    "sha256": "1ec9ef257884181ba1ed3e0a9b38072961d4131699fdede18b989fca73e19e7d",
+    "size": 9498,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "bin/test.py",
+    "sha256": "9505ae5134b07c4182627ce63c1aadca70820bf8d95013911ff0e65030d9ebaa",
+    "size": 97,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "brain-plug/README.md",
+    "sha256": "5663686b317e42915dc269b41a81d31a07bca006ef9b87ed299ea81e44fd2050",
+    "size": 5841,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "brain-plug/escape_living_ai.txt",
+    "sha256": "945dd8f4ac396796215f11e3952a090495f7449738b5a4a080dae0a95835714e",
+    "size": 244302,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "brain-plug/therapist_code only.py",
+    "sha256": "34af5d4d3a0eeb52f433ef03f5464716ae99eafcf702ba8d158fa13b97eff435",
+    "size": 81439,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/__init__.py",
+    "sha256": "9ffbe22560913e89ce0e51a1d48234b64d89ba55a1100beecc8a1aaf242874e7",
+    "size": 654,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/audit.py",
+    "sha256": "afc3229cf125457cbec20baf8c420430b0bc6e1a45f88b945902feeee0b67a0a",
+    "size": 1724,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/cli.py",
+    "sha256": "9464107ee8a4fe80844bb4d9e32e327da3c917e8cae115d311b0ccdea1a78686",
+    "size": 7650,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/config.py",
+    "sha256": "d4d2841e528b3eb37b94fd846aeccf680b799c881536f24f11551e396917ffba",
+    "size": 16748,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/defaults.py",
+    "sha256": "a6d5ec6f4c1ae3c6df5e862916a01d36c6f4f8b1e024f0810d9b3a689da682ac",
+    "size": 11380,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/environment.py",
+    "sha256": "46be223373dbb5c75b6b8b6c167a42ea8f3e43566112f73a5f294f1ce140843a",
+    "size": 2129,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/errors.py",
+    "sha256": "1a121fdb905cb57cf7c113bbdc71e62d2b74d9409699366567e6c1c3f62330e4",
+    "size": 950,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/loader.py",
+    "sha256": "0fd2e328b4916ae5db2903fbf0346c0334aeed8558e87703f8735920cae8cc4e",
+    "size": 3893,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/merger.py",
+    "sha256": "dfb8ffe07be2c07be5ecb4f38a1ef335ca04a154fe03d683f2de5f371550d25b",
+    "size": 4250,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/migration.py",
+    "sha256": "b8f1ac95107acd793e20f151a50a07e4e7a2f1630577ba52a717311204677365",
+    "size": 3979,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/persistence.py",
+    "sha256": "c49027439e061f184c52883fa4cf81124ddce1fa251d63c98dcf2d93976abd1d",
+    "size": 6749,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/preview.py",
+    "sha256": "cbd8a77a876d77e603108ce29c8b61d797eba00e4fe7650a923f9077bc390410",
+    "size": 1350,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/profiles.py",
+    "sha256": "4d3c80acc391cf857d64804f45f18f47c2379fed0bc3cd12d44aebe0044e6f5f",
+    "size": 3349,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/rollback.py",
+    "sha256": "3b669358fc0fbb8fdefdb49e33ba1e431ed91128b2447a03fe6992a20f685936",
+    "size": 1246,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/schema.py",
+    "sha256": "114319aa06664a0f69deae0cc2fd87bd6f790ba853ec1131ccda53b7de2c3a3b",
+    "size": 6775,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/transactions.py",
+    "sha256": "33ec62cd46aa89d9d303142a762e24f75423fcf810454c8c064eac44b03894c7",
+    "size": 4275,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "config_engine/validator.py",
+    "sha256": "1329a0e75b90dfdb2a2a59ffe3f5721f1f0bc8e0e1aa22beb787d149635ee3c8",
+    "size": 3683,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/ACTIVATION_AND_ROLLBACK.md",
+    "sha256": "4aa9bfdb25df4df93be1085198aa90764fd90cd59f7989ba3ce12e1087108851",
+    "size": 1622,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/ANTI_ROLLBACK_POLICY.md",
+    "sha256": "b4b570795e1008189b9e057bf57d0f2ac9c5b8daf1543ceda6e575c320492d9d",
+    "size": 553,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/BOOTSTRAP_AND_EMERGENCY_POLICY.md",
+    "sha256": "9579734d2539403f278714ecf3b8e50c23e06140f5068c3ea60c9ffc41de7549",
+    "size": 6779,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CANONICAL_SOURCE.md",
+    "sha256": "633c3dab98a13d5ef3b04602f16ee6ce2c14dbbfcc03b04a2ebed78a043ae3a8",
+    "size": 3286,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/COMPATIBILITY_LAUNCHERS.md",
+    "sha256": "8cf43bd6d4a2f379c06d2a1157d4d885f7ea3046927efe3140b3eb928e9cc878",
+    "size": 4289,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_BOOTSTRAP.md",
+    "sha256": "df6d46ec0a7ce1beddf6340e26f8ce5f3e4b8d53cd0350696a85d59cfa9214f7",
+    "size": 1788,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_ENGINE.md",
+    "sha256": "f244a8f63f5fc8af467f0b16e7d56c1540b3f715849a23868035b0b223f8c93d",
+    "size": 1505,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_MIGRATIONS.md",
+    "sha256": "0250059f4598c9dc7bff2be26c28dcfa620f990bbc55bb79f7944a4fe3f44abc",
+    "size": 379,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_PROFILES.md",
+    "sha256": "3d1c422f670d3fb021b8370c0936df54e4523069a1276e3934c1849b1ff967af",
+    "size": 487,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_ROLLBACK.md",
+    "sha256": "171be82fe312036e1a3c47e92c3c6fcea955b928748c146fa67ec744a3616701",
+    "size": 339,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_SCHEMA.md",
+    "sha256": "dd2b9102a3c61e5b91e68b348cb01ea39241c77f78e5f64e0fdacab74ba9b30d",
+    "size": 478,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CONFIGURATION_TRANSACTIONS.md",
+    "sha256": "4ecf7edd9d363bde41aa2233d091583c5a20a10c8d8cbc3db3e77012d57b27d4",
+    "size": 351,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/CREDENTIAL_MIGRATION.md",
+    "sha256": "0c351ed6d8393bb3b9cca01bfc76cfec24c09f7e99a146d91bd706565187d945",
+    "size": 891,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HERMES_INTEGRATION_BOUNDARY.md",
+    "sha256": "af9026fd68fca63b9c609ba77465fe7fba8ff335833c37cbfed798efd190c471",
+    "size": 182,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER.md",
+    "sha256": "a18a3883733b2f1479b7cd6af93e6e9b87c215e6b268cf7c7ddcb944f724463f",
+    "size": 139,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_APPROVALS.md",
+    "sha256": "8b003c48ece14b71d3f84cd1e74e4cb7af631c8b5463035e1c71d448d6f82b86",
+    "size": 192,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_AUDIT.md",
+    "sha256": "3eea52d2b5cf00d15111dd9bc0ad1863fb6377f085448cbdc23177cdde7b28dd",
+    "size": 117,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_CAPABILITIES.md",
+    "sha256": "2311fc79da8f95f7b0aa1f2526c7b389d432692d1877e832d715af3ebe13ad98",
+    "size": 154,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_EMERGENCY_STOP.md",
+    "sha256": "abf5eb7540530015283c02a85a78004ade28225139151eea56c07ab034ef6fe9",
+    "size": 150,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_PERMISSIONS.md",
+    "sha256": "f52db513f787ddefa08fb9dca1db447512fcd04fc07a4db0acbc5bd8fed42d1c",
+    "size": 159,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/HIVE_BROKER_TASK_MANIFEST.md",
+    "sha256": "561c493684b56ae3cdfe07b35319e9e05bd68519d9c9ccb642ff5ca7052e6a2a",
+    "size": 139,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/INSTALLATION_ARCHITECTURE.md",
+    "sha256": "c786948083becbd0658698d4a7c1096b96134fc762ad24703972294ee265493c",
+    "size": 1299,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/LEGACY_INSTALLERS.md",
+    "sha256": "09d47f6ab459b716ebb125ecf2de581a118cc5c40921a22204aaf01ff09b30b9",
+    "size": 832,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/LEGACY_SERVICE_MIGRATION.md",
+    "sha256": "c7cac9167c607bd79f26af64d215bcca912b983538a37c9274315a6a95da36c0",
+    "size": 426,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OFFLINE_UPDATE_BUNDLES.md",
+    "sha256": "c8a958668cfd5fa29e7f769aa02672781f153fccb609c7e78645bac43ae47072",
+    "size": 740,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER.md",
+    "sha256": "5c0eb263da4bbf468713a9b55f35d10b474a49fff076e5f08c198f2cd74d0c68",
+    "size": 104,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER_DIAGNOSTICS.md",
+    "sha256": "64688c409c51058efe18d19bf103bb082de63f69384c7272b2e2a1d9a6fae568",
+    "size": 103,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER_EVENTS.md",
+    "sha256": "343bc195a3b230164e8f62b378eb0c55f653ad49e84297444a78048b59326e63",
+    "size": 94,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER_JSON_API.md",
+    "sha256": "93a6c3bd1d73a78162586cdee16f0c9e98f92a96b0abe369994b26312c6ce627",
+    "size": 134,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER_SECURITY.md",
+    "sha256": "3954f46e4500d7a543e819e44f67ad022f3cc0df7656cb58783499b6d627e584",
+    "size": 98,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/OPERATIONS_CENTER_VIEWS.md",
+    "sha256": "ad0f13a442083db959ee6d0ed91a58bd01ffebae0276a4311ef4e2857eba08d5",
+    "size": 134,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PATH_MODEL.md",
+    "sha256": "c9f5ed0e82a24f835098448bd66633a5986866da62b9e09caf96fc9fceeab374",
+    "size": 3065,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_CAPABILITIES.md",
+    "sha256": "0fa48fa8f55b120c0a41ad903f2d6e63f0f63e56ed874d5881b26f2e0464e3aa",
+    "size": 1102,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_CONFIGURATION.md",
+    "sha256": "827a67917d47bf0e4ae61d5ad430e552e08df38a8ac46cdd0db5ccbefe3f132e",
+    "size": 568,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_DEPENDENCIES.md",
+    "sha256": "54df551d0d20b34ad3a55925fe2c7f6fa315bfef37e3ceec1e906bd28599f389",
+    "size": 306,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_DEVELOPMENT.md",
+    "sha256": "5c284ebe8c7933b8029620532385a4205a4e6a30f4b6b1dc212d20bb19c387b4",
+    "size": 497,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_LIFECYCLE.md",
+    "sha256": "403041e919bdbae2e68310c95bc1383a418de58665680dc2ab8a0177405d716a",
+    "size": 883,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_MANIFEST.md",
+    "sha256": "622828a7f74eb703b81554a091e72db9c583692b3ebe4b9825ef47c183f8d709",
+    "size": 1140,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_PACKAGES.md",
+    "sha256": "f4713580cf0e213d9a45aa35dc449f95f9cc5d2a59b0177150c1fb984036ec39",
+    "size": 265,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_REGISTRY.md",
+    "sha256": "81d585fbc2818d3c4869fee1a398857959d9edc0a437afb81ad845e290645045",
+    "size": 437,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_SDK.md",
+    "sha256": "7df579d303f445e68c908c6eaefbd5c49996e1935681315029782c80540206c4",
+    "size": 1222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_SECURITY.md",
+    "sha256": "f215bfa73fc26bd95f2ac4f2249d633ee0090c009b20095a45e59be32ed7187d",
+    "size": 743,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PLUGIN_SIGNING.md",
+    "sha256": "090d7ea1525217225ce4fa7cc23333f6454c9117185ea5d2785160de82f16f94",
+    "size": 454,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_AUDIT.md",
+    "sha256": "d9803d298f7468b776cf1d7ba5e39eb33e045c8883c0ebeedfc56e9ce3ccd0ff",
+    "size": 373,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_BROKER_INTEGRATION.md",
+    "sha256": "cb1a3577b7a1e8b751bf4d1fe750322913930143e080c87f5558cd02d5c775cf",
+    "size": 360,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_DECISIONS.md",
+    "sha256": "8068ac970fb9e17f1382b679a1b7a1fd60c128ab2059f100ac87e81dfa9cf082",
+    "size": 279,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_EMERGENCY_RESTRICTIONS.md",
+    "sha256": "e9ede9adf95da0a50a1e08396af0cb279932f84af500828cd79ff4780970255d",
+    "size": 269,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_ENGINE.md",
+    "sha256": "e42a6ff9293e46d7955a11da6c5385ddfbaaa81802f11a1c2c64c8accea4c52c",
+    "size": 1137,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_PROFILES.md",
+    "sha256": "583160a219793253f10843f2637f57bdc5e48685bbcb00f42a3dcf6caa123561",
+    "size": 463,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_REQUESTS.md",
+    "sha256": "9fb7e050f57d734fec5dc27ddc8d00267b4f49e125d08913bce3b285e2313c7c",
+    "size": 476,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_REQUIREMENTS.md",
+    "sha256": "70929ae7b9287299c9c0581e65a73abb6ea8ce6e7e5b60eb41a3ef61a5cf4222",
+    "size": 402,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/POLICY_RULES.md",
+    "sha256": "411850516b15a44841d6586fb3448ccae673133f3b7ccdd8b8c23c0c3bb5a2e5",
+    "size": 605,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/PRODUCTION_SIGNING_CEREMONY.md",
+    "sha256": "1df19a2ff89c8064ef6b3202793198fae64988a92ad2fc02553f45e8e3bf2bac",
+    "size": 3596,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RECOVERY_ARCHITECTURE.md",
+    "sha256": "4e148077d185b1184f1cd84a41f4e6cf18fa83afa4751bd90ca6e58c64f2311d",
+    "size": 948,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_BUILD.md",
+    "sha256": "6a2d3b254306125f2c071453d8b5d6567ec609b0a4c7539007420d89deca10ea",
+    "size": 342,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_CHANNELS.md",
+    "sha256": "6534cafd3b8c3223d1d45dd9016dc82389f49748c229e711a15947a298e9abd2",
+    "size": 258,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_ENGINE.md",
+    "sha256": "b49836bb53b98197157e3a10192500d5f0721706f9e4fed49f3c11ddf495223b",
+    "size": 392,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_FORMAT.md",
+    "sha256": "9ee7fb031623509d72b99da3a0d8a06085173ef7f75ef9dc07eebafe43daef60",
+    "size": 479,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_INSTALLATION.md",
+    "sha256": "07aaf7a355d67c0e20d576ffbcc6793c2e31fe75d89a7fa5eb782265929971d2",
+    "size": 348,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_ROLLBACK.md",
+    "sha256": "82e24e23962782730c2ec67af4080864235ca964d7f3bf3ef03e1fe6da3d23a3",
+    "size": 257,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_SIGNING.md",
+    "sha256": "33de728ce43147763b6c9f0375963911af929652f470f37acda30305ac5d6c10",
+    "size": 374,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RELEASE_TRUST.md",
+    "sha256": "75c35f4580e9cdefa09596c771bcf81f0613032f051e3bcbb2de6d53e4e6206f",
+    "size": 260,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/RUNTIME_ENVIRONMENT.md",
+    "sha256": "d728f8b9602a7a9f52db227638229d916dca2f2bbbd6339d06bfa2bd21f3b14e",
+    "size": 2484,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SECURITY_BOUNDARIES.md",
+    "sha256": "ab59d0282241651d493263b48894be06b5303a053f544d0ddd084d760f9a82b8",
+    "size": 895,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SERVICE_HEALTH_CHECKS.md",
+    "sha256": "2ac9e7f13dec2271cd008b047e66b036c1e9963603ba6155184242963bb42512",
+    "size": 359,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SERVICE_MANIFESTS.md",
+    "sha256": "cf08b52c0e110dc56ad6045b32f24149de461e53f7abd8d9e18af73b344c1891",
+    "size": 699,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SERVICE_MODEL.md",
+    "sha256": "5c7e42dde87b440bc8d572819be4cc49242f8907de0761fe72b505bc4c2eff22",
+    "size": 2285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SERVICE_RESTART_POLICY.md",
+    "sha256": "c35781595209815a7dc17cd41daff07c6fa58c70ce8e55851e33a5c319c3bd6d",
+    "size": 282,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SERVICE_SUPERVISOR.md",
+    "sha256": "a90669af57224baef95adc4dc840be830f7a64968c72b87452f0284ef7dda039",
+    "size": 879,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/SUPPLY_CHAIN.md",
+    "sha256": "503b7242bcab5bb1a9f6630517405b0cbbd047a3e1931f7c486d0eefc8952856",
+    "size": 285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/UPDATE_ARCHITECTURE.md",
+    "sha256": "bc4a6752dc2c456c1862b903489b31f7ae9be5ec8a0de18dff1d7ef380a2ba63",
+    "size": 1347,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/VAULT_ARCHITECTURE.md",
+    "sha256": "c60f776bbac118351af70ea9094b2b8b8e18cc14a4769d2e0de910bdb7e8011e",
+    "size": 2063,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/releases/1.0.0-rc.1-known-limitations.md",
+    "sha256": "44bbbf60042ac22fafd83cfe59f65a4e37f533f5146581891e277f828fa42725",
+    "size": 1907,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/releases/1.0.0-rc.1.md",
+    "sha256": "26849007e1ae2a79d8b7c6738da2df8f2e50bae1eb5c25412b5d91ff31075b61",
+    "size": 1641,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "docs/releases/PRODUCTION_RELEASE_KEY.md",
+    "sha256": "d9c4663ed870976fd19d2b5ab72d518b5ca4866776ebf991a669f206ad304faf",
+    "size": 1135,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "emergency-repair.sh",
+    "sha256": "92372f674c25660b0d343c43065147a7152c2098a5afa91fc0e57c6627f7d728",
+    "size": 7405,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "examples/plugins/hive-status/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "examples/plugins/hive-status/hive_status_example.py",
+    "sha256": "74896eb4c9cc55cfdaebebd363e9422fe9ad07906ec7fa7e2456c1d1eb1d7b90",
+    "size": 756,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "examples/plugins/hive-status/manifest.json",
+    "sha256": "1096ed3782a9301c6a2be4913536a19e9c690895bb70430de74d282cf751b33d",
+    "size": 672,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive-canonical.json",
+    "sha256": "5b863cb4bc20555b230c809840662bb57497c4c4cd7c340d4cbebe320c5b6b02",
+    "size": 694,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/__init__.py",
+    "sha256": "95c87ca79ea914849f0aa2bb695029808c9ea790e3f23542fe83dfaa1622b1b5",
+    "size": 5918,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/adapters.py",
+    "sha256": "59c738f28b6b7ffec245437fcc3a0eb51a2178861d1a1d2e1f30019c1e85e448",
+    "size": 4771,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/approval.py",
+    "sha256": "98f761d591e9efcb84cac670a208740069ed95b883e1e3858a32ecd825b5bb70",
+    "size": 1691,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/audit.py",
+    "sha256": "65155170adc056ce2c834be3d1fe9807cced207788420c9efc8961fab33fc39b",
+    "size": 1763,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/capabilities.py",
+    "sha256": "ddb2d4febbe4b60825ff4646a97374cb857709cc80e8a97e7216e0c6a227bcd7",
+    "size": 2895,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/cli.py",
+    "sha256": "59fc56807b054d35af9b674b1fc76ffa16dd00fffd296a61788a7d61c2af1fa4",
+    "size": 4643,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/dispatcher.py",
+    "sha256": "906c8e5436d9cff6300ff8752c08f668d67d5681981dc9db6df1ce6031f8482d",
+    "size": 2145,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/errors.py",
+    "sha256": "84e5b488755bae094184c3ca50b456f3108fef7ed393f5021efd4bbfc9e16cb7",
+    "size": 769,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/intents.py",
+    "sha256": "94875444f7d3d96dcafaf3b60ed1d4d93537f45200e38de53dc023f3b98fbe50",
+    "size": 2525,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/policy.py",
+    "sha256": "1c9e87555a34803db2ad57ebc037a654a8afdb084079ea5da43830be4fddae47",
+    "size": 4536,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/schema.py",
+    "sha256": "2eda3d97105b2d0bc5745606184d37ae2e4b5c0c6e989de597de1ff5475de94f",
+    "size": 4158,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/session.py",
+    "sha256": "9640bf9e01bb557fb3cdcd61ef3296c29c4dab7cf8c928f3ba9e6f1f2617124d",
+    "size": 1939,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/stop.py",
+    "sha256": "93f52b48ef3e2d514d1b05e6da552a6e9bcefd2840a666c03eecd9d6d1f5e1c3",
+    "size": 429,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/transaction.py",
+    "sha256": "11fb4aede42ecf3e8d9f549abec07d605c7a7885107803b0663a31be0977282f",
+    "size": 1009,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/validator.py",
+    "sha256": "f4d5a70cbbe69313b5d642da346e5fc45c6456d4b41de1b4567b29928d6e9fc2",
+    "size": 2093,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "hive_broker/version.py",
+    "sha256": "e5b141c7a2a20cf0bd38b880fe7eb1ab627cf2a2fcd753dfa75b73fbff3fc794",
+    "size": 2239,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "install-termux.sh",
+    "sha256": "5e2c02a5f6e4dc024bacf891a51e47c2e073200c026b945966d66810cb8166e1",
+    "size": 11044,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "install.sh",
+    "sha256": "4e27c3f3c0cfe13ae3335a77d7838c16d16261c591a35e0f53a3a8da5bc478a7",
+    "size": 12841,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/README.md",
+    "sha256": "eab9d2aaecf690eb582224f2a824be70ea54abd10d84f2c7b761e0010dfe68be",
+    "size": 1270,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/__init__.py",
+    "sha256": "87b410eb606a86c8f3cbc318baa6ced07cb50e1910bd9781b3a47cf16c5980a4",
+    "size": 225,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/activate.py",
+    "sha256": "6d1fb783f48c94d61d57e0c1fb10579a7438d3d401719e96f65c6deb7e7f4594",
+    "size": 18370,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/install.py",
+    "sha256": "27c5aecec47f2cbad24d905fb7e03d7e1c67bbd2062b4770c4dd3d1245995270",
+    "size": 11116,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/journal.py",
+    "sha256": "874d63375d870203166dea6804dabb6942c19b2badf6603e0f972ddd1489924a",
+    "size": 2791,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/legacy.py",
+    "sha256": "e542e993d1f260eb18e394d29374cffd2135643be202dbcd7b5afeb27097226b",
+    "size": 8980,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/plan.py",
+    "sha256": "fbbff1048825da314bfbcc43c4018cab4001371094aa55eae59c0fa823496a5c",
+    "size": 6864,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/preflight.py",
+    "sha256": "598413f3e1ee0785d2375f0c06a630957a64a8b8dfdbb33de4cb8fe09ea1471a",
+    "size": 7573,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/rollback.py",
+    "sha256": "46f8e5ebdc0955bc29d90ff5a998e2ee9148d837adb82608008c7ba0a067136b",
+    "size": 1338,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/schema.py",
+    "sha256": "4ebabe0fffcd16f05aff1212d2b3c30a44ee6b97ac3ff2cfa075f83250cd4a99",
+    "size": 7538,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/staging.py",
+    "sha256": "645089a75705daece02cab4b3c65a805720add5f3d1a7da769d280f54a01b167",
+    "size": 5676,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "installer/verify.py",
+    "sha256": "29283a8802419b6b898e5f40c05f377d3f4af7b197f259384d0c781aa352722e",
+    "size": 1725,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "lib/hive_path.py",
+    "sha256": "6d422c037153dc1dd40f7adeb90d4c375addfe9b214955be755ecfa0f4eae117",
+    "size": 11383,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "lib/hive_runtime.py",
+    "sha256": "48a0b62ed2dd48c55702cca621efbfeb824365059cca50e9bcafc73859ad60bc",
+    "size": 5221,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "lib/hive_service_loader.py",
+    "sha256": "7f3b996f32d5e6d4207d259ce4d045ec6ea3a913a0cb8ad38bc6ba06ade2e017",
+    "size": 13432,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/__init__.py",
+    "sha256": "96f6ccd6395d00440e5e2f4aeaad6c4d979db9c266cc39323dc6bbe818c06633",
+    "size": 136,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/cli.py",
+    "sha256": "c7479895304642ba6bbaaf9dd6f63eb0fe355de36b3ea4a6a83deb54f4e9e94f",
+    "size": 4048,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/collectors.py",
+    "sha256": "172799328b3260a2a7803295a3fd8e0537081b601fc3eeeeb900b449aa0e3fba",
+    "size": 8665,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/data_sources.py",
+    "sha256": "1e674ecd64fea5f1634187ca4eed2be4f86772e676591951529c8b1e8dcbfc06",
+    "size": 2829,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/diagnostics.py",
+    "sha256": "f43efbd29c4086562d7065cda4c54a68e2fb38af0227276730e95a7924e900f0",
+    "size": 2881,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/errors.py",
+    "sha256": "60a11bf70e647213401361f208b67d2b528b82a4b33152290b52f40cf1722dea",
+    "size": 217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/plugin_view.py",
+    "sha256": "74821f84fa7a1f475e554a148e54d299caae2e249a1b7181f231e85ff6de92b5",
+    "size": 782,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/redaction.py",
+    "sha256": "ddfd02961f476f11ab526e48e4597cce76564d0122a749d371332bb9addc1595",
+    "size": 1309,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/release_view.py",
+    "sha256": "d4b51c3c6417ddd8b408729bfd87004e80029083dc0ec400b469b753f710710e",
+    "size": 819,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/render.py",
+    "sha256": "02f061140cbaa174eecfd1a9c45631a1db44b46f43386e94da838bac35801750",
+    "size": 2476,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/schema.py",
+    "sha256": "c4819399fccb674c0cac5b99eb0978f1c9de8903823f8e02afc8cda2a21ffaa3",
+    "size": 1326,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "operations_center/view_models.py",
+    "sha256": "1152e46e6009e4e753024859b25101d424df5effc71f9066a97dfaa031a25431",
+    "size": 2072,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/__init__.py",
+    "sha256": "78b97d707ede0d7dda20f0dd9181047887eb8b6184a122e26672d17ac632dfdb",
+    "size": 1169,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/audit.py",
+    "sha256": "7940aab5b9acfd30e84149dec1ba812fe84b97a2cdc59fb6835a29f3ed982def",
+    "size": 2620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/broker_client.py",
+    "sha256": "0ae948359c80496c07e66cf0e753d3380a311e2d3b66449cc1e6a950c0935427",
+    "size": 4111,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/capabilities.py",
+    "sha256": "affec8c853879988fb64e5b895a7c9aa2e4491e785c658cee25602b2145ed756",
+    "size": 3309,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/cli.py",
+    "sha256": "2493c716a4c1d93606589744def1661cd4d6c34eb0eca5c6f8e4e0ec43dfe768",
+    "size": 8177,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/compatibility.py",
+    "sha256": "17d467a0bc4e1ca2eb33f505d553b3d1e824c4a2db5ae39090f82ebfa9ddde6c",
+    "size": 3477,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/configuration.py",
+    "sha256": "6e779334a6fe68e071590ed5d87fb1b37ca3d9fdbedbef543e53d7f457a25b0b",
+    "size": 2869,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/developer.py",
+    "sha256": "81bda81e956759262fe9af6c73b658aab966b7cf7daa1fa52a7b863f7cca213d",
+    "size": 2206,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/errors.py",
+    "sha256": "08ff8dbaa0b74ec79f0fa39d43f9ce479f0ae31b72ec7ecad7b5d3e26920769e",
+    "size": 1037,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/identity.py",
+    "sha256": "6a9de2f7c189f16ec78bf07de19551cf03a4be385ccbb4eb5f3dcc8122fba36b",
+    "size": 3404,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/lifecycle.py",
+    "sha256": "7b7594d27815c1d7e11fbafa3c6670562389e0289ebb9f27af84e37eb50dfe75",
+    "size": 2298,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/loader.py",
+    "sha256": "3b649fb992efb003d2d1c85f6a26c2930cb8c27ce44f967475f2ccdca4d846c1",
+    "size": 2630,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/manifest.py",
+    "sha256": "deb61d84fc00b5f1e14b7afbfaf8bb9eccbd33577ba74bac2a508dc2d1ecb15d",
+    "size": 10816,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/policy.py",
+    "sha256": "8069bebfc6ce202b116763757cc2f0a40e4f9e2394cf753c22e412d02339200c",
+    "size": 2370,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/registry.py",
+    "sha256": "c990458c62291d9b3d8c25330e9381947740101b465560eb77e4b4d0c2a13c0a",
+    "size": 2380,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/schema.py",
+    "sha256": "9bcf42f23a78407e99cad00081ba1909b5939bc1d7efbc8dce69696322c1b4e3",
+    "size": 1753,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "plugin_sdk/signing.py",
+    "sha256": "8edbc71bfe57ee7c1006c2dfd521c61a2c39482035272fc2bec96728af0c9d42",
+    "size": 1749,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/__init__.py",
+    "sha256": "f25d57587ed6e008916b1bfca7c4c9f999e6bea23d2fefc704bec51389408281",
+    "size": 567,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/actors.py",
+    "sha256": "67408af217ed33e681c24c22e60ac36ec4c3075ce85c2eaa060618e1bbc8f670",
+    "size": 766,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/audit.py",
+    "sha256": "d493fca801ea684b22fb378ca8f1bcdfe9dd6aa973cf7603adccc3d4b6031ccf",
+    "size": 2156,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/capabilities.py",
+    "sha256": "6f65524bea89728260237f346f9604eaa2abc29af5fb28b1a9934dc19823f788",
+    "size": 5651,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/cli.py",
+    "sha256": "2293b2f1374a0fdfcf9c0a43130829fe74bc2583dec7aae2643dcae0b262acb2",
+    "size": 5320,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/conditions.py",
+    "sha256": "648e45df989fc4d665af12e3fc15cc3f78fb74a6c1d39eab2258438878b02638",
+    "size": 3126,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/decisions.py",
+    "sha256": "69a269b88f3f4c303e1b9a4a39c0575d126f936c61034683e55a1e05294538c7",
+    "size": 3261,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/engine.py",
+    "sha256": "c71e3b4a778e195e2354e53355dcaa504fec25e5a663686e997caaf60f4febde",
+    "size": 4812,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/errors.py",
+    "sha256": "610072128ea8a5e2adb668db6e366ea5ed078a13e0eef9a387fbb7656de90d1f",
+    "size": 677,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/evaluator.py",
+    "sha256": "a45a5f768c02194458618dad8e078cb65e3338d7168547b20d0bbaf7eff148e9",
+    "size": 8507,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/loader.py",
+    "sha256": "59ef9ccac57da05b7a06d0caf731e6a3d07674b9bd26bdf926df21262790c99d",
+    "size": 3790,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/profiles.py",
+    "sha256": "84b53f7e1a9d9ffd8da188df9434475346e4df0af56a407de64dff8c6848272a",
+    "size": 6938,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/requests.py",
+    "sha256": "f9e2c624134c8cef261836ba6cbd8fe2269990e076f77232f91234fd953b4920",
+    "size": 5619,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/requirements.py",
+    "sha256": "94f1bbaefa2424bab958b2cfd79a14ef96dadd34bcbdd95a2f67715aa37d9e2c",
+    "size": 3887,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/resources.py",
+    "sha256": "f0b05a7e1a087a5ee06ed1c170196472af9c6af1652e90695dd24a51b7f089ff",
+    "size": 548,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/rules.py",
+    "sha256": "13df0a37bf148fc629b2cffbd65464397699c909f64f32973b733098f6f01a18",
+    "size": 7042,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/schema.py",
+    "sha256": "f09afba80f8db80c2ff74c97e673a9dece4a7fd7e3f36a0b3840adde4e3b7bf7",
+    "size": 4253,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "policy_engine/validator.py",
+    "sha256": "8706b4efe8aabd77789fe55021b3a6018840b2202b7c1af07ead290e6eb2a6c8",
+    "size": 1678,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/ENTRY",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/EOF",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hermes Plugins/hive-ops-plugin/__init__.py",
+    "sha256": "d2915dabd1e59ba20d5af8683c19bb34a66d77990928c8cc6a41027cdae1abb4",
+    "size": 10045,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hermes Plugins/hive-ops-plugin/agents/__init__.py",
+    "sha256": "bbb04deed77e8e45ac32c9df211830ca04420c84ccb02eddbe585527c7c9b1c2",
+    "size": 7593,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hermes Plugins/hive-ops-plugin/brain_plug.py",
+    "sha256": "d52be496a23a089bde20a86b1708c2d9a8094b6c2766eeef363d8999edde4c60",
+    "size": 8304,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hermes Plugins/install.sh",
+    "sha256": "0f835c69c7f75497f6a403852262078ee322d40b9681ca66f2d102ae1b134a4e",
+    "size": 8101,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hive-42",
+    "sha256": "ab079ce06086de5ef65b8a98c2be056eed07aa645ce874fbd42afb43c3a614d9",
+    "size": 18119,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hive-boot",
+    "sha256": "a1c9f22f679b2a2355e98bb074730a7715459ebcc3f2d5e86e94cd57c964eb90",
+    "size": 18193,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hive-hermes",
+    "sha256": "e23111a60ba317dc5764a2fc89f7d952bac6cf04c1e7782cf3adbceefd20a6b0",
+    "size": 20469,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hive-os",
+    "sha256": "ea5e6efbdf161503280325b99a0ac6bebe9bba78cee4381a80b311940c230889",
+    "size": 20429,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hive-ui",
+    "sha256": "d98b4c6142e855ba9a7160215446debb0eada62df02bf93cefbcde52f2cbe8c4",
+    "size": 23112,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev",
+    "sha256": "6df1da9e030f0ba957ea604ae3b561c116bbbd0aaa6ee4d40231d9cb85194a75",
+    "size": 8395,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-alias",
+    "sha256": "a080f4fe490ac903930fc86e96035fc68f0f8e5ae9e2ef5354102a7a3491341f",
+    "size": 10027,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-anchor",
+    "sha256": "190f229bfe3dd8f2dc1be506df024761a27ab5bd3e96f499428952ebc4d179c7",
+    "size": 17751,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-anomaly",
+    "sha256": "78cf03c0430d9a84002dc3e65a2007f3a433c6486af523e0d26132a170fa52d2",
+    "size": 19984,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-av",
+    "sha256": "74f5064d032ca6d5ab0aae9390dc2ceddc2f372518713f00a13f8a0ced0132a6",
+    "size": 14821,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-backup",
+    "sha256": "c747ff9cd8cbbb1c5c229c85073d10cceff43f540c35804dc16f92530e8e9e2e",
+    "size": 15499,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-clipboard",
+    "sha256": "7db5a1db1ddb9c78704e52e77d460a9193b489742a3ea774caa413ec937e89b5",
+    "size": 18100,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-comms",
+    "sha256": "0d8b767d0a13ec6758536cb1db4c04898ab97a02094e3b4c26a18e602966b85c",
+    "size": 14989,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-comms3",
+    "sha256": "70c1d709c851af9db3367bea93ffadae0ddd5af8d15a8c079286d3519c0fb1a7",
+    "size": 18511,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-container",
+    "sha256": "c023c6aeced3af3a8cd939070e949f30d81129d941fecfc8cf836f427eea4865",
+    "size": 30149,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-duress",
+    "sha256": "5dfa454e3bd98f2509b6d2e2be113f8cbadce4a16abdafc9247bdec286394c4b",
+    "size": 12168,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-emf",
+    "sha256": "0208e8e9aa151cacfffe0dfa19f176ead9ebb2759cc8c786e33a5df97d08d738",
+    "size": 22520,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-exfil",
+    "sha256": "3ffe675281301845eef4d689f9d65820aeb453db14ec5f1c65d83a1366550ac2",
+    "size": 12909,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-firewall",
+    "sha256": "f9bc709fbda4061f16764e4f5a295582987998d9023e2dced03036be3563a3db",
+    "size": 18597,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-forensics",
+    "sha256": "ec57e8b5b79cc573310b1d72e134e03cdf1794d63b0700875bffb5f052436e42",
+    "size": 10498,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-gateway",
+    "sha256": "ae4d807edb113fb1ad880916affd28bc75027f30c1fd3072d627f291a9bfdecb",
+    "size": 9315,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-geo",
+    "sha256": "e8d1e1770e2f30ecb13649c2189ecf60556fda8934e117b53d4058dff1827631",
+    "size": 15768,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-hide",
+    "sha256": "82d1d68163a03a940316d906085d5bf7d06144e456203fd6a474573f69d82a0d",
+    "size": 8490,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-honey",
+    "sha256": "0b387ca08167aaa1ae82d024da2d5778f9b2094b1643a6bbdac11277783d2a90",
+    "size": 23572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-inject",
+    "sha256": "2c360104ae0a87a58c832a3ee88f92c5adc0803f97e13c2b5d64ecee6fe7b411",
+    "size": 22702,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-integrity",
+    "sha256": "710b9568270d2cc7faf97713b01a06fd5c590969a7732aa10a85855610b869fa",
+    "size": 11674,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-intel",
+    "sha256": "9261964add23433ce808b3c5725489765f3e5c84c945a13350051057a6c9f38b",
+    "size": 20963,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-key",
+    "sha256": "c267dd9ed1b0ad7138e9b43a681be1e04b18a5d46148a3a33ae358c84070b625",
+    "size": 16917,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-log",
+    "sha256": "c286c4de2f96864f493991768a34322c32ad8c15cf199fc576a83a22bd05200a",
+    "size": 12207,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-mem",
+    "sha256": "8b0f162f2611bf56cac14a7f9b611f7233fa0ad79ce4ec4f01da26cc6fee8e8a",
+    "size": 19284,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-net",
+    "sha256": "f3503a2eb7cc1351042219df32d6f8f6cae87450efde673677c7cb009d295597",
+    "size": 11832,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-node",
+    "sha256": "ef9f35225748ee3b342534a949c867a4dac485af9699d7cd677d42407129274d",
+    "size": 17305,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-pet",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-pq",
+    "sha256": "555fd9823e0e7b529bb38b14acba9427daa7f71f49fec83b755d5df050482776",
+    "size": 18316,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-secureboot",
+    "sha256": "a14964110f0815dddf5eeb2abc46740c86359b6b085149a02127e28a5bc6b6b8",
+    "size": 13869,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-shred",
+    "sha256": "23cebb7b75a3402089d3d7d8946490b9c9de696c562c2880af4d6af4fd1f56d8",
+    "size": 19319,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-spoof",
+    "sha256": "1d5469c17070f2de49382a03483d29348dda0c864c9130fb3bdcda3dd009183e",
+    "size": 12038,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-swarm",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-swarm-integration",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-swarm-manager",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-temporal",
+    "sha256": "58049af6b9d4dfe0c65baf2fd72f79bd8f60cdc437bbcfa764a4fa441390f675",
+    "size": 18015,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-vault",
+    "sha256": "c419cccd9493ef5bd793db2e1dfee6c397b2b0178d757528f90573a2f4e0efd7",
+    "size": 13821,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/bin/hivedev-volume",
+    "sha256": "61674528b781809f7b2626c95c3b6f0ed5182a79e4b832f395ebb4288ad79ba7",
+    "size": 15727,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/docs/THREAT_MATRIX.md",
+    "sha256": "b7aa4a8eb4f1f4c29ae6437f437ab1934a84e08c4f29392141be0d6c4b3d0bd9",
+    "size": 6799,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive-ctrl.py",
+    "sha256": "eaae7fc6ac881a8969a6b189b59fa76d246cd2546b6f7d0ed569997fb2ed1375",
+    "size": 13353,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive-gateway.py",
+    "sha256": "13c005462ac51f0385d948e6d0a0ac37a93b6938f7998951fa55d2067ecfd0ac",
+    "size": 16202,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive-orchestrator.py",
+    "sha256": "e54289e708fd1868d8f6c6d16dd8d77efa011190785534b152bce9cb666e75ad",
+    "size": 17851,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive-swarm.py",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive_agents.py",
+    "sha256": "b4c2aa08af6d1ad21df2932d052ae9e77493405e8e61c1067aab5ea634d7bc86",
+    "size": 26194,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive_state.json",
+    "sha256": "93dcec64a92c2b8ba6baa4d249ea11777b8700befdf80a00c9aec3019b991366",
+    "size": 1031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/hive_swarm_integration.py",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/lib/stealth.py",
+    "sha256": "21fb25643a0aab889a5f480b500bf45f36f966ac9ffcb450598df7266799cbc4",
+    "size": 5240,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/swarm_orchestrator.py",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops DevAI/swarm_pet.py",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/.termux/boot/00-hive-ops.sh",
+    "sha256": "98a45facbf1249ecf3540214b09dd83160439b5265a1175e511b8569b130ddcc",
+    "size": 1206,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/.termux/boot/00-hive-secure.sh",
+    "sha256": "ac6fb34fcd64b187902bff8c48ca88a86588ea1d3537cbe6dcfa0b1c85101350",
+    "size": 1230,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/README.md",
+    "sha256": "f7c8ed51da89400189cf824406e9a51d5518de0c1533e2a4c895445893c676f7",
+    "size": 2075,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/bin/hive",
+    "sha256": "c3c1b285d62385d4350ef8e1fbfd397840567c05754f696e52ed6a8b0a54e0b6",
+    "size": 17737,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/bin/hive-dashboard",
+    "sha256": "bb339c5c52f3ba8e5ae3107577d59070ce33bb0100644f10cd16b6aa4c55447c",
+    "size": 7806,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/bin/hive-secure-login",
+    "sha256": "c473f2a460c2e39bc898a8a8138517fde24cb1616cedf32cc2d63a7b142788e0",
+    "size": 9220,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/bin/hive-ui-v2",
+    "sha256": "8df5352fe10515d8d5f6601604a704e884992d612ec12838f7398b3ef5ff22d5",
+    "size": 11810,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/etc/bash-integration.sh",
+    "sha256": "76e3fc218dcb6f29b029503c8bba1db97eb18cb70fe1ab88fca2fca123125f94",
+    "size": 3863,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/etc/env.sh",
+    "sha256": "598f01da16ac077fd4579d1d3b9ecc579b21ca684c78ba8a0f97a2b7d214e44b",
+    "size": 1640,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/etc/services.json",
+    "sha256": "c2b64f1be159f74de71f54cf17cbdded198df73d5a879692ac18daa7fbc46f0b",
+    "size": 2606,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/lib/swarm_bridge.py",
+    "sha256": "297b9d728f2596eb581c7ebe18d942c042192867b14a43902a2fa303e403e8f2",
+    "size": 6587,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/.config/hive/env.sh",
+    "sha256": "4f1d73fe4d1faffeb22edb7b85fe522b8e2133f3615b715b2ce2f7c79981e213",
+    "size": 934,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh",
+    "sha256": "64a6b2270cd079632b07fa0dc9dbaf4e392c07027d213b2718a2e6f3b876939a",
+    "size": 530,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive",
+    "sha256": "5c70fcfb64f8edbe764afa25ac250d40de207a7b0083570307174ade577d9cad",
+    "size": 4746,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_logrotate.sh",
+    "sha256": "e7e86e205cc71f18514b2be907ac5a85da5427cde7030bc78ddf799e500caeab",
+    "size": 518,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_net.core.sh",
+    "sha256": "9bd72d0a40d95fe3b2791eec47707e1f51057b799cd30c90afbbacc0e333762a",
+    "size": 5329,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_net.sh",
+    "sha256": "a7abebc0065983ac026d1249fc83b261b12f6a3e82e0b4a114e6b33fdcad3328",
+    "size": 614,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_orbot_ui.sh",
+    "sha256": "d04b8e8c1019890e2579842197f29865a599f978142a03637c3f091a825ca79d",
+    "size": 355,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_proxy_run.sh",
+    "sha256": "2e0d0be164fd0e040742736d221d3f742181a996400089e16aa52d34c2471a81",
+    "size": 1334,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_ps.sh",
+    "sha256": "e861a4f7f702c05a660ad94042f98a2cb622205b24bb215ff1f03af7e34d232e",
+    "size": 663,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_restart.sh",
+    "sha256": "5227b1954a43c2ad02886d1c24ef598bbca0af274d567522b8545e0cc71cc706",
+    "size": 121,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_rotator.sh",
+    "sha256": "66fe3d13cc0e019c06b94edef40dc8a6555048f587fb53857b0d2d84229c42c4",
+    "size": 434,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_services.sh",
+    "sha256": "87881bfde0735ed477a007b53255ffbbc276e2ce3e72eeb28d9f63afb7080082",
+    "size": 4572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_supervisor.sh",
+    "sha256": "f9bbdb1544dbb04b7196b8ec27e292add3a2a93890b0cee5c5dd55a5ba13de01",
+    "size": 642,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/hive_watchdog.sh",
+    "sha256": "eeb8ecbe9a2bf95aebcd728fb7d2d98a5bceee48f4db5ffa990f2261f9e0a5b7",
+    "size": 2253,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/bin/step5.1_fix_health.sh",
+    "sha256": "3482117c81d4b8d6b5ad161fa265a42861e69aaac7232fc54daf14eb89638079",
+    "size": 3100,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/dev.aliases.sh",
+    "sha256": "9f9ce14378a2eaa13a9277b00bf804266cdc12f202f123756c070fffab9a1670",
+    "size": 543,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/escape.txt",
+    "sha256": "8185b218bd61a585f4a02557b40739dd79b97be8392f9857374acc72e17c1bf8",
+    "size": 342,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.service",
+    "sha256": "699902359b42cfd6c71aa4f713a82f3769b7d829077eadca651378848e254ff2",
+    "size": 277,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.svc",
+    "sha256": "0019e21aaf84b543ab673bc195601dafd7660a17b386f6ba37fe5be73a7ba117",
+    "size": 549,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/services/mini-ai.svc",
+    "sha256": "49e1c2acc6419768f5c636bda59bc7909be08521aa59d0d53fcd324087ac9d79",
+    "size": 118,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/etc/tor/torrc",
+    "sha256": "91d0c4e323654e0782bc2a3af20b1573b2119bc98c2fa7110915078ca357c2b4",
+    "size": 248,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/original hive os complete/hive_bootstrap.sh",
+    "sha256": "9e22306bff07bb14703971a6690d43c917190218331ffd6f6d3d8bf8a6367941",
+    "size": 8021,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/shell/notes.txt",
+    "sha256": "9e2eab6fe17e994e6ddfd3da3eabc2fa3b659e15e6f8c8af8ccc0b335a981b42",
+    "size": 144,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/agents/architect_agent.py",
+    "sha256": "6c5f842031c607841c50e19ec64e53fd04f4e78a000bbe4480d45960005d93cb",
+    "size": 14277,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/agents/assistant_agent.py",
+    "sha256": "f02bc97fb2501f1ce85aedcf819d21b43accbd1c9dbbb5d7bb54ff2cd5d5dfdf",
+    "size": 12850,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/gateway_bridge.py",
+    "sha256": "ae4d807edb113fb1ad880916affd28bc75027f30c1fd3072d627f291a9bfdecb",
+    "size": 9315,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/hive-swarm.py",
+    "sha256": "b45235be5e3fffc2f44d8bd6c9cc4a239ca61c802535deb5ce3598858644204c",
+    "size": 10031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/hive_state.json",
+    "sha256": "93dcec64a92c2b8ba6baa4d249ea11777b8700befdf80a00c9aec3019b991366",
+    "size": 1031,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/hive_swarm_integration.py",
+    "sha256": "b2b01528fdf971121e1eb5b31edbce462200762ef92f7a1bb3123de6b9d88f55",
+    "size": 12222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/EVOLUTION_PHASE_3.md",
+    "sha256": "08f4bc4db7b1717c38dd676f678d9e2e290a96d165eedd70e3ce80ab2456166e",
+    "size": 6847,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/EVOLUTION_REPORT.md",
+    "sha256": "9b58653610306aa2f059778e191573284ce0ad62a64185cc2973a532bed35c02",
+    "size": 4213,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/FINAL_ATTRIBUTION_REPORT.md",
+    "sha256": "e40e56e58397543d2e7e7e6973b9ac75e0bb0e0d397830e7d5d4c9d3088df210",
+    "size": 3974,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/FINAL_REVISED_REPORT.md",
+    "sha256": "921f2ee13e330d29bb8daec992ad52557ef93c4ff2e363bcf29189dcd35b4dac",
+    "size": 5448,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/HSL_DEFINITION.md",
+    "sha256": "914405be709f1e670bbfbb204086998e0526b530bddb42b372d937777179c6e1",
+    "size": 569,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/REBUILD_REPORT.md",
+    "sha256": "26c4bb6de9ddf8aa4e30f0c0d88fccad9435fffd416532849b753290c7939ccf",
+    "size": 4135,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md",
+    "sha256": "21a1ce0086332a82a678dadff5c48f83d9e2c0ee08abdf7892b6a6199461279f",
+    "size": 7733,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/SWARM_REGISTRY.md",
+    "sha256": "b52c81e6c62a9cb02b1b0292dcb0baf605d2f1a5c2193b33af80c1203cad3083",
+    "size": 3025,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/correlation_matrix.md",
+    "sha256": "e23606d7e8e7817da5d23e418b42d864935f835451af0ecd76361f106d203fb2",
+    "size": 1500,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/protocol.md",
+    "sha256": "0dcd6bd029da7e7afe3f71797d05d3c1bb67f93dbf78365e1b321e7195aec181",
+    "size": 974,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/registry/the-hive-tools-README.md",
+    "sha256": "f81c78866cc4f3613c958b9332c4b8b0aa3c04594e227a63e73efe05506897be",
+    "size": 980,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/swarm_orchestrator.py",
+    "sha256": "84d193babf7eea00078ffd0992bdaa9873ccc15103ce911685c6ace1fc30a0c6",
+    "size": 13961,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/swarm-core/swarm_pet.py",
+    "sha256": "8909af1985ecf2df76b0ef6ec17705e475a480dda4e557b9b8517828439ec2a4",
+    "size": 7217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/README.md",
+    "sha256": "8e16a5970e6f998b539f027b049ff6e002f4efa9a2569807810bf0ba6523dc40",
+    "size": 2086,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/batch_job_runner.py",
+    "sha256": "31687fa6f857012a7850b9a4e33284213dfdde76fbe007b7fb6ec8e0aea286c4",
+    "size": 7378,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/blockchain_batch_checker.py",
+    "sha256": "d458a9f8e6102b9d28f16e3d191a56a062eaeac2425265f4ce1b47b0eb884a2b",
+    "size": 6956,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/blockchain_monitor.py",
+    "sha256": "d720c53d7466ccc7f3b211ae42576a80f925233c1b88ed1929072ce5a786a33c",
+    "size": 3684,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/condition_simulator.py",
+    "sha256": "95c9493d3bae6b824f36aa3ffc687506d77c08e042024199e113673b3e037c35",
+    "size": 7581,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/deep_disassembler_sqvi.py",
+    "sha256": "6093927681c45845d7e68dca4d4ff23d99f67d14292c193d526c6c26aed0753b",
+    "size": 15308,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/heap_scanner.py",
+    "sha256": "5e8337be3a21a5f32bca18fa4c65c1134a187710525def9424d1058e4bf06933",
+    "size": 582,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/hive_health_monitor.py",
+    "sha256": "c0f4debaed78ac326149c8487e79694a1bab1143bfb711a31135fe80169d6f03",
+    "size": 5628,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/hive_menu.py",
+    "sha256": "09c5afcfcb2a094018c03e55a694627f19a601673a5a94b4e119119027ffbea7",
+    "size": 645,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/hive_tool_builder.py",
+    "sha256": "cd836c404bef07a77baafb18ef46e7ed3898343f15720ed3661c27a56fcf94bd",
+    "size": 3820,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/inject_payload.py",
+    "sha256": "9cd7f4fba26f6f4300039f2fab23ecbd3dc9ab48896cc91e57ba446b32962792",
+    "size": 1126,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/multi_address_generator.py",
+    "sha256": "20c8362ca3be57429f6768b5c35404153ce3db830421c3525d64f19223e6a2e1",
+    "size": 6701,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/obfuscation_layer.py",
+    "sha256": "6ea4c6f19ec58c6b742f2f01393558bc1f438a8dc07cc744cbb460e349cae29d",
+    "size": 7979,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/parallel-scanner.py",
+    "sha256": "10dd976495155500a49c1edde7bd6285ba514b4d40dc6766adaffcee6ad51fcc",
+    "size": 646,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/recon_node.py",
+    "sha256": "44ab7ed8479be5eae0b6d48996844f485453ea1cbdf1ff0839eb52b69993c877",
+    "size": 1443,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/resonance_scanner.py",
+    "sha256": "256cd80b1602e0cd9f7c2e048436b4ffc43d24be1b04b2993b90377eedcc0638",
+    "size": 5328,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sci_deep_disassembler.py",
+    "sha256": "4580c946a7ecb0bb233a4990b0b5a116514a89e170f34d07daee2e2b2bd392ec",
+    "size": 11332,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sci_emulator.py",
+    "sha256": "068452e41d7063770a924594a05449b3ef0c08678f3ebef8dab7947bedfdda8b",
+    "size": 3158,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sci_script_layout_validator.py",
+    "sha256": "b64e59d6dce8831f333d6aeacaf57a7ac9e9369d2a428284b69c3a0eff78a3a3",
+    "size": 1770,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sci_selector_tracker.py",
+    "sha256": "614f20eabbeb1d08191309e020194ebe497c73e363db05b7a5293d2d1a9a55c5",
+    "size": 620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/series-comparator.py",
+    "sha256": "bd137e25efcdd738c74aa24f0d50f2f54631156110b2246ff698631044a4b3f7",
+    "size": 648,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/series-evolution-analyzer.py",
+    "sha256": "0f6d4d760a770df332f12ca0bd2b006dcba612e4ca703baa868073093a7b6725",
+    "size": 660,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sq_investigation_suite.py",
+    "sha256": "620ae3e96e4b230d590c8466ee3215b511eb35e555be2644ad58ad43aaa580e5",
+    "size": 9468,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sq_series_scanner.py",
+    "sha256": "f9d34ed6542da9a1a81cfd3954850e3e498b8888181cf7a462cae106c7b01665",
+    "size": 7800,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/sqvi-deep-scanner.py",
+    "sha256": "f0a42769efd5b376ad01c71cc162c6374dcf70febe306925a67e4ebd4c71acbd",
+    "size": 636,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/variable_tracer.py",
+    "sha256": "3109bcc061b98ef0b15ef81781d83c5398db154a088f5a943767cf397364fa97",
+    "size": 620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/wallet_crypto_simulator.py",
+    "sha256": "83c082c8034cf060287db2a3c237936e2379b712706629ea3e04afd98bf21ece",
+    "size": 7835,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/Hive Ops Final/tools/wallet_extractor.py",
+    "sha256": "d26effba6409623b29246a2ea654a5c776f180bfc05541829586551950b6a3d4",
+    "size": 636,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE10_REPORT.md",
+    "sha256": "7b184101e29a35b862d3a8982a16c67ce056be9079b076970efe438046e8bc45",
+    "size": 9899,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE11_REPORT.md",
+    "sha256": "a24f2817a91acd3108ccb0aad174e4ba2015865e7449d7a1b5cbc8f6e1f5ea8e",
+    "size": 3401,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE12_REPORT.md",
+    "sha256": "627bbe7d950ea7dcd5db165c1fef6e42d5e9da2d5b6b80156c8d10d1f20d7afa",
+    "size": 1296,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE13_REPORT.md",
+    "sha256": "a4bd8acfa3caa967a6e76cb087a7dec894e7262714f9bd1bb8a7e8786915446d",
+    "size": 3843,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE14_REPORT.md",
+    "sha256": "95e14c0fc9f4952dd42e8b4d8e2c2fe1af0863bca8776cff3dcee3df8b1e8cbb",
+    "size": 6803,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE15_REPORT.md",
+    "sha256": "6380ecf688d668b7e0c60f8c66da42bf02f9ae01e6f7fc0d5c005ece390efec7",
+    "size": 5411,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE16_REPORT.md",
+    "sha256": "052406d888db8f368a02bdc55ed5f8ad61e9e309ac1fa5d2242cf4aa473087bc",
+    "size": 3651,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE17_REPORT.md",
+    "sha256": "60c41b0c4fb0491b51e98e7335d5f46071745906663dbd63167351592c5765e1",
+    "size": 5614,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE18_REPORT.md",
+    "sha256": "844baefa2133943fc4b8d7b066693241e98667a6da0c7f1b7cae6c716f099a4d",
+    "size": 3419,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE19_REPORT.md",
+    "sha256": "f897be300e43771add0556f0d91c5acbb1f5aac4490d0e058a37be988f16222e",
+    "size": 7759,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE1_REPORT.md",
+    "sha256": "7f695cd3306c4f05e8a82465994c3370ad7c53712b84add71b2b200e44355ed8",
+    "size": 4654,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE2_REPORT.md",
+    "sha256": "6983f7f546fc6313711ac1b0d7adec87630a295cbf295e987fdee62d06c79960",
+    "size": 6125,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE3_REPORT.md",
+    "sha256": "ffc7b9409c58b25dfb07660083f3b77ef138a4d687cc0915d1ecfea0a28b148d",
+    "size": 8574,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE4_REPORT.md",
+    "sha256": "41ff9937dfcdc784b567c85cd25d7a1506b6e18c3842849a54f19738e1d64be5",
+    "size": 8390,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE6_REPORT.md",
+    "sha256": "ba8bfdf7c8109c3e7d5486ca8735ef405931c05f7489c1e1cda4a3fbd00b9d1d",
+    "size": 9449,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE7_REPORT.md",
+    "sha256": "5a180ff16ef42fdbef308ab4053189daf3a7026c9b814006b1cbd8c4010ef575",
+    "size": 6166,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/MILESTONE8_REPORT.md",
+    "sha256": "9d6a0ee61da33e8469a005f25dcc2e12ac0529796c03872ff56c5b4d746cb599",
+    "size": 6762,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/RC_API_SCHEMA_INVENTORY.md",
+    "sha256": "043e6d12ef20c6e4fb611e70973f379763e9048d2524577ebc31f1062f82d5dc",
+    "size": 10082,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/RC_API_SCHEMA_INVENTORY_MIN.md",
+    "sha256": "01b777510862fa0665a8e8f73be871bf77328d18d1a48360699dc2610884df0c",
+    "size": 2137,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/README.md",
+    "sha256": "85c634f4545d9431fec9d3eabaf7bc374dcb29fee19d5ec796482ed9b9d2244e",
+    "size": 16835,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/bin/hive",
+    "sha256": "1ec9ef257884181ba1ed3e0a9b38072961d4131699fdede18b989fca73e19e7d",
+    "size": 9498,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/bin/test.py",
+    "sha256": "9505ae5134b07c4182627ce63c1aadca70820bf8d95013911ff0e65030d9ebaa",
+    "size": 97,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/brain-plug/README.md",
+    "sha256": "5663686b317e42915dc269b41a81d31a07bca006ef9b87ed299ea81e44fd2050",
+    "size": 5841,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/brain-plug/escape_living_ai.txt",
+    "sha256": "945dd8f4ac396796215f11e3952a090495f7449738b5a4a080dae0a95835714e",
+    "size": 244302,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/brain-plug/therapist_code only.py",
+    "sha256": "34af5d4d3a0eeb52f433ef03f5464716ae99eafcf702ba8d158fa13b97eff435",
+    "size": 81439,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/__init__.py",
+    "sha256": "9ffbe22560913e89ce0e51a1d48234b64d89ba55a1100beecc8a1aaf242874e7",
+    "size": 654,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/audit.py",
+    "sha256": "afc3229cf125457cbec20baf8c420430b0bc6e1a45f88b945902feeee0b67a0a",
+    "size": 1724,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/cli.py",
+    "sha256": "9464107ee8a4fe80844bb4d9e32e327da3c917e8cae115d311b0ccdea1a78686",
+    "size": 7650,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/config.py",
+    "sha256": "d4d2841e528b3eb37b94fd846aeccf680b799c881536f24f11551e396917ffba",
+    "size": 16748,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/defaults.py",
+    "sha256": "a6d5ec6f4c1ae3c6df5e862916a01d36c6f4f8b1e024f0810d9b3a689da682ac",
+    "size": 11380,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/environment.py",
+    "sha256": "46be223373dbb5c75b6b8b6c167a42ea8f3e43566112f73a5f294f1ce140843a",
+    "size": 2129,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/errors.py",
+    "sha256": "1a121fdb905cb57cf7c113bbdc71e62d2b74d9409699366567e6c1c3f62330e4",
+    "size": 950,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/loader.py",
+    "sha256": "0fd2e328b4916ae5db2903fbf0346c0334aeed8558e87703f8735920cae8cc4e",
+    "size": 3893,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/merger.py",
+    "sha256": "dfb8ffe07be2c07be5ecb4f38a1ef335ca04a154fe03d683f2de5f371550d25b",
+    "size": 4250,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/migration.py",
+    "sha256": "b8f1ac95107acd793e20f151a50a07e4e7a2f1630577ba52a717311204677365",
+    "size": 3979,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/persistence.py",
+    "sha256": "c49027439e061f184c52883fa4cf81124ddce1fa251d63c98dcf2d93976abd1d",
+    "size": 6749,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/preview.py",
+    "sha256": "cbd8a77a876d77e603108ce29c8b61d797eba00e4fe7650a923f9077bc390410",
+    "size": 1350,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/profiles.py",
+    "sha256": "4d3c80acc391cf857d64804f45f18f47c2379fed0bc3cd12d44aebe0044e6f5f",
+    "size": 3349,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/rollback.py",
+    "sha256": "3b669358fc0fbb8fdefdb49e33ba1e431ed91128b2447a03fe6992a20f685936",
+    "size": 1246,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/schema.py",
+    "sha256": "114319aa06664a0f69deae0cc2fd87bd6f790ba853ec1131ccda53b7de2c3a3b",
+    "size": 6775,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/transactions.py",
+    "sha256": "33ec62cd46aa89d9d303142a762e24f75423fcf810454c8c064eac44b03894c7",
+    "size": 4275,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/config_engine/validator.py",
+    "sha256": "1329a0e75b90dfdb2a2a59ffe3f5721f1f0bc8e0e1aa22beb787d149635ee3c8",
+    "size": 3683,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/ACTIVATION_AND_ROLLBACK.md",
+    "sha256": "4aa9bfdb25df4df93be1085198aa90764fd90cd59f7989ba3ce12e1087108851",
+    "size": 1622,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/ANTI_ROLLBACK_POLICY.md",
+    "sha256": "b4b570795e1008189b9e057bf57d0f2ac9c5b8daf1543ceda6e575c320492d9d",
+    "size": 553,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/BOOTSTRAP_AND_EMERGENCY_POLICY.md",
+    "sha256": "9579734d2539403f278714ecf3b8e50c23e06140f5068c3ea60c9ffc41de7549",
+    "size": 6779,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CANONICAL_SOURCE.md",
+    "sha256": "633c3dab98a13d5ef3b04602f16ee6ce2c14dbbfcc03b04a2ebed78a043ae3a8",
+    "size": 3286,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/COMPATIBILITY_LAUNCHERS.md",
+    "sha256": "8cf43bd6d4a2f379c06d2a1157d4d885f7ea3046927efe3140b3eb928e9cc878",
+    "size": 4289,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_BOOTSTRAP.md",
+    "sha256": "df6d46ec0a7ce1beddf6340e26f8ce5f3e4b8d53cd0350696a85d59cfa9214f7",
+    "size": 1788,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_ENGINE.md",
+    "sha256": "f244a8f63f5fc8af467f0b16e7d56c1540b3f715849a23868035b0b223f8c93d",
+    "size": 1505,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_MIGRATIONS.md",
+    "sha256": "0250059f4598c9dc7bff2be26c28dcfa620f990bbc55bb79f7944a4fe3f44abc",
+    "size": 379,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_PROFILES.md",
+    "sha256": "3d1c422f670d3fb021b8370c0936df54e4523069a1276e3934c1849b1ff967af",
+    "size": 487,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_ROLLBACK.md",
+    "sha256": "171be82fe312036e1a3c47e92c3c6fcea955b928748c146fa67ec744a3616701",
+    "size": 339,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_SCHEMA.md",
+    "sha256": "dd2b9102a3c61e5b91e68b348cb01ea39241c77f78e5f64e0fdacab74ba9b30d",
+    "size": 478,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CONFIGURATION_TRANSACTIONS.md",
+    "sha256": "4ecf7edd9d363bde41aa2233d091583c5a20a10c8d8cbc3db3e77012d57b27d4",
+    "size": 351,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/CREDENTIAL_MIGRATION.md",
+    "sha256": "0c351ed6d8393bb3b9cca01bfc76cfec24c09f7e99a146d91bd706565187d945",
+    "size": 891,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HERMES_INTEGRATION_BOUNDARY.md",
+    "sha256": "af9026fd68fca63b9c609ba77465fe7fba8ff335833c37cbfed798efd190c471",
+    "size": 182,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER.md",
+    "sha256": "a18a3883733b2f1479b7cd6af93e6e9b87c215e6b268cf7c7ddcb944f724463f",
+    "size": 139,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_APPROVALS.md",
+    "sha256": "8b003c48ece14b71d3f84cd1e74e4cb7af631c8b5463035e1c71d448d6f82b86",
+    "size": 192,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_AUDIT.md",
+    "sha256": "3eea52d2b5cf00d15111dd9bc0ad1863fb6377f085448cbdc23177cdde7b28dd",
+    "size": 117,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_CAPABILITIES.md",
+    "sha256": "2311fc79da8f95f7b0aa1f2526c7b389d432692d1877e832d715af3ebe13ad98",
+    "size": 154,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_EMERGENCY_STOP.md",
+    "sha256": "abf5eb7540530015283c02a85a78004ade28225139151eea56c07ab034ef6fe9",
+    "size": 150,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_PERMISSIONS.md",
+    "sha256": "f52db513f787ddefa08fb9dca1db447512fcd04fc07a4db0acbc5bd8fed42d1c",
+    "size": 159,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/HIVE_BROKER_TASK_MANIFEST.md",
+    "sha256": "561c493684b56ae3cdfe07b35319e9e05bd68519d9c9ccb642ff5ca7052e6a2a",
+    "size": 139,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/INSTALLATION_ARCHITECTURE.md",
+    "sha256": "c786948083becbd0658698d4a7c1096b96134fc762ad24703972294ee265493c",
+    "size": 1299,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/LEGACY_INSTALLERS.md",
+    "sha256": "09d47f6ab459b716ebb125ecf2de581a118cc5c40921a22204aaf01ff09b30b9",
+    "size": 832,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/LEGACY_SERVICE_MIGRATION.md",
+    "sha256": "c7cac9167c607bd79f26af64d215bcca912b983538a37c9274315a6a95da36c0",
+    "size": 426,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OFFLINE_UPDATE_BUNDLES.md",
+    "sha256": "c8a958668cfd5fa29e7f769aa02672781f153fccb609c7e78645bac43ae47072",
+    "size": 740,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER.md",
+    "sha256": "5c0eb263da4bbf468713a9b55f35d10b474a49fff076e5f08c198f2cd74d0c68",
+    "size": 104,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER_DIAGNOSTICS.md",
+    "sha256": "64688c409c51058efe18d19bf103bb082de63f69384c7272b2e2a1d9a6fae568",
+    "size": 103,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER_EVENTS.md",
+    "sha256": "343bc195a3b230164e8f62b378eb0c55f653ad49e84297444a78048b59326e63",
+    "size": 94,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER_JSON_API.md",
+    "sha256": "93a6c3bd1d73a78162586cdee16f0c9e98f92a96b0abe369994b26312c6ce627",
+    "size": 134,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER_SECURITY.md",
+    "sha256": "3954f46e4500d7a543e819e44f67ad022f3cc0df7656cb58783499b6d627e584",
+    "size": 98,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/OPERATIONS_CENTER_VIEWS.md",
+    "sha256": "ad0f13a442083db959ee6d0ed91a58bd01ffebae0276a4311ef4e2857eba08d5",
+    "size": 134,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PATH_MODEL.md",
+    "sha256": "c9f5ed0e82a24f835098448bd66633a5986866da62b9e09caf96fc9fceeab374",
+    "size": 3065,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_CAPABILITIES.md",
+    "sha256": "0fa48fa8f55b120c0a41ad903f2d6e63f0f63e56ed874d5881b26f2e0464e3aa",
+    "size": 1102,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_CONFIGURATION.md",
+    "sha256": "827a67917d47bf0e4ae61d5ad430e552e08df38a8ac46cdd0db5ccbefe3f132e",
+    "size": 568,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_DEPENDENCIES.md",
+    "sha256": "54df551d0d20b34ad3a55925fe2c7f6fa315bfef37e3ceec1e906bd28599f389",
+    "size": 306,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_DEVELOPMENT.md",
+    "sha256": "5c284ebe8c7933b8029620532385a4205a4e6a30f4b6b1dc212d20bb19c387b4",
+    "size": 497,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_LIFECYCLE.md",
+    "sha256": "403041e919bdbae2e68310c95bc1383a418de58665680dc2ab8a0177405d716a",
+    "size": 883,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_MANIFEST.md",
+    "sha256": "622828a7f74eb703b81554a091e72db9c583692b3ebe4b9825ef47c183f8d709",
+    "size": 1140,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_PACKAGES.md",
+    "sha256": "f4713580cf0e213d9a45aa35dc449f95f9cc5d2a59b0177150c1fb984036ec39",
+    "size": 265,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_REGISTRY.md",
+    "sha256": "81d585fbc2818d3c4869fee1a398857959d9edc0a437afb81ad845e290645045",
+    "size": 437,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_SDK.md",
+    "sha256": "7df579d303f445e68c908c6eaefbd5c49996e1935681315029782c80540206c4",
+    "size": 1222,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_SECURITY.md",
+    "sha256": "f215bfa73fc26bd95f2ac4f2249d633ee0090c009b20095a45e59be32ed7187d",
+    "size": 743,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PLUGIN_SIGNING.md",
+    "sha256": "090d7ea1525217225ce4fa7cc23333f6454c9117185ea5d2785160de82f16f94",
+    "size": 454,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_AUDIT.md",
+    "sha256": "d9803d298f7468b776cf1d7ba5e39eb33e045c8883c0ebeedfc56e9ce3ccd0ff",
+    "size": 373,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_BROKER_INTEGRATION.md",
+    "sha256": "cb1a3577b7a1e8b751bf4d1fe750322913930143e080c87f5558cd02d5c775cf",
+    "size": 360,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_DECISIONS.md",
+    "sha256": "8068ac970fb9e17f1382b679a1b7a1fd60c128ab2059f100ac87e81dfa9cf082",
+    "size": 279,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_EMERGENCY_RESTRICTIONS.md",
+    "sha256": "e9ede9adf95da0a50a1e08396af0cb279932f84af500828cd79ff4780970255d",
+    "size": 269,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_ENGINE.md",
+    "sha256": "e42a6ff9293e46d7955a11da6c5385ddfbaaa81802f11a1c2c64c8accea4c52c",
+    "size": 1137,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_PROFILES.md",
+    "sha256": "583160a219793253f10843f2637f57bdc5e48685bbcb00f42a3dcf6caa123561",
+    "size": 463,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_REQUESTS.md",
+    "sha256": "9fb7e050f57d734fec5dc27ddc8d00267b4f49e125d08913bce3b285e2313c7c",
+    "size": 476,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_REQUIREMENTS.md",
+    "sha256": "70929ae7b9287299c9c0581e65a73abb6ea8ce6e7e5b60eb41a3ef61a5cf4222",
+    "size": 402,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/POLICY_RULES.md",
+    "sha256": "411850516b15a44841d6586fb3448ccae673133f3b7ccdd8b8c23c0c3bb5a2e5",
+    "size": 605,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/PRODUCTION_SIGNING_CEREMONY.md",
+    "sha256": "1df19a2ff89c8064ef6b3202793198fae64988a92ad2fc02553f45e8e3bf2bac",
+    "size": 3596,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RECOVERY_ARCHITECTURE.md",
+    "sha256": "4e148077d185b1184f1cd84a41f4e6cf18fa83afa4751bd90ca6e58c64f2311d",
+    "size": 948,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_BUILD.md",
+    "sha256": "6a2d3b254306125f2c071453d8b5d6567ec609b0a4c7539007420d89deca10ea",
+    "size": 342,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_CHANNELS.md",
+    "sha256": "6534cafd3b8c3223d1d45dd9016dc82389f49748c229e711a15947a298e9abd2",
+    "size": 258,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_ENGINE.md",
+    "sha256": "b49836bb53b98197157e3a10192500d5f0721706f9e4fed49f3c11ddf495223b",
+    "size": 392,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_FORMAT.md",
+    "sha256": "9ee7fb031623509d72b99da3a0d8a06085173ef7f75ef9dc07eebafe43daef60",
+    "size": 479,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_INSTALLATION.md",
+    "sha256": "07aaf7a355d67c0e20d576ffbcc6793c2e31fe75d89a7fa5eb782265929971d2",
+    "size": 348,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_ROLLBACK.md",
+    "sha256": "82e24e23962782730c2ec67af4080864235ca964d7f3bf3ef03e1fe6da3d23a3",
+    "size": 257,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_SIGNING.md",
+    "sha256": "33de728ce43147763b6c9f0375963911af929652f470f37acda30305ac5d6c10",
+    "size": 374,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RELEASE_TRUST.md",
+    "sha256": "75c35f4580e9cdefa09596c771bcf81f0613032f051e3bcbb2de6d53e4e6206f",
+    "size": 260,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/RUNTIME_ENVIRONMENT.md",
+    "sha256": "d728f8b9602a7a9f52db227638229d916dca2f2bbbd6339d06bfa2bd21f3b14e",
+    "size": 2484,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SECURITY_BOUNDARIES.md",
+    "sha256": "ab59d0282241651d493263b48894be06b5303a053f544d0ddd084d760f9a82b8",
+    "size": 895,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SERVICE_HEALTH_CHECKS.md",
+    "sha256": "2ac9e7f13dec2271cd008b047e66b036c1e9963603ba6155184242963bb42512",
+    "size": 359,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SERVICE_MANIFESTS.md",
+    "sha256": "cf08b52c0e110dc56ad6045b32f24149de461e53f7abd8d9e18af73b344c1891",
+    "size": 699,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SERVICE_MODEL.md",
+    "sha256": "5c7e42dde87b440bc8d572819be4cc49242f8907de0761fe72b505bc4c2eff22",
+    "size": 2285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SERVICE_RESTART_POLICY.md",
+    "sha256": "c35781595209815a7dc17cd41daff07c6fa58c70ce8e55851e33a5c319c3bd6d",
+    "size": 282,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SERVICE_SUPERVISOR.md",
+    "sha256": "a90669af57224baef95adc4dc840be830f7a64968c72b87452f0284ef7dda039",
+    "size": 879,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/SUPPLY_CHAIN.md",
+    "sha256": "503b7242bcab5bb1a9f6630517405b0cbbd047a3e1931f7c486d0eefc8952856",
+    "size": 285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/UPDATE_ARCHITECTURE.md",
+    "sha256": "bc4a6752dc2c456c1862b903489b31f7ae9be5ec8a0de18dff1d7ef380a2ba63",
+    "size": 1347,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/VAULT_ARCHITECTURE.md",
+    "sha256": "c60f776bbac118351af70ea9094b2b8b8e18cc14a4769d2e0de910bdb7e8011e",
+    "size": 2063,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/releases/1.0.0-rc.1-known-limitations.md",
+    "sha256": "44bbbf60042ac22fafd83cfe59f65a4e37f533f5146581891e277f828fa42725",
+    "size": 1907,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/releases/1.0.0-rc.1.md",
+    "sha256": "26849007e1ae2a79d8b7c6738da2df8f2e50bae1eb5c25412b5d91ff31075b61",
+    "size": 1641,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/docs/releases/PRODUCTION_RELEASE_KEY.md",
+    "sha256": "5e7db209a3ec54e27a8bfe6a245dd2fe126f00452ebe5398ab7164431ebddc73",
+    "size": 706,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/emergency-repair.sh",
+    "sha256": "92372f674c25660b0d343c43065147a7152c2098a5afa91fc0e57c6627f7d728",
+    "size": 7405,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/examples/plugins/hive-status/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/examples/plugins/hive-status/hive_status_example.py",
+    "sha256": "74896eb4c9cc55cfdaebebd363e9422fe9ad07906ec7fa7e2456c1d1eb1d7b90",
+    "size": 756,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/examples/plugins/hive-status/manifest.json",
+    "sha256": "1096ed3782a9301c6a2be4913536a19e9c690895bb70430de74d282cf751b33d",
+    "size": 672,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive-canonical.json",
+    "sha256": "5b863cb4bc20555b230c809840662bb57497c4c4cd7c340d4cbebe320c5b6b02",
+    "size": 694,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/__init__.py",
+    "sha256": "95c87ca79ea914849f0aa2bb695029808c9ea790e3f23542fe83dfaa1622b1b5",
+    "size": 5918,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/adapters.py",
+    "sha256": "59c738f28b6b7ffec245437fcc3a0eb51a2178861d1a1d2e1f30019c1e85e448",
+    "size": 4771,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/approval.py",
+    "sha256": "98f761d591e9efcb84cac670a208740069ed95b883e1e3858a32ecd825b5bb70",
+    "size": 1691,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/audit.py",
+    "sha256": "65155170adc056ce2c834be3d1fe9807cced207788420c9efc8961fab33fc39b",
+    "size": 1763,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/capabilities.py",
+    "sha256": "ddb2d4febbe4b60825ff4646a97374cb857709cc80e8a97e7216e0c6a227bcd7",
+    "size": 2895,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/cli.py",
+    "sha256": "59fc56807b054d35af9b674b1fc76ffa16dd00fffd296a61788a7d61c2af1fa4",
+    "size": 4643,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/dispatcher.py",
+    "sha256": "906c8e5436d9cff6300ff8752c08f668d67d5681981dc9db6df1ce6031f8482d",
+    "size": 2145,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/errors.py",
+    "sha256": "84e5b488755bae094184c3ca50b456f3108fef7ed393f5021efd4bbfc9e16cb7",
+    "size": 769,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/intents.py",
+    "sha256": "94875444f7d3d96dcafaf3b60ed1d4d93537f45200e38de53dc023f3b98fbe50",
+    "size": 2525,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/policy.py",
+    "sha256": "1c9e87555a34803db2ad57ebc037a654a8afdb084079ea5da43830be4fddae47",
+    "size": 4536,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/schema.py",
+    "sha256": "2eda3d97105b2d0bc5745606184d37ae2e4b5c0c6e989de597de1ff5475de94f",
+    "size": 4158,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/session.py",
+    "sha256": "9640bf9e01bb557fb3cdcd61ef3296c29c4dab7cf8c928f3ba9e6f1f2617124d",
+    "size": 1939,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/stop.py",
+    "sha256": "93f52b48ef3e2d514d1b05e6da552a6e9bcefd2840a666c03eecd9d6d1f5e1c3",
+    "size": 429,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/transaction.py",
+    "sha256": "11fb4aede42ecf3e8d9f549abec07d605c7a7885107803b0663a31be0977282f",
+    "size": 1009,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/validator.py",
+    "sha256": "f4d5a70cbbe69313b5d642da346e5fc45c6456d4b41de1b4567b29928d6e9fc2",
+    "size": 2093,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/hive_broker/version.py",
+    "sha256": "e5b141c7a2a20cf0bd38b880fe7eb1ab627cf2a2fcd753dfa75b73fbff3fc794",
+    "size": 2239,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/install-termux.sh",
+    "sha256": "5e2c02a5f6e4dc024bacf891a51e47c2e073200c026b945966d66810cb8166e1",
+    "size": 11044,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/install.sh",
+    "sha256": "4e27c3f3c0cfe13ae3335a77d7838c16d16261c591a35e0f53a3a8da5bc478a7",
+    "size": 12841,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/README.md",
+    "sha256": "eab9d2aaecf690eb582224f2a824be70ea54abd10d84f2c7b761e0010dfe68be",
+    "size": 1270,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/__init__.py",
+    "sha256": "87b410eb606a86c8f3cbc318baa6ced07cb50e1910bd9781b3a47cf16c5980a4",
+    "size": 225,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/activate.py",
+    "sha256": "6d1fb783f48c94d61d57e0c1fb10579a7438d3d401719e96f65c6deb7e7f4594",
+    "size": 18370,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/install.py",
+    "sha256": "27c5aecec47f2cbad24d905fb7e03d7e1c67bbd2062b4770c4dd3d1245995270",
+    "size": 11116,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/journal.py",
+    "sha256": "874d63375d870203166dea6804dabb6942c19b2badf6603e0f972ddd1489924a",
+    "size": 2791,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/legacy.py",
+    "sha256": "e542e993d1f260eb18e394d29374cffd2135643be202dbcd7b5afeb27097226b",
+    "size": 8980,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/plan.py",
+    "sha256": "fbbff1048825da314bfbcc43c4018cab4001371094aa55eae59c0fa823496a5c",
+    "size": 6864,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/preflight.py",
+    "sha256": "598413f3e1ee0785d2375f0c06a630957a64a8b8dfdbb33de4cb8fe09ea1471a",
+    "size": 7573,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/rollback.py",
+    "sha256": "46f8e5ebdc0955bc29d90ff5a998e2ee9148d837adb82608008c7ba0a067136b",
+    "size": 1338,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/schema.py",
+    "sha256": "4ebabe0fffcd16f05aff1212d2b3c30a44ee6b97ac3ff2cfa075f83250cd4a99",
+    "size": 7538,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/staging.py",
+    "sha256": "645089a75705daece02cab4b3c65a805720add5f3d1a7da769d280f54a01b167",
+    "size": 5676,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/installer/verify.py",
+    "sha256": "29283a8802419b6b898e5f40c05f377d3f4af7b197f259384d0c781aa352722e",
+    "size": 1725,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/lib/hive_path.py",
+    "sha256": "6d422c037153dc1dd40f7adeb90d4c375addfe9b214955be755ecfa0f4eae117",
+    "size": 11383,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/lib/hive_runtime.py",
+    "sha256": "48a0b62ed2dd48c55702cca621efbfeb824365059cca50e9bcafc73859ad60bc",
+    "size": 5221,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/lib/hive_service_loader.py",
+    "sha256": "7f3b996f32d5e6d4207d259ce4d045ec6ea3a913a0cb8ad38bc6ba06ade2e017",
+    "size": 13432,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/manifest.json",
+    "sha256": "8cc339bf6229a2536b2219a95827b1a0938c01ff55b51cb4eb466896093bd45c",
+    "size": 66308,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/metadata.json",
+    "sha256": "c40f24c4f0eea052dad96ff3df229e36d92d8b013c5c338785cd46ebda234ed5",
+    "size": 531,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/__init__.py",
+    "sha256": "96f6ccd6395d00440e5e2f4aeaad6c4d979db9c266cc39323dc6bbe818c06633",
+    "size": 136,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/cli.py",
+    "sha256": "c7479895304642ba6bbaaf9dd6f63eb0fe355de36b3ea4a6a83deb54f4e9e94f",
+    "size": 4048,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/collectors.py",
+    "sha256": "172799328b3260a2a7803295a3fd8e0537081b601fc3eeeeb900b449aa0e3fba",
+    "size": 8665,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/data_sources.py",
+    "sha256": "1e674ecd64fea5f1634187ca4eed2be4f86772e676591951529c8b1e8dcbfc06",
+    "size": 2829,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/diagnostics.py",
+    "sha256": "f43efbd29c4086562d7065cda4c54a68e2fb38af0227276730e95a7924e900f0",
+    "size": 2881,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/errors.py",
+    "sha256": "60a11bf70e647213401361f208b67d2b528b82a4b33152290b52f40cf1722dea",
+    "size": 217,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/plugin_view.py",
+    "sha256": "74821f84fa7a1f475e554a148e54d299caae2e249a1b7181f231e85ff6de92b5",
+    "size": 782,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/redaction.py",
+    "sha256": "ddfd02961f476f11ab526e48e4597cce76564d0122a749d371332bb9addc1595",
+    "size": 1309,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/release_view.py",
+    "sha256": "d4b51c3c6417ddd8b408729bfd87004e80029083dc0ec400b469b753f710710e",
+    "size": 819,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/render.py",
+    "sha256": "02f061140cbaa174eecfd1a9c45631a1db44b46f43386e94da838bac35801750",
+    "size": 2476,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/schema.py",
+    "sha256": "c4819399fccb674c0cac5b99eb0978f1c9de8903823f8e02afc8cda2a21ffaa3",
+    "size": 1326,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/operations_center/view_models.py",
+    "sha256": "1152e46e6009e4e753024859b25101d424df5effc71f9066a97dfaa031a25431",
+    "size": 2072,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/__init__.py",
+    "sha256": "78b97d707ede0d7dda20f0dd9181047887eb8b6184a122e26672d17ac632dfdb",
+    "size": 1169,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/audit.py",
+    "sha256": "7940aab5b9acfd30e84149dec1ba812fe84b97a2cdc59fb6835a29f3ed982def",
+    "size": 2620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/broker_client.py",
+    "sha256": "0ae948359c80496c07e66cf0e753d3380a311e2d3b66449cc1e6a950c0935427",
+    "size": 4111,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/capabilities.py",
+    "sha256": "affec8c853879988fb64e5b895a7c9aa2e4491e785c658cee25602b2145ed756",
+    "size": 3309,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/cli.py",
+    "sha256": "2493c716a4c1d93606589744def1661cd4d6c34eb0eca5c6f8e4e0ec43dfe768",
+    "size": 8177,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/compatibility.py",
+    "sha256": "17d467a0bc4e1ca2eb33f505d553b3d1e824c4a2db5ae39090f82ebfa9ddde6c",
+    "size": 3477,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/configuration.py",
+    "sha256": "6e779334a6fe68e071590ed5d87fb1b37ca3d9fdbedbef543e53d7f457a25b0b",
+    "size": 2869,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/developer.py",
+    "sha256": "81bda81e956759262fe9af6c73b658aab966b7cf7daa1fa52a7b863f7cca213d",
+    "size": 2206,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/errors.py",
+    "sha256": "08ff8dbaa0b74ec79f0fa39d43f9ce479f0ae31b72ec7ecad7b5d3e26920769e",
+    "size": 1037,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/identity.py",
+    "sha256": "6a9de2f7c189f16ec78bf07de19551cf03a4be385ccbb4eb5f3dcc8122fba36b",
+    "size": 3404,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/lifecycle.py",
+    "sha256": "7b7594d27815c1d7e11fbafa3c6670562389e0289ebb9f27af84e37eb50dfe75",
+    "size": 2298,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/loader.py",
+    "sha256": "3b649fb992efb003d2d1c85f6a26c2930cb8c27ce44f967475f2ccdca4d846c1",
+    "size": 2630,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/manifest.py",
+    "sha256": "deb61d84fc00b5f1e14b7afbfaf8bb9eccbd33577ba74bac2a508dc2d1ecb15d",
+    "size": 10816,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/policy.py",
+    "sha256": "8069bebfc6ce202b116763757cc2f0a40e4f9e2394cf753c22e412d02339200c",
+    "size": 2370,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/registry.py",
+    "sha256": "c990458c62291d9b3d8c25330e9381947740101b465560eb77e4b4d0c2a13c0a",
+    "size": 2380,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/schema.py",
+    "sha256": "9bcf42f23a78407e99cad00081ba1909b5939bc1d7efbc8dce69696322c1b4e3",
+    "size": 1753,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/plugin_sdk/signing.py",
+    "sha256": "8edbc71bfe57ee7c1006c2dfd521c61a2c39482035272fc2bec96728af0c9d42",
+    "size": 1749,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/__init__.py",
+    "sha256": "f25d57587ed6e008916b1bfca7c4c9f999e6bea23d2fefc704bec51389408281",
+    "size": 567,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/actors.py",
+    "sha256": "67408af217ed33e681c24c22e60ac36ec4c3075ce85c2eaa060618e1bbc8f670",
+    "size": 766,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/audit.py",
+    "sha256": "d493fca801ea684b22fb378ca8f1bcdfe9dd6aa973cf7603adccc3d4b6031ccf",
+    "size": 2156,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/capabilities.py",
+    "sha256": "6f65524bea89728260237f346f9604eaa2abc29af5fb28b1a9934dc19823f788",
+    "size": 5651,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/cli.py",
+    "sha256": "2293b2f1374a0fdfcf9c0a43130829fe74bc2583dec7aae2643dcae0b262acb2",
+    "size": 5320,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/conditions.py",
+    "sha256": "648e45df989fc4d665af12e3fc15cc3f78fb74a6c1d39eab2258438878b02638",
+    "size": 3126,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/decisions.py",
+    "sha256": "69a269b88f3f4c303e1b9a4a39c0575d126f936c61034683e55a1e05294538c7",
+    "size": 3261,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/engine.py",
+    "sha256": "c71e3b4a778e195e2354e53355dcaa504fec25e5a663686e997caaf60f4febde",
+    "size": 4812,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/errors.py",
+    "sha256": "610072128ea8a5e2adb668db6e366ea5ed078a13e0eef9a387fbb7656de90d1f",
+    "size": 677,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/evaluator.py",
+    "sha256": "a45a5f768c02194458618dad8e078cb65e3338d7168547b20d0bbaf7eff148e9",
+    "size": 8507,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/loader.py",
+    "sha256": "59ef9ccac57da05b7a06d0caf731e6a3d07674b9bd26bdf926df21262790c99d",
+    "size": 3790,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/profiles.py",
+    "sha256": "84b53f7e1a9d9ffd8da188df9434475346e4df0af56a407de64dff8c6848272a",
+    "size": 6938,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/requests.py",
+    "sha256": "f9e2c624134c8cef261836ba6cbd8fe2269990e076f77232f91234fd953b4920",
+    "size": 5619,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/requirements.py",
+    "sha256": "94f1bbaefa2424bab958b2cfd79a14ef96dadd34bcbdd95a2f67715aa37d9e2c",
+    "size": 3887,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/resources.py",
+    "sha256": "f0b05a7e1a087a5ee06ed1c170196472af9c6af1652e90695dd24a51b7f089ff",
+    "size": 548,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/rules.py",
+    "sha256": "13df0a37bf148fc629b2cffbd65464397699c909f64f32973b733098f6f01a18",
+    "size": 7042,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/schema.py",
+    "sha256": "f09afba80f8db80c2ff74c97e673a9dece4a7fd7e3f36a0b3840adde4e3b7bf7",
+    "size": 4253,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/policy_engine/validator.py",
+    "sha256": "8706b4efe8aabd77789fe55021b3a6018840b2202b7c1af07ead290e6eb2a6c8",
+    "size": 1678,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/__init__.py",
+    "sha256": "decbb12872901b501cb01a83a619abb734b842531fc91c0d019393d07aaac8ed",
+    "size": 181,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/builder.py",
+    "sha256": "36b92a892296f26e2c211566987c9ed69764e186379e4d7627684d784f9870e7",
+    "size": 3237,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/channels.py",
+    "sha256": "45ce3d085c373131cbb8298494e9dea9e88e597e44f127a3b3280131f81ddf4e",
+    "size": 1085,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/cli.py",
+    "sha256": "b615729e04959cbbc3dfd04d1c2a356ea0fb9829865bfc3310db5514d7436929",
+    "size": 6615,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/dependencies.py",
+    "sha256": "a8cfc55e39568c15769fb2b61b754278a913334a9053ddee46d8aa19ffa17ca4",
+    "size": 3325,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/errors.py",
+    "sha256": "776dc5b8b708208a97fbc9d35c79ff39b1a36d72c2f3226e204d74041e2e8829",
+    "size": 605,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/manifest.py",
+    "sha256": "fe17981ea60dd2d606b1daab9cd32b368ef4513204b2fd5f2d73203cf9922783",
+    "size": 2224,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/plugin_package.py",
+    "sha256": "09d24da7db1d3ca17f6e2beb596a8c5f025496419d37662abb78727689600480",
+    "size": 3758,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/plugin_registry.py",
+    "sha256": "b9b3015b8eb5617409836decccc2ea87360692e6b2c0c8deafca756ef395acd3",
+    "size": 2953,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/registry.py",
+    "sha256": "74fc051043a274d996a2d777ed43340cad3b79505d921df1431cc956f6b6b4db",
+    "size": 2956,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/reproducibility.py",
+    "sha256": "1cf46a58babefdfa1aa38de03c724d6a168de27bd6f16725cf246056ce133d19",
+    "size": 2762,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/sbom.py",
+    "sha256": "d4dfc240dcc2e9a44d2f6c1721adee258cdf06c30818dfa7f0f3a00c202fd5b3",
+    "size": 1035,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/schema.py",
+    "sha256": "b569eecffa9413f36c5ddf9cf2855cb71edd6db8a84f095c790c1b768193bf61",
+    "size": 764,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/signing.py",
+    "sha256": "77304aa37a76c69ed8a84b1cfe23bd593220a145cc4b7c4555237b42f1edcb67",
+    "size": 1991,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/verifier.py",
+    "sha256": "b8a3875b677ada69c42ea61b7264b4add6c5b5f6fb0979f84ca522600c8c3daf",
+    "size": 3040,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/release_engine/version.py",
+    "sha256": "b4a768b36285d4b554f8f3b928a4ded0584f78a231c8afae43ab88bf30164a48",
+    "size": 2572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/requirements.txt",
+    "sha256": "7a29e50f925be429a5edc00fca38919f12bb63e18e427ad137ee933da0eb8f26",
+    "size": 723,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/__init__.py",
+    "sha256": "ab0144a30d0b7e57a0757d81eb44ba55be3da71857268fde028113b1c78605a9",
+    "size": 569,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/backend.py",
+    "sha256": "cdf0edfa9ca1a028cb736a025ed9ec34a3e04adedb68ca699900c88fb9cac458",
+    "size": 7942,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/cli.py",
+    "sha256": "f011cc3b13e84e8807de12fde48d9b06ff733ab0de58a3784371f27fee1c3c84",
+    "size": 6768,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/crypto.py",
+    "sha256": "d4fafe035fab73e0b7121dd34af4ef189ca709fc3e49f9068a2994970f33a436",
+    "size": 4329,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/errors.py",
+    "sha256": "54227058a8d3a8aa5344a8e07e1d1c2595f69d6ce93f5bcdba7827a0338cd95f",
+    "size": 607,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/format.py",
+    "sha256": "d7f144f174316bdb5d9259cf60eeecc1f047c330692fc4b606c48a419d671976",
+    "size": 4298,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/migration.py",
+    "sha256": "9aee39c8b973a8c54c7407825c07b776cab6045a1936ce3cba5176ec12fd479e",
+    "size": 2742,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/redaction.py",
+    "sha256": "7bf110fd4e3c1477c6a3b5d060c1e8088b89e7a3fd5d8eb7fae4ba3d11b3e9af",
+    "size": 1805,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/session.py",
+    "sha256": "9873e5cc6f270d21044dc0541ea8e5a2c252920c1a94b458612db17e18687378",
+    "size": 2334,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/security/vault/storage.py",
+    "sha256": "397333a5987783735ab2da887a8b777671475d807c37e176fa292b2d327e0dc3",
+    "size": 1993,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/__init__.py",
+    "sha256": "98220ab064dfff2b87d0daee7eda447a7c262abc323a75a312dbb12fa38da492",
+    "size": 80,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/cli.py",
+    "sha256": "c1b6d5e7cc72fdb3523583125ba7817b1c22afefa3b06a798e0299fcf66c95a9",
+    "size": 5872,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/errors.py",
+    "sha256": "f7a7e8ec58e1375407395e004fac55845041e61aabbac1cff89c6a75543f7e0f",
+    "size": 501,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/graph.py",
+    "sha256": "a08370ba0433e720f2653e3f8a7ff28d2afc009da3a5873e16528bb383d52aaa",
+    "size": 3465,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/health.py",
+    "sha256": "202717b688e0b46fd69ab2983e22c9bd246823ae5d8902bf4fc268b5fab52b30",
+    "size": 3285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/legacy.py",
+    "sha256": "57d803c98ba743d4e8fc91c742b4b0e0d2f0730fb93d2ac903709d975d14fe52",
+    "size": 2928,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/logging.py",
+    "sha256": "91ce71f7c240d5ae92e11f5988a1e922fc2a88e17b3e7a986575b34541a0ec97",
+    "size": 849,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/process.py",
+    "sha256": "2fa10bb581d77ebb0717ad290e9798387c1410fe3556b3d122c0886a51e17a28",
+    "size": 5464,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/registry.py",
+    "sha256": "6009d5e448bdc0edb77e7078cb0d15b059b1310fa124712294d55623a217ba5d",
+    "size": 3833,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/restart.py",
+    "sha256": "f447dbf7a7481c64caf2a204bafa1b1ecf586798449b29d748af3615fc568e0e",
+    "size": 2620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/schema.py",
+    "sha256": "db0cffb944c15958ea791a4971ac2113db2ae1b773e2efacb26a2602411ab13a",
+    "size": 6268,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/state.py",
+    "sha256": "f74473822758bbcb1eb018d1c427557024873b3b7d2ffff0bfb886f64cb64efb",
+    "size": 2251,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/services/supervisor.py",
+    "sha256": "7155da999e41946938e011cc24b62572330bb16f39340ed3b519a732675ca3ab",
+    "size": 9940,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/update.sh",
+    "sha256": "ea9ae38edb512acd3cd8d9a9d62d546bccc716ca5e960a0934f7cfbcd7d405ef",
+    "size": 4823,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/__init__.py",
+    "sha256": "c4e5598fbd2d253e3047567245998e230bbab7f89e7632033e4ee3253292e89c",
+    "size": 958,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/bundle.py",
+    "sha256": "71ff01d7cacf9ef84bf591a4494321299cc15cf720777fca6aa8c03c1d16403a",
+    "size": 5571,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/cli.py",
+    "sha256": "86fdca91881e6a7877482b7da8ae15698843f9d4d6dd9de973804733f0a6fa7c",
+    "size": 4743,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/errors.py",
+    "sha256": "3175ec9bd28031a578eece80d8b999083eba9a324f9d05546c5cbfd4300e0dc0",
+    "size": 682,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/manifest.py",
+    "sha256": "a26de28ed39867c8d15da7044b1c09a865fae0502cedbb7185e9b93bac5f3f81",
+    "size": 3415,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/metadata.py",
+    "sha256": "cb0be846f6c74458fa0757e6ad0e7ee2e632733ab8f30f91bae2941a01f764cd",
+    "size": 6151,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/planner.py",
+    "sha256": "84d0f88a6e0341abe14774fda8b4e3eed6f0b243d411bd5efe16e87b83fc92b6",
+    "size": 1943,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/recovery.py",
+    "sha256": "1b7d461d433132babd9fae7141cabcac58c07f6aeb24fda3115ad66679734a97",
+    "size": 2284,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/recovery_cli.py",
+    "sha256": "0c514fd62501e7a58556e2b9e315dc2933c1bcd4fb1b3434e882d8a75f87a00c",
+    "size": 1313,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/signing.py",
+    "sha256": "d43600651c3f5d83fce0e7c78738f8b1f4084ed35bb79befa77f9430c5cf3593",
+    "size": 3602,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/trust.py",
+    "sha256": "929b948544df0c34d26e10814f0d01f7dac638a7136511559ef62299defa7db7",
+    "size": 7908,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/updater.py",
+    "sha256": "ad0c9f1e444950691c072ccccd2b136aca231c0e27c96ab71e6474b56e3c7f24",
+    "size": 2806,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/.verify-unsigned/updates/verifier.py",
+    "sha256": "7e704708808639d306d94b0986d53fcddb70639d8b655adf8e895658784c44e2",
+    "size": 2560,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/hive-os-1.0.0-release.manifest.json",
+    "sha256": "53a4b35363fbef2a56051055fba127cbe2cb0a4d3bc7f739332122b0317667f2",
+    "size": 83381,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/hive-os-1.0.0-release.metadata.json",
+    "sha256": "23b9057e0dacc309186e40a30ef27d23e66f8d4c5dde5a823dafb5e4aa2db90f",
+    "size": 720,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/hive-os-1.0.0-release.tar.gz",
+    "sha256": "b5456129715836b56ff696178f0b5ed1e1db43dd5568a11c6d4c0d88de8c322a",
+    "size": 618451,
+    "type": "required"
+  },
+  {
+    "executable": true,
+    "path": "release-output-pre-rotation/hive_key_rotation_helper.cmd",
+    "sha256": "471bd11a4e4605a973760c9fcaed3e2adabd5698f537f76ea29faaef7a63a158",
+    "size": 275,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/hive_key_rotation_helper.py",
+    "sha256": "8df0798da24d2e56aee5f37132adaf4355eaf2624d7b5cf7647ede42ea28fbc7",
+    "size": 4972,
+    "type": "required"
+  },
+  {
+    "executable": true,
+    "path": "release-output-pre-rotation/sign_metadata.cmd",
+    "sha256": "63da5ed9a3431f7e82f7bd01a8c7aa36c746953efa0240cb33006705e69bfeff",
+    "size": 594,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release-output-pre-rotation/sign_metadata.sh",
+    "sha256": "71e52bd8434589c6c837c29a4db21f974531e0a067bdb8ca6f81b3ea2796df8e",
+    "size": 618,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/__init__.py",
+    "sha256": "decbb12872901b501cb01a83a619abb734b842531fc91c0d019393d07aaac8ed",
+    "size": 181,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/builder.py",
+    "sha256": "36b92a892296f26e2c211566987c9ed69764e186379e4d7627684d784f9870e7",
+    "size": 3237,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/channels.py",
+    "sha256": "45ce3d085c373131cbb8298494e9dea9e88e597e44f127a3b3280131f81ddf4e",
+    "size": 1085,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/cli.py",
+    "sha256": "b615729e04959cbbc3dfd04d1c2a356ea0fb9829865bfc3310db5514d7436929",
+    "size": 6615,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/dependencies.py",
+    "sha256": "a8cfc55e39568c15769fb2b61b754278a913334a9053ddee46d8aa19ffa17ca4",
+    "size": 3325,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/errors.py",
+    "sha256": "776dc5b8b708208a97fbc9d35c79ff39b1a36d72c2f3226e204d74041e2e8829",
+    "size": 605,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/manifest.py",
+    "sha256": "fe17981ea60dd2d606b1daab9cd32b368ef4513204b2fd5f2d73203cf9922783",
+    "size": 2224,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/plugin_package.py",
+    "sha256": "09d24da7db1d3ca17f6e2beb596a8c5f025496419d37662abb78727689600480",
+    "size": 3758,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/plugin_registry.py",
+    "sha256": "b9b3015b8eb5617409836decccc2ea87360692e6b2c0c8deafca756ef395acd3",
+    "size": 2953,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/registry.py",
+    "sha256": "74fc051043a274d996a2d777ed43340cad3b79505d921df1431cc956f6b6b4db",
+    "size": 2956,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/reproducibility.py",
+    "sha256": "1cf46a58babefdfa1aa38de03c724d6a168de27bd6f16725cf246056ce133d19",
+    "size": 2762,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/sbom.py",
+    "sha256": "d4dfc240dcc2e9a44d2f6c1721adee258cdf06c30818dfa7f0f3a00c202fd5b3",
+    "size": 1035,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/schema.py",
+    "sha256": "b569eecffa9413f36c5ddf9cf2855cb71edd6db8a84f095c790c1b768193bf61",
+    "size": 764,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/signing.py",
+    "sha256": "77304aa37a76c69ed8a84b1cfe23bd593220a145cc4b7c4555237b42f1edcb67",
+    "size": 1991,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/verifier.py",
+    "sha256": "b8a3875b677ada69c42ea61b7264b4add6c5b5f6fb0979f84ca522600c8c3daf",
+    "size": 3040,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "release_engine/version.py",
+    "sha256": "b4a768b36285d4b554f8f3b928a4ded0584f78a231c8afae43ab88bf30164a48",
+    "size": 2572,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "requirements.txt",
+    "sha256": "7a29e50f925be429a5edc00fca38919f12bb63e18e427ad137ee933da0eb8f26",
+    "size": 723,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/__init__.py",
+    "sha256": "ab0144a30d0b7e57a0757d81eb44ba55be3da71857268fde028113b1c78605a9",
+    "size": 569,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/backend.py",
+    "sha256": "cdf0edfa9ca1a028cb736a025ed9ec34a3e04adedb68ca699900c88fb9cac458",
+    "size": 7942,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/cli.py",
+    "sha256": "f011cc3b13e84e8807de12fde48d9b06ff733ab0de58a3784371f27fee1c3c84",
+    "size": 6768,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/crypto.py",
+    "sha256": "d4fafe035fab73e0b7121dd34af4ef189ca709fc3e49f9068a2994970f33a436",
+    "size": 4329,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/errors.py",
+    "sha256": "54227058a8d3a8aa5344a8e07e1d1c2595f69d6ce93f5bcdba7827a0338cd95f",
+    "size": 607,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/format.py",
+    "sha256": "d7f144f174316bdb5d9259cf60eeecc1f047c330692fc4b606c48a419d671976",
+    "size": 4298,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/migration.py",
+    "sha256": "9aee39c8b973a8c54c7407825c07b776cab6045a1936ce3cba5176ec12fd479e",
+    "size": 2742,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/redaction.py",
+    "sha256": "7bf110fd4e3c1477c6a3b5d060c1e8088b89e7a3fd5d8eb7fae4ba3d11b3e9af",
+    "size": 1805,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/session.py",
+    "sha256": "9873e5cc6f270d21044dc0541ea8e5a2c252920c1a94b458612db17e18687378",
+    "size": 2334,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "security/vault/storage.py",
+    "sha256": "397333a5987783735ab2da887a8b777671475d807c37e176fa292b2d327e0dc3",
+    "size": 1993,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/__init__.py",
+    "sha256": "98220ab064dfff2b87d0daee7eda447a7c262abc323a75a312dbb12fa38da492",
+    "size": 80,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/cli.py",
+    "sha256": "c1b6d5e7cc72fdb3523583125ba7817b1c22afefa3b06a798e0299fcf66c95a9",
+    "size": 5872,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/errors.py",
+    "sha256": "f7a7e8ec58e1375407395e004fac55845041e61aabbac1cff89c6a75543f7e0f",
+    "size": 501,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/graph.py",
+    "sha256": "a08370ba0433e720f2653e3f8a7ff28d2afc009da3a5873e16528bb383d52aaa",
+    "size": 3465,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/health.py",
+    "sha256": "202717b688e0b46fd69ab2983e22c9bd246823ae5d8902bf4fc268b5fab52b30",
+    "size": 3285,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/legacy.py",
+    "sha256": "57d803c98ba743d4e8fc91c742b4b0e0d2f0730fb93d2ac903709d975d14fe52",
+    "size": 2928,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/logging.py",
+    "sha256": "91ce71f7c240d5ae92e11f5988a1e922fc2a88e17b3e7a986575b34541a0ec97",
+    "size": 849,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/process.py",
+    "sha256": "2fa10bb581d77ebb0717ad290e9798387c1410fe3556b3d122c0886a51e17a28",
+    "size": 5464,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/registry.py",
+    "sha256": "6009d5e448bdc0edb77e7078cb0d15b059b1310fa124712294d55623a217ba5d",
+    "size": 3833,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/restart.py",
+    "sha256": "f447dbf7a7481c64caf2a204bafa1b1ecf586798449b29d748af3615fc568e0e",
+    "size": 2620,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/schema.py",
+    "sha256": "db0cffb944c15958ea791a4971ac2113db2ae1b773e2efacb26a2602411ab13a",
+    "size": 6268,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/state.py",
+    "sha256": "f74473822758bbcb1eb018d1c427557024873b3b7d2ffff0bfb886f64cb64efb",
+    "size": 2251,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "services/supervisor.py",
+    "sha256": "7155da999e41946938e011cc24b62572330bb16f39340ed3b519a732675ca3ab",
+    "size": 9940,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "update.sh",
+    "sha256": "ea9ae38edb512acd3cd8d9a9d62d546bccc716ca5e960a0934f7cfbcd7d405ef",
+    "size": 4823,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/__init__.py",
+    "sha256": "c4e5598fbd2d253e3047567245998e230bbab7f89e7632033e4ee3253292e89c",
+    "size": 958,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/bundle.py",
+    "sha256": "71ff01d7cacf9ef84bf591a4494321299cc15cf720777fca6aa8c03c1d16403a",
+    "size": 5571,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/cli.py",
+    "sha256": "86fdca91881e6a7877482b7da8ae15698843f9d4d6dd9de973804733f0a6fa7c",
+    "size": 4743,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/errors.py",
+    "sha256": "3175ec9bd28031a578eece80d8b999083eba9a324f9d05546c5cbfd4300e0dc0",
+    "size": 682,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/manifest.py",
+    "sha256": "a26de28ed39867c8d15da7044b1c09a865fae0502cedbb7185e9b93bac5f3f81",
+    "size": 3415,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/metadata.py",
+    "sha256": "cb0be846f6c74458fa0757e6ad0e7ee2e632733ab8f30f91bae2941a01f764cd",
+    "size": 6151,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/planner.py",
+    "sha256": "84d0f88a6e0341abe14774fda8b4e3eed6f0b243d411bd5efe16e87b83fc92b6",
+    "size": 1943,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/recovery.py",
+    "sha256": "1b7d461d433132babd9fae7141cabcac58c07f6aeb24fda3115ad66679734a97",
+    "size": 2284,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/recovery_cli.py",
+    "sha256": "0c514fd62501e7a58556e2b9e315dc2933c1bcd4fb1b3434e882d8a75f87a00c",
+    "size": 1313,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/signing.py",
+    "sha256": "d43600651c3f5d83fce0e7c78738f8b1f4084ed35bb79befa77f9430c5cf3593",
+    "size": 3602,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/trust.py",
+    "sha256": "da649aca55e1f7654c668c3567ec4991498843ae85957532e2c5e49ad64e0778",
+    "size": 8530,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/updater.py",
+    "sha256": "ad0c9f1e444950691c072ccccd2b136aca231c0e27c96ab71e6474b56e3c7f24",
+    "size": 2806,
+    "type": "required"
+  },
+  {
+    "executable": false,
+    "path": "updates/verifier.py",
+    "sha256": "7e704708808639d306d94b0986d53fcddb70639d8b655adf8e895658784c44e2",
+    "size": 2560,
+    "type": "required"
+  }
+]

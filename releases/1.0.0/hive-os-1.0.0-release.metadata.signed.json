@@ -1,0 +1,31 @@
+{
+  "manifest_digest": "ef38b21cf687c5955a488ef8db8d4bd8628a9bb4a6078588594c38d8ba0b81b1",
+  "release": {
+    "architectures": [
+      "aarch64",
+      "arm",
+      "x86_64"
+    ],
+    "build_id": "release",
+    "channel": "stable",
+    "created_at": "2026-08-14T21:19:11Z",
+    "minimum_supported_version": "0.0.0",
+    "platforms": [
+      "android",
+      "linux"
+    ],
+    "release_id": "hive-os-1.0.0-release",
+    "release_sequence": 20,
+    "source_revision": "de5ebe4ae9fd340331b796a67e70d484cd13e7d8",
+    "version": "1.0.0"
+  },
+  "revocation": {
+    "sequence": 0
+  },
+  "schema_version": 1,
+  "signing": {
+    "algorithm": "Ed25519",
+    "key_id": "hive-release-prod-2026-02",
+    "signature": "uegE4FRebfBO-uWDnO3wDaq3LlteJZoZVTYLaecm4zeqdcxMOn28a2wd_3_GpdCxVx8L57mV82gQtXzGr60GAw=="
+  }
+}

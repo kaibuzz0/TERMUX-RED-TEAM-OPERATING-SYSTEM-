@@ -1,0 +1,11 @@
+# Hive OS 1.0.0 Release Checksums
+# Product: Hive OS
+# Version: 1.0.0
+# Channel: stable
+# Source revision: de5ebe4ae9fd340331b796a67e70d484cd13e7d8
+# Release sequence: 20
+# Production key ID: hive-release-prod-2026-02
+# Production fingerprint: 55c4ca0853756b608c250f687ea8aa3f5ab9157240a243648303185b5f6925f4
+
+3a6240a515076dfea430c0004730710f7208138c61da1f71966fe0a10da9e7b8  hive-os-1.0.0-release.tar.gz
+ef38b21cf687c5955a488ef8db8d4bd8628a9bb4a6078588594c38d8ba0b81b1  manifest_digest
