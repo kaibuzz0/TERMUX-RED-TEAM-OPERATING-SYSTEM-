@@ -98,6 +98,8 @@ class TrustStore:
             key_id = f"key-{len(keys) + 1}"
             fingerprint = ""
             purpose = "release"
+            status = "active"
+            replacement_key_id = None
             has_key_id_comment = False
 
             preceding = entries[idx - 1]
@@ -110,6 +112,10 @@ class TrustStore:
                     fingerprint = line_stripped.split(":", 1)[1].strip()
                 elif line_stripped.startswith("# purpose:"):
                     purpose = line_stripped.split(":", 1)[1].strip()
+                elif line_stripped.startswith("# status:"):
+                    status = line_stripped.split(":", 1)[1].strip()
+                elif line_stripped.startswith("# replacement_key_id:"):
+                    replacement_key_id = line_stripped.split(":", 1)[1].strip()
 
             if not isinstance(pub, Ed25519PublicKey):
                 if has_key_id_comment:
@@ -143,7 +149,8 @@ class TrustStore:
                 key_id=key_id,
                 public_key=pub,
                 role=purpose,
-                status="active",
+                status=status,
+                replacement_key_id=replacement_key_id,
                 fingerprint=computed if not fingerprint else fingerprint,
             )
         return cls(keys)
