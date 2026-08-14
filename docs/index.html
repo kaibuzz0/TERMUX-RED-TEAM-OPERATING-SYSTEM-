@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hive OS 1.0.0 - A hardened autonomous runtime for Termux, Android and Linux.">
+  <title>Hive OS 1.0.0</title>
+  <link rel="stylesheet" href="assets/css/hive.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <nav>
+    <div class="container nav-inner">
+      <div class="logo">HIVE<span>OS</span></div>
+      <div class="nav-links">
+        <a href="#what">What</a>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="#security">Security</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#docs">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1>HIVE OS</h1>
+      <p class="tagline">A hardened autonomous runtime for Termux, Android and Linux.</p>
+      <div class="version-pill">
+        <span>Version: Hive OS 1.0.0</span>
+        <span class="stable">● STABLE</span>
+      </div>
+      <div class="hero-buttons">
+        <a class="btn btn-primary" href="#install">[ INSTALL HIVE OS ]</a>
+        <a class="btn" href="#docs">[ VIEW DOCUMENTATION ]</a>
+        <a class="btn btn-green" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.0.0" target="_blank" rel="noopener">[ GITHUB RELEASE ]</a>
+        <a class="btn btn-purple" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-" target="_blank" rel="noopener">[ VIEW SOURCE ]</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- WHAT IS HIVE OS -->
+    <section id="what">
+      <div class="container">
+        <h2><span class="num">01</span> What is Hive OS?</h2>
+        <p>Hive OS is a secure, compartmentalized operating environment built for Android, Termux-PROot and Linux shells. It layers policy enforcement, release verification, service orchestration and encrypted storage on top of a standard Python runtime.</p>
+        <p>Every installation is validated through a signed, offline-capable release pipeline. The broker enforces a default-deny policy over all privileged operations. Secrets live in an encrypted vault. Updates are staged and verified before activation.</p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="container">
+        <h2><span class="num">02</span> Features</h2>
+        <div class="cards">
+          <div class="card">
+            <h3><span class="icon">🔐</span> Hardened Runtime</h3>
+            <p>Default-deny capability broker isolates privileged operations and requires explicit policy approval.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">✍</span> Signed Releases</h3>
+            <p>Every stable release is signed with Ed25519 and verified against the public trust anchor.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🔑</span> Ed25519 Trust</h3>
+            <p>Production release keys are pinned in a revocable trust store with SHA-256 fingerprints.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">✓</span> Release Verification</h3>
+            <p>Offline bundle verification checks manifest, signatures, compatibility and anti-rollback state.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">↩</span> Rollback Protection</h3>
+            <p>Monotonic security sequences prevent downgrade attacks and rejected releases are never activated.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🔌</span> Plugin SDK</h3>
+            <p>Manifest-based plugins with explicit capabilities, dependency checks and signing requirements.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🧠</span> Broker / Session Isolation</h3>
+            <p>Broker sessions are isolated; each transaction is auditable and can be emergency-stopped.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">⚙</span> Configuration Engine</h3>
+            <p>Transactional configuration with schemas, migrations, profiles and rollback support.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">📡</span> Operations Center</h3>
+            <p>JSON API and diagnostic views for runtime events, health and security posture.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🤖</span> Android / Termux-PROot</h3>
+            <p>Validated on Android/aarch64 and Termux-PROot environments.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🐧</span> Linux Support</h3>
+            <p>Linux shell runtime validated through CI and offline bundle verification.</p>
+          </div>
+          <div class="card">
+            <h3><span class="icon">🛡</span> Security Controls</h3>
+            <p>Encrypted vault, policy profiles, emergency restrictions and audit logging.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section id="install">
+      <div class="container">
+        <h2><span class="num">03</span> Quick Install</h2>
+        <p style="color:var(--text-dim); margin-bottom:1rem;">Choose your platform. Click the copy button to grab the commands.</p>
+        <div class="install-tabs" role="tablist" aria-label="Install platform tabs">
+          <button class="tab-btn active" data-tab="termux" role="tab" aria-selected="true" tabindex="0">TERMUX</button>
+          <button class="tab-btn" data-tab="linux" role="tab" aria-selected="false" tabindex="-1">LINUX</button>
+          <button class="tab-btn" data-tab="win-cmd" role="tab" aria-selected="false" tabindex="-1">WINDOWS CMD</button>
+          <button class="tab-btn" data-tab="win-ps" role="tab" aria-selected="false" tabindex="-1">WINDOWS POWERSHELL</button>
+        </div>
+
+        <div id="termux" class="tab-panel active" role="tabpanel">
+          <div class="code-block">
+            <code>pkg update
+pkg install -y git python python-cryptography
+git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+cd ~/Hive-Ops
+python bin/hive --help
+python bin/hive config validate
+python bin/hive broker capabilities</code>
+            <button class="copy" type="button">COPY</button>
+          </div>
+        </div>
+
+        <div id="linux" class="tab-panel" role="tabpanel">
+          <div class="code-block">
+            <code># Ensure Python 3 and python3-cryptography are installed via your package manager
+git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+cd ~/Hive-Ops
+python3 bin/hive --help
+python3 bin/hive config validate
+python3 bin/hive broker capabilities</code>
+            <button class="copy" type="button">COPY</button>
+          </div>
+        </div>
+
+        <div id="win-cmd" class="tab-panel" role="tabpanel">
+          <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:0.6rem;">Windows is supported as a development/portable testing environment only.</p>
+          <div class="code-block">
+            <code>git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+python bin\hive --help
+python bin\hive config validate
+python bin\hive broker capabilities
+
+REM If 'python' is not on PATH, try: py -3 bin\hive --help</code>
+            <button class="copy" type="button">COPY</button>
+          </div>
+        </div>
+
+        <div id="win-ps" class="tab-panel" role="tabpanel">
+          <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:0.6rem;">Windows is supported as a development/portable testing environment only.</p>
+          <div class="code-block">
+            <code>git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+python .\bin\hive --help
+python .\bin\hive config validate
+python .\bin\hive broker capabilities</code>
+            <button class="copy" type="button">COPY</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security">
+      <div class="container">
+        <h2><span class="num">04</span> Security</h2>
+        <div class="security-grid">
+          <div class="security-item">
+            <h4>SIGNED RELEASES</h4>
+            <p>Stable release metadata is signed with Ed25519 and verified against the pinned trust store before installation.</p>
+          </div>
+          <div class="security-item">
+            <h4>ED25519 TRUST</h4>
+            <p>Production release keys are published as public PEM entries with SHA-256 fingerprints.</p>
+          </div>
+          <div class="security-item">
+            <h4>ANTI-ROLLBACK</h4>
+            <p>Monotonic release/security sequences prevent downgrade attacks and replayed bundles are rejected.</p>
+          </div>
+          <div class="security-item">
+            <h4>FAIL-CLOSED VERIFICATION</h4>
+            <p>Any signature, fingerprint, manifest or trust mismatch causes the installer/verifier to reject the release.</p>
+          </div>
+        </div>
+        <div class="fingerprint-box">
+          <div class="label">Production release key / Key ID: hive-release-prod-2026-02</div>
+          <div class="value">55c4ca0853756b608c250f687ea8aa3f5ab9157240a243648303185b5f6925f4</div>
+          <p style="margin:0.6rem 0 0; color:var(--text-dim); font-size:0.8rem;">Verify release metadata against this fingerprint using <code>updates/trust_store/hive-release.pem</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELEASE -->
+    <section id="release">
+      <div class="container">
+        <h2><span class="num">05</span> Release</h2>
+        <div class="card" style="max-width:640px;">
+          <h3>Hive OS 1.0.0 — Stable</h3>
+          <p>Release sequence <strong>20</strong> · Channel <strong>stable</strong> · Source <code>9b2a80a</code></p>
+          <p>Canonical tag: <strong>hive-os-v1.0.0</strong></p>
+          <p>
+            <a class="btn btn-green" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.0.0" target="_blank" rel="noopener">[ OPEN GITHUB RELEASE ]</a>
+          </p>
+          <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0.8rem; margin-bottom:0;">The historical Git tag <code>v1.0.0</code> points to an unrelated earlier commit and is not the canonical Hive OS stable release.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="architecture">
+      <div class="container">
+        <h2><span class="num">06</span> Architecture</h2>
+        <p style="color:var(--text-dim);">Major verified components and data flow.</p>
+        <div class="arch-diagram">
+          <div class="arch-node">Release Engine</div>
+          <div class="arch-node">Trust Store</div>
+          <div class="arch-node">Broker / Policy</div>
+          <div class="arch-node">Vault</div>
+          <div class="arch-node">Configuration Engine</div>
+          <div class="arch-node">Service Supervisor</div>
+          <div class="arch-node">Operations Center</div>
+          <div class="arch-node">Plugin SDK</div>
+        </div>
+        <p style="color:var(--text-dim); margin-top:1.5rem; font-size:0.9rem;">The broker mediates every privileged request. The trust store anchors release verification. The vault protects secrets. Services run under manifest-based supervision. All state changes are logged and auditable.</p>
+      </div>
+    </section>
+
+    <!-- DOCUMENTATION -->
+    <section id="docs">
+      <div class="container">
+        <h2><span class="num">07</span> Documentation</h2>
+        <p style="color:var(--text-dim);">All documentation lives in this repository under <code>/docs</code>.</p>
+        <div class="cards">
+          <div class="card">
+            <h3>📦 Releases</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/releases/1.0.0.md">Hive OS 1.0.0 release notes</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RELEASE_BUILD.md">Release build</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RELEASE_SIGNING.md">Signing</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RELEASE_TRUST.md">Trust</a></p>
+          </div>
+          <div class="card">
+            <h3>🛡 Security</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/VAULT_ARCHITECTURE.md">Vault</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/POLICY_ENGINE.md">Policy engine</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/SECURITY_BOUNDARIES.md">Boundaries</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/HIVE_BROKER.md">Broker</a></p>
+          </div>
+          <div class="card">
+            <h3>⚙ Runtime</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RUNTIME_ENVIRONMENT.md">Environment</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/CONFIGURATION_ENGINE.md">Configuration</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/SERVICE_MODEL.md">Services</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/OPERATIONS_CENTER.md">Operations center</a></p>
+          </div>
+          <div class="card">
+            <h3>🔌 Plugins</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/PLUGIN_SDK.md">SDK</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/PLUGIN_MANIFEST.md">Manifest</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/PLUGIN_SECURITY.md">Security</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/PLUGIN_SIGNING.md">Signing</a></p>
+          </div>
+          <div class="card">
+            <h3>🚀 Installation</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/INSTALLATION_ARCHITECTURE.md">Installation architecture</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/LEGACY_INSTALLERS.md">Legacy installers</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RELEASE_INSTALLATION.md">Release installation</a></p>
+          </div>
+          <div class="card">
+            <h3>🔁 Updates</h3>
+            <p><a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/UPDATE_ARCHITECTURE.md">Update architecture</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/OFFLINE_UPDATE_BUNDLES.md">Offline bundles</a> · <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/blob/master/docs/RECOVERY_ARCHITECTURE.md">Recovery</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand">HIVE OS</div>
+      <div class="links">
+        <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.0.0" target="_blank" rel="noopener">Release</a>
+        <a href="#docs">Documentation</a>
+      </div>
+    </div>
+    <div class="container copy">
+      Hive OS · open-source project · canonical stable tag: <code>hive-os-v1.0.0</code>
+    </div>
+  </footer>
+
+  <script src="assets/js/hive.js"></script>
+</body>
+</html>
