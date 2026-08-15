@@ -55,7 +55,10 @@ def dispatch(capability: str, txn: Any, params: dict[str, Any]) -> dict[str, Any
 def _dispatch_service(capability: str, params: dict[str, Any]) -> dict[str, Any]:
     if capability == "service.list":
         return _services_result(["list"])
-    service = params.get("service", "")
+    service = params.get("service") or ""
+    # Skip per-service calls when no service is specified (zero services configured).
+    if capability in ("service.status", "service.health") and not service:
+        return {"status": "skipped", "reason": "no service specified"}
     mapping = {
         "service.show": ["show", service],
         "service.status": ["status", service],

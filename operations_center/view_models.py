@@ -27,7 +27,7 @@ def service_view_model(services: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def overview_view_model(runtime: Any, broker: Any, services: Any, updates: Any, recovery: Any, vault: Any, diagnostics: list[dict[str, Any]]) -> dict[str, Any]:
+def overview_view_model(runtime: Any, broker: Any, services: Any, updates: Any, recovery: Any, vault: Any, diagnostics: list[dict[str, Any]], physical_validation: str | None = None) -> dict[str, Any]:
     return {
         "hive_version": runtime.get("version"),
         "runtime_platform": runtime.get("platform"),
@@ -43,5 +43,5 @@ def overview_view_model(runtime: Any, broker: Any, services: Any, updates: Any, 
         "critical_count": sum(1 for d in diagnostics if d.get("severity") == "CRITICAL"),
         "diagnostic_count": len(diagnostics),
         "snapshot": __import__("time").strftime("%Y-%m-%dT%H:%M:%SZ", __import__("time").gmtime()),
-        "physical_validation": "DEFERRED  PHYSICAL DEVICE VALIDATION PENDING",
+        "physical_validation": physical_validation or "DEFERRED",
     }

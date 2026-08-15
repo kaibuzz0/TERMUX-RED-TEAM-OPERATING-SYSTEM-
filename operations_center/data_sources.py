@@ -52,7 +52,7 @@ SOURCE_TEMPLATES: dict[str, SourceRequest] = {
     ),
     "service_health": SourceRequest(
         "service.health",
-        make_manifest("inspect-service-health", "service.health", "oc-services-health"),
+        make_manifest("inspect-service-status", "service.health", "oc-services-health"),
     ),
     "updates": SourceRequest(
         "update.status",

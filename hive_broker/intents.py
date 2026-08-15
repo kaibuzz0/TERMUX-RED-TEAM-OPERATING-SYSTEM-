@@ -77,6 +77,24 @@ _INTENTS: dict[str, Intent] = {
         read_only=False,
         max_timeout=10,
     ),
+    "broker-capabilities": Intent(
+        name="broker-capabilities",
+        allowed_actions=frozenset({"broker.capabilities"}),
+        read_only=True,
+        max_timeout=10,
+    ),
+    "broker-status": Intent(
+        name="broker-status",
+        allowed_actions=frozenset({"broker.status"}),
+        read_only=True,
+        max_timeout=10,
+    ),
+    "policy-status": Intent(
+        name="policy-status",
+        allowed_actions=frozenset({"policy.status"}),
+        read_only=True,
+        max_timeout=30,
+    ),
 }
 
 

@@ -20,6 +20,12 @@ fi
 
 cd "${INSTALL_DIR}"
 
+echo "[Hive OS] Installing Python dependencies..."
+if ! python -m pip install -r requirements.txt; then
+    echo "[Hive OS] ERROR: Failed to install requirements. Stopping." >&2
+    exit 1
+fi
+
 echo "[Hive OS] Running quick checks..."
 python bin/hive --help >/dev/null
 python bin/hive config validate

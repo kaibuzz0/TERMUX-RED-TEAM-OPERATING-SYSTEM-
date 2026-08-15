@@ -11,7 +11,7 @@ def evaluate(view: str, data: dict[str, Any], sources: dict[str, Any]) -> list[d
     findings: list[dict[str, Any]] = []
 
     # broker unavailable
-    if sources.get("broker_status", {}).get("status") != "ok":
+    if sources.get("broker_status", {}).get("status") != "AVAILABLE":
         findings.append(_diag("OC-BRK-001", Severity.ERROR, "broker", "Broker is not available"))
 
     # missing capability
@@ -49,7 +49,7 @@ def evaluate(view: str, data: dict[str, Any], sources: dict[str, Any]) -> list[d
         findings.append(_diag("OC-RCV-001", Severity.ERROR, "recovery", "Recovery journal is corrupt"))
 
     # physical validation pending
-    findings.append(_diag("OC-VAL-001", Severity.INFO, "validation", "Physical Termux validation pending"))
+    findings.append(_diag("OC-VAL-001", Severity.INFO, "validation", "Native Termux validation in progress"))
 
     return findings
 

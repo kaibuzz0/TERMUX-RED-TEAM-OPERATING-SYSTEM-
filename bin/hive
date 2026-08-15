@@ -94,12 +94,46 @@ def main(argv: list[str]) -> int:
     except (CanonicalMetadataError, LauncherTypeError) as exc:
         return _fail(str(exc))
 
+    # Modern Hive OS help
+    if argv[1:] and (argv[1] in ("--help", "-h")):
+        print("""Hive OS 1.0.0 — Unified Command Interface
+
+Modern Hive OS commands:
+  config          Configuration management
+  policy          Policy engine
+  broker          Hive broker capabilities
+  ops             Operations center
+  service         Service management
+  vault           Security vault
+  update          Update management
+  recovery        Recovery tools
+  plugin          Plugin SDK
+  release         Release engine
+  install         Installer
+
+Legacy compatibility commands (via canonical launcher):
+  status, health, start, stop, net, services, service,
+  dashboard, swarm, speak, logs, ps, doctor, audit,
+  backup, restore, rotate-logs
+
+Other options:
+  --help, -h                 Show this help
+  --resolve                  Show launcher resolution diagnostics
+  --runtime-info --json      Show runtime report
+  --validate-services-json   Validate services.json
+
+For command-specific help: hive <command> --help
+""")
+        return 0
+
     # Milestone 7: install subcommands delegate to the installer package.
     if argv[1:] and argv[1] == "install":
         install_args = argv[2:]
         cmd = [sys.executable, "-m", "installer.install"] + install_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"installer package not available: {exc}")
@@ -108,8 +142,10 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "vault":
         vault_args = argv[2:]
         cmd = [sys.executable, "-m", "security.vault.cli"] + vault_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"security vault package not available: {exc}")
@@ -121,8 +157,10 @@ def main(argv: list[str]) -> int:
             cmd = [sys.executable, "-m", "updates.cli"] + update_args
         else:
             cmd = [sys.executable, "-m", "updates.recovery_cli"] + update_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"updates package not available: {exc}")
@@ -131,8 +169,10 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "service":
         service_args = argv[2:]
         cmd = [sys.executable, "-m", "services.cli"] + service_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"services package not available: {exc}")
@@ -141,8 +181,10 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "broker":
         broker_args = argv[2:]
         cmd = [sys.executable, "-m", "hive_broker.cli"] + broker_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"hive_broker package not available: {exc}")
@@ -151,8 +193,10 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "ops":
         ops_args = argv[2:]
         cmd = [sys.executable, "-m", "operations_center.cli"] + ops_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"operations_center package not available: {exc}")
@@ -161,18 +205,34 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "config":
         config_args = argv[2:]
         cmd = [sys.executable, "-m", "config_engine.cli"] + config_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"config_engine package not available: {exc}")
+
+    # Milestone 15: policy subcommands delegate to the policy_engine package.
+    if argv[1:] and argv[1] == "policy":
+        policy_args = argv[2:]
+        cmd = [sys.executable, "-m", "policy_engine.cli"] + policy_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"policy_engine package not available: {exc}")
 
     # Milestone 16: plugin subcommands delegate to the plugin_sdk package.
     if argv[1:] and argv[1] == "plugin":
         plugin_args = argv[2:]
         cmd = [sys.executable, "-m", "plugin_sdk.cli"] + plugin_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"plugin_sdk package not available: {exc}")
@@ -181,8 +241,10 @@ def main(argv: list[str]) -> int:
     if argv[1:] and argv[1] == "release":
         release_args = argv[2:]
         cmd = [sys.executable, "-m", "release_engine.cli"] + release_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:
-            result = subprocess.run(cmd, cwd=os.getcwd())
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
             return result.returncode
         except FileNotFoundError as exc:
             return _fail(f"release_engine package not available: {exc}")
@@ -228,7 +290,7 @@ def main(argv: list[str]) -> int:
     cmd = prefix + [str(target)] + argv[1:]
 
     try:
-        result = subprocess.run(cmd, cwd=os.getcwd())
+        result = subprocess.run(cmd, cwd=str(repo_root))
         return result.returncode
     except FileNotFoundError as exc:
         return _fail(f"failed to execute canonical launcher: {exc}")
