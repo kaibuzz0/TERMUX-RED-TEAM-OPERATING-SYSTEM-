@@ -16,6 +16,7 @@ from network.health import HealthLevel
 from network.profiles import NetworkProfile
 from services.errors import ServiceConfigError, ServiceRuntimeError, ServiceStateError
 from services.graph import DependencyGraph
+from runtime_logs.service_logger import RuntimeLogger, ServiceLogger
 from services.health import HealthCheck
 from services.logging import resolve_log_targets
 from services.process import TrackedProcess, _command_digest, _manifest_digest
@@ -47,6 +48,8 @@ class Supervisor:
         self.graph = DependencyGraph(manifests)
         self.policies: dict[str, RestartPolicy] = {n: RestartPolicy(m) for n, m in manifests.items()}
         self.processes: dict[str, TrackedProcess] = {}
+        self._service_loggers: dict[str, ServiceLogger] = {}
+        self._runtime_logger = RuntimeLogger(log_root, "supervisor")
         self._load_instances()
 
     def _load_instances(self) -> None:
@@ -171,22 +174,23 @@ class Supervisor:
                 env = self.network_manager.proxy_env()
         session_id = self._session_id()
         proc = TrackedProcess(manifest, cmd, session_id)
-        stdout, stderr = resolve_log_targets(manifest, self.log_root)
-        if stdout:
-            stdout.parent.mkdir(parents=True, exist_ok=True)
-        if stderr:
-            stderr.parent.mkdir(parents=True, exist_ok=True)
-        kwargs = {"cwd": str(cwd), "env": env, "start_new_session": True}
-        if stdout:
-            kwargs["stdout"] = open(stdout, "a")
-        if stderr:
-            kwargs["stderr"] = open(stderr, "a")
+        # Use canonical service logger for bounded, rotated stdout/stderr.
+        svc_logger = ServiceLogger(name, self.log_root)
+        handles = svc_logger.open_handles()
         try:
-            # Re-create Popen directly to manage file handles.
             import subprocess
-            proc._proc = subprocess.Popen(cmd, **kwargs)
+            proc._proc = subprocess.Popen(
+                cmd,
+                cwd=str(cwd),
+                env=env,
+                stdout=handles["stdout"],
+                stderr=handles["stderr"],
+                start_new_session=True,
+            )
         except OSError as e:
+            svc_logger.close()
             raise ServiceRuntimeError(f"Failed to start {name}: {e}") from e
+        self._service_loggers[name] = svc_logger
         proc.start_time = time.time()
         self.processes[name] = proc
         self._record(name, state="RUNNING", pid=proc.pid, session_id=session_id, command_digest=_command_digest(cmd), manifest_digest=_manifest_digest(manifest))
@@ -346,6 +350,11 @@ class Supervisor:
         entry = state.setdefault(name, ServiceInstance(service_name=name).to_dict())
         entry.update(kwargs)
         save_state(self.state_root, state)
+        self._runtime_logger.write(
+            "SERVICE_STATE_CHANGE",
+            f"Service {name} state update",
+            {"service": name, "updates": kwargs},
+        )
 
     def _session_id(self) -> str:
         return f"{time.time():.6f}-{os.getpid()}"

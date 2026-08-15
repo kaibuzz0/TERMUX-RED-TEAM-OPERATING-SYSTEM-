@@ -349,6 +349,29 @@ For command-specific help: hive <command> --help
         except FileNotFoundError as exc:
             return _fail(f"services package not available: {exc}")
 
+    # Pass D: diagnostic commands.
+    if argv[1:] and argv[1] in {"health", "doctor", "audit", "selftest"}:
+        cmd = [sys.executable, "-m", "diagnostics.cli", argv[1]] + argv[2:]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"diagnostics package not available: {exc}")
+
+    # Pass D: logging commands.
+    if argv[1:] and argv[1] in {"logs", "rotate-logs"}:
+        subcommand = "show" if argv[1] == "logs" else "rotate"
+        cmd = [sys.executable, "-m", "runtime_logs.cli", subcommand] + argv[2:]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"logging package not available: {exc}")
+
     try:
         target = resolve_canonical_launcher(repo_root, metadata)
     except (PathResolutionError, CanonicalMetadataError) as exc:

@@ -187,7 +187,8 @@ class TermuxDependencyRepairTests(unittest.TestCase):
         internals = {
             "config_engine", "policy_engine", "hive_broker", "operations_center",
             "services", "installer", "security", "plugin_sdk", "release_engine",
-            "updates", "lib", "version", "schema", "network",
+            "updates", "lib", "version", "schema", "network", "runtime_logs",
+            "diagnostics",
         }
         # Import name → PyPI package name mappings
         import_to_pkg = {
