@@ -171,11 +171,15 @@ class ActiveState:
         tmp.write_text(json.dumps(active_pointer_to_dict(pointer), indent=2), encoding="utf-8")
         tmp.replace(self.active_pointer_path)
 
-    def _write_release_metadata(self, release: ReleaseInfo) -> None:
+    def _write_release_metadata(self, release: ReleaseInfo, metadata: dict[str, Any] | None = None) -> None:
         path = self._release_metadata_path(release.release_id)
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(f".tmp-{uuid.uuid4().hex}")
-        tmp.write_text(json.dumps(release_to_dict(release), indent=2), encoding="utf-8")
+        data = release_to_dict(release)
+        if metadata:
+            data["metadata"] = metadata
+            data["trust_level"] = "offline_verified_bundle"
+        tmp.write_text(json.dumps(data, indent=2), encoding="utf-8")
         tmp.replace(path)
 
     def _read_release_metadata(self, release_id: str) -> ReleaseInfo:
@@ -251,6 +255,11 @@ class ActiveState:
             runtime_dir.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(staged_runtime, runtime_dir)
             digest = self._manifest_digest(release_dir / "runtime")
+            metadata = {}
+            try:
+                metadata = json.loads((staging_root / "metadata.json").read_text(encoding="utf-8"))
+            except Exception:
+                pass
             release = ReleaseInfo(
                 release_id=release_id,
                 transaction_id=plan.transaction_id,
@@ -261,7 +270,7 @@ class ActiveState:
                 manifest_digest=digest,
                 previous_release_id="",
             )
-            self._write_release_metadata(release)
+            self._write_release_metadata(release, metadata)
             journal = InstallJournal(self.state_root / "install-journal", plan.transaction_id)
             journal.append("promote", "promote", {"release_id": release_id, "digest": digest}, result="completed")
             return release
