@@ -175,10 +175,8 @@ class ActiveState:
         path = self._release_metadata_path(release.release_id)
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(f".tmp-{uuid.uuid4().hex}")
-        data = release_to_dict(release)
-        if metadata:
-            data["metadata"] = metadata
-            data["trust_level"] = "offline_verified_bundle"
+        trust_level = "offline_verified_bundle" if metadata else None
+        data = release_to_dict(release, metadata=metadata, trust_level=trust_level)
         tmp.write_text(json.dumps(data, indent=2), encoding="utf-8")
         tmp.replace(path)
 
