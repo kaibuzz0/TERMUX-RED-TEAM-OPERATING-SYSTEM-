@@ -29,8 +29,9 @@
       <h1>HIVE OS</h1>
       <p class="tagline">A hardened autonomous runtime for Termux, Android and Linux.</p>
       <div class="version-pill">
-        <span>Version: Hive OS CURRENT MASTER / 1.0.1 REPAIR</span>
-        <span class="stable">● REPAIR</span>
+        <span>Stable: Hive OS 1.0.0 · Parity Test: Hive OS 1.1.0-rc.1</span>
+        <span class="stable">● STABLE</span>
+        <span style="color:#f59e0b; margin-left:0.5rem;">● RC.1 TEST</span>
       </div>
       <div class="hero-buttons">
         <a class="btn btn-primary" href="#install">[ INSTALL HIVE OS ]</a>
@@ -108,6 +109,25 @@
       </div>
     </section>
 
+    <!-- PARITY TEST -->
+    <section id="parity" style="border-top:2px solid #f59e0b;">
+      <div class="container">
+        <h2><span class="num">02b</span> Hive OS 1.1 — Original Runtime Parity Release Candidate</h2>
+        <p style="color:#f59e0b; font-weight:600;">TEST CHANNEL · NOT STABLE · DO NOT USE IN PRODUCTION</p>
+        <p>OG Hive OS behavior has been rebuilt on top of the modern architecture:</p>
+        <ul style="color:var(--text-dim); line-height:1.8;">
+          <li>Network profiles: DIRECT · ORBOT · TOR · HOLD (fail-closed)</li>
+          <li>Supervised services with exact process ownership and crash-loop protection</li>
+          <li>Hive health / doctor / read-only audit / selftest</li>
+          <li>Unified runtime logging with rotation</li>
+          <li>Hive Operator Home, operator notes, and <code>hive speak</code></li>
+          <li>Policy/broker read-only integration with Operations Center</li>
+          <li>Signed offline update bundles with rollback</li>
+        </ul>
+        <p style="color:var(--text-dim); font-size:0.85rem;">Candidate: <code>1.1.0-rc.1</code> · Channel: <code>parity-test</code> · Source: <code>b5a4ae5</code></p>
+      </div>
+    </section>
+
     <!-- INSTALL -->
     <section id="install">
       <div class="container">
@@ -121,8 +141,24 @@
         </div>
 
         <div id="termux" class="tab-panel active" role="tabpanel">
+          <p style="color:#f59e0b; font-weight:600; margin-bottom:0.75rem;">
+            Existing Hive 1.0.x users: test the 1.1 parity candidate manually for now.
+          </p>
           <p style="color:var(--text-dim); margin-bottom:0.75rem;">
-            Install once. Then <code>hive</code> works everywhere in Termux and Hive boots on startup.
+            The current stable updater is offline-bundle oriented. Download the signed RC.1 bundle, then verify, plan, stage, and activate through Hive's own update engine.
+          </p>
+          <div class="code-block">
+            <code>cd ~/downloads
+curl -fsSL -O https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/download/hive-os-v1.1.0-rc.1/hive-1.1.0-rc.1.tar.gz
+hive update verify hive-1.1.0-rc.1.tar.gz --trust-store updates/trust_store/hive-release.pem --platform termux --architecture aarch64
+hive update plan hive-1.1.0-rc.1.tar.gz
+hive update stage hive-1.1.0-rc.1.tar.gz --release-root $HOME/Hive-Ops/data
+hive install --activate $HOME/Hive-Ops/data/hive-1.1.0-rc.1-20260815-parity --approve</code>
+            <button class="copy" type="button">COPY</button>
+          </div>
+          <hr style="border-color:var(--border); margin:1.5rem 0;">
+          <p style="color:var(--text-dim); margin-bottom:0.75rem;">
+            New install. Then <code>hive</code> works everywhere in Termux and Hive boots on startup.
           </p>
           <div class="code-block">
             <code>pkg update
@@ -213,14 +249,23 @@ python .\bin\hive broker capabilities</code>
     <section id="release">
       <div class="container">
         <h2><span class="num">05</span> Release</h2>
-        <div class="card" style="max-width:640px;">
+        <div class="card" style="max-width:640px; margin-bottom:1rem;">
           <h3>Hive OS 1.0.0 — Stable</h3>
           <p>Release sequence <strong>20</strong> · Channel <strong>stable</strong> · Source <code>9b2a80a</code></p>
           <p>Canonical tag: <strong>hive-os-v1.0.0</strong></p>
           <p>
-            <a class="btn btn-green" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.0.0" target="_blank" rel="noopener">[ OPEN GITHUB RELEASE ]</a>
+            <a class="btn btn-green" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.0.0" target="_blank" rel="noopener">[ OPEN STABLE RELEASE ]</a>
           </p>
           <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0.8rem; margin-bottom:0;">The historical Git tag <code>v1.0.0</code> points to an unrelated earlier commit and is not the canonical Hive OS stable release.</p>
+        </div>
+        <div class="card" style="max-width:640px; border-color:#f59e0b;">
+          <h3>Hive OS 1.1.0-rc.1 — Original Runtime Parity Test</h3>
+          <p>Channel <strong style="color:#f59e0b;">parity-test</strong> · Source <code>b5a4ae5</code> · NOT STABLE</p>
+          <p>Canonical tag: <strong>hive-os-v1.1.0-rc.1</strong></p>
+          <p>
+            <a class="btn" style="border-color:#f59e0b; color:#f59e0b;" href="https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/tag/hive-os-v1.1.0-rc.1" target="_blank" rel="noopener">[ OPEN RC.1 PRERELEASE ]</a>
+          </p>
+          <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0.8rem; margin-bottom:0;">Requires manual trust verification for the parity-test signing path. See the release notes.</p>
         </div>
       </div>
     </section>

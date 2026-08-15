@@ -85,6 +85,7 @@ def render(state: HiveHomeState, width: int = 58) -> str:
     lines.append("  [6] Plugins")
     lines.append("  [7] Logs")
     lines.append("  [8] Diagnostics")
+    lines.append("  [U] Updates")
     lines.append("  [9] Termux Integration / Repair")
     lines.append("  [N] Operator Notes")
     lines.append("  [S] Speak")

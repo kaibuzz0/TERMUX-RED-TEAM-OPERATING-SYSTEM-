@@ -235,6 +235,9 @@ def _main_menu(repo_root: Path) -> int:
             _run(repo_root, "speak")
             _pause()
             continue
+        if choice.upper() == "U":
+            _updates_menu(repo_root)
+            continue
         if choice.upper() == "N":
             _notes_menu(repo_root)
             continue
