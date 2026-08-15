@@ -121,17 +121,19 @@
         </div>
 
         <div id="termux" class="tab-panel active" role="tabpanel">
+          <p style="color:var(--text-dim); margin-bottom:0.75rem;">
+            Install once. Then <code>hive</code> works everywhere in Termux and Hive boots on startup.
+          </p>
           <div class="code-block">
             <code>pkg update
-pkg install -y git python python-cryptography
-git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
-cd ~/Hive-Ops
-python -m pip install -r requirements-runtime.txt
-python bin/hive --help
-python bin/hive config validate
-python bin/hive broker capabilities</code>
+pkg install -y curl git python python-cryptography
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/master/install-termux-easy.sh)"</code>
             <button class="copy" type="button">COPY</button>
           </div>
+          <p style="color:var(--text-dim); margin-top:0.75rem;">
+            After install: type <code>hive</code> to launch, or open a new Termux session for autoboot.
+            <br>Disable autoboot: <code>hive autoboot disable</code>. Re-enable: <code>hive autoboot enable</code>.
+          </p>
         </div>
 
         <div id="linux" class="tab-panel" role="tabpanel">

@@ -34,9 +34,35 @@ Dependency files:
 - `requirements-dev.txt` — pytest, black, flake8, mypy
 - `requirements.txt` — preserved historical full dependency set
 
-### A. Termux (Full Supported Runtime — CURRENT MASTER / 1.0.1 REPAIR)
+### A. Termux (Normal User Install — CURRENT MASTER / 1.0.1 REPAIR)
 
-Requires Termux from F-Droid.
+Requires Termux from F-Droid. Run the easy installer once; it installs Hive OS as
+a real environment with a global `hive` command and Termux autoboot.
+
+```bash
+pkg update
+pkg install -y curl git python python-cryptography
+
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/master/install-termux-easy.sh)"
+```
+
+After installation:
+
+- Type `hive` anywhere to launch Hive OS.
+- Open a **new** Termux session and Hive OS boots automatically.
+- Exit Hive to return to the normal Termux shell.
+- Disable autoboot: `hive autoboot disable`
+- Re-enable autoboot: `hive autoboot enable`
+
+Optional extras (legacy AI/network tools):
+```bash
+python -m pip install -r requirements-extras.txt
+```
+
+#### Manual / developer source run
+
+If you prefer not to install a global command, you can run directly from the
+cloned repository:
 
 ```bash
 pkg update
@@ -52,12 +78,7 @@ python bin/hive broker capabilities
 python bin/hive config validate
 ```
 
-Optional extras (legacy AI/network tools):
-```bash
-python -m pip install -r requirements-extras.txt
-```
-
-To inspect the safe installer plan (recommended before activation):
+To inspect the safe transactional installer plan:
 
 ```bash
 python -m installer.install --check
@@ -65,7 +86,7 @@ python -m installer.install --plan
 python -m installer.install --dry-run
 ```
 
-> `install.sh` and `install-termux.sh` are legacy, non-transactional scripts. They are disabled by default and require `HIVE_LEGACY_UNSAFE=1` to run. Prefer the safe installer workflow above.
+> `install.sh` and `install-termux.sh` are legacy, non-transactional scripts. They are disabled by default and require `HIVE_LEGACY_UNSAFE=1` to run. Prefer the easy installer or the safe installer workflow above.
 
 ### B. Linux Shell (Full Supported Runtime)
 
