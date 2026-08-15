@@ -85,7 +85,6 @@ def _resolve_mode(repo_root: Path, metadata: dict) -> bool:
 
 def main(argv: list[str]) -> int:
     import shutil
-
     # Repository root is derived from this script's location: bin/hive lives at <repo>/bin/hive.
     repo_root = Path(__file__).resolve().parent.parent
 
@@ -192,7 +191,12 @@ For command-specific help: hive <command> --help
     # Milestone 13: operations-center subcommands delegate to the operations_center package.
     if argv[1:] and argv[1] == "ops":
         ops_args = argv[2:]
-        cmd = [sys.executable, "-m", "operations_center.cli"] + ops_args
+        # operations_center.cli expects the view positional argument before flags.
+        # Normalize argv so the first non-option token is the view.
+        non_flags = [a for a in ops_args if not a.startswith("-")]
+        flags = [a for a in ops_args if a.startswith("-")]
+        normalized = non_flags + flags
+        cmd = [sys.executable, "-m", "operations_center.cli"] + normalized
         env = os.environ.copy()
         env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
         try:

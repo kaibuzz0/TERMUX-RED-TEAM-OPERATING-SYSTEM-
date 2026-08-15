@@ -13,6 +13,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -26,6 +27,7 @@ class RepairPass1Tests(unittest.TestCase):
 
     def _run_launcher(self, *args, cwd=None, env=None):
         env = env or os.environ.copy()
+        env["HIVE_REPO_ROOT"] = str(REPO_ROOT)
         env["PYTHONPATH"] = str(REPO_ROOT)
         cmd = [sys.executable, str(LAUNCHER)] + list(args)
         result = subprocess.run(
@@ -74,16 +76,16 @@ class RepairPass1Tests(unittest.TestCase):
                          f"broker capabilities from $HOME must succeed: {result.stderr}")
 
     def test_config_validate_from_unrelated_dir(self):
-        other = "/data/data/com.termux/files/usr/tmp"
-        result = self._run_launcher("config", "validate", cwd=other)
-        self.assertEqual(result.returncode, 0,
-                         f"config validate from tmp must succeed: {result.stderr}")
+        with tempfile.TemporaryDirectory() as other:
+            result = self._run_launcher("config", "validate", cwd=other)
+            self.assertEqual(result.returncode, 0,
+                             f"config validate from unrelated dir must succeed: {result.stderr}")
 
     def test_policy_status_from_unrelated_dir(self):
-        other = "/data/data/com.termux/files/usr/tmp"
-        result = self._run_launcher("policy", "status", cwd=other)
-        self.assertEqual(result.returncode, 0,
-                         f"policy status from tmp must succeed: {result.stderr}")
+        with tempfile.TemporaryDirectory() as other:
+            result = self._run_launcher("policy", "status", cwd=other)
+            self.assertEqual(result.returncode, 0,
+                             f"policy status from unrelated dir must succeed: {result.stderr}")
 
     # ── C. Policy routing ──
     def test_policy_route_exists(self):

@@ -15,21 +15,13 @@ class AdapterError(Exception):
 
 
 def _run_services_argv(argv: list[str]) -> dict[str, Any]:
-    import io
-    old_stdout = sys.stdout
-    old_stderr = sys.stderr
-    stdout = io.StringIO()
-    stderr = io.StringIO()
+    # Run services CLI in a subprocess to avoid sys.stdout races with the caller's threads.
+    cmd = [sys.executable, "-m", "services.cli"] + argv
     try:
-        sys.stdout = stdout
-        sys.stderr = stderr
-        code = services_main(argv)
-    except SystemExit as exc:
-        code = exc.code if isinstance(exc.code, int) else 1
-    finally:
-        sys.stdout = old_stdout
-        sys.stderr = old_stderr
-    return {"exit_code": code, "stdout": stdout.getvalue(), "stderr": stderr.getvalue()}
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, shell=False, cwd=str(Path.cwd()))
+        return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
+    except subprocess.TimeoutExpired:
+        return {"exit_code": 124, "stdout": "", "stderr": "services adapter timeout"}
 
 
 def dispatch(capability: str, txn: Any, params: dict[str, Any]) -> dict[str, Any]:
