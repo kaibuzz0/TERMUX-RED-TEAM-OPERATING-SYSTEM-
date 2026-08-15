@@ -209,9 +209,9 @@ class ActiveState:
             ActivationState.VERIFIED: {ActivationState.READY_TO_ACTIVATE, ActivationState.ACTIVATION_FAILED},
             ActivationState.READY_TO_ACTIVATE: {ActivationState.ACTIVE, ActivationState.ACTIVATION_FAILED, ActivationState.ROLLED_BACK},
             ActivationState.ACTIVE: {ActivationState.ROLLBACK_AVAILABLE},
-            ActivationState.ROLLBACK_AVAILABLE: {ActivationState.ROLLED_BACK, ActivationState.ACTIVE},
+            ActivationState.ROLLBACK_AVAILABLE: {ActivationState.ROLLED_BACK, ActivationState.ACTIVE, ActivationState.READY_TO_ACTIVATE},
             ActivationState.ACTIVATION_FAILED: set(),
-            ActivationState.ROLLED_BACK: set(),
+            ActivationState.ROLLED_BACK: {ActivationState.READY_TO_ACTIVATE, ActivationState.ACTIVE},
         }
         if target not in allowed.get(release.state, set()):
             raise ActivationSafetyError(
@@ -286,10 +286,18 @@ class ActiveState:
             )
 
         release = self._read_release_metadata(release_id)
-        if release.state not in (ActivationState.READY_TO_ACTIVATE, ActivationState.VERIFIED):
+        if release.state not in (ActivationState.READY_TO_ACTIVATE, ActivationState.VERIFIED, ActivationState.ROLLBACK_AVAILABLE, ActivationState.ACTIVE):
             raise ActivationSafetyError(
                 f"Release {release_id} is not ready to activate (state={release.state.value})"
             )
+        # Idempotency: already active is fine.
+        previous_ptr = self._active_pointer()
+        if previous_ptr and previous_ptr.active_release_id == release_id:
+            return previous_ptr
+        # Re-applying a release that was previously rolled back preserves rollback history.
+        if release.state in (ActivationState.ROLLBACK_AVAILABLE, ActivationState.ACTIVE):
+            # Treat it as ready for re-activation.
+            pass
 
         self.acquire_lock(release.transaction_id)
         try:
