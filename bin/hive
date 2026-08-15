@@ -137,6 +137,18 @@ For command-specific help: hive <command> --help
         except FileNotFoundError as exc:
             return _fail(f"installer package not available: {exc}")
 
+    # Pass B: network subcommands delegate to the network package.
+    if argv[1:] and argv[1] == "net":
+        net_args = argv[2:]
+        cmd = [sys.executable, "-m", "network.cli"] + net_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"network package not available: {exc}")
+
     # Milestone 8: vault subcommands delegate to the security vault package.
     if argv[1:] and argv[1] == "vault":
         vault_args = argv[2:]
