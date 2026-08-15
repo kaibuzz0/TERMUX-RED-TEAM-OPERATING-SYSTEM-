@@ -36,8 +36,11 @@ if [ -n "${HIVE_BOOT_ACTIVE:-}" ]; then
 fi
 export HIVE_BOOT_ACTIVE=1
 HIVE_INSTALL_DIR="${HIVE_INSTALL_DIR:-$HOME/Hive-Ops}"
-if [ -x "$HIVE_INSTALL_DIR/bin/hive" ]; then
-    "$HIVE_INSTALL_DIR/bin/hive" boot
+# Prefer the known-good global hive command; fall back to python repo launcher.
+if command -v hive >/dev/null 2>&1; then
+    hive boot
+elif command -v python >/dev/null 2>&1 && [ -f "$HIVE_INSTALL_DIR/bin/hive" ]; then
+    python "$HIVE_INSTALL_DIR/bin/hive" boot
 fi
 unset HIVE_BOOT_ACTIVE
 # <<< HIVE OS AUTOBOOT <<<
@@ -142,7 +145,8 @@ def _is_enabled(bashrc: Path) -> bool | None:
     if block_start == -1 or block_end == -1:
         return None
     block = text[block_start:block_end]
-    return "HIVE_NO_AUTOBOOT=1" not in block
+    # Only count an active export line, not the explanatory comment.
+    return not any(line.strip() == "export HIVE_NO_AUTOBOOT=1" for line in block.splitlines())
 
 
 def _status_line(bashrc: Path) -> str:

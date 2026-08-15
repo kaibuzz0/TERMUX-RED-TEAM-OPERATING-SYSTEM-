@@ -40,8 +40,11 @@ if [ -n "${HIVE_BOOT_ACTIVE:-}" ]; then
 fi
 export HIVE_BOOT_ACTIVE=1
 HIVE_INSTALL_DIR="${HIVE_INSTALL_DIR:-$HOME/Hive-Ops}"
-if [ -x "$HIVE_INSTALL_DIR/bin/hive" ]; then
-    "$HIVE_INSTALL_DIR/bin/hive" boot
+# Prefer the known-good global hive command; fall back to python repo launcher.
+if command -v hive >/dev/null 2>&1; then
+    hive boot
+elif command -v python >/dev/null 2>&1 && [ -f "$HIVE_INSTALL_DIR/bin/hive" ]; then
+    python "$HIVE_INSTALL_DIR/bin/hive" boot
 fi
 unset HIVE_BOOT_ACTIVE
 # <<< HIVE OS AUTOBOOT <<<
@@ -83,6 +86,7 @@ class TestTermuxInstallAutoboot(unittest.TestCase):
         self.env["USERPROFILE"] = str(self.home)
         self.env["HIVE_REPO_ROOT"] = str(self.install_dir)
         self.env["PYTHONPATH"] = str(self.install_dir)
+        self.env["HIVE_PREFIX"] = str(self.prefix)
         self.env["PATH"] = str(self.prefix / "bin") + os.pathsep + self.env.get("PATH", "")
 
     def tearDown(self):
@@ -323,6 +327,90 @@ class TestTermuxInstallAutoboot(unittest.TestCase):
         script = (REPO_ROOT / "install-termux-easy.sh").read_text(encoding="utf-8")
         self.assertIn("_is_hive_managed", script)
         self.assertIn("exit 1", script)
+
+    # ------------------------------------------------------------------
+    # Termux self-repair
+    # ------------------------------------------------------------------
+
+    def test_autoboot_prefers_global_hive_path(self):
+        # If a global `hive` command exists in PATH, the autoboot block should use it.
+        self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
+        bashrc = self.home / ".bashrc"
+        text = bashrc.read_text(encoding="utf-8")
+        start = text.find("# >>> HIVE OS AUTOBOOT >>>")
+        end = text.find("# <<< HIVE OS AUTOBOOT <<<")
+        block = text[start:end]
+        self.assertIn("command -v hive", block)
+        self.assertIn("hive boot", block)
+
+    def test_autoboot_falls_back_to_python_repo_launcher(self):
+        self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
+        bashrc = self.home / ".bashrc"
+        text = bashrc.read_text(encoding="utf-8")
+        start = text.find("# >>> HIVE OS AUTOBOOT >>>")
+        end = text.find("# <<< HIVE OS AUTOBOOT <<<")
+        block = text[start:end]
+        self.assertIn('python "$HIVE_INSTALL_DIR/bin/hive" boot', block)
+
+    def test_autoboot_no_longer_uses_executable_bit_only(self):
+        self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
+        bashrc = self.home / ".bashrc"
+        text = bashrc.read_text(encoding="utf-8")
+        block = text[text.find("# >>> HIVE OS AUTOBOOT >>>"):text.find("# <<< HIVE OS AUTOBOOT <<<")]
+        # The old implementation required -x on the repo launcher. The new block no longer relies on it.
+        self.assertNotIn('if [ -x "$HIVE_INSTALL_DIR/bin/hive" ]; then', block)
+
+    def test_home_option_nine_invokes_repair(self):
+        result = subprocess.run(
+            [sys.executable, str(self.install_dir / "bin" / "hive_boot.py")],
+            env=self.env,
+            capture_output=True,
+            text=True,
+            input="9\n0\n",
+        )
+        self.assertEqual(result.returncode, 0)
+        # The menu should advertise option 9.
+        self.assertIn("[9] Termux Integration", result.stdout)
+
+    def test_termux_repair_creates_global_launcher(self):
+        result = self._run_hive("termux", "repair", cwd=str(self.install_dir))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        global_hive = self.prefix / "bin" / "hive"
+        self.assertTrue(global_hive.exists())
+        text = global_hive.read_text(encoding="utf-8")
+        self.assertIn("# HIVE_OS_MANAGED_LAUNCHER", text)
+        # The launcher references the repo via HIVE_REPO_ROOT; verify the export line is present.
+        self.assertIn('export HIVE_REPO_ROOT="', text)
+        # Bash-style forward-slash path of the resolved repo root appears inside the export.
+        self.assertIn((self.install_dir.resolve()).as_posix(), text)
+
+    def test_termux_repair_idempotent(self):
+        self._run_hive("termux", "repair", cwd=str(self.install_dir))
+        result = self._run_hive("termux", "repair", cwd=str(self.install_dir))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        bashrc = self.home / ".bashrc"
+        text = bashrc.read_text(encoding="utf-8")
+        self.assertEqual(text.count("# >>> HIVE OS AUTOBOOT >>>"), 1)
+
+    def test_termux_status_reports_integration(self):
+        self._run_hive("termux", "repair", cwd=str(self.install_dir))
+        result = self._run_hive("termux", "status", cwd=str(self.install_dir))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Hive OS Termux Integration", result.stdout)
+        self.assertIn("Global hive command", result.stdout)
+
+    def test_termux_repair_preserves_collision_rules(self):
+        existing = self.prefix / "bin" / "hive"
+        existing.parent.mkdir(parents=True, exist_ok=True)
+        existing.write_text("#!/bin/sh\necho 'unrelated hive'\n", encoding="utf-8")
+        result = self._run_hive("termux", "repair", cwd=str(self.install_dir))
+        # Repair does not overwrite unrelated launchers.
+        text = existing.read_text(encoding="utf-8")
+        self.assertIn("unrelated hive", text)
+        self.assertNotIn("HIVE_OS_MANAGED_LAUNCHER", text)
+        # Status should reflect that global hive is not managed.
+        result2 = self._run_hive("termux", "status", cwd=str(self.install_dir))
+        self.assertIn("Global hive command", result2.stdout)
 
 
 if __name__ == "__main__":

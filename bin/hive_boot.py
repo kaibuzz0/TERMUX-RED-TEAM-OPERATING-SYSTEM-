@@ -58,6 +58,7 @@ def _print_menu() -> None:
     print("  [6] Vault status             (hive vault status)")
     print("  [7] Configuration            (hive config validate)")
     print("  [8] Help                     (hive --help)")
+    print("  [9] Termux Integration       (hive termux repair)")
     print("  [0] Exit to Termux shell")
     print("=" * 56)
 
@@ -93,6 +94,7 @@ def main(argv: list[str] | None = None) -> int:
             "6": ("vault", "status"),
             "7": ("config", "validate"),
             "8": ("--help",),
+            "9": ("termux", "repair"),
         }.get(choice)
         if dispatch is None:
             print("Invalid choice. Press Enter to continue.")
