@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Hive OS 1.0.0 - A hardened autonomous runtime for Termux, Android and Linux.">
-  <title>Hive OS 1.0.0</title>
+  <meta name="description" content="Hive OS 1.1 Original Runtime Parity release candidate test channel.">
+  <title>Hive OS 1.1 — Original Runtime Parity Test Candidate</title>
   <link rel="stylesheet" href="assets/css/hive.css">
 </head>
 <body>
@@ -26,12 +26,14 @@
 
   <header class="hero">
     <div class="container">
-      <h1>HIVE OS</h1>
-      <p class="tagline">A hardened autonomous runtime for Termux, Android and Linux.</p>
+      <h1>HIVE OS 1.1</h1>
+      <p class="tagline">
+        Original Runtime Parity Release Candidate — TEST CHANNEL · NOT STABLE
+      </p>
       <div class="version-pill">
         <span>Stable: Hive OS 1.0.0 · Parity Test: Hive OS 1.1.0-rc.1</span>
         <span class="stable">● STABLE</span>
-        <span style="color:#f59e0b; margin-left:0.5rem;">● RC.1 TEST</span>
+        <span style="color:#f59e0b; margin-left:0.5rem;">● RC.1 TEST — DO NOT USE FOR PRODUCTION</span>
       </div>
       <div class="hero-buttons">
         <a class="btn btn-primary" href="#install">[ INSTALL HIVE OS ]</a>
@@ -129,7 +131,60 @@
     </section>
 
     <!-- INSTALL -->
-    <section id="install">
+    
+    <!-- UPDATE EXISTING HIVE -->
+    <section id="update">
+      <div class="container">
+        <h2><span class="num">UPDATE</span> Update Existing Hive to RC.1</h2>
+        <p class="warning-box" style="border:1px solid #f59e0b; padding:1rem; border-radius:0.5rem; color:#fbbf24;">
+          <strong>WARNING:</strong> This is a parity-test release candidate. Do not apply it to a
+          production phone unless you have backed up your state and you accept the risk
+          of regression. The stable 1.0.0 release remains the recommended channel.
+        </p>
+        <h3>From a currently installed Hive 1.0.0 phone</h3>
+        <pre class="code-block"><code># 1) Download the signed parity-test bundle
+mkdir -p ~/.hive-update-scratch
+curl -fsSL -o ~/.hive-update-scratch/hive-os-1.1.0-rc.1-20260815-parity.tar.gz   https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/download/hive-os-v1.1.0-rc.1/hive-os-1.1.0-rc.1-20260815-parity.tar.gz
+
+# 2) Verify the bundle against the trust store
+cd "$HOME/Hive-Ops"
+hive update verify   ~/.hive-update-scratch/hive-os-1.1.0-rc.1-20260815-parity.tar.gz   --trust-store ./updates/trust_store/hive-parity-test.pem   --platform termux --architecture aarch64   --current-sequence 20
+
+# 3) Plan the update
+hive update plan   ~/.hive-update-scratch/hive-os-1.1.0-rc.1-20260815-parity.tar.gz
+
+# 4) Apply (requires explicit approval)
+hive update apply   ~/.hive-update-scratch/hive-os-1.1.0-rc.1-20260815-parity.tar.gz   --trust-store ./updates/trust_store/hive-parity-test.pem   --platform termux --architecture aarch64   --current-sequence 20   --approve
+
+# 5) Confirm the active version
+hive version
+</code></pre>
+
+        <h3>What RC.1 brings back / modernizes</h3>
+        <ul class="feature-list">
+          <li>Network profiles and local Tor / Orbot integration</li>
+          <li>Fail-closed supervised services with crash-loop protection</li>
+          <li>Unified logs, health, doctor, read-only audit, selftest</li>
+          <li>Hive Operator Home with operator notes and [U] Updates menu</li>
+          <li>Policy / Broker integration</li>
+          <li>Signed update delivery and local rollback</li>
+        </ul>
+
+        <h3>Trust fingerprint for the parity-test key</h3>
+        <pre class="code-block"><code>key_id: hive-parity-test-2026-01
+fingerprint_sha256: 26f5f980827a3ee0f99d4b67e8dec1578bad27e8d4baffcef7061ecc6f8bfb39
+purpose: release
+</code></pre>
+        <p>
+          Compare this fingerprint with an out-of-band source before trusting it.
+          The parity-test key is a separate test trust anchor; it is <strong>not</strong>
+          signed by the stable 1.0.0 production release key. The bootstrap design
+          for RC.1 is explicit manual trust-anchor install.
+        </p>
+      </div>
+    </section>
+
+<section id="install">
       <div class="container">
         <h2><span class="num">03</span> Quick Install</h2>
         <p style="color:var(--text-dim); margin-bottom:1rem;">Choose your platform. Click the copy button to grab the commands.</p>
