@@ -24,11 +24,17 @@ This is the stable 1.0.0 release.
 
 > **Note:** The historical Git tag `v1.0.0` points to an unrelated earlier commit and was not modified. Use `hive-os-v1.0.0` as the canonical Hive OS stable tag.
 
-## Quick Install / Quick Start
+## CURRENT MASTER / 1.0.1 REPAIR
 
-Choose the path that matches your platform.
+The `master` branch contains dependency-split and Termux-native install fixes not yet in the `hive-os-v1.0.0` stable tag. Until `hive-os-v1.0.1` is formally tagged, use `master` for native Termux installation.
 
-### A. Termux (Full Supported Runtime)
+Dependency files:
+- `requirements-runtime.txt` — minimal core runtime (pyyaml, cryptography)
+- `requirements-extras.txt` — optional legacy / AI / networking
+- `requirements-dev.txt` — pytest, black, flake8, mypy
+- `requirements.txt` — preserved historical full dependency set
+
+### A. Termux (Full Supported Runtime — CURRENT MASTER / 1.0.1 REPAIR)
 
 Requires Termux from F-Droid.
 
@@ -36,12 +42,19 @@ Requires Termux from F-Droid.
 pkg update
 pkg install -y git python python-cryptography
 
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
 cd ~/Hive-Ops
+
+python -m pip install -r requirements-runtime.txt
 
 python bin/hive --help
 python bin/hive broker capabilities
 python bin/hive config validate
+```
+
+Optional extras (legacy AI/network tools):
+```bash
+python -m pip install -r requirements-extras.txt
 ```
 
 To inspect the safe installer plan (recommended before activation):
@@ -57,15 +70,21 @@ python -m installer.install --dry-run
 ### B. Linux Shell (Full Supported Runtime)
 
 ```bash
-# Ensure Python 3 and cryptography are available
-# (use your distribution's package manager)
+# Ensure Python 3 and python3-cryptography are installed via your package manager
 
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
 cd ~/Hive-Ops
+
+python3 -m pip install -r requirements-runtime.txt
 
 python3 bin/hive --help
 python3 bin/hive broker capabilities
 python3 bin/hive config validate
+```
+
+Optional extras:
+```bash
+python3 -m pip install -r requirements-extras.txt
 ```
 
 ### C. Windows Command Prompt (Development / Portable Run)
@@ -73,12 +92,19 @@ python3 bin/hive config validate
 Hive OS is primarily designed for Android/Termux/Linux. Windows is supported only as a development and portable testing environment.
 
 ```cmd
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
 cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+
+python -m pip install -r requirements-runtime.txt
 
 python bin\hive --help
 python bin\hive broker capabilities
 python bin\hive config validate
+```
+
+Optional extras:
+```cmd
+python -m pip install -r requirements-extras.txt
 ```
 
 If `python` is not on your PATH, use:
@@ -90,12 +116,19 @@ py -3 bin\hive --help
 ### D. Windows PowerShell (Development / Portable Run)
 
 ```powershell
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
 cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+
+python -m pip install -r requirements-runtime.txt
 
 python .\bin\hive --help
 python .\bin\hive broker capabilities
 python .\bin\hive config validate
+```
+
+Optional extras:
+```powershell
+python -m pip install -r requirements-extras.txt
 ```
 
 ## Verified Offline Install (Advanced)

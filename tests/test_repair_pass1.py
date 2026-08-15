@@ -38,10 +38,19 @@ class RepairPass1Tests(unittest.TestCase):
         return result
 
     # ── A. Installer dependency installation ──
-    def test_installer_sh_contains_pip_install(self):
+    def test_installer_sh_uses_runtime_requirements(self):
         text = INSTALLER.read_text(encoding="utf-8")
-        self.assertIn("pip install -r requirements.txt", text,
-                        "install-termux-easy.sh must install requirements")
+        self.assertIn("requirements-runtime.txt", text,
+                        "install-termux-easy.sh must install runtime requirements")
+        self.assertNotIn("requirements.txt", text,
+                         "install-termux-easy.sh must NOT reference full requirements.txt")
+
+    def test_installer_sh_uses_master_not_old_tag(self):
+        text = INSTALLER.read_text(encoding="utf-8")
+        self.assertIn("master", text,
+                        "install-termux-easy.sh must clone master branch")
+        self.assertNotIn("hive-os-v1.0.0", text,
+                         "install-termux-easy.sh must NOT reference old v1.0.0 tag")
 
     def test_installer_sh_error_on_failure(self):
         text = INSTALLER.read_text(encoding="utf-8")

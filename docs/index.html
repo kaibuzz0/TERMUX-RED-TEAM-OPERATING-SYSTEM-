@@ -29,8 +29,8 @@
       <h1>HIVE OS</h1>
       <p class="tagline">A hardened autonomous runtime for Termux, Android and Linux.</p>
       <div class="version-pill">
-        <span>Version: Hive OS 1.0.0</span>
-        <span class="stable">● STABLE</span>
+        <span>Version: Hive OS CURRENT MASTER / 1.0.1 REPAIR</span>
+        <span class="stable">● REPAIR</span>
       </div>
       <div class="hero-buttons">
         <a class="btn btn-primary" href="#install">[ INSTALL HIVE OS ]</a>
@@ -124,8 +124,9 @@
           <div class="code-block">
             <code>pkg update
 pkg install -y git python python-cryptography
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
 cd ~/Hive-Ops
+python -m pip install -r requirements-runtime.txt
 python bin/hive --help
 python bin/hive config validate
 python bin/hive broker capabilities</code>
@@ -136,8 +137,9 @@ python bin/hive broker capabilities</code>
         <div id="linux" class="tab-panel" role="tabpanel">
           <div class="code-block">
             <code># Ensure Python 3 and python3-cryptography are installed via your package manager
-git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
+git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git ~/Hive-Ops
 cd ~/Hive-Ops
+python3 -m pip install -r requirements-runtime.txt
 python3 bin/hive --help
 python3 bin/hive config validate
 python3 bin/hive broker capabilities</code>
@@ -148,8 +150,9 @@ python3 bin/hive broker capabilities</code>
         <div id="win-cmd" class="tab-panel" role="tabpanel">
           <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:0.6rem;">Windows is supported as a development/portable testing environment only.</p>
           <div class="code-block">
-            <code>git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+            <code>git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
 cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+python -m pip install -r requirements-runtime.txt
 python bin\hive --help
 python bin\hive config validate
 python bin\hive broker capabilities
@@ -162,8 +165,9 @@ REM If 'python' is not on PATH, try: py -3 bin\hive --help</code>
         <div id="win-ps" class="tab-panel" role="tabpanel">
           <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:0.6rem;">Windows is supported as a development/portable testing environment only.</p>
           <div class="code-block">
-            <code>git clone --depth 1 --branch hive-os-v1.0.0 https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
+            <code>git clone --depth 1 --branch master https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-.git
 cd TERMUX-RED-TEAM-OPERATING-SYSTEM-
+python -m pip install -r requirements-runtime.txt
 python .\bin\hive --help
 python .\bin\hive config validate
 python .\bin\hive broker capabilities</code>

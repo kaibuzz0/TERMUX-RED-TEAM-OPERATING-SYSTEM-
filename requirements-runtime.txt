@@ -1,0 +1,14 @@
+# Hive OS Core Runtime Dependencies
+# Minimal packages required for modern Hive OS command surface.
+# Install with: python -m pip install -r requirements-runtime.txt
+#
+# For legacy/AI/networking extras:  requirements-extras.txt
+# For development/testing:           requirements-dev.txt
+# For full historical dependency set: requirements.txt
+
+# Configuration engine loads YAML configs
+pyyaml>=6.0.1
+
+# Cryptography: Ed25519 signing, AES-GCM vault encryption, HKDF key derivation
+# On Termux, prefer: pkg install python-cryptography
+cryptography>=41.0.0
