@@ -406,7 +406,13 @@ class ActiveState:
 
             current_release = self._read_release_metadata(current.active_release_id)
             current_release.state = ActivationState.ROLLBACK_AVAILABLE
-            self._write_release_metadata(current_release)
+            current_metadata = {}
+            try:
+                current_data = json.loads(self._release_metadata_path(current.active_release_id).read_text(encoding="utf-8"))
+                current_metadata = current_data.get("metadata", {})
+            except Exception:
+                pass
+            self._write_release_metadata(current_release, current_metadata or None)
 
             existing_metadata = {}
             try:
