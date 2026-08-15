@@ -78,11 +78,36 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
 
 def cmd_stage(args: argparse.Namespace) -> int:
-    from updates.updater import Updater
-    updater = Updater(Path(args.release_root))
+    from updates.bundle import extract_bundle
+    from updates.manifest import load_manifest
+    import json, shutil
+    work = Path(args.work_dir or "/tmp/hive-update-stage")
+    if work.exists():
+        shutil.rmtree(work)
     try:
-        staged = updater.stage(Path(args.bundle))
-        print(f"Staged to {staged}")
+        extract_bundle(Path(args.bundle), work)
+        manifest = load_manifest(work / "manifest.json")
+        release_id = json.loads((work / "metadata.json").read_text(encoding="utf-8"))["release"]["release_id"]
+        target = Path(args.release_root) / release_id
+        if target.exists():
+            shutil.rmtree(target)
+        runtime_dir = target / "data" / "runtime"
+        runtime_dir.mkdir(parents=True)
+        for entry in manifest:
+            src = work / entry["path"]
+            dst = runtime_dir / entry["path"]
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            if src.is_dir():
+                shutil.copytree(src, dst)
+            else:
+                shutil.copy2(src, dst)
+        staged_manifest = {"manifest": manifest}
+        (target / "state" / "manifest.json").write_text(json.dumps(staged_manifest), encoding="utf-8")
+        shutil.copy2(work / "metadata.json", target / "metadata.json")
+        if args.json:
+            _print_json({"staged_root": str(target), "release_id": release_id})
+        else:
+            print(f"Staged installer layout to {target}")
         return 0
     except Exception as e:
         print(f"Stage failed: {e}", file=sys.stderr)
@@ -178,9 +203,10 @@ def main(argv: list[str] | None = None) -> int:
     verify_p.add_argument("--work-dir")
     verify_p.add_argument("--emergency", action="store_true")
 
-    stage_p = sub.add_parser("stage", help="Stage a verified bundle")
+    stage_p = sub.add_parser("stage", help="Stage a verified bundle into installer-compatible layout")
     stage_p.add_argument("bundle")
     stage_p.add_argument("--release-root", required=True)
+    stage_p.add_argument("--work-dir")
 
     apply_p = sub.add_parser("apply", help="Verify, stage, and activate a bundle")
     apply_p.add_argument("bundle")
