@@ -250,15 +250,28 @@ class NetworkManager:
         profile = self.current_profile
         if profile == NetworkProfile.HOLD:
             return False, "profile is HOLD"
-        if profile == NetworkProfile.DIRECT and network_required:
-            # A service requiring network but accepting direct is allowed in DIRECT.
-            return True, "direct networking available"
         if required_profile is not None:
-            want = NetworkProfile.from_name(required_profile)
-            if profile != want:
-                return False, f"requires {want}; current is {profile}"
+            want = required_profile.lower()
+            if want == "proxied":
+                if profile not in (NetworkProfile.TOR, NetworkProfile.ORBOT):
+                    return False, f"requires a proxied profile; current is {profile}"
+            elif want == "any":
+                # any means any active non-HIVE network profile
+                if profile not in (NetworkProfile.DIRECT, NetworkProfile.TOR, NetworkProfile.ORBOT):
+                    return False, f"requires a non-HOLD network profile; current is {profile}"
+            else:
+                try:
+                    want_enum = NetworkProfile.from_name(want)
+                except ValueError:
+                    return False, f"unknown required profile: {required_profile}"
+                if profile != want_enum:
+                    return False, f"requires {want}; current is {profile}"
+        elif network_required and profile == NetworkProfile.DIRECT:
+            # Service requires network but has no specific profile: DIRECT is acceptable.
+            return True, "direct networking available"
+        # For specific proxied profiles, verify basic health if possible.
         if network_required and profile in (NetworkProfile.TOR, NetworkProfile.ORBOT):
             report = self.health()
-            if report.level != HealthLevel.HEALTHY:
-                return False, f"network not healthy: {report.overall}"
+            if report.level == HealthLevel.UNAVAILABLE:
+                return False, f"network unavailable: {report.overall}"
         return True, "network requirement satisfied"

@@ -27,6 +27,8 @@ class HealthCheck:
             return self._command_check()
         if self.type == "tcp-local":
             return self._tcp_check()
+        if self.type == "http-local":
+            return self._http_check()
         if self.type == "file":
             return self._file_check(log_root)
         return {"healthy": False, "type": self.type, "error": "Unsupported"}
@@ -55,6 +57,25 @@ class HealthCheck:
                 return {"healthy": True, "type": "tcp-local"}
         except OSError:
             return {"healthy": False, "type": "tcp-local"}
+
+    def _http_check(self) -> dict[str, Any]:
+        import urllib.request
+        host = self.config.get("host", "127.0.0.1")
+        port = self.config.get("port")
+        path = self.config.get("path", "/")
+        timeout = self.config.get("timeout_seconds", 5)
+        if host not in {"127.0.0.1", "::1", "localhost"}:
+            return {"healthy": False, "type": "http-local", "error": f"Non-loopback host rejected: {host}"}
+        if not isinstance(port, int) or port <= 0 or port > 65535:
+            return {"healthy": False, "type": "http-local", "error": f"Invalid port: {port}"}
+        url = f"http://{host}:{port}{path}"
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Hive-OS/1.1"})
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                _ = resp.read()
+            return {"healthy": True, "type": "http-local"}
+        except Exception as e:
+            return {"healthy": False, "type": "http-local", "error": str(e)}
 
     def _file_check(self, log_root: Path) -> dict[str, Any]:
         rel = self.config.get("path")

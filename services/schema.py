@@ -14,8 +14,9 @@ SCHEMA_VERSION = 1
 
 ALLOWED_INTERPRETERS = {"python", "bash", "sh", "direct-executable"}
 ALLOWED_RESTART_POLICIES = {"never", "on-failure", "always", "unless-stopped"}
-ALLOWED_HEALTH_TYPES = {"process", "command", "tcp-local", "file", "none"}
+ALLOWED_HEALTH_TYPES = {"process", "command", "tcp-local", "http-local", "file", "none"}
 ALLOWED_SHUTDOWN_SIGNALS = {"TERM", "INT", "HUP", "KILL"}
+ALLOWED_NETWORK_PROFILES = {"direct", "orbot", "tor", "proxied", "any"}
 ALLOWED_PATH_BASES = {
     "repository", "canonical-source", "config-root", "state-root",
     "data-root", "cache-root", "log-root", "temp-root", "active-runtime",
@@ -68,6 +69,7 @@ def validate_manifest(raw: dict[str, Any]) -> dict[str, Any]:
             raise ServiceConfigError(f"Invalid dependency name: {dep!r}")
 
     _validate_environment(raw.get("environment", {}))
+    _validate_network(raw.get("network", {}))
     _validate_logging(raw.get("logging", {}), name)
     _validate_health(raw.get("health_check", {}), name)
 
@@ -79,6 +81,20 @@ def _validate_path_base(base: Any, field: str) -> None:
         return
     if base not in ALLOWED_PATH_BASES:
         raise ServiceConfigError(f"Unknown path base in {field}: {base!r}")
+
+
+def _validate_network(network: Any) -> None:
+    if network is None:
+        return
+    if not isinstance(network, dict):
+        raise ServiceConfigError("network must be an object")
+    required = network.get("required", False)
+    if not isinstance(required, bool):
+        raise ServiceConfigError("network.required must be a boolean")
+    profile = network.get("profile")
+    if profile is not None and profile not in ALLOWED_NETWORK_PROFILES:
+        raise ServiceConfigError(f"Unknown network.profile: {profile!r}")
+
 
 
 def _validate_environment(env: Any) -> None:
@@ -123,10 +139,10 @@ def _validate_health(health: Any, service_name: str) -> None:
             raise ServiceConfigError("health_check.args must be a list of strings")
         for a in args:
             _reject_shell_metacharacters(a, "health_check.args")
-    elif htype == "tcp-local":
+    elif htype in ("tcp-local", "http-local"):
         host = health.get("host", "127.0.0.1")
         if host not in {"127.0.0.1", "::1", "localhost"}:
-            raise ServiceConfigError(f"health_check.tcp-local host must be loopback: {host!r}")
+            raise ServiceConfigError(f"health_check.{htype} host must be loopback: {host!r}")
     elif htype == "file":
         path = health.get("path")
         if not isinstance(path, str):

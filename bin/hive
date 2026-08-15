@@ -328,6 +328,27 @@ For command-specific help: hive <command> --help
             print(f"[validate-services-json] {e}", file=sys.stderr)
             return 2
 
+    # Pass C: top-level lifecycle commands.
+    if argv[1:] and argv[1] in {"start", "stop", "restart", "status"}:
+        lifecycle = argv[1]
+        rest = argv[2:]
+        if lifecycle == "start":
+            svc_cmd = ["ensure"] + rest
+        elif lifecycle == "status":
+            svc_cmd = ["status"] + rest
+        elif lifecycle == "stop":
+            svc_cmd = (["stop"] + rest) if rest else ["stop-all"]
+        elif lifecycle == "restart":
+            svc_cmd = (["restart"] + rest) if rest else ["restart-all"]
+        cmd = [sys.executable, "-m", "services.cli"] + svc_cmd
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"services package not available: {exc}")
+
     try:
         target = resolve_canonical_launcher(repo_root, metadata)
     except (PathResolutionError, CanonicalMetadataError) as exc:
