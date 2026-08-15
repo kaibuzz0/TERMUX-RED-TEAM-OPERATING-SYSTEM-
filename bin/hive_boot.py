@@ -217,6 +217,48 @@ def _notes_menu(repo_root: Path) -> None:
             _pause()
 
 
+
+def _updates_menu(repo_root: Path) -> None:
+    """Hive OS Updates sub-menu."""
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Updates")
+        print("=" * 56)
+        print("  [1] Status      (hive update status)")
+        print("  [2] Check       (hive update check)")
+        print("  [3] Verify      (hive update verify)")
+        print("  [4] Plan        (hive update plan)")
+        print("  [5] Apply       (hive update apply)")
+        print("  [6] Rollback    (installer.rollback)")
+        print("  [0] Back")
+        print("=" * 56)
+        choice = _read("Updates> ")
+        if choice == "0":
+            return
+        dispatch = {
+            "1": ("update", "status"),
+            "2": ("update", "check"),
+            "3": ("update", "verify"),
+            "4": ("update", "plan"),
+            "5": ("update", "apply"),
+            "6": ("install", "--rollback"),
+        }.get(choice)
+        if dispatch is None:
+            print("Invalid choice.")
+            _pause()
+            continue
+        if choice == "5":
+            print("\nApplying an update modifies the active runtime.")
+            confirm = _read("Approve update apply? [y/N] ")
+            if confirm.lower() != "y":
+                continue
+            _run(repo_root, *dispatch, "--approve")
+        else:
+            _run(repo_root, *dispatch)
+        _pause()
+
+
 def _main_menu(repo_root: Path) -> int:
     while True:
         _clear()
