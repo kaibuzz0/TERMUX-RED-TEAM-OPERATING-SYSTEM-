@@ -41,6 +41,14 @@ def dispatch(capability: str, txn: Any, params: dict[str, Any]) -> dict[str, Any
         return _dispatch_update(capability, params)
     if capability.startswith("recovery."):
         return _dispatch_recovery(capability, params)
+    if capability.startswith("network."):
+        return _dispatch_network(capability, params)
+    if capability.startswith("diagnostics."):
+        return _dispatch_diagnostics(capability, params)
+    if capability.startswith("logs."):
+        return _dispatch_logs(capability, params)
+    if capability.startswith("termux."):
+        return _dispatch_termux(capability, params)
     raise AdapterError(f"No adapter for capability: {capability}")
 
 
@@ -114,3 +122,85 @@ def _run_recovery_argv(argv: list[str]) -> dict[str, Any]:
         return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
     except subprocess.TimeoutExpired:
         return {"exit_code": 124, "stdout": "", "stderr": "recovery adapter timeout"}
+
+def _dispatch_network(capability: str, params: dict[str, Any]) -> dict[str, Any]:
+    """Read-only network capabilities via network CLI."""
+    if capability == "network.status":
+        return _run_network_argv(["status", "--json"])
+    if capability == "network.health":
+        return _run_network_argv(["status", "--json"])
+    if capability == "network.profile.read":
+        return _run_network_argv(["status", "--json"])
+    raise AdapterError(f"Unsupported network capability: {capability}")
+
+
+def _run_network_argv(argv: list[str]) -> dict[str, Any]:
+    cmd = [sys.executable, "-m", "network.cli"] + argv
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, shell=False, cwd=str(Path.cwd()))
+        return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
+    except subprocess.TimeoutExpired:
+        return {"exit_code": 124, "stdout": "", "stderr": "network adapter timeout"}
+
+
+def _dispatch_diagnostics(capability: str, params: dict[str, Any]) -> dict[str, Any]:
+    """Read-only diagnostic capabilities via diagnostics CLI."""
+    mapping = {
+        "diagnostics.health": ["health", "--json"],
+        "diagnostics.doctor": ["doctor", "--json"],
+        "diagnostics.audit": ["audit", "--json"],
+    }
+    if capability in mapping:
+        return _run_diagnostics_argv(mapping[capability])
+    raise AdapterError(f"Unsupported diagnostics capability: {capability}")
+
+
+def _run_diagnostics_argv(argv: list[str]) -> dict[str, Any]:
+    cmd = [sys.executable, "-m", "diagnostics.cli"] + argv
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, shell=False, cwd=str(Path.cwd()))
+        return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
+    except subprocess.TimeoutExpired:
+        return {"exit_code": 124, "stdout": "", "stderr": "diagnostics adapter timeout"}
+
+
+def _dispatch_logs(capability: str, params: dict[str, Any]) -> dict[str, Any]:
+    """Read-only logging capabilities."""
+    if capability == "logs.status":
+        return _run_logs_argv(["show", "--status"])
+    if capability == "logs.tail":
+        service = params.get("service")
+        if not service:
+            return {"status": "skipped", "reason": "no service specified"}
+        return _run_logs_argv(["show", service, "--tail", "50"])
+    if capability == "logs.service.read":
+        service = params.get("service")
+        if not service:
+            return {"status": "skipped", "reason": "no service specified"}
+        return _run_logs_argv(["show", service])
+    raise AdapterError(f"Unsupported logs capability: {capability}")
+
+
+def _run_logs_argv(argv: list[str]) -> dict[str, Any]:
+    cmd = [sys.executable, "-m", "runtime_logs.cli"] + argv
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, shell=False, cwd=str(Path.cwd()))
+        return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
+    except subprocess.TimeoutExpired:
+        return {"exit_code": 124, "stdout": "", "stderr": "logs adapter timeout"}
+
+
+def _dispatch_termux(capability: str, params: dict[str, Any]) -> dict[str, Any]:
+    """Read-only Termux integration status."""
+    if capability == "termux.integration.status":
+        return _run_termux_argv(["status"])
+    raise AdapterError(f"Unsupported termux capability: {capability}")
+
+
+def _run_termux_argv(argv: list[str]) -> dict[str, Any]:
+    cmd = [sys.executable, "-m", "installer.termux_repair"] + argv
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30, shell=False, cwd=str(Path.cwd()))
+        return {"exit_code": proc.returncode, "stdout": proc.stdout, "stderr": proc.stderr}
+    except subprocess.TimeoutExpired:
+        return {"exit_code": 124, "stdout": "", "stderr": "termux adapter timeout"}

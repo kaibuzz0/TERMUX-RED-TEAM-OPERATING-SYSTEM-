@@ -176,12 +176,12 @@ class TestTermuxInstallAutoboot(unittest.TestCase):
             input="0\n",
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Hive OS Interactive Home", result.stdout)
+        self.assertIn("Operator Environment", result.stdout)
 
     def test_bare_hive_command_launches_boot(self):
         result = self._run_hive(cwd=str(self.install_dir), input="0\n")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Hive OS Interactive Home", result.stdout)
+        self.assertIn("Operator Environment", result.stdout)
 
     # ------------------------------------------------------------------
     # Autoboot install and idempotency
@@ -244,7 +244,7 @@ class TestTermuxInstallAutoboot(unittest.TestCase):
         self._run_hive("autoboot", "disable", cwd=str(self.install_dir))
         result = self._simulate_bashrc(self.home / ".bashrc", interactive=False)
         self.assertIn("shell_ready", result.stdout)
-        self.assertNotIn("Hive OS Interactive Home", result.stdout)
+        self.assertNotIn("Operator Environment", result.stdout)
 
     def test_autoboot_remove_deletes_block(self):
         self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
@@ -272,25 +272,25 @@ class TestTermuxInstallAutoboot(unittest.TestCase):
         self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
         result = self._simulate_bashrc(self.home / ".bashrc", interactive=False)
         self.assertIn("shell_ready", result.stdout)
-        self.assertNotIn("Hive OS Interactive Home", result.stdout)
+        self.assertNotIn("Operator Environment", result.stdout)
 
     def test_recursive_boot_prevented(self):
         self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
         result = self._simulate_bashrc(self.home / ".bashrc", interactive=False, boot_active=True)
         self.assertIn("shell_ready", result.stdout)
-        self.assertNotIn("Hive OS Interactive Home", result.stdout)
+        self.assertNotIn("Operator Environment", result.stdout)
 
     def test_env_no_autoboot_bypass(self):
         self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
         result = self._simulate_bashrc(self.home / ".bashrc", interactive=False, no_autoboot=True)
         self.assertIn("shell_ready", result.stdout)
-        self.assertNotIn("Hive OS Interactive Home", result.stdout)
+        self.assertNotIn("Operator Environment", result.stdout)
 
     def test_disable_file_bypass(self):
         self._run_hive("autoboot", "enable", cwd=str(self.install_dir))
         result = self._simulate_bashrc(self.home / ".bashrc", interactive=False, disable_file=True)
         self.assertIn("shell_ready", result.stdout)
-        self.assertNotIn("Hive OS Interactive Home", result.stdout)
+        self.assertNotIn("Operator Environment", result.stdout)
 
     # ------------------------------------------------------------------
     # Launcher collision protection

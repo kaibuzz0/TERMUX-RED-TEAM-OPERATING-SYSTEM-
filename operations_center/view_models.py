@@ -27,7 +27,7 @@ def service_view_model(services: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def overview_view_model(runtime: Any, broker: Any, services: Any, updates: Any, recovery: Any, vault: Any, diagnostics: list[dict[str, Any]], physical_validation: str | None = None) -> dict[str, Any]:
+def overview_view_model(runtime: Any, broker: Any, services: Any, network: Any, logs: Any, termux: Any, updates: Any, recovery: Any, vault: Any, diagnostics: list[dict[str, Any]], physical_validation: str | None = None) -> dict[str, Any]:
     return {
         "hive_version": runtime.get("version"),
         "runtime_platform": runtime.get("platform"),
@@ -38,6 +38,9 @@ def overview_view_model(runtime: Any, broker: Any, services: Any, updates: Any, 
         "services_failed": services.get("failed", 0),
         "vault_state": vault.get("state", "UNKNOWN"),
         "update_active_release": updates.get("active_release"),
+        "network": network,
+        "logs": logs,
+        "termux": termux,
         "recovery_status": recovery.get("status", "UNKNOWN"),
         "warning_count": sum(1 for d in diagnostics if d.get("severity") in ("WARNING", "ERROR", "CRITICAL")),
         "critical_count": sum(1 for d in diagnostics if d.get("severity") == "CRITICAL"),

@@ -198,8 +198,8 @@ def plan_to_dict(plan: InstallPlan) -> dict:
     }
 
 
-def release_to_dict(release: ReleaseInfo) -> dict:
-    return {
+def release_to_dict(release: ReleaseInfo, metadata: dict[str, Any] | None = None, trust_level: str | None = None) -> dict:
+    data = {
         "schema_version": 1,
         "release_id": release.release_id,
         "transaction_id": release.transaction_id,
@@ -211,6 +211,11 @@ def release_to_dict(release: ReleaseInfo) -> dict:
         "manifest_digest": release.manifest_digest,
         "previous_release_id": release.previous_release_id,
     }
+    if metadata:
+        data["metadata"] = metadata
+    if trust_level:
+        data["trust_level"] = trust_level
+    return data
 
 
 def active_pointer_to_dict(pointer: ActivePointer) -> dict:

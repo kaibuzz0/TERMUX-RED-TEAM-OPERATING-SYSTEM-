@@ -171,11 +171,13 @@ class ActiveState:
         tmp.write_text(json.dumps(active_pointer_to_dict(pointer), indent=2), encoding="utf-8")
         tmp.replace(self.active_pointer_path)
 
-    def _write_release_metadata(self, release: ReleaseInfo) -> None:
+    def _write_release_metadata(self, release: ReleaseInfo, metadata: dict[str, Any] | None = None) -> None:
         path = self._release_metadata_path(release.release_id)
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(f".tmp-{uuid.uuid4().hex}")
-        tmp.write_text(json.dumps(release_to_dict(release), indent=2), encoding="utf-8")
+        trust_level = "offline_verified_bundle" if metadata else None
+        data = release_to_dict(release, metadata=metadata, trust_level=trust_level)
+        tmp.write_text(json.dumps(data, indent=2), encoding="utf-8")
         tmp.replace(path)
 
     def _read_release_metadata(self, release_id: str) -> ReleaseInfo:
@@ -209,9 +211,9 @@ class ActiveState:
             ActivationState.VERIFIED: {ActivationState.READY_TO_ACTIVATE, ActivationState.ACTIVATION_FAILED},
             ActivationState.READY_TO_ACTIVATE: {ActivationState.ACTIVE, ActivationState.ACTIVATION_FAILED, ActivationState.ROLLED_BACK},
             ActivationState.ACTIVE: {ActivationState.ROLLBACK_AVAILABLE},
-            ActivationState.ROLLBACK_AVAILABLE: {ActivationState.ROLLED_BACK, ActivationState.ACTIVE},
+            ActivationState.ROLLBACK_AVAILABLE: {ActivationState.ROLLED_BACK, ActivationState.ACTIVE, ActivationState.READY_TO_ACTIVATE},
             ActivationState.ACTIVATION_FAILED: set(),
-            ActivationState.ROLLED_BACK: set(),
+            ActivationState.ROLLED_BACK: {ActivationState.READY_TO_ACTIVATE, ActivationState.ACTIVE},
         }
         if target not in allowed.get(release.state, set()):
             raise ActivationSafetyError(
@@ -251,6 +253,11 @@ class ActiveState:
             runtime_dir.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(staged_runtime, runtime_dir)
             digest = self._manifest_digest(release_dir / "runtime")
+            metadata = {}
+            try:
+                metadata = json.loads((staging_root / "metadata.json").read_text(encoding="utf-8"))
+            except Exception:
+                pass
             release = ReleaseInfo(
                 release_id=release_id,
                 transaction_id=plan.transaction_id,
@@ -261,7 +268,7 @@ class ActiveState:
                 manifest_digest=digest,
                 previous_release_id="",
             )
-            self._write_release_metadata(release)
+            self._write_release_metadata(release, metadata)
             journal = InstallJournal(self.state_root / "install-journal", plan.transaction_id)
             journal.append("promote", "promote", {"release_id": release_id, "digest": digest}, result="completed")
             return release
@@ -286,10 +293,18 @@ class ActiveState:
             )
 
         release = self._read_release_metadata(release_id)
-        if release.state not in (ActivationState.READY_TO_ACTIVATE, ActivationState.VERIFIED):
+        if release.state not in (ActivationState.READY_TO_ACTIVATE, ActivationState.VERIFIED, ActivationState.ROLLBACK_AVAILABLE, ActivationState.ACTIVE):
             raise ActivationSafetyError(
                 f"Release {release_id} is not ready to activate (state={release.state.value})"
             )
+        # Idempotency: already active is fine.
+        previous_ptr = self._active_pointer()
+        if previous_ptr and previous_ptr.active_release_id == release_id:
+            return previous_ptr
+        # Re-applying a release that was previously rolled back preserves rollback history.
+        if release.state in (ActivationState.ROLLBACK_AVAILABLE, ActivationState.ACTIVE):
+            # Treat it as ready for re-activation.
+            pass
 
         self.acquire_lock(release.transaction_id)
         try:

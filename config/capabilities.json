@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "version": "1.1",
+  "categories": [
+    "network",
+    "services",
+    "diagnostics",
+    "logging",
+    "termux",
+    "vault",
+    "update",
+    "recovery",
+    "broker",
+    "policy"
+  ],
+  "capabilities": [
+    {
+      "name": "network.status",
+      "category": "network",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "network.read"
+    },
+    {
+      "name": "network.health",
+      "category": "network",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "network.read"
+    },
+    {
+      "name": "network.profile.read",
+      "category": "network",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "network.read"
+    },
+    {
+      "name": "service.list",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "service.show",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "service.status",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "service.health",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "service.validate",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "service.graph",
+      "category": "services",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "service.read"
+    },
+    {
+      "name": "diagnostics.health",
+      "category": "diagnostics",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "diagnostics.read"
+    },
+    {
+      "name": "diagnostics.doctor",
+      "category": "diagnostics",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "diagnostics.read"
+    },
+    {
+      "name": "diagnostics.audit",
+      "category": "diagnostics",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "diagnostics.read"
+    },
+    {
+      "name": "logs.status",
+      "category": "logging",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "logs.read"
+    },
+    {
+      "name": "logs.tail",
+      "category": "logging",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "logs.read"
+    },
+    {
+      "name": "logs.service.read",
+      "category": "logging",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "logs.read"
+    },
+    {
+      "name": "termux.integration.status",
+      "category": "termux",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "termux.read"
+    },
+    {
+      "name": "vault.status",
+      "category": "vault",
+      "version": 1,
+      "read_only": true,
+      "approval": "none",
+      "mutating": false,
+      "required_policy": "vault.status"
+    }
+  ],
+  "reserved_mutating": [
+    {
+      "name": "network.profile.change",
+      "category": "network",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "network.change"
+    },
+    {
+      "name": "network.identity.renew",
+      "category": "network",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "network.change"
+    },
+    {
+      "name": "service.start",
+      "category": "services",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "service.control"
+    },
+    {
+      "name": "service.stop",
+      "category": "services",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "service.control"
+    },
+    {
+      "name": "service.restart",
+      "category": "services",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "service.control"
+    },
+    {
+      "name": "logs.rotate",
+      "category": "logging",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "logs.rotate"
+    },
+    {
+      "name": "diagnostics.selftest",
+      "category": "diagnostics",
+      "read_only": false,
+      "approval": "policy+manual",
+      "required_policy": "diagnostics.active_test"
+    }
+  ]
+}

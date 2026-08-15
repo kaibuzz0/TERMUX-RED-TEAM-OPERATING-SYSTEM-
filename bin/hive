@@ -12,6 +12,7 @@ Thin dispatcher that:
 import os
 import subprocess
 import sys
+import json
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -137,6 +138,18 @@ For command-specific help: hive <command> --help
         except FileNotFoundError as exc:
             return _fail(f"installer package not available: {exc}")
 
+    # Pass B: network subcommands delegate to the network package.
+    if argv[1:] and argv[1] == "net":
+        net_args = argv[2:]
+        cmd = [sys.executable, "-m", "network.cli"] + net_args
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"network package not available: {exc}")
+
     # Milestone 8: vault subcommands delegate to the security vault package.
     if argv[1:] and argv[1] == "vault":
         vault_args = argv[2:]
@@ -253,6 +266,22 @@ For command-specific help: hive <command> --help
         except FileNotFoundError as exc:
             return _fail(f"release_engine package not available: {exc}")
 
+    # Milestone 18: version command reports active release metadata.
+    if argv[1:] and argv[1] == "version":
+        if str(REPO_ROOT) not in sys.path:
+            sys.path.insert(0, str(REPO_ROOT))
+        try:
+            from installer.version import get_active_version
+            data_root = Path(os.environ.get("HIVE_DATA_ROOT", repo_root.parent / "Hive-Ops" / "data"))
+            state_root = Path(os.environ.get("HIVE_STATE_ROOT", repo_root.parent / "Hive-Ops" / "state"))
+            info = get_active_version(data_root, state_root)
+            print(json.dumps(info.to_dict(), indent=2))
+            return 0
+        except Exception as exc:
+            import traceback
+            traceback.print_exc()
+            return _fail(f"version command failed: {exc}")
+
     # Milestone 18: boot interface launches the interactive Hive OS home.
     if argv[1:] and argv[1] == "boot":
         cmd = [sys.executable, str(repo_root / "bin" / "hive_boot.py")] + argv[2:]
@@ -294,7 +323,6 @@ For command-specific help: hive <command> --help
 
     if "--runtime-info" in argv[1:] and "--json" in argv[1:]:
         from hive_runtime import build_report
-        import json
         report = build_report()
         print(json.dumps({
             "platform": report.platform,
@@ -307,7 +335,6 @@ For command-specific help: hive <command> --help
     if "--validate-services-json" in argv[1:]:
         try:
             from hive_service_loader import validate_services_file, ServiceLoaderError
-            import json
             target = resolve_canonical_source(repo_root) / "etc" / "services.json"
             report = validate_services_file(target)
             print(json.dumps(report, indent=2))
@@ -315,6 +342,61 @@ For command-specific help: hive <command> --help
         except ServiceLoaderError as e:
             print(f"[validate-services-json] {e}", file=sys.stderr)
             return 2
+
+    # Pass C: top-level lifecycle commands.
+    if argv[1:] and argv[1] in {"start", "stop", "restart", "status"}:
+        lifecycle = argv[1]
+        rest = argv[2:]
+        if lifecycle == "start":
+            svc_cmd = ["ensure"] + rest
+        elif lifecycle == "status":
+            svc_cmd = ["status"] + rest
+        elif lifecycle == "stop":
+            svc_cmd = (["stop"] + rest) if rest else ["stop-all"]
+        elif lifecycle == "restart":
+            svc_cmd = (["restart"] + rest) if rest else ["restart-all"]
+        cmd = [sys.executable, "-m", "services.cli"] + svc_cmd
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"services package not available: {exc}")
+
+    # Pass D: diagnostic commands.
+    if argv[1:] and argv[1] in {"health", "doctor", "audit", "selftest"}:
+        cmd = [sys.executable, "-m", "diagnostics.cli", argv[1]] + argv[2:]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"diagnostics package not available: {exc}")
+
+    # Pass E: operator-experience commands.
+    if argv[1:] and argv[1] in {"speak", "notes", "shell"}:
+        cmd = [sys.executable, "-m", "hive_operator.cli", argv[1]] + argv[2:]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"operator package not available: {exc}")
+
+    # Pass D: logging commands.
+    if argv[1:] and argv[1] in {"logs", "rotate-logs"}:
+        subcommand = "show" if argv[1] == "logs" else "rotate"
+        cmd = [sys.executable, "-m", "runtime_logs.cli", subcommand] + argv[2:]
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(repo_root) + os.pathsep + env.get("PYTHONPATH", "")
+        try:
+            result = subprocess.run(cmd, cwd=str(repo_root), env=env)
+            return result.returncode
+        except FileNotFoundError as exc:
+            return _fail(f"logging package not available: {exc}")
 
     try:
         target = resolve_canonical_launcher(repo_root, metadata)

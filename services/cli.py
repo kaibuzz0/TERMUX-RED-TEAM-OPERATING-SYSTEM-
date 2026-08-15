@@ -35,11 +35,15 @@ def _make_registry() -> ServiceRegistry:
 
 def _make_supervisor() -> Supervisor:
     from config_engine import get_config
+    from network import NetworkManager
     registry = _make_registry()
     svc_cfg = get_config("services")
+    runtime_cfg = get_config("runtime")
     state_root = Path(svc_cfg["state_root"])
     log_root = Path(svc_cfg["log_root"])
-    return Supervisor(registry.native, state_root, log_root, {})
+    net_state_root = Path(runtime_cfg["state_root"])
+    network_manager = NetworkManager(state_root=net_state_root, repo_root=_repo_root())
+    return Supervisor(registry.native, state_root, log_root, {}, network_manager=network_manager)
 
 
 def _print_json(data: dict) -> None:
@@ -79,13 +83,15 @@ def cmd_graph(args: argparse.Namespace) -> int:
 
 def cmd_status(args: argparse.Namespace) -> int:
     sup = _make_supervisor()
-    _print_json(sup.status(args.service))
+    service = getattr(args, "service", None)
+    _print_json(sup.status(service))
     return 0
 
 
 def cmd_health(args: argparse.Namespace) -> int:
     sup = _make_supervisor()
-    _print_json(sup.health(args.service))
+    service = getattr(args, "service", None)
+    _print_json(sup.health(service))
     return 0
 
 
@@ -114,6 +120,45 @@ def cmd_restart(args: argparse.Namespace) -> int:
 def cmd_reset(args: argparse.Namespace) -> int:
     sup = _make_supervisor()
     _print_json(sup.reset(args.service))
+    return 0
+
+
+def cmd_ensure(args: argparse.Namespace) -> int:
+    sup = _make_supervisor()
+    _print_json(sup.ensure())
+    return 0
+
+
+def cmd_ps(args: argparse.Namespace) -> int:
+    sup = _make_supervisor()
+    if args.json:
+        _print_json({"processes": sup.ps()})
+    else:
+        rows = sup.ps()
+        print(f"{'SERVICE':<20} {'PID':<10} {'STATE':<12} {'UPTIME':<12} {'RESTARTS':<10} {'HEALTH':<10}")
+        for r in rows:
+            print(f"{r['service']:<20} {str(r['pid']):<10} {r['state']:<12} {str(r.get('uptime_seconds')):<12} {r['restart_count']:<10} {str(r.get('health')):<10}")
+    return 0
+
+
+def cmd_stop_all(args: argparse.Namespace) -> int:
+    sup = _make_supervisor()
+    running = [name for name in sorted(sup.manifests) if sup.status(name)["state"] == "RUNNING"]
+    shutdown_order = sup.graph.shutdown_order(running)
+    results = []
+    for name in shutdown_order:
+        results.append(sup.stop(name))
+    _print_json({"stopped": results})
+    return 0
+
+
+def cmd_restart_all(args: argparse.Namespace) -> int:
+    sup = _make_supervisor()
+    running = [name for name in sorted(sup.manifests) if sup.status(name)["state"] == "RUNNING"]
+    shutdown_order = sup.graph.shutdown_order(running)
+    stopped = [sup.stop(name) for name in shutdown_order]
+    result = sup.ensure()
+    _print_json({"stopped": stopped, "started": result})
     return 0
 
 
@@ -154,9 +199,19 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("validate", help="Validate all manifests")
     sub.add_parser("graph", help="Show dependency order")
 
-    for name in ("status", "health", "start", "stop", "restart", "reset"):
+    for name in ("start", "stop", "restart", "reset"):
         p = sub.add_parser(name, help=f"{name.capitalize()} a service")
         p.add_argument("service")
+
+    for name in ("status", "health"):
+        p = sub.add_parser(name, help=f"{name.capitalize()} services")
+        p.add_argument("service", nargs="?")
+
+    sub.add_parser("ensure", help="Start all eligible enabled services")
+    sub.add_parser("stop-all", help="Stop all running services")
+    sub.add_parser("restart-all", help="Restart all services")
+    ps_p = sub.add_parser("ps", help="List Hive-owned processes")
+    ps_p.add_argument("--json", action="store_true")
 
     sub.add_parser("migrate-legacy", help="Show legacy migration plan")
     sub.add_parser("legacy-status", help="Show legacy service classifications")
@@ -175,8 +230,12 @@ def main(argv: list[str] | None = None) -> int:
         "health": cmd_health,
         "start": cmd_start,
         "stop": cmd_stop,
+        "stop-all": cmd_stop_all,
         "restart": cmd_restart,
+        "restart-all": cmd_restart_all,
         "reset": cmd_reset,
+        "ensure": cmd_ensure,
+        "ps": cmd_ps,
         "migrate-legacy": cmd_migrate_legacy_plan,
         "legacy-status": cmd_legacy_status,
     }

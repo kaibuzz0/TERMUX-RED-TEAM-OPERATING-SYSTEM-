@@ -78,15 +78,104 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
 
 def cmd_stage(args: argparse.Namespace) -> int:
-    from updates.updater import Updater
-    updater = Updater(Path(args.release_root))
+    from updates.bundle import extract_bundle
+    from updates.manifest import load_manifest
+    import json, shutil
+    work = Path(args.work_dir or "/tmp/hive-update-stage")
+    if work.exists():
+        shutil.rmtree(work)
     try:
-        staged = updater.stage(Path(args.bundle))
-        print(f"Staged to {staged}")
+        extract_bundle(Path(args.bundle), work)
+        manifest = load_manifest(work / "manifest.json")
+        release_id = json.loads((work / "metadata.json").read_text(encoding="utf-8"))["release"]["release_id"]
+        target = Path(args.release_root) / release_id
+        if target.exists():
+            shutil.rmtree(target)
+        runtime_dir = target / "data" / "runtime"
+        runtime_dir.mkdir(parents=True)
+        for entry in manifest:
+            src = work / entry["path"]
+            dst = runtime_dir / entry["path"]
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            if src.is_dir():
+                shutil.copytree(src, dst)
+            else:
+                shutil.copy2(src, dst)
+        staged_manifest = {"manifest": manifest}
+        (target / "state" / "manifest.json").write_text(json.dumps(staged_manifest), encoding="utf-8")
+        shutil.copy2(work / "metadata.json", target / "metadata.json")
+        if args.json:
+            _print_json({"staged_root": str(target), "release_id": release_id})
+        else:
+            print(f"Staged installer layout to {target}")
         return 0
     except Exception as e:
         print(f"Stage failed: {e}", file=sys.stderr)
         return 2
+
+
+
+
+def cmd_apply(args: argparse.Namespace) -> int:
+    """Verify, stage, and activate a signed offline bundle.
+
+    Requires --trust-store, --release-root, and --approve.
+    """
+    if not args.approve:
+        print("Activation requires --approve", file=sys.stderr)
+        return 2
+
+    from pathlib import Path
+    from updates import TrustStore, BundleVerifier
+    from updates.bundle import extract_bundle
+    from updates.metadata import parse_metadata
+    from installer.activate import ActiveState
+    from installer.plan import generate_plan
+    from installer.schema import plan_to_dict
+    import json
+    import shutil
+
+    work = Path(args.work_dir or "/tmp/hive-update-apply")
+    trust = TrustStore.from_pem_file(Path(args.trust_store))
+    verifier = BundleVerifier(trust, args.platform, args.architecture, args.current_sequence)
+    for seq in args.revoked_sequence or []:
+        verifier.add_revoked_sequence(seq)
+
+    try:
+        verified = verifier.verify(Path(args.bundle), work)
+    except Exception as e:
+        print(f"Verification failed: {e}", file=sys.stderr)
+        return 2
+
+    metadata = verified["metadata"]
+    release_id = metadata["release"]["release_id"]
+
+    # Use installer staging/activation against the active installation
+    plan = generate_plan(work)
+    state = ActiveState(
+        data_root=plan.target.data_root,
+        state_root=plan.target.state_root,
+        transaction_id=plan.transaction_id,
+    )
+    release = state.promote_to_ready(work, plan)
+    release.metadata = metadata
+    pointer = state.activate(release_id, approve=True)
+
+    if args.json:
+        _print_json({
+            "verified": True,
+            "release_id": release_id,
+            "version": metadata["release"]["version"],
+            "active_runtime": pointer.active_runtime,
+            "previous_release_id": pointer.previous_release_id,
+        })
+    else:
+        print(f"Verified and activated: {release_id}")
+        print(f"Version: {metadata['release']['version']}")
+        print(f"Runtime: {pointer.active_runtime}")
+        if pointer.previous_release_id:
+            print(f"Previous release preserved: {pointer.previous_release_id}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -114,9 +203,21 @@ def main(argv: list[str] | None = None) -> int:
     verify_p.add_argument("--work-dir")
     verify_p.add_argument("--emergency", action="store_true")
 
-    stage_p = sub.add_parser("stage", help="Stage a verified bundle")
+    stage_p = sub.add_parser("stage", help="Stage a verified bundle into installer-compatible layout")
     stage_p.add_argument("bundle")
     stage_p.add_argument("--release-root", required=True)
+    stage_p.add_argument("--work-dir")
+
+    apply_p = sub.add_parser("apply", help="Verify, stage, and activate a bundle")
+    apply_p.add_argument("bundle")
+    apply_p.add_argument("--trust-store", required=True)
+    apply_p.add_argument("--release-root", required=True)
+    apply_p.add_argument("--platform", default="termux")
+    apply_p.add_argument("--architecture", default="aarch64")
+    apply_p.add_argument("--current-sequence", type=int, default=0)
+    apply_p.add_argument("--revoked-sequence", type=int, action="append")
+    apply_p.add_argument("--approve", action="store_true", help="Approve activation")
+    apply_p.add_argument("--work-dir")
 
     args = parser.parse_args(argv)
     if args.command is None:
@@ -130,6 +231,7 @@ def main(argv: list[str] | None = None) -> int:
         "plan": cmd_plan,
         "verify": cmd_verify,
         "stage": cmd_stage,
+        "apply": cmd_apply,
     }
     return handlers[args.command](args)
 

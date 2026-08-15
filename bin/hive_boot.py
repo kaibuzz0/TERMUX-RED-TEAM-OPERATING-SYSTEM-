@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
-"""Hive OS interactive boot menu (Milestone 18).
+"""Hive OS Interactive Home (Pass E).
 
-Lightweight home interface that delegates to existing `hive` subcommands.
-Uses only stdlib so it runs under requirements-runtime.txt.
+Lightweight operator landing page.  All telemetry comes from authoritative
+subsystems (network, services, diagnostics, operator notes).  No fake state.
 """
 
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
+from home.renderer import render
+from home.view_model import build_home_state
+
 
 def _resolve_hive_root() -> Path:
-    # Prefer HIVE_REPO_ROOT env var, then canonical repo at ~/Hive-Ops, then cwd.
     env_root = os.environ.get("HIVE_REPO_ROOT")
     if env_root:
         return Path(env_root).resolve()
     default = Path.home() / "Hive-Ops"
     if (default / "bin" / "hive").exists():
         return default
-    # Fallback: derive from this script location when run from source.
     return Path(__file__).resolve().parent.parent
 
 
@@ -33,7 +35,6 @@ def _run(repo_root: Path, *args: str) -> int:
     cmd = _hive_cmd(repo_root) + list(args)
     env = os.environ.copy()
     env["HIVE_REPO_ROOT"] = str(repo_root)
-    # Ensure PYTHONPATH includes repo root for module-based delegations.
     env["PYTHONPATH"] = str(repo_root) + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
     try:
         return subprocess.run(cmd, env=env).returncode
@@ -46,28 +47,265 @@ def _clear() -> None:
     sys.stdout.write("\033[2J\033[H")
 
 
-def _print_menu() -> None:
-    print("=" * 56)
-    print("              Hive OS Interactive Home")
-    print("=" * 56)
-    print("  [1] Status overview          (hive ops overview)")
-    print("  [2] Operations Center        (hive ops --json)")
-    print("  [3] Broker capabilities      (hive broker capabilities)")
-    print("  [4] Service status           (hive service list)")
-    print("  [5] Policy status            (hive policy status)")
-    print("  [6] Vault status             (hive vault status)")
-    print("  [7] Configuration            (hive config validate)")
-    print("  [8] Help                     (hive --help)")
-    print("  [9] Termux Integration       (hive termux repair)")
-    print("  [0] Exit to Termux shell")
-    print("=" * 56)
-
-
-def _read_choice() -> str:
+def _read(prompt: str = "Hive> ") -> str:
     try:
-        return input("Hive> ").strip()
+        return input(prompt).strip()
     except (EOFError, KeyboardInterrupt):
         return "0"
+
+
+def _pause() -> None:
+    try:
+        input("\nPress Enter to continue...")
+    except (EOFError, KeyboardInterrupt):
+        pass
+
+
+def _network_menu(repo_root: Path) -> None:
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Network")
+        print("=" * 56)
+        print("  [1] Status   (hive net status)")
+        print("  [2] DIRECT")
+        print("  [3] ORBOT")
+        print("  [4] TOR")
+        print("  [5] HOLD")
+        print("  [6] Test")
+        print("  [7] New identity")
+        print("  [8] Run command through profile")
+        print("  [0] Back")
+        print("=" * 56)
+        choice = _read("Network> ")
+        if choice == "0":
+            return
+        dispatch = {
+            "1": ("net", "status"),
+            "2": ("net", "direct"),
+            "3": ("net", "orbot"),
+            "4": ("net", "tor"),
+            "5": ("net", "hold"),
+            "6": ("net", "test"),
+            "7": ("net", "newnym"),
+            "8": ("net", "run", "--"),
+        }.get(choice)
+        if dispatch is None:
+            print("Invalid choice.")
+            _pause()
+            continue
+        if choice == "5":
+            print("\nHOLD disables Hive proxy execution and network-dependent services.")
+            print("It is NOT an Android device firewall.")
+        _run(repo_root, *dispatch)
+        _pause()
+
+
+def _services_menu(repo_root: Path) -> None:
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Services")
+        print("=" * 56)
+        print("  [1] Status        (hive services status)")
+        print("  [2] List          (hive services list)")
+        print("  [3] Ensure all    (hive start)")
+        print("  [4] Stop all      (hive stop)")
+        print("  [0] Back")
+        print("=" * 56)
+        choice = _read("Services> ")
+        if choice == "0":
+            return
+        dispatch = {
+            "1": ("services", "status"),
+            "2": ("services", "list"),
+            "3": ("start",),
+            "4": ("stop",),
+        }.get(choice)
+        if dispatch is None:
+            print("Invalid choice.")
+            _pause()
+            continue
+        _run(repo_root, *dispatch)
+        _pause()
+
+
+def _security_menu(repo_root: Path) -> None:
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Security / Audit")
+        print("=" * 56)
+        print("  [1] Health        (hive health)")
+        print("  [2] Doctor        (hive doctor)")
+        print("  [3] Audit         (hive audit)")
+        print("  [4] Selftest      (hive selftest)")
+        print("  [0] Back")
+        print("=" * 56)
+        print("  Audit is READ-ONLY. Selftest is an active test that restores state.")
+        choice = _read("Security> ")
+        if choice == "0":
+            return
+        if choice == "4":
+            print("\nSelftest performs controlled temporary runtime tests and restores state.")
+            confirm = _read("Run selftest? [y/N] ")
+            if confirm.lower() != "y":
+                continue
+        dispatch = {
+            "1": ("health",),
+            "2": ("doctor",),
+            "3": ("audit",),
+            "4": ("selftest",),
+        }.get(choice)
+        if dispatch is None:
+            print("Invalid choice.")
+            _pause()
+            continue
+        _run(repo_root, *dispatch)
+        _pause()
+
+
+def _notes_menu(repo_root: Path) -> None:
+    from config_engine import get_config
+    from hive_operator.notes import clear_notes, read_notes, save_notes
+    config_root = Path(get_config("runtime").get("config_root", str(Path.home() / ".config" / "hive")))
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Operator Notes")
+        print("=" * 56)
+        notes, migrated = read_notes(config_root)
+        if notes:
+            print("\nCurrent notes:")
+            for line in notes.splitlines()[:20]:
+                print(f"  {line}")
+        else:
+            print("\nNo notes yet.")
+        if migrated:
+            print("  (migrated from ~/.hive_ops.txt)")
+        print("\n  [1] Show all")
+        print("  [2] Edit")
+        print("  [3] Clear")
+        print("  [0] Back")
+        print("=" * 56)
+        choice = _read("Notes> ")
+        if choice == "0":
+            return
+        if choice == "1":
+            _clear()
+            print(notes)
+            _pause()
+        elif choice == "2":
+            editor = os.environ.get("EDITOR") or shutil.which("nano") or shutil.which("vim") or shutil.which("vi")
+            path = save_notes(config_root, notes)
+            if editor:
+                subprocess.run([editor, str(path)])
+                notes, _ = read_notes(config_root)
+                save_notes(config_root, notes)
+            else:
+                print("No editor found. Type new notes (Ctrl-D / Ctrl-Z to finish):")
+                try:
+                    new = sys.stdin.read()
+                    save_notes(config_root, new)
+                except (EOFError, KeyboardInterrupt):
+                    pass
+        elif choice == "3":
+            if clear_notes(config_root):
+                print("Notes cleared.")
+            else:
+                print("No notes to clear.")
+            _pause()
+
+
+
+def _updates_menu(repo_root: Path) -> None:
+    """Hive OS Updates sub-menu."""
+    while True:
+        _clear()
+        print("=" * 56)
+        print("              Hive OS Updates")
+        print("=" * 56)
+        print("  [1] Status      (hive update status)")
+        print("  [2] Check       (hive update check)")
+        print("  [3] Verify      (hive update verify)")
+        print("  [4] Plan        (hive update plan)")
+        print("  [5] Apply       (hive update apply)")
+        print("  [6] Rollback    (installer.rollback)")
+        print("  [0] Back")
+        print("=" * 56)
+        choice = _read("Updates> ")
+        if choice == "0":
+            return
+        dispatch = {
+            "1": ("update", "status"),
+            "2": ("update", "check"),
+            "3": ("update", "verify"),
+            "4": ("update", "plan"),
+            "5": ("update", "apply"),
+            "6": ("install", "--rollback"),
+        }.get(choice)
+        if dispatch is None:
+            print("Invalid choice.")
+            _pause()
+            continue
+        if choice == "5":
+            print("\nApplying an update modifies the active runtime.")
+            confirm = _read("Approve update apply? [y/N] ")
+            if confirm.lower() != "y":
+                continue
+            _run(repo_root, *dispatch, "--approve")
+        else:
+            _run(repo_root, *dispatch)
+        _pause()
+
+
+def _main_menu(repo_root: Path) -> int:
+    while True:
+        _clear()
+        try:
+            state = build_home_state(repo_root)
+            print(render(state), end="")
+        except Exception as exc:
+            print(f"\n[Hive Home telemetry error: {exc}]\n", file=sys.stderr)
+        choice = _read("Hive> ")
+        if choice == "0":
+            print("\nExiting Hive. Returning to Termux shell.")
+            return 0
+        if choice.upper() == "R":
+            continue
+        if choice.upper() == "S":
+            _run(repo_root, "speak")
+            _pause()
+            continue
+        if choice.upper() == "U":
+            _updates_menu(repo_root)
+            continue
+        if choice.upper() == "N":
+            _notes_menu(repo_root)
+            continue
+        dispatch = {
+            "1": ("ops", "overview"),
+            "2": None,  # network submenu
+            "3": None,  # services submenu
+            "4": None,  # security submenu
+            "5": ("vault", "status"),
+            "6": ("plugins", "list"),
+            "7": ("logs",),
+            "8": ("doctor",),
+            "9": ("termux", "repair"),
+        }.get(choice)
+        if choice == "2":
+            _network_menu(repo_root)
+        elif choice == "3":
+            _services_menu(repo_root)
+        elif choice == "4":
+            _security_menu(repo_root)
+        elif dispatch:
+            _run(repo_root, *dispatch)
+            _pause()
+        else:
+            print("Invalid choice.")
+            _pause()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -75,41 +313,12 @@ def main(argv: list[str] | None = None) -> int:
     if not (repo_root / "bin" / "hive").exists():
         print(f"hive-boot: cannot find Hive OS launcher at {repo_root / 'bin' / 'hive'}", file=sys.stderr)
         print("Run the Hive OS installer first:", file=sys.stderr)
-        print('  bash -c "$(curl -fsSL .../install-termux-easy.sh)"', file=sys.stderr)
         return 1
-
-    while True:
-        _clear()
-        _print_menu()
-        choice = _read_choice()
-        if choice == "0":
-            print("Exiting Hive. Returning to Termux shell.")
-            return 0
-        dispatch = {
-            "1": ("overview",),
-            "2": ("ops", "--json"),
-            "3": ("broker", "capabilities"),
-            "4": ("service", "list"),
-            "5": ("policy", "status"),
-            "6": ("vault", "status"),
-            "7": ("config", "validate"),
-            "8": ("--help",),
-            "9": ("termux", "repair"),
-        }.get(choice)
-        if dispatch is None:
-            print("Invalid choice. Press Enter to continue.")
-            try:
-                input()
-            except (EOFError, KeyboardInterrupt):
-                return 0
-            continue
-        print(f"\nRunning: hive {' '.join(dispatch)}\n")
-        _run(repo_root, *dispatch)
-        print("\nPress Enter to return to Hive menu.")
-        try:
-            input()
-        except (EOFError, KeyboardInterrupt):
-            return 0
+    try:
+        return _main_menu(repo_root)
+    except KeyboardInterrupt:
+        print("\n\nExiting Hive.")
+        return 0
 
 
 if __name__ == "__main__":
