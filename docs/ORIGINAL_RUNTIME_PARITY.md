@@ -3,7 +3,7 @@
 **Branch:** `hive-1.1-original-runtime-parity`  
 **Base commit:** `eb659ac09444834a37c8325dfc481f0fe37633a4`  
 **Generated:** 2026-08-15  
-**Status:** PASS A — Specification only. No production code changes yet.
+**Status:** PASS A-E complete. Pass F in progress.
 
 This document is the permanent parity specification for rebuilding the original Hive OS Termux-native runtime behavior on top of the modern Python Hive architecture.
 
@@ -112,6 +112,67 @@ operator runs hive {start|stop|status|restart|health|doctor|net|services|ps|logs
 `hive net run -- <command>` is provided by `hive_proxy_run.sh` (no direct CLI mapping in OG main CLI).
 
 ---
+
+
+
+## 3.1. OG → Modern Command Parity
+
+| OG Command | Status | Modern Implementation | Notes |
+|------------|--------|----------------------|-------|
+| `hive start` | **IMPLEMENTED** | `services.cli ensure` / `hive start` | Starts all eligible services |
+| `hive stop` | **IMPLEMENTED** | `services.cli stop-all` / `hive stop` | Stops all Hive-managed services |
+| `hive restart` | **IMPLEMENTED** | `services.cli restart-all` / `hive restart` | Full service restart |
+| `hive status` | **IMPLEMENTED** | `services.cli status` / `hive status` | Supervisor + service status |
+| `hive health` | **IMPLEMENTED** | `diagnostics.health.evaluate_health` | Read-only composite health |
+| `hive doctor` | **IMPLEMENTED** | `diagnostics.doctor.diagnose` | Read-only findings + remediation |
+| `hive audit` | **IMPLEMENTED** | `diagnostics.audit.run_audit` | Read-only security audit |
+| `hive selftest` | **IMPLEMENTED** | `diagnostics.selftest.run_selftest` | Active test with restore |
+| `hive net local` | **COMPATIBILITY** | `network.cli` (alias: `hive net tor` + notice) | `local` maps to `TOR` |
+| `hive net off` | **COMPATIBILITY** | `network.cli` (alias: `hive net hold` + notice) | `off` maps to `HOLD` |
+| `hive net orbot` | **IMPLEMENTED** | `network.cli` | Select ORBOT profile |
+| `hive net status` | **IMPLEMENTED** | `network.cli status` | JSON + human |
+| `hive net test` | **IMPLEMENTED** | `network.cli test` | Proxy routing test |
+| `hive net newnym` | **IMPLEMENTED** | `network.cli newnym` | Tor NEWNYM via ControlPort |
+| `hive net run` | **IMPLEMENTED** | `network.cli run` | argv execution under proxy |
+| `hive services list` | **IMPLEMENTED** | `services.cli list` | Service registry list |
+| `hive services status` | **IMPLEMENTED** | `services.cli status` | Supervisor status |
+| `hive services health` | **IMPLEMENTED** | `services.cli health` | Service health summary |
+| `hive services start NAME` | **IMPLEMENTED** | `services.cli start NAME` | Exact PID ownership |
+| `hive services stop NAME` | **IMPLEMENTED** | `services.cli stop NAME` | Clean shutdown |
+| `hive services ensure` | **IMPLEMENTED** | `services.cli ensure` | Supervisor reconciliation |
+| `hive ps` | **IMPLEMENTED** | `services.cli ps` | Hive-owned processes only |
+| `hive logs` | **IMPLEMENTED** | `runtime_logs.cli` | Service/runtime log viewer |
+| `hive rotate-logs` | **IMPLEMENTED** | `runtime_logs.cli rotate` | Canonical rotation engine |
+| `hive speak` | **IMPLEMENTED** | `hive_operator.speak.speak` | Read-only identity signal |
+| `hive notes` | **IMPLEMENTED** | `hive_operator.notes` | Operator notes with legacy compat |
+| `hive shell` | **IMPLEMENTED** | `hive_operator.shell_integration` | Optional aliases |
+| `hive termux repair` | **IMPLEMENTED** | `installer.termux_repair` | 1.0.1 self-repair |
+| `hive termux status` | **IMPLEMENTED** | `installer.termux_repair` | Integration status |
+| `hive autoboot enable/disable` | **IMPLEMENTED** | `installer.autoboot` | Managed `.bashrc` block |
+| `hive vault status` | **IMPLEMENTED** | existing vault CLI | Broker/read-only where possible |
+| `hive ops overview` | **IMPLEMENTED** | `operations_center.cli` | Unified system view |
+| `hive broker capabilities` | **IMPLEMENTED** | existing broker CLI | Capability catalog |
+| `hive config validate` | **IMPLEMENTED** | existing config_engine CLI | Config validation |
+| `hive policy status` | **IMPLEMENTED** | existing policy_engine CLI | Policy summary |
+| `hive update` | **REPLACED** | `hive update status` / staged update flow | Safer staged update |
+| `hive recovery` | **REPLACED** | `hive recovery status` / journal | Safer recovery |
+| `hive dashboard` | **NOT_IMPLEMENTED** | — | No standalone dashboard in 1.1 |
+| `hive swarm` | **NOT_IMPLEMENTED** | — | Multi-node not in 1.1 |
+| `hive backup` | **NOT_IMPLEMENTED** | — | Backup subsystem not in 1.1 |
+| `hive restore` | **NOT_IMPLEMENTED** | — | Restore subsystem not in 1.1 |
+
+**Legend:**
+
+- **IMPLEMENTED** — directly implemented through modern subsystem
+- **COMPATIBILITY** — alias/bridge to modern behavior with explicit notice
+- **REPLACED** — concept exists with safer modern mechanism
+- **DEPRECATED** — intentionally removed, shows informational message
+- **NOT_IMPLEMENTED** — not claimed; does not exist
+
+**Ghost commands:**
+
+NONE.  Every command advertised by `hive --help` resolves to an implemented
+subsystem or an explicit deprecation message.
 
 ## 4. Environment Variables
 

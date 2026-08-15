@@ -28,6 +28,9 @@ class Collector:
     def collect_overview(self) -> dict[str, Any]:
         sources = self._collect_sources([
             "services", "service_status", "service_health",
+            "network_status", "network_health",
+            "diagnostics_health", "diagnostics_doctor", "diagnostics_audit",
+            "logs_status", "termux_status",
             "updates", "recovery_status", "vault_status",
             "broker_capabilities", "broker_status",
         ])
@@ -43,7 +46,10 @@ class Collector:
         from operations_center.diagnostics import evaluate
         diagnostics = evaluate("overview", {"services": services, "updates": updates, "recovery": recovery, "vault": vault, "broker_capabilities": {"capabilities": broker_capabilities}}, sources)
         physical_validation = _detect_physical_validation()
-        data = overview_view_model(runtime, broker, services, updates, recovery, vault, diagnostics, physical_validation)
+        network = _extract_network(sources.get("network_status"))
+        logs = _extract_logs(sources.get("logs_status"))
+        termux = _extract_termux(sources.get("termux_status"))
+        data = overview_view_model(runtime, broker, services, network, logs, termux, updates, recovery, vault, diagnostics, physical_validation)
         return self._envelope("overview", data, sources, diagnostics)
 
     def collect_services(self) -> dict[str, Any]:
@@ -117,6 +123,33 @@ class Collector:
             "diagnostics": diagnostics,
             "errors": [e for e in errors if e][:20],
         }
+
+
+def _extract_network(source: dict[str, Any] | None) -> dict[str, Any]:
+    if not source:
+        return {"status": "UNKNOWN"}
+    result = source.get("result", {})
+    if isinstance(result, dict) and result.get("results"):
+        try:
+            import json
+            stdout = result["results"][0].get("result", {}).get("stdout", "")
+            if stdout:
+                return json.loads(stdout)
+        except (json.JSONDecodeError, TypeError):
+            pass
+    return {"status": "UNKNOWN"}
+
+
+def _extract_logs(source: dict[str, Any] | None) -> dict[str, Any]:
+    if not source:
+        return {"status": "UNKNOWN"}
+    return {"status": "OK" if source.get("status") == "AVAILABLE" else source.get("status", "UNKNOWN")}
+
+
+def _extract_termux(source: dict[str, Any] | None) -> dict[str, Any]:
+    if not source:
+        return {"status": "UNKNOWN"}
+    return {"status": "OK" if source.get("status") == "AVAILABLE" else source.get("status", "UNKNOWN")}
 
 
 def _safe_message(exc: Exception) -> str:

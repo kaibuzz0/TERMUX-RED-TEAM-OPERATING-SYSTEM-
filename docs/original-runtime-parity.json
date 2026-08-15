@@ -227,5 +227,58 @@
     "PASS E: operator experience",
     "PASS F: broker/policy/Ops integration",
     "PASS G: physical Termux validation"
-  ]
+  ],
+  "command_parity": {
+    "implemented": [
+      "hive start",
+      "hive stop",
+      "hive restart",
+      "hive status",
+      "hive health",
+      "hive doctor",
+      "hive audit",
+      "hive selftest",
+      "hive net orbot",
+      "hive net status",
+      "hive net test",
+      "hive net newnym",
+      "hive net run",
+      "hive services list",
+      "hive services status",
+      "hive services health",
+      "hive services start",
+      "hive services stop",
+      "hive services ensure",
+      "hive ps",
+      "hive logs",
+      "hive rotate-logs",
+      "hive speak",
+      "hive notes",
+      "hive shell",
+      "hive termux repair",
+      "hive termux status",
+      "hive autoboot enable/disable",
+      "hive vault status",
+      "hive ops overview",
+      "hive broker capabilities",
+      "hive config validate",
+      "hive policy status"
+    ],
+    "compatibility": {
+      "hive net local": "hive net tor",
+      "hive net off": "hive net hold"
+    },
+    "replaced": {
+      "hive update": "staged update flow with verification",
+      "hive recovery": "recovery journal and repair flow"
+    },
+    "deprecated": [],
+    "not_implemented": [
+      "hive dashboard",
+      "hive swarm",
+      "hive backup",
+      "hive restore"
+    ]
+  },
+  "status": "PASS A-E complete. Pass F in progress."
 }

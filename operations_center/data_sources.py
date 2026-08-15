@@ -82,4 +82,32 @@ SOURCE_TEMPLATES: dict[str, SourceRequest] = {
         "broker.status",
         make_manifest("broker-status", "broker.status", "oc-broker-status"),
     ),
+    "network_status": SourceRequest(
+        "network.status",
+        make_manifest("network-status", "network.status", "oc-network-status"),
+    ),
+    "network_health": SourceRequest(
+        "network.health",
+        make_manifest("network-health", "network.health", "oc-network-health"),
+    ),
+    "diagnostics_health": SourceRequest(
+        "diagnostics.health",
+        make_manifest("diagnostics-health", "diagnostics.health", "oc-diagnostics-health"),
+    ),
+    "diagnostics_doctor": SourceRequest(
+        "diagnostics.doctor",
+        make_manifest("diagnostics-doctor", "diagnostics.doctor", "oc-diagnostics-doctor"),
+    ),
+    "diagnostics_audit": SourceRequest(
+        "diagnostics.audit",
+        make_manifest("diagnostics-audit", "diagnostics.audit", "oc-diagnostics-audit"),
+    ),
+    "logs_status": SourceRequest(
+        "logs.status",
+        make_manifest("logs-status", "logs.status", "oc-logs-status"),
+    ),
+    "termux_status": SourceRequest(
+        "termux.integration.status",
+        make_manifest("termux-status", "termux.integration.status", "oc-termux-status"),
+    ),
 }
