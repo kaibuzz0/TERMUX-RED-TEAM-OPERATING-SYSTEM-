@@ -29,6 +29,8 @@ MCowBQYDK2VwAyEABf4VRp7InkSSIM9wHZusMV+ujbHgmREPJQgCZhJvpCU=
 -----END PUBLIC KEY-----
 """
 MAX_SECURITY_SEQUENCE = 2_147_483_647
+MAX_ARCHIVE_MEMBERS = 100_000
+MAX_EXTRACTED_BYTES = 512 * 1024 * 1024
 CONTROL_FILES = frozenset({"metadata.json", "manifest.json"})
 
 
@@ -79,29 +81,106 @@ def _safe_relative_path(value: str) -> PurePosixPath:
     return path
 
 
-def safe_extract(bundle: Path, destination: Path) -> None:
-    """Extract only regular files/directories after validating every member.
+def _prepare_extract_destination(destination: Path) -> None:
+    if destination.is_symlink():
+        raise BootstrapVerificationError("bootstrap extraction destination must not be a symlink")
+    if destination.exists():
+        if not destination.is_dir():
+            raise BootstrapVerificationError("bootstrap extraction destination must be a directory")
+        try:
+            if next(destination.iterdir(), None) is not None:
+                raise BootstrapVerificationError("bootstrap extraction destination must be empty")
+        except OSError as exc:
+            raise BootstrapVerificationError(f"cannot inspect bootstrap extraction destination: {exc}") from exc
+    else:
+        destination.mkdir(parents=True)
+    destination.chmod(0o700)
 
-    This deliberately avoids tarfile's newer extraction-filter API so the
-    bootstrap remains compatible with the repository's Python 3.10+ floor.
+
+def safe_extract(bundle: Path, destination: Path) -> None:
+    """Extract an archive without delegating filesystem writes to ``tarfile``.
+
+    Only regular files and directories are accepted. The destination must be an
+    empty, non-symlink directory; archive path-prefix conflicts are rejected;
+    member count and total uncompressed bytes are bounded before any payload is
+    written. Tar header permission bits are ignored.
     """
-    destination.mkdir(parents=True, exist_ok=True)
+    _prepare_extract_destination(destination)
     try:
         archive = tarfile.open(bundle, "r:gz")
     except (tarfile.TarError, OSError) as exc:
         raise BootstrapVerificationError(f"invalid release archive: {exc}") from exc
+
     with archive:
         members = archive.getmembers()
+        if len(members) > MAX_ARCHIVE_MEMBERS:
+            raise BootstrapVerificationError("release archive contains too many members")
+
         seen_members: set[str] = set()
+        regular_files: set[str] = set()
+        normalized_members: list[tuple[tarfile.TarInfo, PurePosixPath]] = []
+        extracted_bytes = 0
+
         for member in members:
-            normalized = str(_safe_relative_path(member.name))
+            rel_path = _safe_relative_path(member.name)
+            normalized = rel_path.as_posix()
             if normalized in seen_members:
                 raise BootstrapVerificationError(f"duplicate archive member: {member.name}")
             seen_members.add(normalized)
             if not (member.isfile() or member.isdir()):
                 raise BootstrapVerificationError(f"unsafe archive member type: {member.name}")
-        for member in members:
-            archive.extract(member, destination)
+            if member.isfile():
+                if member.size < 0:
+                    raise BootstrapVerificationError(f"invalid archive member size: {member.name}")
+                extracted_bytes += member.size
+                if extracted_bytes > MAX_EXTRACTED_BYTES:
+                    raise BootstrapVerificationError("release archive exceeds bootstrap extraction limit")
+                regular_files.add(normalized)
+            normalized_members.append((member, rel_path))
+
+        # A regular file may never be an ancestor of another archive path. This
+        # catches ambiguous archives such as a file named ``a`` plus ``a/b``.
+        for _member, rel_path in normalized_members:
+            for depth in range(1, len(rel_path.parts)):
+                ancestor = PurePosixPath(*rel_path.parts[:depth]).as_posix()
+                if ancestor in regular_files:
+                    raise BootstrapVerificationError(f"archive path conflicts with regular file: {ancestor}")
+
+        for member, rel_path in normalized_members:
+            target = destination.joinpath(*rel_path.parts)
+            if member.isdir():
+                target.mkdir(parents=True, exist_ok=True)
+                if target.is_symlink() or not target.is_dir():
+                    raise BootstrapVerificationError(f"unsafe extracted directory: {member.name}")
+                target.chmod(0o700)
+                continue
+
+            target.parent.mkdir(parents=True, exist_ok=True)
+            parent = destination
+            for part in rel_path.parts[:-1]:
+                parent = parent / part
+                if parent.is_symlink() or not parent.is_dir():
+                    raise BootstrapVerificationError(f"unsafe extraction parent: {member.name}")
+                parent.chmod(0o700)
+            if target.exists() or target.is_symlink():
+                raise BootstrapVerificationError(f"archive target already exists: {member.name}")
+
+            source = archive.extractfile(member)
+            if source is None:
+                raise BootstrapVerificationError(f"archive member is unreadable: {member.name}")
+            remaining = member.size
+            try:
+                with target.open("xb") as handle:
+                    while remaining:
+                        chunk = source.read(min(65536, remaining))
+                        if not chunk:
+                            raise BootstrapVerificationError(f"truncated archive member: {member.name}")
+                        handle.write(chunk)
+                        remaining -= len(chunk)
+                target.chmod(0o600)
+            except Exception:
+                target.unlink(missing_ok=True)
+                raise
 
 
 def verify_metadata(metadata: dict[str, Any]) -> None:
