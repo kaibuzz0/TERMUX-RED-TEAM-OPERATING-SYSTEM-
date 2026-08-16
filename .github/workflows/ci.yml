@@ -45,7 +45,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing || echo "No tests yet"
+        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing
 
   security:
     runs-on: ubuntu-latest
@@ -63,8 +63,8 @@ jobs:
     
     - name: Run bandit security scan
       run: |
-        bandit -r "Hive Ops DevAI" -f json -o bandit-report.json || true
-        bandit -r "Hive Ops DevAI" -ll || true
+        bandit -r "Hive Ops DevAI" bootstrap installer updates -f json -o bandit-report.json || true
+        bandit -r "Hive Ops DevAI" bootstrap installer updates -ll || true
     
     - name: Upload security scan results
       uses: actions/upload-artifact@v4
