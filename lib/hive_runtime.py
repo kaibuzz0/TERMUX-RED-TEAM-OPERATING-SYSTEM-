@@ -65,6 +65,18 @@ def _safe_which(name: str) -> CapabilityState:
     return CapabilityState.AVAILABLE if shutil.which(name) else CapabilityState.UNAVAILABLE
 
 
+def _safe_exists(path: Path) -> bool:
+    """Return whether *path* exists without leaking host permission errors.
+
+    Runtime detection is informational and must never fail merely because a
+    container/CI host exposes a protected procfs or filesystem entry.
+    """
+    try:
+        return path.exists()
+    except OSError:
+        return False
+
+
 def _run_version(cmd: list[str]) -> Optional[str]:
     exe = shutil.which(cmd[0])
     if not exe:
@@ -88,7 +100,7 @@ def detect_android() -> CapabilityState:
     android_envs = ["ANDROID_ROOT", "ANDROID_DATA", "ANDROID_RUNTIME_ROOT"]
     if any(os.environ.get(e) for e in android_envs):
         return CapabilityState.AVAILABLE
-    if Path("/system/build.prop").exists():
+    if _safe_exists(Path("/system/build.prop")):
         return CapabilityState.AVAILABLE
     return CapabilityState.UNVERIFIED
 
@@ -106,12 +118,12 @@ def detect_termux() -> CapabilityState:
 
 
 def detect_proot() -> CapabilityState:
-    """Detect PROot/Distro presence."""
+    """Detect PROot/Distro presence without assuming procfs is readable."""
     if os.environ.get("PROOT_DISTRO"):
         return CapabilityState.AVAILABLE
     if os.environ.get("PROOT"):
         return CapabilityState.AVAILABLE
-    if Path("/proc/1/root").exists() and not os.environ.get("TERMUX_VERSION"):
+    if _safe_exists(Path("/proc/1/root")) and not os.environ.get("TERMUX_VERSION"):
         # Weak heuristic; do not rely on it for security decisions.
         return CapabilityState.UNVERIFIED
     return CapabilityState.UNAVAILABLE
