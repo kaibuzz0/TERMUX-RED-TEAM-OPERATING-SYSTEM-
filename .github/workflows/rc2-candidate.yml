@@ -1,0 +1,200 @@
+name: Build Hive RC.2 Candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "RC version to build"
+        required: true
+        default: "1.1.0-rc.2"
+        type: string
+      security_sequence:
+        description: "Monotonic security sequence for this candidate"
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  candidate:
+    name: Reproducible unsigned RC.2 candidate
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout selected revision
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install release dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Validate candidate inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ inputs.version }}" in
+            *-rc.*) ;;
+            *) echo "Candidate version must be an RC prerelease" >&2; exit 2 ;;
+          esac
+          sequence='${{ inputs.security_sequence }}'
+          if ! [[ "$sequence" =~ ^[0-9]+$ ]]; then
+            echo "security_sequence must be a non-negative integer" >&2
+            exit 2
+          fi
+
+      - name: Pin deterministic build identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
+          echo "HIVE_BUILD_ID=rc2-${GITHUB_SHA:0:12}" >> "$GITHUB_ENV"
+
+      - name: Build candidate twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/hive-rc2-a" "$RUNNER_TEMP/hive-rc2-b"
+          python -m release_engine.cli build \
+            --source "$GITHUB_WORKSPACE" \
+            --output "$RUNNER_TEMP/hive-rc2-a" \
+            --version "${{ inputs.version }}" \
+            --sequence "${{ inputs.security_sequence }}" \
+            --build-id "$HIVE_BUILD_ID" \
+            --revision "$GITHUB_SHA" \
+            --platforms termux \
+            --architectures aarch64 \
+            --channel rc
+          python -m release_engine.cli build \
+            --source "$GITHUB_WORKSPACE" \
+            --output "$RUNNER_TEMP/hive-rc2-b" \
+            --version "${{ inputs.version }}" \
+            --sequence "${{ inputs.security_sequence }}" \
+            --build-id "$HIVE_BUILD_ID" \
+            --revision "$GITHUB_SHA" \
+            --platforms termux \
+            --architectures aarch64 \
+            --channel rc
+
+      - name: Prove candidate reproducibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          a_bundle=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.tar.gz' -print -quit)
+          b_bundle=$(find "$RUNNER_TEMP/hive-rc2-b" -maxdepth 1 -name '*.tar.gz' -print -quit)
+          a_metadata=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.metadata.json' -print -quit)
+          b_metadata=$(find "$RUNNER_TEMP/hive-rc2-b" -maxdepth 1 -name '*.metadata.json' -print -quit)
+          a_manifest=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.manifest.json' -print -quit)
+          b_manifest=$(find "$RUNNER_TEMP/hive-rc2-b" -maxdepth 1 -name '*.manifest.json' -print -quit)
+          test -n "$a_bundle" && test -n "$b_bundle"
+          test -n "$a_metadata" && test -n "$b_metadata"
+          test -n "$a_manifest" && test -n "$b_manifest"
+          cmp --silent "$a_bundle" "$b_bundle"
+          cmp --silent "$a_metadata" "$b_metadata"
+          cmp --silent "$a_manifest" "$b_manifest"
+          echo "Reproducible bundle: $(sha256sum "$a_bundle" | cut -d' ' -f1)"
+
+      - name: Validate runtime release shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.tar.gz' -print -quit)
+          metadata=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.metadata.json' -print -quit)
+          manifest=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.manifest.json' -print -quit)
+          export BUNDLE="$bundle" METADATA="$metadata" MANIFEST="$manifest"
+          python - <<'PY'
+          import json
+          import os
+          import tarfile
+          from pathlib import Path
+
+          bundle = Path(os.environ["BUNDLE"])
+          metadata = json.loads(Path(os.environ["METADATA"]).read_text(encoding="utf-8"))
+          manifest = json.loads(Path(os.environ["MANIFEST"]).read_text(encoding="utf-8"))
+          paths = {entry["path"] for entry in manifest}
+          required = {
+              "bin/hive",
+              "hive-canonical.json",
+              "installer/activate.py",
+              "installer/autoboot.py",
+              "installer/plan.py",
+              "installer/schema.py",
+              "Hive Ops Final/bin/hive",
+          }
+          missing = sorted(required - paths)
+          if missing:
+              raise SystemExit(f"candidate manifest missing required runtime file: {missing[0]}")
+          release = metadata.get("release", {})
+          if release.get("commit") != os.environ["GITHUB_SHA"]:
+              raise SystemExit("candidate metadata is not bound to the workflow commit")
+          if release.get("security_sequence") != int(os.environ["SEQUENCE"]):
+              raise SystemExit("candidate security sequence mismatch")
+          if release.get("platforms") != ["termux"] or release.get("architectures") != ["aarch64"]:
+              raise SystemExit("candidate platform/architecture contract mismatch")
+          with tarfile.open(bundle, "r:gz") as archive:
+              names = archive.getnames()
+          if len(names) != len(set(names)):
+              raise SystemExit("candidate bundle contains duplicate archive members")
+          if set(names) != paths | {"manifest.json", "metadata.json"}:
+              raise SystemExit("candidate archive does not exactly match manifest closure")
+          print(f"Candidate release shape validated: {release.get('release_id')}")
+          PY
+        env:
+          SEQUENCE: "${{ inputs.security_sequence }}"
+
+      - name: Inspect unsigned bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle=$(find "$RUNNER_TEMP/hive-rc2-a" -maxdepth 1 -name '*.tar.gz' -print -quit)
+          python -m release_engine.cli inspect "$bundle" --work-dir "$RUNNER_TEMP/hive-rc2-inspect"
+
+      - name: Assemble offline-signing kit
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$GITHUB_WORKSPACE/dist/rc2-candidate"
+          rm -rf "$out"
+          mkdir -p "$out"
+          cp "$RUNNER_TEMP/hive-rc2-a"/* "$out/"
+          python -m zipapp bootstrap -o "$out/hive-bootstrap.pyz" -p "/usr/bin/env python3"
+          sha256sum "$out"/*.tar.gz "$out"/*.json "$out/hive-bootstrap.pyz" > "$out/SHA256SUMS"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          out = Path("dist/rc2-candidate")
+          bundle = next(out.glob("*.tar.gz"))
+          metadata = next(out.glob("*.metadata.json"))
+          manifest = next(out.glob("*.manifest.json"))
+          info = {
+              "status": "unsigned_candidate_only",
+              "version": "${{ inputs.version }}",
+              "security_sequence": int("${{ inputs.security_sequence }}"),
+              "source_revision": os.environ["GITHUB_SHA"],
+              "source_date_epoch": int(os.environ["SOURCE_DATE_EPOCH"]),
+              "build_id": os.environ["HIVE_BUILD_ID"],
+              "expected_production_key_id": "hive-release-prod-2026-02",
+              "bundle": bundle.name,
+              "metadata": metadata.name,
+              "manifest": manifest.name,
+              "next_step": "offline-sign metadata, then run `hive release seal` and bootstrap verification before publication",
+          }
+          (out / "CANDIDATE.json").write_text(json.dumps(info, indent=2, sort_keys=True), encoding="utf-8")
+          PY
+
+      - name: Upload unsigned RC.2 candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: hive-rc2-unsigned-${{ github.sha }}
+          path: dist/rc2-candidate/
+          if-no-files-found: error
+          retention-days: 7
