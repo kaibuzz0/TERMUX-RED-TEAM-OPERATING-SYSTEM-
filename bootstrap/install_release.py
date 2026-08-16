@@ -21,9 +21,14 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 try:
-    from bootstrap.verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
+    from bootstrap.verify_bundle import (
+        BootstrapVerificationError,
+        _safe_relative_path,
+        verify_bundle,
+        verify_metadata,
+    )
 except ImportError:  # pragma: no cover - exercised by the standalone zipapp test
-    from verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
+    from verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle, verify_metadata
 
 DEFAULT_MAX_DOWNLOAD_BYTES = 512 * 1024 * 1024
 MANAGED_LAUNCHER_MARKER = "# HIVE_OS_V2_MANAGED_LAUNCHER"
@@ -105,12 +110,7 @@ def _private_mkdir(path: Path) -> None:
 
 
 def stage_verified_release(verified_root: Path, staging_root: Path) -> Path:
-    """Translate a verified release bundle into the existing installer layout.
-
-    Tar header modes are deliberately not preserved: archive metadata is not part
-    of the signed manifest. Runtime permissions are derived only from the signed
-    ``executable`` flag, and staging directories remain operator-private.
-    """
+    """Translate a verified release bundle into the existing installer layout."""
     manifest = _read_verified_manifest(verified_root)
     staging_root.mkdir(parents=True, exist_ok=False)
     staging_root.chmod(0o700)
@@ -199,10 +199,7 @@ os.execv(sys.executable, [sys.executable, str(entry), *sys.argv[1:]])
 
 
 def install_global_launcher(data_root: Path, prefix: Path) -> Path:
-    """Install an atomic managed launcher that follows ``active.json``.
-
-    Existing non-Hive commands are never overwritten.
-    """
+    """Install an atomic managed launcher that follows ``active.json``."""
     prefix = prefix.expanduser().resolve()
     launcher_dir = prefix / "bin"
     launcher_dir.mkdir(parents=True, exist_ok=True)
@@ -275,9 +272,6 @@ def install_verified_release(
 
     with tempfile.TemporaryDirectory(prefix="hive-stage-") as staging_dir:
         staging_root = stage_verified_release(verified_root, Path(staging_dir) / "staged")
-
-        # This is the trust boundary: no module from verified_root is imported
-        # until verify_bundle has completed successfully.
         sys.path.insert(0, str(verified_root))
         try:
             from installer.activate import ActiveState
@@ -336,21 +330,113 @@ def _termux_prefix(explicit: Path | None) -> Path:
     return Path(value).expanduser().resolve()
 
 
+def resolve_current_security_state(
+    data_root: Path,
+    *,
+    explicit_sequence: int | None = None,
+    explicit_release_id: str | None = None,
+) -> tuple[int, str | None]:
+    """Derive the anti-rollback floor from the active signed release.
+
+    A V2-managed install stores the verified signed metadata in the release
+    record. We re-verify that metadata with the embedded production root instead
+    of trusting mutable command-line state. Legacy installs that do not have a
+    signed metadata record may supply *both* explicit values as a migration
+    bridge; malformed/tampered signed metadata is never bypassed by overrides.
+    """
+    if explicit_sequence is not None and (not isinstance(explicit_sequence, int) or explicit_sequence < 0):
+        raise BootstrapInstallError("current security sequence must be a non-negative integer")
+    if explicit_release_id is not None and (not isinstance(explicit_release_id, str) or not explicit_release_id):
+        raise BootstrapInstallError("current release id must be a non-empty string")
+
+    data_root = data_root.expanduser().resolve()
+    pointer_path = data_root / "active.json"
+    if not pointer_path.exists():
+        if explicit_release_id is not None and explicit_sequence is None:
+            raise BootstrapInstallError("--current-release-id requires --current-sequence on a clean/legacy install")
+        return explicit_sequence if explicit_sequence is not None else 0, explicit_release_id
+
+    try:
+        pointer = json.loads(pointer_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BootstrapInstallError(f"cannot trust corrupt active release pointer: {exc}") from exc
+    if not isinstance(pointer, dict) or pointer.get("schema_version") != 1:
+        raise BootstrapInstallError("cannot trust active release pointer with unknown schema")
+
+    active_release_id = pointer.get("active_release_id")
+    active_runtime = pointer.get("active_runtime")
+    if not isinstance(active_release_id, str) or not active_release_id or not isinstance(active_runtime, str):
+        raise BootstrapInstallError("active release pointer is invalid")
+    if "/" in active_release_id or "\\" in active_release_id or active_release_id in {".", ".."}:
+        raise BootstrapInstallError("active release id is unsafe")
+
+    expected_runtime = (data_root / "releases" / active_release_id / "runtime").resolve()
+    if Path(active_runtime).expanduser().resolve() != expected_runtime:
+        raise BootstrapInstallError("active runtime pointer does not match versioned release layout")
+
+    record_path = data_root / "releases" / active_release_id / ".release.json"
+    try:
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        record = None
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BootstrapInstallError(f"cannot trust corrupt active release record: {exc}") from exc
+
+    if not isinstance(record, dict) or not isinstance(record.get("metadata"), dict):
+        if explicit_sequence is None or explicit_release_id is None:
+            raise BootstrapInstallError(
+                "active legacy release has no signed security state; supply both --current-sequence and --current-release-id"
+            )
+        if explicit_release_id != active_release_id:
+            raise BootstrapInstallError("explicit current release id does not match active release pointer")
+        return explicit_sequence, explicit_release_id
+
+    if record.get("release_id") != active_release_id:
+        raise BootstrapInstallError("active release record identity does not match active pointer")
+
+    metadata = record["metadata"]
+    try:
+        verify_metadata(metadata)
+    except BootstrapVerificationError as exc:
+        raise BootstrapInstallError(f"active release signed metadata is invalid: {exc}") from exc
+
+    release = metadata.get("release")
+    if not isinstance(release, dict):
+        raise BootstrapInstallError("active signed metadata has no release block")
+    signed_release_id = release.get("release_id")
+    signed_sequence = release.get("security_sequence")
+    if signed_release_id != active_release_id:
+        raise BootstrapInstallError("active signed metadata identity does not match active pointer")
+    if not isinstance(signed_sequence, int) or isinstance(signed_sequence, bool) or signed_sequence < 0:
+        raise BootstrapInstallError("active signed metadata has invalid security sequence")
+
+    if explicit_sequence is not None and explicit_sequence != signed_sequence:
+        raise BootstrapInstallError("explicit current sequence conflicts with active signed release")
+    if explicit_release_id is not None and explicit_release_id != signed_release_id:
+        raise BootstrapInstallError("explicit current release id conflicts with active signed release")
+    return signed_sequence, signed_release_id
+
+
 def bootstrap_install(
     bundle_url: str,
     *,
     platform: str,
     architecture: str,
-    current_sequence: int,
     data_root: Path,
     state_root: Path,
     approve: bool,
     prefix: Path | None = None,
+    current_sequence: int | None = None,
     current_release_id: str | None = None,
 ) -> dict[str, Any]:
     """Execute the clean-install trust pipeline from download through activation."""
     configure_termux = approve and platform == "termux"
     termux_prefix = _termux_prefix(prefix) if configure_termux else None
+    effective_sequence, effective_release_id = resolve_current_security_state(
+        data_root,
+        explicit_sequence=current_sequence,
+        explicit_release_id=current_release_id,
+    )
 
     with tempfile.TemporaryDirectory(prefix="hive-bootstrap-") as work_dir:
         work = Path(work_dir)
@@ -362,8 +448,8 @@ def bootstrap_install(
             verified_root,
             platform,
             architecture,
-            current_sequence=current_sequence,
-            current_release_id=current_release_id,
+            current_sequence=effective_sequence,
+            current_release_id=effective_release_id,
         )
         if configure_termux:
             installation = install_verified_release(
@@ -385,6 +471,10 @@ def bootstrap_install(
             "downloaded_bytes": downloaded_bytes,
             "verification": verification,
             "installation": installation,
+            "current_security_state": {
+                "security_sequence": effective_sequence,
+                "release_id": effective_release_id,
+            },
         }
 
 
@@ -396,8 +486,16 @@ def main(argv: list[str] | None = None) -> int:
         "--architecture",
         default=os.uname().machine if hasattr(os, "uname") else "aarch64",
     )
-    parser.add_argument("--current-sequence", type=int, default=0)
-    parser.add_argument("--current-release-id", help="release identity currently bound to --current-sequence")
+    parser.add_argument(
+        "--current-sequence",
+        type=int,
+        default=None,
+        help="legacy/manual anti-rollback floor; V2 installs derive this from active signed metadata",
+    )
+    parser.add_argument(
+        "--current-release-id",
+        help="legacy/manual release identity bound to --current-sequence; V2 installs derive this automatically",
+    )
     parser.add_argument("--data-root", type=Path, default=Path.home() / "Hive-Ops" / "data")
     parser.add_argument("--state-root", type=Path, default=Path.home() / "Hive-Ops" / "state")
     parser.add_argument("--prefix", type=Path, help="Termux package prefix; defaults to $PREFIX")
