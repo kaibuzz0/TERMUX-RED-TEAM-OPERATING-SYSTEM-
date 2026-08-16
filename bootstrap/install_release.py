@@ -256,6 +256,96 @@ def enable_termux_autoboot(active_runtime: Path) -> None:
         raise BootstrapInstallError(f"failed to enable Termux autoboot: {exc}") from exc
 
 
+def _snapshot_regular_file(path: Path) -> dict[str, Any]:
+    """Capture exact file bytes/mode without following symlinks."""
+    if path.is_symlink():
+        raise BootstrapInstallError(f"refusing transactional finalization through symlink: {path}")
+    if not path.exists():
+        return {"path": path, "existed": False, "data": b"", "mode": 0}
+    if not path.is_file():
+        raise BootstrapInstallError(f"refusing transactional finalization over non-file path: {path}")
+    try:
+        return {
+            "path": path,
+            "existed": True,
+            "data": path.read_bytes(),
+            "mode": path.stat().st_mode & 0o7777,
+        }
+    except OSError as exc:
+        raise BootstrapInstallError(f"cannot snapshot finalization state {path}: {exc}") from exc
+
+
+def _restore_file_snapshot(snapshot: dict[str, Any]) -> None:
+    """Atomically restore one snapshot, or remove a file created by the transaction."""
+    path = snapshot["path"]
+    if not snapshot["existed"]:
+        if path.is_symlink() or path.is_file():
+            path.unlink()
+        elif path.exists():
+            raise BootstrapInstallError(f"cannot remove unexpected non-file during rollback: {path}")
+        return
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="wb", dir=path.parent, prefix=f".{path.name}.rollback-", delete=False) as handle:
+            handle.write(snapshot["data"])
+            temp_path = Path(handle.name)
+        temp_path.chmod(snapshot["mode"])
+        if path.exists() and not path.is_file() and not path.is_symlink():
+            raise BootstrapInstallError(f"cannot restore file over unexpected non-file: {path}")
+        os.replace(temp_path, path)
+        temp_path = None
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
+
+
+def _termux_finalization_snapshots(data_root: Path, prefix: Path, release_id: str) -> list[dict[str, Any]]:
+    """Snapshot every mutable file touched before activation commits."""
+    home = Path.home()
+    bashrc = home / ".bashrc"
+    paths = [
+        prefix.expanduser().resolve() / "bin" / "hive",
+        bashrc,
+        bashrc.with_suffix(".bashrc.hive-backup"),
+        home / ".config" / "hive" / "no-autoboot",
+        data_root / "active.json",
+        data_root / "releases" / release_id / ".release.json",
+    ]
+    return [_snapshot_regular_file(path) for path in paths]
+
+
+def finalize_termux_activation(
+    active: Any,
+    release_id: str,
+    ready_runtime: Path,
+    *,
+    data_root: Path,
+    prefix: Path,
+) -> tuple[Any, Path]:
+    """Install Termux integration and activate as one rollback-safe transaction."""
+    snapshots = _termux_finalization_snapshots(data_root, prefix, release_id)
+    try:
+        launcher = install_global_launcher(data_root, prefix)
+        enable_termux_autoboot(ready_runtime)
+        pointer = active.activate(release_id, approve=True)
+        return pointer, launcher
+    except Exception as exc:
+        rollback_errors: list[str] = []
+        for snapshot in reversed(snapshots):
+            try:
+                _restore_file_snapshot(snapshot)
+            except Exception as rollback_exc:  # rollback must attempt every snapshot
+                rollback_errors.append(f"{snapshot['path']}: {rollback_exc}")
+        if rollback_errors:
+            joined = "; ".join(rollback_errors)
+            raise BootstrapInstallError(
+                f"Termux activation failed ({exc}); finalization rollback was incomplete: {joined}"
+            ) from exc
+        raise
+
+
 def install_verified_release(
     verified_root: Path,
     *,
@@ -305,10 +395,17 @@ def install_verified_release(
             if approve:
                 ready_runtime = (data_root / "releases" / release_id / "runtime").resolve()
                 if configure_termux:
-                    launcher = install_global_launcher(data_root, termux_prefix)
-                    enable_termux_autoboot(ready_runtime)
+                    assert termux_prefix is not None
+                    pointer, launcher = finalize_termux_activation(
+                        active,
+                        release_id,
+                        ready_runtime,
+                        data_root=data_root,
+                        prefix=termux_prefix,
+                    )
                     result.update({"global_launcher": str(launcher), "autoboot": "enabled"})
-                pointer = active.activate(release_id, approve=True)
+                else:
+                    pointer = active.activate(release_id, approve=True)
                 result.update(
                     {
                         "state": "active",
