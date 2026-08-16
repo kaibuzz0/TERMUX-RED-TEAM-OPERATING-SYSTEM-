@@ -165,6 +165,8 @@ jobs:
           mkdir -p "$out"
           cp "$RUNNER_TEMP/hive-rc2-a"/* "$out/"
           python -m zipapp bootstrap -o "$out/hive-bootstrap.pyz" -p "/usr/bin/env python3"
+          python "$out/hive-bootstrap.pyz" install --help >/dev/null
+          python "$out/hive-bootstrap.pyz" verify --help >/dev/null
           sha256sum "$out"/*.tar.gz "$out"/*.json "$out/hive-bootstrap.pyz" > "$out/SHA256SUMS"
           python - <<'PY'
           import json
