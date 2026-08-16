@@ -12,7 +12,8 @@ def _build_zipapp(tmp_path: Path) -> Path:
     source = tmp_path / "bootstrap-src"
     shutil.copytree(repo_root / "bootstrap", source)
     archive = tmp_path / "hive-bootstrap.pyz"
-    zipapp.create_archive(source, target=archive, interpreter="/usr/bin/env python3")
+    zipapp.create_archive(source, target=archive)
+    assert not archive.read_bytes().startswith(b"#!")
     return archive
 
 
