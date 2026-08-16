@@ -83,7 +83,7 @@ def safe_extract(bundle: Path, destination: Path) -> None:
     """Extract only regular files/directories after validating every member.
 
     This deliberately avoids tarfile's newer extraction-filter API so the
-    bootstrap remains compatible with the repository's Python 3.9+ support.
+    bootstrap remains compatible with the repository's Python 3.10+ floor.
     """
     destination.mkdir(parents=True, exist_ok=True)
     try:
