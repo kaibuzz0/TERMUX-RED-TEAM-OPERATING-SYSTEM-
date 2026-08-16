@@ -334,10 +334,19 @@ class ActiveState:
             # Atomic pointer write; previous pointer is preserved via previous_release_id.
             self._write_active_pointer(pointer)
 
+            # Preserve any signed metadata that was stored during promotion.
+            existing_path = self._release_metadata_path(release_id)
+            existing_metadata = {}
+            try:
+                existing_data = json.loads(existing_path.read_text(encoding="utf-8"))
+                existing_metadata = existing_data.get("metadata", {})
+            except Exception:
+                pass
+
             # Update release state.
             release.state = ActivationState.ACTIVE
             release.previous_release_id = previous_release_id
-            self._write_release_metadata(release)
+            self._write_release_metadata(release, existing_metadata or None)
 
             journal = InstallJournal(self.state_root / "install-journal", release.transaction_id)
             journal.append(
@@ -397,10 +406,22 @@ class ActiveState:
 
             current_release = self._read_release_metadata(current.active_release_id)
             current_release.state = ActivationState.ROLLBACK_AVAILABLE
-            self._write_release_metadata(current_release)
+            current_metadata = {}
+            try:
+                current_data = json.loads(self._release_metadata_path(current.active_release_id).read_text(encoding="utf-8"))
+                current_metadata = current_data.get("metadata", {})
+            except Exception:
+                pass
+            self._write_release_metadata(current_release, current_metadata or None)
 
+            existing_metadata = {}
+            try:
+                existing_data = json.loads(self._release_metadata_path(previous_release_id).read_text(encoding="utf-8"))
+                existing_metadata = existing_data.get("metadata", {})
+            except Exception:
+                pass
             previous.state = ActivationState.ROLLED_BACK
-            self._write_release_metadata(previous)
+            self._write_release_metadata(previous, existing_metadata or None)
 
             journal = InstallJournal(self.state_root / "install-journal", previous.transaction_id)
             journal.append(
