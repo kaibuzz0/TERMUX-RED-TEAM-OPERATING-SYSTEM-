@@ -19,7 +19,12 @@ from typing import Any, Callable
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from bootstrap.verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
+try:
+    # Normal repository/package execution: ``python -m bootstrap.install_release``.
+    from bootstrap.verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
+except ImportError:  # pragma: no cover - exercised by the standalone zipapp test
+    # Standalone zipapp execution: the bootstrap package contents are archive-root modules.
+    from verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
 
 DEFAULT_MAX_DOWNLOAD_BYTES = 512 * 1024 * 1024
 
