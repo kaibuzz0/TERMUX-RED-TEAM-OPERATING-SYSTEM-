@@ -48,16 +48,37 @@ def _file_contains_base64(path: Path) -> bool:
     return False
 
 
+def _is_readable_directory(path: Path) -> bool:
+    """Probe a candidate legacy root without surfacing host permission errors."""
+    try:
+        return path.is_dir() and os.access(path, os.R_OK | os.X_OK)
+    except OSError:
+        return False
+
+
 def _classify_file(path: Path, legacy_root: Path) -> dict[str, Any]:
     rel = path.relative_to(legacy_root).as_posix()
     name = path.name.lower()
     reason = ""
     risk = MigrationRisk.UNKNOWN
 
+    try:
+        is_dir = path.is_dir()
+        is_file = path.is_file()
+        size = path.stat().st_size if is_file else 0
+    except OSError:
+        return {
+            "path": rel,
+            "type": "unknown",
+            "size": 0,
+            "risk": MigrationRisk.UNKNOWN.value,
+            "reason": "path is not readable",
+        }
+
     if name in _NEVER_COPY_NAMES or any(part.lower() in _NEVER_COPY_NAMES for part in path.parts):
         risk = MigrationRisk.NEVER_COPY
         reason = "credential/secret-like filename"
-    elif path.suffix.lower() in {".sh", ".py"} and path.stat().st_size > 0:
+    elif path.suffix.lower() in {".sh", ".py"} and size > 0:
         # Scripts are potentially executable; require manual review.
         risk = MigrationRisk.MANUAL_REVIEW
         reason = "executable script"
@@ -67,10 +88,10 @@ def _classify_file(path: Path, legacy_root: Path) -> dict[str, Any]:
     elif name in _SHELL_STARTUP_FILES:
         risk = MigrationRisk.MANUAL_REVIEW
         reason = "shell startup file"
-    elif path.is_dir() and "termux" in rel.lower():
+    elif is_dir and "termux" in rel.lower():
         risk = MigrationRisk.MANUAL_REVIEW
         reason = "Termux-specific directory"
-    elif path.is_file():
+    elif is_file:
         risk = MigrationRisk.SAFE
         reason = "ordinary file"
     else:
@@ -79,8 +100,8 @@ def _classify_file(path: Path, legacy_root: Path) -> dict[str, Any]:
 
     return {
         "path": rel,
-        "type": "directory" if path.is_dir() else "file",
-        "size": path.stat().st_size if path.is_file() else 0,
+        "type": "directory" if is_dir else "file" if is_file else "unknown",
+        "size": size,
         "risk": risk.value,
         "reason": reason,
     }
@@ -104,14 +125,14 @@ def detect_legacy_installation(
 
     found = []
     for label, root in candidates:
-        if root.exists() and root.is_dir():
+        if _is_readable_directory(root):
             found.append((label, root))
 
     if not found:
         return {
             "legacy_status": LegacyStatus.NO_LEGACY_INSTALLATION.value,
             "legacy_root": None,
-            "classification_reason": "No legacy installation paths found",
+            "classification_reason": "No readable legacy installation paths found",
             "candidates": {label: str(root) for label, root in candidates},
         }
 
@@ -127,7 +148,9 @@ def detect_legacy_installation(
 
     primary_label, primary_root = found[0]
 
-    # Inspect contents without modification.
+    # Inspect contents without modification. Permission failures inside a
+    # legacy tree are treated as unknown/unreadable rather than aborting
+    # installation detection on the current host.
     safe_items = []
     manual_review_items = []
     never_copy_items = []
@@ -138,8 +161,16 @@ def detect_legacy_installation(
     has_base64_credential = False
     has_symlink = False
 
-    for p in sorted(primary_root.rglob("*")):
-        rel = p.relative_to(primary_root).as_posix()
+    try:
+        paths = sorted(primary_root.rglob("*"))
+    except OSError:
+        paths = []
+
+    for p in paths:
+        try:
+            rel = p.relative_to(primary_root).as_posix()
+        except (OSError, ValueError):
+            continue
         if any(part in {".git", "__pycache__"} for part in p.parts):
             continue
         entry = _classify_file(p, primary_root)
@@ -161,8 +192,11 @@ def detect_legacy_installation(
             has_boot = True
         if entry["risk"] == MigrationRisk.NEVER_COPY.value and "credential" in entry["reason"]:
             has_base64_credential = True
-        if p.is_symlink():
-            has_symlink = True
+        try:
+            if p.is_symlink():
+                has_symlink = True
+        except OSError:
+            pass
 
     if has_base64_credential or has_bashrc or has_boot:
         legacy_status = LegacyStatus.LEGACY_UNSUPPORTED
