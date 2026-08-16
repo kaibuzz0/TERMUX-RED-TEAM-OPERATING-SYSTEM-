@@ -7,7 +7,6 @@ from pathlib import Path
 import pytest
 
 from release_engine import candidate_gate
-from release_engine.errors import BuildError
 
 
 def _sha256(path: Path) -> str:
@@ -70,7 +69,7 @@ def test_verify_candidate_hashes_rejects_tampered_artifact(tmp_path: Path) -> No
     (tmp_path / "SHA256SUMS").write_text(f"{original}  {artifact.name}\n", encoding="utf-8")
     artifact.write_bytes(b"tampered")
 
-    with pytest.raises(BuildError, match="candidate hash mismatch"):
+    with pytest.raises(candidate_gate.CandidateGateError, match="candidate hash mismatch"):
         candidate_gate.verify_candidate_hashes(tmp_path)
 
 
@@ -81,7 +80,7 @@ def test_verify_candidate_hashes_rejects_nonportable_path(tmp_path: Path) -> Non
         f"{_sha256(artifact)}  /tmp/{artifact.name}\n", encoding="utf-8"
     )
 
-    with pytest.raises(BuildError, match="basename-only"):
+    with pytest.raises(candidate_gate.CandidateGateError, match="basename-only"):
         candidate_gate.verify_candidate_hashes(tmp_path)
 
 
@@ -111,7 +110,10 @@ def test_validate_signed_metadata_rejects_unsigned_field_substitution(
     }
     monkeypatch.setattr(candidate_gate, "verify_metadata", lambda metadata: None)
 
-    with pytest.raises(BuildError, match="does not belong to the exact unsigned candidate"):
+    with pytest.raises(
+        candidate_gate.CandidateGateError,
+        match="does not belong to the exact unsigned candidate",
+    ):
         candidate_gate.validate_signed_metadata(_candidate(), unsigned, signed)
 
 
@@ -124,5 +126,5 @@ def test_validate_signed_metadata_rejects_wrong_signing_key() -> None:
         "signature": "test-signature",
     }
 
-    with pytest.raises(BuildError, match="must use production key"):
+    with pytest.raises(candidate_gate.CandidateGateError, match="must use production key"):
         candidate_gate.validate_signed_metadata(_candidate(), unsigned, signed)
