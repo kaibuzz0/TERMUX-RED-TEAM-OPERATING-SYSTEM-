@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Standalone Hive bootstrap verifier for clean Termux installs.
 
-This module intentionally has no imports from the Hive source tree.  A clean
+This module intentionally has no imports from the Hive source tree. A clean
 Termux install can install Python + python-cryptography, download a release
 bundle, and verify it before any code from that bundle is executed.
 """
@@ -32,7 +32,7 @@ MAX_SECURITY_SEQUENCE = 2_147_483_647
 
 
 class BootstrapVerificationError(RuntimeError):
-    pass
+    """A release failed a clean-install bootstrap verification gate."""
 
 
 def _canonical_json(data: dict[str, Any]) -> bytes:
@@ -79,6 +79,11 @@ def _safe_relative_path(value: str) -> PurePosixPath:
 
 
 def safe_extract(bundle: Path, destination: Path) -> None:
+    """Extract only regular files/directories after validating every member.
+
+    This deliberately avoids tarfile's newer extraction-filter API so the
+    bootstrap remains compatible with the repository's Python 3.9+ support.
+    """
     destination.mkdir(parents=True, exist_ok=True)
     try:
         archive = tarfile.open(bundle, "r:gz")
@@ -88,9 +93,10 @@ def safe_extract(bundle: Path, destination: Path) -> None:
         members = archive.getmembers()
         for member in members:
             _safe_relative_path(member.name)
-            if member.issym() or member.islnk() or member.isdev() or member.isfifo():
+            if not (member.isfile() or member.isdir()):
                 raise BootstrapVerificationError(f"unsafe archive member type: {member.name}")
-        archive.extractall(destination, members=members, filter="data")
+        for member in members:
+            archive.extract(member, destination)
 
 
 def verify_metadata(metadata: dict[str, Any]) -> None:
@@ -201,12 +207,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     destination = args.destination
-    temporary: tempfile.TemporaryDirectory[str] | None = None
+    temporary = None
     if destination is None:
         temporary = tempfile.TemporaryDirectory(prefix="hive-bootstrap-")
         destination = Path(temporary.name)
     try:
-        result = verify_bundle(args.bundle.resolve(), destination.resolve(), args.platform, args.architecture, args.current_sequence)
+        result = verify_bundle(
+            args.bundle.resolve(), destination.resolve(), args.platform, args.architecture, args.current_sequence
+        )
         if args.json:
             print(json.dumps(result, indent=2, sort_keys=True))
         else:
