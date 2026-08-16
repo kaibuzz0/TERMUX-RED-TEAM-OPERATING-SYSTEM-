@@ -6,7 +6,6 @@ import copy
 import hashlib
 import json
 import os
-import shutil
 import tarfile
 import tempfile
 from datetime import datetime, timezone
@@ -20,13 +19,30 @@ from release_engine.reproducibility import (
     _add_json,
     compute_bundle_digest,
     create_reproducible_tar,
+    open_reproducible_tar,
 )
-from release_engine.schema import ReleaseMetadata
 from release_engine.version import parse_release_version
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    """Return the signed release timestamp, honoring SOURCE_DATE_EPOCH.
+
+    Candidate workflows pin SOURCE_DATE_EPOCH to the source commit timestamp so
+    rebuilding the same revision produces the same signed metadata bytes.
+    Interactive/local builds retain the current-time behavior when the variable
+    is not supplied.
+    """
+    source_epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if source_epoch is None:
+        return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        epoch = int(source_epoch, 10)
+        if epoch < 0:
+            raise ValueError
+        timestamp = datetime.fromtimestamp(epoch, timezone.utc)
+    except (ValueError, OverflowError, OSError) as exc:
+        raise BuildError("SOURCE_DATE_EPOCH must be a non-negative Unix timestamp") from exc
+    return timestamp.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def build_release(
@@ -45,11 +61,9 @@ def build_release(
 
     ``release_sequence`` remains the release-engine/registry ordering field.
     ``security_sequence`` is emitted as an equal-value compatibility field for
-    the clean-install bootstrap's anti-rollback gate.  Keeping both prevents
+    the clean-install bootstrap's anti-rollback gate. Keeping both prevents
     either side of the release pipeline from silently interpreting a different
     monotonic sequence.
-
-    Returns a dict describing the release artifact and manifest.
     """
     try:
         parse_release_version(version)
@@ -95,14 +109,13 @@ def build_release(
     artifact_digests = {bundle_name: compute_bundle_digest(bundle_path)}
 
     # Write manifest and metadata alongside the bundle for inspection/offline
-    # signing.  The signed sidecar must later be sealed back into the bundle;
+    # signing. The signed sidecar must later be sealed back into the bundle;
     # the clean-install bootstrap verifies metadata from inside the archive.
     (output_dir / f"{release_id}.manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8"
     )
-    unsigned_metadata = dict(metadata)
     (output_dir / f"{release_id}.metadata.json").write_text(
-        json.dumps(unsigned_metadata, indent=2, sort_keys=True), encoding="utf-8"
+        json.dumps(metadata, indent=2, sort_keys=True), encoding="utf-8"
     )
 
     return {
@@ -117,7 +130,7 @@ def build_release(
     }
 
 
-def _json_member(archive: tarfile.TarFile, name: str) -> tuple[dict[str, Any], bytes]:
+def _json_member(archive: tarfile.TarFile, name: str) -> tuple[Any, bytes]:
     members = [member for member in archive.getmembers() if member.name == name]
     if len(members) != 1 or not members[0].isfile():
         raise BuildError(f"release bundle must contain exactly one regular {name}")
@@ -129,7 +142,7 @@ def _json_member(archive: tarfile.TarFile, name: str) -> tuple[dict[str, Any], b
         value = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise BuildError(f"release bundle {name} is invalid JSON") from exc
-    if not isinstance(value, dict) and name == "metadata.json":
+    if name == "metadata.json" and not isinstance(value, dict):
         raise BuildError("release bundle metadata.json must be an object")
     return value, raw
 
@@ -142,9 +155,9 @@ def seal_release_bundle(
     """Seal signed metadata back into a built release bundle.
 
     ``release sign`` operates on the inspectable metadata sidecar so private-key
-    use can remain offline.  A publishable release, however, must carry that
+    use can remain offline. A publishable release, however, must carry that
     exact signed metadata *inside* the archive because the clean bootstrap does
-    not trust unsigned sidecars.  This function refuses to alter any unsigned
+    not trust unsigned sidecars. This function refuses to alter any unsigned
     metadata field or to seal metadata for a different manifest.
     """
     bundle_path = bundle_path.expanduser().resolve()
@@ -169,13 +182,9 @@ def seal_release_bundle(
                 raise BuildError("release bundle contains duplicate members")
 
             original_metadata, _ = _json_member(source, "metadata.json")
-            manifest_member = [member for member in source.getmembers() if member.name == "manifest.json"]
-            if len(manifest_member) != 1 or not manifest_member[0].isfile():
-                raise BuildError("release bundle must contain exactly one regular manifest.json")
-            manifest_handle = source.extractfile(manifest_member[0])
-            if manifest_handle is None:
-                raise BuildError("release bundle manifest.json is unreadable")
-            manifest_raw = manifest_handle.read()
+            manifest_value, manifest_raw = _json_member(source, "manifest.json")
+            if not isinstance(manifest_value, list):
+                raise BuildError("release bundle manifest.json must be a list")
             actual_manifest_digest = hashlib.sha256(manifest_raw).hexdigest()
             if signed_metadata.get("manifest_digest") != actual_manifest_digest:
                 raise BuildError("signed metadata manifest digest does not match bundle manifest")
@@ -196,7 +205,7 @@ def seal_release_bundle(
             ) as handle:
                 temp_path = Path(handle.name)
 
-            with tarfile.open(temp_path, "w:gz") as target:
+            with open_reproducible_tar(temp_path) as target:
                 for member in source.getmembers():
                     if member.name == "metadata.json":
                         continue
