@@ -28,18 +28,18 @@ def _command_digest(command: list[str]) -> str:
 
 
 def _process_start_time(pid: int) -> float | None:
-    """Return process start time if safely readable."""
+    """Return a process start-time identity value from the host OS."""
     try:
         if sys.platform == "win32":
             import psutil  # type: ignore
             return psutil.Process(pid).create_time()
-        else:
-            stat_path = Path(f"/proc/{pid}/stat")
-            if not stat_path.exists():
-                return None
-            parts = stat_path.read_text().split()
-            # starttime is field 22 (index 21) in /proc/PID/stat.
-            return float(parts[21]) / os.sysconf(os.sysconf_names["SC_CLK_TCK"])
+        stat_path = Path(f"/proc/{pid}/stat")
+        if not stat_path.exists():
+            return None
+        parts = stat_path.read_text().split()
+        # Linux /proc starttime is clock ticks since boot. Keep that native
+        # representation (converted to seconds) and compare like with like.
+        return float(parts[21]) / os.sysconf(os.sysconf_names["SC_CLK_TCK"])
     except Exception:
         return None
 
@@ -49,11 +49,10 @@ def _cmdline(pid: int) -> list[str] | None:
         if sys.platform == "win32":
             import psutil  # type: ignore
             return psutil.Process(pid).cmdline()
-        else:
-            cmd_path = Path(f"/proc/{pid}/cmdline")
-            if not cmd_path.exists():
-                return None
-            return cmd_path.read_bytes().decode("utf-8", errors="replace").split("\x00")
+        cmd_path = Path(f"/proc/{pid}/cmdline")
+        if not cmd_path.exists():
+            return None
+        return cmd_path.read_bytes().decode("utf-8", errors="replace").split("\x00")
     except Exception:
         return None
 
@@ -82,7 +81,17 @@ class TrackedProcess:
             self._proc = subprocess.Popen(self.command, **kwargs)
         except OSError as e:
             raise ServiceRuntimeError(f"Failed to start service: {e}") from e
-        self.start_time = time.time()
+        # Store the same OS-derived start-time value used during validation.
+        # Falling back to wall time is safe only on platforms where the helper
+        # itself also reports wall time (Windows); on Linux an unavailable
+        # /proc value remains None and command/Popen identity still applies.
+        observed = _process_start_time(self._proc.pid)
+        if observed is not None:
+            self.start_time = observed
+        elif sys.platform == "win32":
+            self.start_time = time.time()
+        else:
+            self.start_time = None
 
     @property
     def pid(self) -> int | None:
@@ -105,12 +114,13 @@ class TrackedProcess:
         if not self.is_running():
             return False
         start = _process_start_time(pid)
-        if start and self.start_time and abs(start - self.start_time) > 5:
+        if start is not None and self.start_time is not None and abs(start - self.start_time) > 5:
             return False
         cmdline = _cmdline(pid)
         if cmdline and self.command:
-            # Accept if first executable-related part matches.
-            return any(part in " ".join(cmdline) for part in self.command[:2])
+            # Accept if one of the executable-related command parts is present.
+            joined = " ".join(cmdline)
+            return any(part in joined for part in self.command[:2])
         return True
 
     def _signal_if_identity_valid(self, sig: int) -> bool:
