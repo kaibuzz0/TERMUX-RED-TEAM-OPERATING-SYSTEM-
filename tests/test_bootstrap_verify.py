@@ -14,6 +14,9 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from bootstrap import verify_bundle as bootstrap
 
 
+RELEASE_ID = "hive-os-2.0.0-rc.1-test"
+
+
 def _write_signed_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     private = Ed25519PrivateKey.generate()
     public = private.public_key()
@@ -36,7 +39,7 @@ def _write_signed_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Pat
         "schema_version": 1,
         "release": {
             "version": "2.0.0-rc.1",
-            "release_id": "hive-os-2.0.0-rc.1-test",
+            "release_id": RELEASE_ID,
             "commit": "a" * 40,
             "created_at": "2026-08-16T00:00:00+00:00",
             "minimum_hive_version": "0.0.0",
@@ -96,6 +99,32 @@ def test_bootstrap_rejects_rollback_sequence(tmp_path, monkeypatch):
     bundle = _write_signed_bundle(tmp_path, monkeypatch)
     with pytest.raises(bootstrap.BootstrapVerificationError, match="older than current"):
         bootstrap.verify_bundle(bundle, tmp_path / "extracted", "termux", "aarch64", current_sequence=22)
+
+
+def test_bootstrap_allows_exact_same_release_replay_at_equal_sequence(tmp_path, monkeypatch):
+    bundle = _write_signed_bundle(tmp_path, monkeypatch)
+    result = bootstrap.verify_bundle(
+        bundle,
+        tmp_path / "equal-replay",
+        "termux",
+        "aarch64",
+        current_sequence=21,
+        current_release_id=RELEASE_ID,
+    )
+    assert result["release_id"] == RELEASE_ID
+
+
+def test_bootstrap_rejects_equal_sequence_for_different_release_identity(tmp_path, monkeypatch):
+    bundle = _write_signed_bundle(tmp_path, monkeypatch)
+    with pytest.raises(bootstrap.BootstrapVerificationError, match="already belongs to release"):
+        bootstrap.verify_bundle(
+            bundle,
+            tmp_path / "equal-conflict",
+            "termux",
+            "aarch64",
+            current_sequence=21,
+            current_release_id="different-release",
+        )
 
 
 def test_bootstrap_rejects_path_traversal(tmp_path):
