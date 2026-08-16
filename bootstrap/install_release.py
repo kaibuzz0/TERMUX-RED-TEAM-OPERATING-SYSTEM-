@@ -154,7 +154,11 @@ def stage_verified_release(verified_root: Path, staging_root: Path) -> Path:
 
 def _launcher_source(data_root: Path) -> str:
     root_literal = repr(str(data_root.resolve()))
-    return f'''#!/usr/bin/env python3
+    interpreter = Path(sys.executable).expanduser().resolve()
+    interpreter_text = str(interpreter)
+    if not interpreter.is_file() or "\n" in interpreter_text or "\r" in interpreter_text:
+        raise BootstrapInstallError("cannot determine a safe Python interpreter for the global Hive launcher")
+    return f'''#!{interpreter_text}
 {MANAGED_LAUNCHER_MARKER}
 """Managed Hive OS V2 launcher. Follows the validated active release pointer."""
 import json
