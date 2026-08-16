@@ -89,7 +89,7 @@ class SwarmDelegate:
         # Step 4: Architect review (if code involved)
         if work_result.get('code'):
             arch_review = self.architect.review_code(
-                work_result.get('file_path', '/tmp/generated.py'),
+                work_result.get('file_path', 'generated.py'),
                 work_result['code']
             )
             
