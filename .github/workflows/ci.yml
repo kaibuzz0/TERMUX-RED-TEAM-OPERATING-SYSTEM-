@@ -137,9 +137,7 @@ jobs:
 
     - name: Create standalone clean-install bootstrap
       run: |
-        python -m zipapp bootstrap \
-          -o dist/hive-bootstrap.pyz \
-          -p "/usr/bin/env python3"
+        python -m zipapp bootstrap -o dist/hive-bootstrap.pyz
         python dist/hive-bootstrap.pyz --help
         python dist/hive-bootstrap.pyz install --help
         python dist/hive-bootstrap.pyz verify --help
