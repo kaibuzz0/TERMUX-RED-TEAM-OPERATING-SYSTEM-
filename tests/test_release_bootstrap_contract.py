@@ -13,17 +13,19 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from bootstrap import verify_bundle as bootstrap_verify
 from release_engine.builder import build_release, seal_release_bundle
 from release_engine.errors import BuildError
+from release_engine.reproducibility import compute_bundle_digest
 from release_engine.signing import sign_release_metadata
 
 
-def _build_candidate(tmp_path: Path):
+def _build_candidate(tmp_path: Path, *, output_name: str = "release"):
     source = tmp_path / "runtime"
-    (source / "bin").mkdir(parents=True)
-    hive = source / "bin" / "hive"
-    hive.write_text("#!/usr/bin/env python3\nprint('hive contract test')\n", encoding="utf-8")
-    hive.chmod(0o755)
+    if not source.exists():
+        (source / "bin").mkdir(parents=True)
+        hive = source / "bin" / "hive"
+        hive.write_text("#!/usr/bin/env python3\nprint('hive contract test')\n", encoding="utf-8")
+        hive.chmod(0o755)
 
-    output = tmp_path / "release"
+    output = tmp_path / output_name
     result = build_release(
         source_dir=source,
         output_dir=output,
@@ -60,7 +62,25 @@ def test_release_builder_emits_clean_bootstrap_sequence_contract(tmp_path):
     assert result["metadata"]["release"]["security_sequence"] == 7
 
 
+def test_candidate_build_honors_source_date_epoch_and_is_bit_stable(tmp_path, monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
+    first, first_metadata = _build_candidate(tmp_path, output_name="first")
+    second, second_metadata = _build_candidate(tmp_path, output_name="second")
+
+    assert first_metadata["release"]["created_at"] == "2023-11-14T22:13:20Z"
+    assert second_metadata["release"]["created_at"] == first_metadata["release"]["created_at"]
+    assert compute_bundle_digest(first["bundle_path"]) == compute_bundle_digest(second["bundle_path"])
+    assert first["bundle_path"].read_bytes()[4:8] == b"\x00\x00\x00\x00"
+
+
+def test_invalid_source_date_epoch_fails_closed(tmp_path, monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "not-a-timestamp")
+    with pytest.raises(BuildError, match="SOURCE_DATE_EPOCH"):
+        _build_candidate(tmp_path)
+
+
 def test_sealed_release_bundle_is_accepted_by_clean_bootstrap(tmp_path, monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
     result, metadata = _build_candidate(tmp_path)
     private_key = Ed25519PrivateKey.generate()
     key_id = "test-release-root"
@@ -72,6 +92,7 @@ def test_sealed_release_bundle_is_accepted_by_clean_bootstrap(tmp_path, monkeypa
     assert sealed_result["sealed"] is True
     assert sealed_result["release_id"] == result["release_id"]
     assert sealed_result["key_id"] == key_id
+    assert sealed.read_bytes()[4:8] == b"\x00\x00\x00\x00"
 
     _install_test_root(monkeypatch, private_key, key_id)
     verification = bootstrap_verify.verify_bundle(
