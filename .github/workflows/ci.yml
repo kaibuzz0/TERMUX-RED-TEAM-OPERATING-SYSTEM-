@@ -10,8 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - uses: actions/checkout@v4
@@ -51,23 +52,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
-    
+
     - name: Install security tools
       run: |
         pip install bandit safety
-    
+
     - name: Run bandit security scan
       run: |
         # Keep a machine-readable report even when findings exist, then enforce
         # the release gate with a second medium-or-higher severity scan.
         bandit -r "Hive Ops DevAI" bootstrap installer updates -f json -o bandit-report.json || true
         bandit -r "Hive Ops DevAI" bootstrap installer updates -ll
-    
+
     - name: Upload security scan results
       if: always()
       uses: actions/upload-artifact@v4
@@ -80,7 +81,7 @@ jobs:
     needs: [test]
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Create distribution package
       run: |
         mkdir -p dist
@@ -91,7 +92,7 @@ jobs:
           --exclude=.pytest_cache \
           --exclude=brain-plug/escape_living_ai.txt \
           "Hive Ops DevAI" "Hive Ops Final" "Hermes Plugins" brain-plug install.sh README.md requirements.txt
-    
+
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
       with:
