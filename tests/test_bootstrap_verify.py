@@ -67,6 +67,21 @@ def _write_signed_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Pat
     return bundle
 
 
+def _copy_bundle_with_extra_file(source: Path, destination: Path, name: str, data: bytes) -> Path:
+    entries: list[tuple[tarfile.TarInfo, bytes | None]] = []
+    with tarfile.open(source, "r:gz") as archive:
+        for member in archive.getmembers():
+            body = archive.extractfile(member).read() if member.isfile() else None
+            entries.append((member, body))
+    with tarfile.open(destination, "w:gz") as archive:
+        for member, body in entries:
+            archive.addfile(member, io.BytesIO(body) if body is not None else None)
+        info = tarfile.TarInfo(name)
+        info.size = len(data)
+        archive.addfile(info, io.BytesIO(data))
+    return destination
+
+
 def test_clean_bootstrap_verifies_signed_release(tmp_path, monkeypatch):
     bundle = _write_signed_bundle(tmp_path, monkeypatch)
     extracted = tmp_path / "extracted"
@@ -104,3 +119,26 @@ def test_bootstrap_rejects_symlink_member(tmp_path):
         archive.addfile(info)
     with pytest.raises(bootstrap.BootstrapVerificationError, match="unsafe archive member type"):
         bootstrap.safe_extract(bundle, tmp_path / "extract")
+
+
+def test_bootstrap_rejects_unmanifested_file(tmp_path, monkeypatch):
+    signed = _write_signed_bundle(tmp_path, monkeypatch)
+    tampered = _copy_bundle_with_extra_file(
+        signed,
+        tmp_path / "release-with-extra.tar.gz",
+        "bootstrap_shadow.py",
+        b"raise RuntimeError('unsigned code executed')\n",
+    )
+    with pytest.raises(bootstrap.BootstrapVerificationError, match="unmanifested bundle file"):
+        bootstrap.verify_bundle(tampered, tmp_path / "extract-extra", "termux", "aarch64", current_sequence=20)
+
+
+def test_bootstrap_rejects_duplicate_archive_member(tmp_path):
+    bundle = tmp_path / "duplicate.tar.gz"
+    with tarfile.open(bundle, "w:gz") as archive:
+        for payload in (b"first", b"second"):
+            info = tarfile.TarInfo("bin/hive")
+            info.size = len(payload)
+            archive.addfile(info, io.BytesIO(payload))
+    with pytest.raises(bootstrap.BootstrapVerificationError, match="duplicate archive member"):
+        bootstrap.safe_extract(bundle, tmp_path / "extract-duplicate")
