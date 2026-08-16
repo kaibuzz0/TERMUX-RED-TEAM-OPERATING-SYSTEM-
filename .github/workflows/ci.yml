@@ -2,7 +2,7 @@ name: Hive Ops DevAI CI
 
 on:
   push:
-    branches: [ master, main, develop ]
+    branches: [ master, main, develop, hive-1.1-rc2-bootstrap ]
   pull_request:
     branches: [ master, main ]
 
@@ -63,10 +63,13 @@ jobs:
     
     - name: Run bandit security scan
       run: |
+        # Keep a machine-readable report even when findings exist, then enforce
+        # the release gate with a second medium-or-higher severity scan.
         bandit -r "Hive Ops DevAI" bootstrap installer updates -f json -o bandit-report.json || true
-        bandit -r "Hive Ops DevAI" bootstrap installer updates -ll || true
+        bandit -r "Hive Ops DevAI" bootstrap installer updates -ll
     
     - name: Upload security scan results
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: security-scan
