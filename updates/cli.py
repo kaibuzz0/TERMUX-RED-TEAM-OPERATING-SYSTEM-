@@ -3,13 +3,44 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import json
 import sys
+import tempfile
 from pathlib import Path
+from typing import Iterator
 
 from updates import TrustStore, BundleVerifier
 from updates.errors import UpdateError
 from updates.recovery_cli import _print_json
+
+
+@contextmanager
+def _work_directory(explicit: str | None, prefix: str) -> Iterator[Path]:
+    """Provide an operator-private update workspace.
+
+    Automatic workspaces use ``TemporaryDirectory`` instead of predictable
+    shared /tmp paths.  An explicitly requested workspace is never deleted by
+    Hive and must be empty before use, preventing update commands from
+    recursively deleting or overwriting an unrelated directory.
+    """
+    if explicit is None:
+        with tempfile.TemporaryDirectory(prefix=prefix) as temp_dir:
+            work = Path(temp_dir)
+            work.chmod(0o700)
+            yield work
+        return
+
+    work = Path(explicit).expanduser().resolve()
+    if work.exists():
+        if work.is_symlink() or not work.is_dir():
+            raise UpdateError(f"update work directory is unsafe: {work}")
+        if any(work.iterdir()):
+            raise UpdateError(f"update work directory must be empty: {work}")
+    else:
+        work.mkdir(parents=True, mode=0o700)
+    work.chmod(0o700)
+    yield work
 
 
 def cmd_status(args: argparse.Namespace) -> int:
@@ -26,17 +57,18 @@ def cmd_inspect(args: argparse.Namespace) -> int:
     from updates.bundle import extract_bundle
     from updates.metadata import parse_metadata
     from updates.manifest import load_manifest
+
     bundle = Path(args.bundle)
-    work = args.work_dir or Path("/tmp/hive-update-inspect")
     try:
-        extract_bundle(bundle, work)
-        metadata = parse_metadata((work / "metadata.json").read_text(encoding="utf-8"))
-        manifest = load_manifest(work / "manifest.json")
-        _print_json({
-            "metadata": metadata,
-            "manifest_artifact_count": len(manifest),
-            "bundle_root": str(work),
-        })
+        with _work_directory(args.work_dir, "hive-update-inspect-") as work:
+            extract_bundle(bundle, work)
+            metadata = parse_metadata((work / "metadata.json").read_text(encoding="utf-8"))
+            manifest = load_manifest(work / "manifest.json")
+            _print_json({
+                "metadata": metadata,
+                "manifest_artifact_count": len(manifest),
+                "bundle_root": str(work) if args.work_dir else None,
+            })
         return 0
     except Exception as e:
         print(f"Inspect failed: {e}", file=sys.stderr)
@@ -45,6 +77,7 @@ def cmd_inspect(args: argparse.Namespace) -> int:
 
 def cmd_plan(args: argparse.Namespace) -> int:
     from updates.planner import plan_update
+
     bundle_root = Path(args.bundle)
     active_root = Path(args.active_root) if args.active_root else None
     try:
@@ -61,16 +94,16 @@ def cmd_verify(args: argparse.Namespace) -> int:
     verifier = BundleVerifier(trust, args.platform, args.architecture, args.current_sequence)
     for seq in args.revoked_sequence or []:
         verifier.add_revoked_sequence(seq)
-    work = Path(args.work_dir or "/tmp/hive-update-verify")
     try:
-        result = verifier.verify(Path(args.bundle), work, allow_emergency=args.emergency)
-        _print_json({
-            "verified": True,
-            "release_id": result["metadata"]["release"]["release_id"],
-            "version": result["metadata"]["release"]["version"],
-            "trust_level": result["trust_level"],
-            "manifest_artifact_count": len(result["manifest"]),
-        })
+        with _work_directory(args.work_dir, "hive-update-verify-") as work:
+            result = verifier.verify(Path(args.bundle), work, allow_emergency=args.emergency)
+            _print_json({
+                "verified": True,
+                "release_id": result["metadata"]["release"]["release_id"],
+                "version": result["metadata"]["release"]["version"],
+                "trust_level": result["trust_level"],
+                "manifest_artifact_count": len(result["manifest"]),
+            })
         return 0
     except Exception as e:
         print(f"Verification failed: {e}", file=sys.stderr)
@@ -80,40 +113,45 @@ def cmd_verify(args: argparse.Namespace) -> int:
 def cmd_stage(args: argparse.Namespace) -> int:
     from updates.bundle import extract_bundle
     from updates.manifest import load_manifest
-    import json, shutil
-    work = Path(args.work_dir or "/tmp/hive-update-stage")
-    if work.exists():
-        shutil.rmtree(work)
+    import shutil
+
     try:
-        extract_bundle(Path(args.bundle), work)
-        manifest = load_manifest(work / "manifest.json")
-        release_id = json.loads((work / "metadata.json").read_text(encoding="utf-8"))["release"]["release_id"]
-        target = Path(args.release_root) / release_id
-        if target.exists():
-            shutil.rmtree(target)
-        runtime_dir = target / "data" / "runtime"
-        runtime_dir.mkdir(parents=True)
-        for entry in manifest:
-            src = work / entry["path"]
-            dst = runtime_dir / entry["path"]
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            if src.is_dir():
-                shutil.copytree(src, dst)
+        with _work_directory(args.work_dir, "hive-update-stage-") as work:
+            extract_bundle(Path(args.bundle), work)
+            manifest = load_manifest(work / "manifest.json")
+            release_id = json.loads((work / "metadata.json").read_text(encoding="utf-8"))["release"]["release_id"]
+            target = (Path(args.release_root).expanduser().resolve() / release_id).resolve()
+            release_root = Path(args.release_root).expanduser().resolve()
+            try:
+                target.relative_to(release_root)
+            except ValueError as exc:
+                raise UpdateError(f"release_id escapes release root: {release_id!r}") from exc
+            if target == release_root:
+                raise UpdateError("release_id may not resolve to the release root")
+            if target.exists():
+                shutil.rmtree(target)
+            runtime_dir = target / "data" / "runtime"
+            runtime_dir.mkdir(parents=True)
+            for entry in manifest:
+                src = work / entry["path"]
+                dst = runtime_dir / entry["path"]
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                if src.is_dir():
+                    shutil.copytree(src, dst)
+                else:
+                    shutil.copy2(src, dst)
+            staged_manifest = {"manifest": manifest}
+            (target / "state").mkdir(parents=True, exist_ok=True)
+            (target / "state" / "manifest.json").write_text(json.dumps(staged_manifest), encoding="utf-8")
+            shutil.copy2(work / "metadata.json", target / "metadata.json")
+            if args.json:
+                _print_json({"staged_root": str(target), "release_id": release_id})
             else:
-                shutil.copy2(src, dst)
-        staged_manifest = {"manifest": manifest}
-        (target / "state" / "manifest.json").write_text(json.dumps(staged_manifest), encoding="utf-8")
-        shutil.copy2(work / "metadata.json", target / "metadata.json")
-        if args.json:
-            _print_json({"staged_root": str(target), "release_id": release_id})
-        else:
-            print(f"Staged installer layout to {target}")
+                print(f"Staged installer layout to {target}")
         return 0
     except Exception as e:
         print(f"Stage failed: {e}", file=sys.stderr)
         return 2
-
-
 
 
 def cmd_apply(args: argparse.Namespace) -> int:
@@ -125,57 +163,48 @@ def cmd_apply(args: argparse.Namespace) -> int:
         print("Activation requires --approve", file=sys.stderr)
         return 2
 
-    from pathlib import Path
-    from updates import TrustStore, BundleVerifier
-    from updates.bundle import extract_bundle
-    from updates.metadata import parse_metadata
     from installer.activate import ActiveState
     from installer.plan import generate_plan
-    from installer.schema import plan_to_dict
-    import json
-    import shutil
 
-    work = Path(args.work_dir or "/tmp/hive-update-apply")
     trust = TrustStore.from_pem_file(Path(args.trust_store))
     verifier = BundleVerifier(trust, args.platform, args.architecture, args.current_sequence)
     for seq in args.revoked_sequence or []:
         verifier.add_revoked_sequence(seq)
 
     try:
-        verified = verifier.verify(Path(args.bundle), work)
+        with _work_directory(args.work_dir, "hive-update-apply-") as work:
+            verified = verifier.verify(Path(args.bundle), work)
+            metadata = verified["metadata"]
+            release_id = metadata["release"]["release_id"]
+
+            plan = generate_plan(work)
+            state = ActiveState(
+                data_root=plan.target.data_root,
+                state_root=plan.target.state_root,
+                transaction_id=plan.transaction_id,
+            )
+            release = state.promote_to_ready(work, plan)
+            release.metadata = metadata
+            pointer = state.activate(release_id, approve=True)
+
+            if args.json:
+                _print_json({
+                    "verified": True,
+                    "release_id": release_id,
+                    "version": metadata["release"]["version"],
+                    "active_runtime": pointer.active_runtime,
+                    "previous_release_id": pointer.previous_release_id,
+                })
+            else:
+                print(f"Verified and activated: {release_id}")
+                print(f"Version: {metadata['release']['version']}")
+                print(f"Runtime: {pointer.active_runtime}")
+                if pointer.previous_release_id:
+                    print(f"Previous release preserved: {pointer.previous_release_id}")
+        return 0
     except Exception as e:
-        print(f"Verification failed: {e}", file=sys.stderr)
+        print(f"Apply failed: {e}", file=sys.stderr)
         return 2
-
-    metadata = verified["metadata"]
-    release_id = metadata["release"]["release_id"]
-
-    # Use installer staging/activation against the active installation
-    plan = generate_plan(work)
-    state = ActiveState(
-        data_root=plan.target.data_root,
-        state_root=plan.target.state_root,
-        transaction_id=plan.transaction_id,
-    )
-    release = state.promote_to_ready(work, plan)
-    release.metadata = metadata
-    pointer = state.activate(release_id, approve=True)
-
-    if args.json:
-        _print_json({
-            "verified": True,
-            "release_id": release_id,
-            "version": metadata["release"]["version"],
-            "active_runtime": pointer.active_runtime,
-            "previous_release_id": pointer.previous_release_id,
-        })
-    else:
-        print(f"Verified and activated: {release_id}")
-        print(f"Version: {metadata['release']['version']}")
-        print(f"Runtime: {pointer.active_runtime}")
-        if pointer.previous_release_id:
-            print(f"Previous release preserved: {pointer.previous_release_id}")
-    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -207,6 +236,7 @@ def main(argv: list[str] | None = None) -> int:
     stage_p.add_argument("bundle")
     stage_p.add_argument("--release-root", required=True)
     stage_p.add_argument("--work-dir")
+    stage_p.add_argument("--json", action="store_true")
 
     apply_p = sub.add_parser("apply", help="Verify, stage, and activate a bundle")
     apply_p.add_argument("bundle")
@@ -218,6 +248,7 @@ def main(argv: list[str] | None = None) -> int:
     apply_p.add_argument("--revoked-sequence", type=int, action="append")
     apply_p.add_argument("--approve", action="store_true", help="Approve activation")
     apply_p.add_argument("--work-dir")
+    apply_p.add_argument("--json", action="store_true")
 
     args = parser.parse_args(argv)
     if args.command is None:

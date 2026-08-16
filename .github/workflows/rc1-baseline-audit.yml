@@ -1,0 +1,53 @@
+name: Audit Hive RC.1 Baseline
+
+on:
+  push:
+    branches: [ hive-1.1-rc2-bootstrap ]
+    paths:
+      - .github/workflows/rc1-baseline-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fetch exact published RC.1 metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/download/hive-os-v1.1.0-rc.1/metadata.signed.json'
+          curl --fail --location --proto '=https' --tlsv1.2 "$url" --output "$RUNNER_TEMP/rc1-metadata.signed.json"
+          echo '96567a1380aef1516c487900313ee099646cd5af70eb6c42308a01ef9a08149e  '"$RUNNER_TEMP/rc1-metadata.signed.json" | sha256sum --check --strict
+
+      - name: Report signed RC.1 sequence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path(os.environ['RUNNER_TEMP']) / 'rc1-metadata.signed.json'
+          metadata = json.loads(path.read_text(encoding='utf-8'))
+          release = metadata.get('release')
+          if not isinstance(release, dict):
+              raise SystemExit('RC.1 metadata has no release object')
+          sequence = release.get('security_sequence', release.get('release_sequence'))
+          if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 0:
+              raise SystemExit('RC.1 metadata has no valid monotonic sequence')
+          release_id = release.get('release_id')
+          key_id = metadata.get('signing', {}).get('key_id')
+          print(f'RC1_RELEASE_ID={release_id}')
+          print(f'RC1_SECURITY_SEQUENCE={sequence}')
+          print(f'RC1_KEY_ID={key_id}')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as summary:
+              summary.write('## Hive RC.1 published baseline\n\n')
+              summary.write(f'- Release ID: `{release_id}`\n')
+              summary.write(f'- Monotonic sequence: `{sequence}`\n')
+              summary.write(f'- Signing key ID: `{key_id}`\n')
+              summary.write('- Asset SHA-256: `96567a1380aef1516c487900313ee099646cd5af70eb6c42308a01ef9a08149e`\n')
+          PY

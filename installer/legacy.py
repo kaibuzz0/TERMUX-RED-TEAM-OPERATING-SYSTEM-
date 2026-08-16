@@ -91,7 +91,7 @@ def detect_legacy_installation(
     legacy_root_override: Path | None = None,
 ) -> dict[str, Any]:
     """Detect legacy installations and return structured findings without mutation."""
-    home = home or Path(os.environ.get("HOME", "/tmp"))
+    home = home or Path.home()
     candidates = []
 
     if legacy_root_override:

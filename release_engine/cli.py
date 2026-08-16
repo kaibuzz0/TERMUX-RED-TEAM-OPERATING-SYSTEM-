@@ -7,10 +7,11 @@ import getpass
 import json
 import sys
 from pathlib import Path
+from typing import List
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from release_engine.builder import build_release
+from release_engine.builder import build_release, seal_release_bundle
 from release_engine.channels import ReleaseChannel, parse_channel
 from release_engine.errors import ReleaseEngineError
 from release_engine.registry import ReleaseRegistry
@@ -60,11 +61,16 @@ def _build_parser() -> argparse.ArgumentParser:
     p_inspect.add_argument("bundle", type=Path)
     p_inspect.add_argument("--work-dir", type=Path, default=None)
 
-    p_sign = sub.add_parser("sign", help="sign release metadata")
+    p_sign = sub.add_parser("sign", help="sign release metadata sidecar")
     p_sign.add_argument("--metadata", required=True, type=Path)
     p_sign.add_argument("--private-key", required=True, type=Path)
     p_sign.add_argument("--key-id", required=True)
     p_sign.add_argument("--output", required=True, type=Path)
+
+    p_seal = sub.add_parser("seal", help="embed signed metadata into a publishable release bundle")
+    p_seal.add_argument("--bundle", required=True, type=Path)
+    p_seal.add_argument("--signed-metadata", required=True, type=Path)
+    p_seal.add_argument("--output", required=True, type=Path)
 
     p_verify = sub.add_parser("verify", help="verify a release bundle")
     p_verify.add_argument("bundle", type=Path)
@@ -125,6 +131,12 @@ def main(argv: List[str] | None = None) -> int:
             key = _load_private_key_with_prompt(args.private_key)
             signed = sign_release_metadata(metadata, key, args.key_id, metadata.get("manifest_digest", ""))
             args.output.write_text(json.dumps(signed, indent=2, sort_keys=True), encoding="utf-8")
+            return 0
+
+        if args.command == "seal":
+            signed_metadata = json.loads(args.signed_metadata.read_text(encoding="utf-8"))
+            result = seal_release_bundle(args.bundle, signed_metadata, args.output)
+            print(json.dumps(result, indent=2, default=str))
             return 0
 
         if args.command == "verify":
