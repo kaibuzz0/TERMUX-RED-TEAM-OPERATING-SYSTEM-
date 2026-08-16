@@ -71,26 +71,56 @@ def _detect_termux(env: dict[str, str]) -> CapabilityState:
     return CapabilityState.UNKNOWN
 
 
+def _probe_exists(path: Path) -> tuple[bool, OSError | None]:
+    """Probe a path without allowing host permission quirks to abort preflight."""
+    try:
+        return path.exists(), None
+    except OSError as exc:
+        return False, exc
+
+
 def _detect_existing_installation(target_root: Path, env: dict[str, str]) -> tuple[InstallStatus, list[str]]:
     warnings = []
-    root = target_root.resolve() if target_root.exists() else None
+    target_exists, target_error = _probe_exists(target_root)
+    if target_error is not None:
+        warnings.append(f"Cannot inspect target {target_root}: {target_error}")
+        return InstallStatus.CONFLICT, warnings
+
+    root = target_root.resolve() if target_exists else None
     legacy_root = Path("/root/hive")
 
-    if root and root.exists():
+    if root:
         # Determine if it looks managed or modified.
         manifest = root / ".hive" / "manifest.json"
-        if manifest.exists():
+        manifest_exists, manifest_error = _probe_exists(manifest)
+        if manifest_error is not None:
+            warnings.append(f"Cannot inspect managed manifest {manifest}: {manifest_error}")
+            return InstallStatus.CONFLICT, warnings
+        if manifest_exists:
             return InstallStatus.MANAGED_UPGRADE_REQUIRED, warnings
         warnings.append(f"Target {root} exists but has no managed manifest")
         return InstallStatus.CONFLICT, warnings
 
-    if legacy_root.exists():
+    legacy_exists, legacy_error = _probe_exists(legacy_root)
+    if legacy_error is not None:
+        # /root is intentionally inaccessible on many non-root Linux hosts and
+        # CI runners. Legacy discovery is advisory, so inability to inspect this
+        # unrelated root-owned path must not make clean installs impossible.
+        warnings.append(f"Legacy installation path {legacy_root} is not inspectable: {legacy_error}")
+    elif legacy_exists:
         warnings.append(f"Legacy installation path {legacy_root} exists")
         return InstallStatus.LEGACY_MIGRATION_REQUIRED, warnings
 
-    if env.get("HIVE_HOME") and Path(env["HIVE_HOME"]).exists():
-        warnings.append(f"HIVE_HOME {env['HIVE_HOME']} exists")
-        return InstallStatus.CONFLICT, warnings
+    hive_home = env.get("HIVE_HOME")
+    if hive_home:
+        hive_home_path = Path(hive_home)
+        hive_home_exists, hive_home_error = _probe_exists(hive_home_path)
+        if hive_home_error is not None:
+            warnings.append(f"HIVE_HOME {hive_home} is not inspectable: {hive_home_error}")
+            return InstallStatus.CONFLICT, warnings
+        if hive_home_exists:
+            warnings.append(f"HIVE_HOME {hive_home} exists")
+            return InstallStatus.CONFLICT, warnings
 
     return InstallStatus.CLEAN_INSTALL, warnings
 
