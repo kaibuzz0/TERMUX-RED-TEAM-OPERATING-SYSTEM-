@@ -46,39 +46,34 @@ jobs:
 
     - name: Test with pytest
       id: pytest
-      continue-on-error: true
+      shell: bash
       run: |
-        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml
+        set +e
+        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
+        code=${PIPESTATUS[0]}
+        echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+        exit 0
 
     - name: Surface pytest failures
-      if: steps.pytest.outcome == 'failure'
+      if: steps.pytest.outputs.exit_code != '0'
       run: |
         python - <<'PY'
-        import xml.etree.ElementTree as ET
         from pathlib import Path
 
-        report = Path("pytest-report.xml")
-        if not report.is_file():
-            print("::error::pytest failed before producing pytest-report.xml")
-            raise SystemExit(1)
-
-        root = ET.parse(report).getroot()
-        failures = 0
-        for case in root.iter("testcase"):
-            node = case.find("failure") or case.find("error")
-            if node is None:
-                continue
-            failures += 1
-            classname = case.attrib.get("classname", "")
-            name = case.attrib.get("name", "unknown")
-            message = node.attrib.get("message", "pytest failure")
-            detail = (node.text or "").strip().splitlines()
-            tail = detail[-1] if detail else message
-            text = f"{classname}::{name}: {message} | {tail}"
-            text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
-            print(f"::error title=pytest failure::{text}")
-        if failures == 0:
-            print("::error::pytest exited non-zero but no testcase failure was found in JUnit XML")
+        output = Path("pytest-output.txt").read_text(encoding="utf-8", errors="replace")
+        lines = output.splitlines()
+        important = []
+        capture = False
+        for line in lines:
+            if line.startswith("=================================== FAILURES") or line.startswith("==================================== ERRORS"):
+                capture = True
+            if capture:
+                important.append(line)
+        if not important:
+            important = lines[-80:]
+        text = "\n".join(important[-80:])
+        text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+        print(f"::error title=pytest exited non-zero::{text}")
         raise SystemExit(1)
         PY
 
