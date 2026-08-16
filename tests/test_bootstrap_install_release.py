@@ -77,7 +77,6 @@ def test_stage_verified_release_builds_existing_installer_layout(tmp_path):
     data_file.parent.mkdir()
     data_file.write_bytes(data_payload)
 
-    # Simulate attacker-controlled tar header modes. Staging must ignore these.
     executable.chmod(0o777)
     data_file.chmod(0o777)
 
@@ -136,12 +135,20 @@ def test_bootstrap_install_verifies_before_handing_release_to_installer(tmp_path
         destination.write_bytes(b"signed-bundle-placeholder")
         return destination.stat().st_size
 
-    def fake_verify(bundle: Path, destination: Path, platform: str, architecture: str, current_sequence: int):
+    def fake_verify(
+        bundle: Path,
+        destination: Path,
+        platform: str,
+        architecture: str,
+        current_sequence: int,
+        current_release_id: str | None = None,
+    ):
         calls.append("verify")
         assert bundle.is_file()
         assert platform == "termux"
         assert architecture == "aarch64"
         assert current_sequence == 20
+        assert current_release_id == "hive-current"
         destination.mkdir()
         return {"verified": True, "release_id": "hive-v2-test", "version": "2.0.0-rc.2"}
 
@@ -160,6 +167,7 @@ def test_bootstrap_install_verifies_before_handing_release_to_installer(tmp_path
         platform="termux",
         architecture="aarch64",
         current_sequence=20,
+        current_release_id="hive-current",
         data_root=tmp_path / "data",
         state_root=tmp_path / "state",
         approve=False,
