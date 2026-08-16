@@ -19,7 +19,7 @@ from typing import Any, Callable
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from bootstrap.verify_bundle import BootstrapVerificationError, verify_bundle
+from bootstrap.verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
 
 DEFAULT_MAX_DOWNLOAD_BYTES = 512 * 1024 * 1024
 
@@ -94,31 +94,56 @@ def _read_verified_manifest(verified_root: Path) -> list[dict[str, Any]]:
     return manifest
 
 
+def _private_mkdir(path: Path) -> None:
+    path.mkdir(exist_ok=True)
+    path.chmod(0o700)
+
+
 def stage_verified_release(verified_root: Path, staging_root: Path) -> Path:
-    """Translate a verified release bundle into the existing installer layout."""
+    """Translate a verified release bundle into the existing installer layout.
+
+    Tar header modes are deliberately not preserved: archive metadata is not part
+    of the signed manifest. Runtime permissions are derived only from the signed
+    ``executable`` flag, and staging directories remain operator-private.
+    """
     manifest = _read_verified_manifest(verified_root)
-    runtime_root = staging_root / "data" / "runtime"
+    staging_root.mkdir(parents=True, exist_ok=False)
+    staging_root.chmod(0o700)
+    data_dir = staging_root / "data"
+    _private_mkdir(data_dir)
+    runtime_root = data_dir / "runtime"
+    _private_mkdir(runtime_root)
     state_root = staging_root / "state"
-    runtime_root.mkdir(parents=True, exist_ok=False)
-    state_root.mkdir(parents=True, exist_ok=True)
+    _private_mkdir(state_root)
 
     for entry in manifest:
         if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
             raise BootstrapInstallError("verified manifest contains an invalid entry")
         rel = entry["path"]
-        source = verified_root / rel
-        destination = runtime_root / rel
+        try:
+            rel_path = _safe_relative_path(rel)
+        except BootstrapVerificationError as exc:
+            raise BootstrapInstallError(str(exc)) from exc
+        source = verified_root.joinpath(*rel_path.parts)
+        destination = runtime_root.joinpath(*rel_path.parts)
         if not source.is_file() or source.is_symlink():
             raise BootstrapInstallError(f"verified release artifact disappeared: {rel}")
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
-        if entry.get("executable") is True:
-            destination.chmod(destination.stat().st_mode | 0o100)
 
-    (state_root / "manifest.json").write_text(
-        json.dumps({"manifest": manifest}, indent=2), encoding="utf-8"
-    )
-    shutil.copy2(verified_root / "metadata.json", staging_root / "metadata.json")
+        parent = runtime_root
+        for part in rel_path.parts[:-1]:
+            parent = parent / part
+            _private_mkdir(parent)
+
+        shutil.copyfile(source, destination)
+        destination.chmod(0o700 if entry.get("executable") is True else 0o600)
+
+    state_manifest = state_root / "manifest.json"
+    state_manifest.write_text(json.dumps({"manifest": manifest}, indent=2), encoding="utf-8")
+    state_manifest.chmod(0o600)
+
+    metadata_destination = staging_root / "metadata.json"
+    shutil.copyfile(verified_root / "metadata.json", metadata_destination)
+    metadata_destination.chmod(0o600)
     return staging_root
 
 
