@@ -137,11 +137,7 @@ def verify_metadata(metadata: dict[str, Any]) -> None:
 
 
 def _verify_manifest_closure(destination: Path, manifest_paths: set[str]) -> None:
-    """Require the extracted file set to be exactly the signed manifest plus controls.
-
-    Allowing an unmanifested file would let unsigned code/resources ride inside an
-    otherwise valid release bundle and potentially be imported or executed later.
-    """
+    """Require the extracted file set to be exactly the signed manifest plus controls."""
     expected = set(manifest_paths) | set(CONTROL_FILES)
     actual: set[str] = set()
     for path in destination.rglob("*"):
@@ -163,9 +159,13 @@ def verify_bundle(
     platform: str,
     architecture: str,
     current_sequence: int,
+    current_release_id: str | None = None,
 ) -> dict[str, Any]:
     if current_sequence < 0:
         raise BootstrapVerificationError("current security sequence cannot be negative")
+    if current_release_id is not None and (not isinstance(current_release_id, str) or not current_release_id):
+        raise BootstrapVerificationError("current release id must be a non-empty string when supplied")
+
     safe_extract(bundle, destination)
     metadata_path = destination / "metadata.json"
     manifest_path = destination / "manifest.json"
@@ -180,11 +180,18 @@ def verify_bundle(
         raise BootstrapVerificationError(f"release does not support platform {platform}")
     if architecture not in release.get("architectures", []):
         raise BootstrapVerificationError(f"release does not support architecture {architecture}")
+
     sequence = release["security_sequence"]
+    release_id = release.get("release_id")
     if sequence < current_sequence:
         raise BootstrapVerificationError(
             f"release sequence {sequence} is older than current sequence {current_sequence}"
         )
+    if sequence == current_sequence and current_release_id is not None and release_id != current_release_id:
+        raise BootstrapVerificationError(
+            f"security sequence {sequence} already belongs to release {current_release_id}"
+        )
+
     expected_manifest = metadata.get("manifest_digest")
     actual_manifest = _sha256_file(manifest_path)
     if not isinstance(expected_manifest, str) or expected_manifest != actual_manifest:
@@ -216,7 +223,7 @@ def verify_bundle(
     return {
         "verified": True,
         "version": release.get("version"),
-        "release_id": release.get("release_id"),
+        "release_id": release_id,
         "commit": release.get("commit"),
         "security_sequence": sequence,
         "key_id": ROOT_KEY_ID,
@@ -233,6 +240,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--platform", default="termux")
     parser.add_argument("--architecture", default=os.uname().machine if hasattr(os, "uname") else "aarch64")
     parser.add_argument("--current-sequence", type=int, default=0)
+    parser.add_argument("--current-release-id")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     destination = args.destination
@@ -242,7 +250,12 @@ def main(argv: list[str] | None = None) -> int:
         destination = Path(temporary.name)
     try:
         result = verify_bundle(
-            args.bundle.resolve(), destination.resolve(), args.platform, args.architecture, args.current_sequence
+            args.bundle.resolve(),
+            destination.resolve(),
+            args.platform,
+            args.architecture,
+            args.current_sequence,
+            current_release_id=args.current_release_id,
         )
         if args.json:
             print(json.dumps(result, indent=2, sort_keys=True))
