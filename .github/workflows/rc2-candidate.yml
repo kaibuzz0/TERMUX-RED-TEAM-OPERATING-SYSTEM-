@@ -212,7 +212,11 @@ jobs:
           python -m zipapp bootstrap -o "$out/hive-bootstrap.pyz"
           python "$out/hive-bootstrap.pyz" install --help >/dev/null
           python "$out/hive-bootstrap.pyz" verify --help >/dev/null
-          sha256sum "$out"/*.tar.gz "$out"/*.json "$out/hive-bootstrap.pyz" > "$out/SHA256SUMS"
+          (
+            cd "$out"
+            sha256sum *.tar.gz *.json hive-bootstrap.pyz > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
           python - <<'PY'
           import json
           import os
