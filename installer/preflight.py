@@ -161,23 +161,26 @@ def run_preflight(repo_root: Path | None = None, target_root: Path | None = None
         except Exception as e:
             errors.append(f"Repository resolution failed: {e}")
 
-    # Target root determination
+    # Target root determination. Missing HOME is a hard preflight error; use an
+    # inert absolute placeholder only so the remainder of this read-only report
+    # can be generated without ever selecting a shared temporary directory.
     if target_root is None:
-        base = Path(home) if home else None
-        if base is None:
-            errors.append("Cannot determine target root: HOME is not set")
-            target_root = Path("/tmp/hive")
+        if home:
+            target_root = Path(home) / ".local" / "share" / "hive"
         else:
-            target_root = base / ".local" / "share" / "hive"
+            errors.append("Cannot determine target root: HOME is not set")
+            target_root = Path.cwd().resolve() / ".hive-unresolved-target"
     env["target_root"] = str(target_root)
 
     existing_status, existing_warnings = _detect_existing_installation(target_root, os.environ)
     warnings.extend(existing_warnings)
 
-    if _detect_incomplete_transaction(Path(env["home"] or "/tmp") / ".local" / "state" / "hive"):
-        warnings.append("Incomplete installation transaction detected")
-        if existing_status == InstallStatus.CLEAN_INSTALL:
-            existing_status = InstallStatus.RECOVERY_REQUIRED
+    if home:
+        state_root = Path(home) / ".local" / "state" / "hive"
+        if _detect_incomplete_transaction(state_root):
+            warnings.append("Incomplete installation transaction detected")
+            if existing_status == InstallStatus.CLEAN_INSTALL:
+                existing_status = InstallStatus.RECOVERY_REQUIRED
 
     # Relative target rejection
     if not target_root.is_absolute():
