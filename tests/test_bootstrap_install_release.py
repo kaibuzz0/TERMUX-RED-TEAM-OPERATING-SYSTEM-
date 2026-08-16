@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -67,18 +68,34 @@ def test_download_bundle_enforces_streaming_size_limit(tmp_path):
 def test_stage_verified_release_builds_existing_installer_layout(tmp_path):
     verified = tmp_path / "verified"
     verified.mkdir()
-    payload = b"#!/usr/bin/env python3\nprint('hive')\n"
-    artifact = verified / "bin" / "hive"
-    artifact.parent.mkdir()
-    artifact.write_bytes(payload)
+    executable_payload = b"#!/usr/bin/env python3\nprint('hive')\n"
+    data_payload = b"operator data\n"
+    executable = verified / "bin" / "hive"
+    executable.parent.mkdir()
+    executable.write_bytes(executable_payload)
+    data_file = verified / "etc" / "defaults.txt"
+    data_file.parent.mkdir()
+    data_file.write_bytes(data_payload)
+
+    # Simulate attacker-controlled tar header modes. Staging must ignore these.
+    executable.chmod(0o777)
+    data_file.chmod(0o777)
+
     manifest = [
         {
             "path": "bin/hive",
-            "size": len(payload),
+            "size": len(executable_payload),
             "sha256": "ignored-here-because-bootstrap-already-verified",
             "executable": True,
             "type": "required",
-        }
+        },
+        {
+            "path": "etc/defaults.txt",
+            "size": len(data_payload),
+            "sha256": "ignored-here-because-bootstrap-already-verified",
+            "executable": False,
+            "type": "required",
+        },
     ]
     (verified / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
     (verified / "metadata.json").write_text(
@@ -86,10 +103,29 @@ def test_stage_verified_release_builds_existing_installer_layout(tmp_path):
     )
 
     staged = bootstrap_install.stage_verified_release(verified, tmp_path / "staged")
-    assert (staged / "data" / "runtime" / "bin" / "hive").read_bytes() == payload
+    staged_executable = staged / "data" / "runtime" / "bin" / "hive"
+    staged_data = staged / "data" / "runtime" / "etc" / "defaults.txt"
+    assert staged_executable.read_bytes() == executable_payload
+    assert staged_data.read_bytes() == data_payload
+    assert os.stat(staged_executable).st_mode & 0o777 == 0o700
+    assert os.stat(staged_data).st_mode & 0o777 == 0o600
+    assert os.stat(staged / "data" / "runtime").st_mode & 0o777 == 0o700
+    assert os.stat(staged / "state" / "manifest.json").st_mode & 0o777 == 0o600
+    assert os.stat(staged / "metadata.json").st_mode & 0o777 == 0o600
+
     recorded = json.loads((staged / "state" / "manifest.json").read_text(encoding="utf-8"))
     assert recorded["manifest"] == manifest
-    assert (staged / "metadata.json").is_file()
+
+
+def test_stage_verified_release_rejects_unsafe_manifest_path(tmp_path):
+    verified = tmp_path / "verified"
+    verified.mkdir()
+    (verified / "manifest.json").write_text(
+        json.dumps([{"path": "../outside", "executable": False}]), encoding="utf-8"
+    )
+    (verified / "metadata.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(bootstrap_install.BootstrapInstallError, match="unsafe"):
+        bootstrap_install.stage_verified_release(verified, tmp_path / "staged")
 
 
 def test_bootstrap_install_verifies_before_handing_release_to_installer(tmp_path, monkeypatch):
