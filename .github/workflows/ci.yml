@@ -141,6 +141,8 @@ jobs:
           -o dist/hive-bootstrap.pyz \
           -p "/usr/bin/env python3"
         python dist/hive-bootstrap.pyz --help
+        python dist/hive-bootstrap.pyz install --help
+        python dist/hive-bootstrap.pyz verify --help
         sha256sum dist/hive-bootstrap.pyz > dist/hive-bootstrap.pyz.sha256
 
     - name: Upload Hive package
