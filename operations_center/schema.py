@@ -2,7 +2,17 @@
 
 from __future__ import annotations
 
-from enum import StrEnum
+try:
+    from enum import StrEnum
+except ImportError:  # Python 3.9-3.10 compatibility
+    from enum import Enum
+
+    class StrEnum(str, Enum):
+        """Minimal stdlib StrEnum compatibility for supported pre-3.11 runtimes."""
+
+        def __str__(self) -> str:
+            return str(self.value)
+
 from typing import Any
 
 
