@@ -74,7 +74,10 @@ def _load_canonical_metadata(repo_root: Path) -> dict:
 def _make_target_policy(repo_root: Path, overrides: dict[str, Path] | None = None) -> TargetPolicy:
     if resolve_repository_root is None:
         raise RuntimeError("lib/hive_path.py is required")
-    home = Path(os.environ.get("HOME", "/tmp"))
+    home_value = os.environ.get("HOME")
+    if not home_value:
+        raise RuntimeError("HOME is required to determine Hive target paths")
+    home = Path(home_value)
     overrides = overrides or {}
     return TargetPolicy(
         root=overrides.get("root", resolve_data_root(home=home)),
