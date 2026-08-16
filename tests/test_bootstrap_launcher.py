@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -36,13 +37,15 @@ def _activate(data_root: Path, release_id: str, runtime: Path) -> None:
     )
 
 
-def test_managed_launcher_follows_active_pointer_across_rollback(tmp_path: Path) -> None:
+def test_managed_launcher_uses_installing_python_and_follows_active_pointer_across_rollback(tmp_path: Path) -> None:
     data_root = tmp_path / "data"
     prefix = tmp_path / "prefix"
     first = _make_runtime(data_root, "release-one", "one")
     second = _make_runtime(data_root, "release-two", "two")
 
     launcher = install_global_launcher(data_root, prefix)
+    first_line = launcher.read_text(encoding="utf-8").splitlines()[0]
+    assert first_line == f"#!{Path(sys.executable).resolve()}"
 
     _activate(data_root, "release-one", first)
     run_one = subprocess.run(
@@ -50,7 +53,6 @@ def test_managed_launcher_follows_active_pointer_across_rollback(tmp_path: Path)
     )
     assert json.loads(run_one.stdout) == {"release": "one", "args": ["status"]}
 
-    # Simulate the activation engine changing/rolling back the active pointer.
     _activate(data_root, "release-two", second)
     run_two = subprocess.run(
         [str(launcher), "boot"], capture_output=True, text=True, check=True, timeout=15
