@@ -1,6 +1,16 @@
 name: Build Hive RC.2 Candidate
 
 on:
+  push:
+    branches: [ hive-1.1-rc2-bootstrap ]
+    paths:
+      - ".github/workflows/rc2-candidate.yml"
+      - ".github/workflows/rc1-baseline-audit.yml"
+      - "release_engine/**"
+      - "bootstrap/**"
+      - "installer/**"
+      - "updates/**"
+      - "requirements.txt"
   workflow_dispatch:
     inputs:
       version:
@@ -8,13 +18,13 @@ on:
         required: true
         default: "1.1.0-rc.2"
         type: string
-      security_sequence:
-        description: "Monotonic security sequence for this candidate"
-        required: true
-        type: number
 
 permissions:
   contents: read
+
+env:
+  RC1_METADATA_URL: "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/releases/download/hive-os-v1.1.0-rc.1/metadata.signed.json"
+  RC1_METADATA_SHA256: "96567a1380aef1516c487900313ee099646cd5af70eb6c42308a01ef9a08149e"
 
 jobs:
   candidate:
@@ -36,19 +46,55 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
-      - name: Validate candidate inputs
+      - name: Resolve exact RC.1 anti-rollback baseline
         shell: bash
         run: |
           set -euo pipefail
-          case "${{ inputs.version }}" in
+          baseline="$RUNNER_TEMP/rc1-metadata.signed.json"
+          curl --fail --location --proto '=https' --tlsv1.2 "$RC1_METADATA_URL" -o "$baseline"
+          printf '%s  %s\n' "$RC1_METADATA_SHA256" "$baseline" | sha256sum --check --strict
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          metadata = json.loads((Path(os.environ["RUNNER_TEMP"]) / "rc1-metadata.signed.json").read_text(encoding="utf-8"))
+          release = metadata.get("release")
+          if not isinstance(release, dict):
+              raise SystemExit("RC.1 metadata has no release block")
+          if release.get("version") != "1.1.0-rc.1":
+              raise SystemExit(f"unexpected RC.1 version: {release.get('version')!r}")
+          if release.get("release_id") not in {
+              "hive-os-v1.1.0-rc.1",
+              "hive-1.1.0-rc.1-20260915-parity",
+          }:
+              raise SystemExit(f"unexpected RC.1 release id: {release.get('release_id')!r}")
+          sequence = release.get("security_sequence", release.get("release_sequence"))
+          if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 0:
+              raise SystemExit("RC.1 metadata has no valid monotonic sequence")
+          rc2_sequence = sequence + 1
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as handle:
+              handle.write(f"RC1_SEQUENCE={sequence}\n")
+              handle.write(f"RC2_SEQUENCE={rc2_sequence}\n")
+          print(f"Published RC.1 sequence: {sequence}")
+          print(f"Required RC.2 sequence: {rc2_sequence}")
+          PY
+
+      - name: Validate candidate inputs
+        shell: bash
+        env:
+          VERSION: "${{ github.event_name == 'workflow_dispatch' && inputs.version || '1.1.0-rc.2' }}"
+        run: |
+          set -euo pipefail
+          case "$VERSION" in
             *-rc.*) ;;
             *) echo "Candidate version must be an RC prerelease" >&2; exit 2 ;;
           esac
-          sequence='${{ inputs.security_sequence }}'
-          if ! [[ "$sequence" =~ ^[0-9]+$ ]]; then
-            echo "security_sequence must be a non-negative integer" >&2
+          if ! [[ "$RC2_SEQUENCE" =~ ^[0-9]+$ ]]; then
+            echo "resolved RC.2 sequence must be a non-negative integer" >&2
             exit 2
           fi
+          echo "RC2_VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Pin deterministic build identity
         shell: bash
@@ -65,8 +111,8 @@ jobs:
           python -m release_engine.cli build \
             --source "$GITHUB_WORKSPACE" \
             --output "$RUNNER_TEMP/hive-rc2-a" \
-            --version "${{ inputs.version }}" \
-            --sequence "${{ inputs.security_sequence }}" \
+            --version "$RC2_VERSION" \
+            --sequence "$RC2_SEQUENCE" \
             --build-id "$HIVE_BUILD_ID" \
             --revision "$GITHUB_SHA" \
             --platforms termux \
@@ -75,8 +121,8 @@ jobs:
           python -m release_engine.cli build \
             --source "$GITHUB_WORKSPACE" \
             --output "$RUNNER_TEMP/hive-rc2-b" \
-            --version "${{ inputs.version }}" \
-            --sequence "${{ inputs.security_sequence }}" \
+            --version "$RC2_VERSION" \
+            --sequence "$RC2_SEQUENCE" \
             --build-id "$HIVE_BUILD_ID" \
             --revision "$GITHUB_SHA" \
             --platforms termux \
@@ -134,7 +180,7 @@ jobs:
           release = metadata.get("release", {})
           if release.get("commit") != os.environ["GITHUB_SHA"]:
               raise SystemExit("candidate metadata is not bound to the workflow commit")
-          if release.get("security_sequence") != int(os.environ["SEQUENCE"]):
+          if release.get("security_sequence") != int(os.environ["RC2_SEQUENCE"]):
               raise SystemExit("candidate security sequence mismatch")
           if release.get("platforms") != ["termux"] or release.get("architectures") != ["aarch64"]:
               raise SystemExit("candidate platform/architecture contract mismatch")
@@ -146,8 +192,6 @@ jobs:
               raise SystemExit("candidate archive does not exactly match manifest closure")
           print(f"Candidate release shape validated: {release.get('release_id')}")
           PY
-        env:
-          SEQUENCE: "${{ inputs.security_sequence }}"
 
       - name: Inspect unsigned bundle
         shell: bash
@@ -179,8 +223,9 @@ jobs:
           manifest = next(out.glob("*.manifest.json"))
           info = {
               "status": "unsigned_candidate_only",
-              "version": "${{ inputs.version }}",
-              "security_sequence": int("${{ inputs.security_sequence }}"),
+              "version": os.environ["RC2_VERSION"],
+              "rc1_sequence": int(os.environ["RC1_SEQUENCE"]),
+              "security_sequence": int(os.environ["RC2_SEQUENCE"]),
               "source_revision": os.environ["GITHUB_SHA"],
               "source_date_epoch": int(os.environ["SOURCE_DATE_EPOCH"]),
               "build_id": os.environ["HIVE_BUILD_ID"],
