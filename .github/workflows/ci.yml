@@ -78,9 +78,14 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, security]
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
 
     - name: Create distribution package
       run: |
@@ -93,8 +98,24 @@ jobs:
           --exclude=brain-plug/escape_living_ai.txt \
           "Hive Ops DevAI" "Hive Ops Final" "Hermes Plugins" brain-plug install.sh README.md requirements.txt
 
-    - name: Upload build artifact
+    - name: Create standalone clean-install bootstrap
+      run: |
+        python -m zipapp bootstrap \
+          -o dist/hive-bootstrap.pyz \
+          -p "/usr/bin/env python3"
+        python dist/hive-bootstrap.pyz --help
+        sha256sum dist/hive-bootstrap.pyz > dist/hive-bootstrap.pyz.sha256
+
+    - name: Upload Hive package
       uses: actions/upload-artifact@v4
       with:
         name: hive-ops-package
         path: dist/hive-ops-devai.tar.gz
+
+    - name: Upload clean-install bootstrap
+      uses: actions/upload-artifact@v4
+      with:
+        name: hive-clean-install-bootstrap
+        path: |
+          dist/hive-bootstrap.pyz
+          dist/hive-bootstrap.pyz.sha256
