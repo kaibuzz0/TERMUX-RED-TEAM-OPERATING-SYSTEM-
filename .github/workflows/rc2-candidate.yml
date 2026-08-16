@@ -206,17 +206,20 @@ jobs:
         run: |
           set -euo pipefail
           out="$GITHUB_WORKSPACE/dist/rc2-candidate"
-          rm -rf "$out"
-          mkdir -p "$out"
+          gate_stage="$RUNNER_TEMP/hive-release-gate"
+          rm -rf "$out" "$gate_stage"
+          mkdir -p "$out" "$gate_stage"
           cp "$RUNNER_TEMP/hive-rc2-a"/* "$out/"
+
           python -m zipapp bootstrap -o "$out/hive-bootstrap.pyz"
           python "$out/hive-bootstrap.pyz" install --help >/dev/null
           python "$out/hive-bootstrap.pyz" verify --help >/dev/null
-          (
-            cd "$out"
-            sha256sum *.tar.gz *.json hive-bootstrap.pyz > SHA256SUMS
-            sha256sum --check --strict SHA256SUMS
-          )
+
+          cp -R release_engine "$gate_stage/release_engine"
+          cp -R bootstrap "$gate_stage/bootstrap"
+          python -m zipapp "$gate_stage" -m "release_engine.candidate_gate:main" -o "$out/hive-release-gate.pyz"
+          python "$out/hive-release-gate.pyz" --help >/dev/null
+
           python - <<'PY'
           import json
           import os
@@ -238,10 +241,24 @@ jobs:
               "bundle": bundle.name,
               "metadata": metadata.name,
               "manifest": manifest.name,
-              "next_step": "offline-sign metadata, then run `hive release seal` and bootstrap verification before publication",
+              "bootstrap": "hive-bootstrap.pyz",
+              "post_sign_gate": "hive-release-gate.pyz",
+              "next_step": (
+                  "offline-sign the metadata with hive-release-prod-2026-02, then run "
+                  "`python hive-release-gate.pyz --candidate-dir . --signed-metadata <signed.json> "
+                  "--output publishable`"
+              ),
           }
-          (out / "CANDIDATE.json").write_text(json.dumps(info, indent=2, sort_keys=True), encoding="utf-8")
+          (out / "CANDIDATE.json").write_text(
+              json.dumps(info, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+          )
           PY
+
+          (
+            cd "$out"
+            sha256sum *.tar.gz *.json *.pyz > SHA256SUMS
+            sha256sum --check --strict SHA256SUMS
+          )
 
       - name: Upload unsigned RC.2 candidate
         uses: actions/upload-artifact@v4
