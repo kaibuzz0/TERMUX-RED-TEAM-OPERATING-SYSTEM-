@@ -64,11 +64,12 @@ jobs:
               raise SystemExit("RC.1 metadata has no release block")
           if release.get("version") != "1.1.0-rc.1":
               raise SystemExit(f"unexpected RC.1 version: {release.get('version')!r}")
-          if release.get("release_id") not in {
-              "hive-os-v1.1.0-rc.1",
-              "hive-1.1.0-rc.1-20260915-parity",
-          }:
+          expected_release_id = "hive-os-1.1.0-rc.1-20260815-parity"
+          if release.get("release_id") != expected_release_id:
               raise SystemExit(f"unexpected RC.1 release id: {release.get('release_id')!r}")
+          signing = metadata.get("signing")
+          if not isinstance(signing, dict) or signing.get("key_id") != "hive-parity-test-2026-01":
+              raise SystemExit(f"unexpected RC.1 signing key id: {signing.get('key_id') if isinstance(signing, dict) else None!r}")
           sequence = release.get("security_sequence", release.get("release_sequence"))
           if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence < 0:
               raise SystemExit("RC.1 metadata has no valid monotonic sequence")
