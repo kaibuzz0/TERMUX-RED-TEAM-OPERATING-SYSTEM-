@@ -46,21 +46,24 @@ jobs:
 
     - name: Test with pytest
       id: pytest
+      continue-on-error: true
       shell: bash
       run: |
-        set +e
+        set -o pipefail
         pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
-        code=${PIPESTATUS[0]}
-        echo "exit_code=$code" >> "$GITHUB_OUTPUT"
-        exit 0
 
     - name: Surface pytest failures
-      if: steps.pytest.outputs.exit_code != '0'
+      if: steps.pytest.outcome == 'failure'
       run: |
         python - <<'PY'
         from pathlib import Path
 
-        output = Path("pytest-output.txt").read_text(encoding="utf-8", errors="replace")
+        output_path = Path("pytest-output.txt")
+        if not output_path.is_file():
+            print("::error title=pytest failure::Pytest failed before diagnostics were captured.")
+            raise SystemExit(1)
+
+        output = output_path.read_text(encoding="utf-8", errors="replace")
         lines = output.splitlines()
         summary = [line for line in lines if line.startswith(("FAILED ", "ERROR "))]
 
