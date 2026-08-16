@@ -21,10 +21,8 @@ from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 try:
-    # Normal repository/package execution: ``python -m bootstrap.install_release``.
     from bootstrap.verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
 except ImportError:  # pragma: no cover - exercised by the standalone zipapp test
-    # Standalone zipapp execution: the bootstrap package contents are archive-root modules.
     from verify_bundle import BootstrapVerificationError, _safe_relative_path, verify_bundle
 
 DEFAULT_MAX_DOWNLOAD_BYTES = 512 * 1024 * 1024
@@ -348,6 +346,7 @@ def bootstrap_install(
     state_root: Path,
     approve: bool,
     prefix: Path | None = None,
+    current_release_id: str | None = None,
 ) -> dict[str, Any]:
     """Execute the clean-install trust pipeline from download through activation."""
     configure_termux = approve and platform == "termux"
@@ -364,6 +363,7 @@ def bootstrap_install(
             platform,
             architecture,
             current_sequence=current_sequence,
+            current_release_id=current_release_id,
         )
         if configure_termux:
             installation = install_verified_release(
@@ -397,6 +397,7 @@ def main(argv: list[str] | None = None) -> int:
         default=os.uname().machine if hasattr(os, "uname") else "aarch64",
     )
     parser.add_argument("--current-sequence", type=int, default=0)
+    parser.add_argument("--current-release-id", help="release identity currently bound to --current-sequence")
     parser.add_argument("--data-root", type=Path, default=Path.home() / "Hive-Ops" / "data")
     parser.add_argument("--state-root", type=Path, default=Path.home() / "Hive-Ops" / "state")
     parser.add_argument("--prefix", type=Path, help="Termux package prefix; defaults to $PREFIX")
@@ -410,6 +411,7 @@ def main(argv: list[str] | None = None) -> int:
             platform=args.platform,
             architecture=args.architecture,
             current_sequence=args.current_sequence,
+            current_release_id=args.current_release_id,
             data_root=args.data_root.expanduser().resolve(),
             state_root=args.state_root.expanduser().resolve(),
             approve=args.approve,
