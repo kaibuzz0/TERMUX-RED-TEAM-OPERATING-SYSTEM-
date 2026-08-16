@@ -60,8 +60,11 @@ def _detect_architecture() -> str:
     return platform.machine().lower()
 
 
-def _detect_termux(env: dict[str, str]) -> CapabilityState:
-    if env.get("TERMUX_VERSION"):
+def _detect_termux(env: dict[str, Any]) -> CapabilityState:
+    # Accept either raw process-environment keys or the normalized keys used in
+    # the preflight report. This keeps fixture detection and runtime detection
+    # consistent instead of accidentally dropping TERMUX_VERSION evidence.
+    if env.get("TERMUX_VERSION") or env.get("termux_version"):
         return CapabilityState.AVAILABLE
     if Path("/data/data/com.termux").exists():
         return CapabilityState.AVAILABLE
