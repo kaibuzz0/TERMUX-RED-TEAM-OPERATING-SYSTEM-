@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-16T23:59:19Z",
+  "source_commit": "85de2c43e928d595cb9e3825e80456c16e41424c",
+  "repo": {
+    "id": "termux-red-team-operating-system-",
+    "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
+    "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
+    "default_branch": "master"
+  },
+  "stats": {
+    "tracked_files": 924,
+    "python_files": 403,
+    "javascript_typescript_files": 1,
+    "workflow_files": 4,
+    "test_files": 170
+  },
+  "tools": [],
+  "toolsets": [],
+  "cases": [],
+  "opportunities": [],
+  "intelligence": [],
+  "sources": [],
+  "prompts": [],
+  "evidence": [],
+  "agent_ops": {},
+  "activity": [
+    {
+      "id": "85de2c43e928d595cb9e3825e80456c16e41424c",
+      "type": "commit",
+      "title": "Connect repository to GitHub Command Site",
+      "timestamp": "2026-08-16T18:59:09-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/85de2c43e928d595cb9e3825e80456c16e41424c"
+    },
+    {
+      "id": "aeb13519c6064fc8d9d3badc7d53e0603016f2ab",
+      "type": "commit",
+      "title": "Merge pull request #4 from kaibuzz0/hive-1.1-rc2-bootstrap",
+      "timestamp": "2026-08-16T18:55:14-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/aeb13519c6064fc8d9d3badc7d53e0603016f2ab"
+    },
+    {
+      "id": "aa579843a31c1f13bcf78a72a58b734f966db35f",
+      "type": "commit",
+      "title": "docs: add explicit Hive V2 release acceptance gate",
+      "timestamp": "2026-08-16T13:32:42-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/aa579843a31c1f13bcf78a72a58b734f966db35f"
+    },
+    {
+      "id": "2f2a3e4c1cbdb6b1c263bba5cc69bcad99a24d41",
+      "type": "commit",
+      "title": "fix: harden legacy detection against unreadable host paths",
+      "timestamp": "2026-08-16T13:31:55-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/2f2a3e4c1cbdb6b1c263bba5cc69bcad99a24d41"
+    },
+    {
+      "id": "5f110c8faa2e037c1ad47bfa5f241953a897fb1f",
+      "type": "commit",
+      "title": "fix: make runtime detection permission-safe",
+      "timestamp": "2026-08-16T13:31:33-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/5f110c8faa2e037c1ad47bfa5f241953a897fb1f"
+    },
+    {
+      "id": "3bdd64ae817e0cf89325298ca0bab1dbc25cffb2",
+      "type": "commit",
+      "title": "Merge pull request #3 from kaibuzz0/hive-1.1-rc2-bootstrap",
+      "timestamp": "2026-08-16T11:23:33-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/3bdd64ae817e0cf89325298ca0bab1dbc25cffb2"
+    },
+    {
+      "id": "12691465f3f3d5a837b210c44e52d106de71fd10",
+      "type": "commit",
+      "title": "test: align candidate gate errors",
+      "timestamp": "2026-08-16T11:05:56-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12691465f3f3d5a837b210c44e52d106de71fd10"
+    },
+    {
+      "id": "1c3ca32953eac0f4f813e586763ecd06ff78f5a6",
+      "type": "commit",
+      "title": "release: route candidate gate through standalone core",
+      "timestamp": "2026-08-16T11:05:31-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1c3ca32953eac0f4f813e586763ecd06ff78f5a6"
+    },
+    {
+      "id": "6ebf16f448fc72f0297dc2f1a8229350e9b7e6b3",
+      "type": "commit",
+      "title": "release: make post-sign gate self-contained",
+      "timestamp": "2026-08-16T11:05:12-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/6ebf16f448fc72f0297dc2f1a8229350e9b7e6b3"
+    },
+    {
+      "id": "12a093fc79835eb02d57655e21af0773708459a6",
+      "type": "commit",
+      "title": "release: package self-contained RC2 post-sign gate",
+      "timestamp": "2026-08-16T10:59:24-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12a093fc79835eb02d57655e21af0773708459a6"
+    }
+  ],
+  "links": [
+    {
+      "id": "github",
+      "name": "GitHub repository",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-"
+    },
+    {
+      "id": "actions",
+      "name": "GitHub Actions",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/actions"
+    },
+    {
+      "id": "issues",
+      "name": "Issues",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/issues"
+    }
+  ]
+}
