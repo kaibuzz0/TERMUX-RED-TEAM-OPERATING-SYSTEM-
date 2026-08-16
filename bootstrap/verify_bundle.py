@@ -29,6 +29,7 @@ MCowBQYDK2VwAyEABf4VRp7InkSSIM9wHZusMV+ujbHgmREPJQgCZhJvpCU=
 -----END PUBLIC KEY-----
 """
 MAX_SECURITY_SEQUENCE = 2_147_483_647
+CONTROL_FILES = frozenset({"metadata.json", "manifest.json"})
 
 
 class BootstrapVerificationError(RuntimeError):
@@ -91,8 +92,12 @@ def safe_extract(bundle: Path, destination: Path) -> None:
         raise BootstrapVerificationError(f"invalid release archive: {exc}") from exc
     with archive:
         members = archive.getmembers()
+        seen_members: set[str] = set()
         for member in members:
-            _safe_relative_path(member.name)
+            normalized = str(_safe_relative_path(member.name))
+            if normalized in seen_members:
+                raise BootstrapVerificationError(f"duplicate archive member: {member.name}")
+            seen_members.add(normalized)
             if not (member.isfile() or member.isdir()):
                 raise BootstrapVerificationError(f"unsafe archive member type: {member.name}")
         for member in members:
@@ -129,6 +134,27 @@ def verify_metadata(metadata: dict[str, Any]) -> None:
         if isinstance(exc, BootstrapVerificationError):
             raise
         raise BootstrapVerificationError("metadata signature verification failed") from exc
+
+
+def _verify_manifest_closure(destination: Path, manifest_paths: set[str]) -> None:
+    """Require the extracted file set to be exactly the signed manifest plus controls.
+
+    Allowing an unmanifested file would let unsigned code/resources ride inside an
+    otherwise valid release bundle and potentially be imported or executed later.
+    """
+    expected = set(manifest_paths) | set(CONTROL_FILES)
+    actual: set[str] = set()
+    for path in destination.rglob("*"):
+        if path.is_symlink():
+            raise BootstrapVerificationError(f"unsafe extracted symlink: {path.relative_to(destination).as_posix()}")
+        if path.is_file():
+            actual.add(path.relative_to(destination).as_posix())
+    extras = sorted(actual - expected)
+    if extras:
+        raise BootstrapVerificationError(f"unmanifested bundle file: {extras[0]}")
+    missing = sorted(expected - actual)
+    if missing:
+        raise BootstrapVerificationError(f"missing bundle file: {missing[0]}")
 
 
 def verify_bundle(
@@ -174,6 +200,8 @@ def verify_bundle(
         if not isinstance(rel, str):
             raise BootstrapVerificationError("manifest entry missing path")
         _safe_relative_path(rel)
+        if rel in CONTROL_FILES:
+            raise BootstrapVerificationError(f"manifest must not redefine bootstrap control file: {rel}")
         if rel in seen:
             raise BootstrapVerificationError(f"duplicate manifest path: {rel}")
         seen.add(rel)
@@ -184,6 +212,7 @@ def verify_bundle(
             raise BootstrapVerificationError(f"size mismatch: {rel}")
         if _sha256_file(full) != entry.get("sha256"):
             raise BootstrapVerificationError(f"sha256 mismatch: {rel}")
+    _verify_manifest_closure(destination, seen)
     return {
         "verified": True,
         "version": release.get("version"),
