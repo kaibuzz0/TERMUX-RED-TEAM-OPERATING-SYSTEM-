@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-16T23:59:19Z",
-  "source_commit": "85de2c43e928d595cb9e3825e80456c16e41424c",
+  "generated_at": "2026-08-17T00:20:08Z",
+  "source_commit": "60efd34807b05b3b680d03a12caf987e9ae352f2",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -15,6 +15,5316 @@
     "workflow_files": 4,
     "test_files": 170
   },
+  "repository_tree": {
+    "total_files": 924,
+    "total_directories": 102,
+    "files_truncated": false,
+    "directories_truncated": false,
+    "top_level": [
+      ".github",
+      ".gitignore",
+      "ENTRY",
+      "EOF",
+      "Hermes Plugins",
+      "Hive Ops DevAI",
+      "Hive Ops Final",
+      "MILESTONE10_REPORT.md",
+      "MILESTONE11_REPORT.md",
+      "MILESTONE12_REPORT.md",
+      "MILESTONE13_REPORT.md",
+      "MILESTONE14_REPORT.md",
+      "MILESTONE15_REPORT.md",
+      "MILESTONE16_REPORT.md",
+      "MILESTONE17_REPORT.md",
+      "MILESTONE18_REPORT.md",
+      "MILESTONE19_REPORT.md",
+      "MILESTONE1_REPORT.md",
+      "MILESTONE2_REPORT.md",
+      "MILESTONE3_REPORT.md",
+      "MILESTONE4_REPORT.md",
+      "MILESTONE6_REPORT.md",
+      "MILESTONE7_REPORT.md",
+      "MILESTONE8_REPORT.md",
+      "RC_API_SCHEMA_INVENTORY.md",
+      "RC_API_SCHEMA_INVENTORY_MIN.md",
+      "README.md",
+      "apply-hive-rc1.py",
+      "bin",
+      "blueprints",
+      "bootstrap",
+      "brain-plug",
+      "config",
+      "config_engine",
+      "diagnostics",
+      "docs",
+      "emergency-repair.sh",
+      "examples",
+      "hive-canonical.json",
+      "hive_broker",
+      "hive_operator",
+      "home",
+      "install-hive.sh",
+      "install-termux-easy.sh",
+      "install-termux.sh",
+      "install.sh",
+      "installer",
+      "lib",
+      "network",
+      "operations_center",
+      "plugin_sdk",
+      "policy_engine",
+      "release_engine",
+      "releases",
+      "requirements-dev.txt",
+      "requirements-extras.txt",
+      "requirements-runtime.txt",
+      "requirements.txt",
+      "run-hive.cmd",
+      "run-hive.ps1",
+      "runtime_logs",
+      "security",
+      "services",
+      "tests",
+      "update.sh",
+      "updates"
+    ],
+    "directories": [
+      {
+        "path": ".github",
+        "name": ".github",
+        "depth": 1,
+        "file_count": 4
+      },
+      {
+        "path": ".github/workflows",
+        "name": "workflows",
+        "depth": 2,
+        "file_count": 4
+      },
+      {
+        "path": "Hermes Plugins",
+        "name": "Hermes Plugins",
+        "depth": 1,
+        "file_count": 4
+      },
+      {
+        "path": "Hermes Plugins/hive-ops-plugin",
+        "name": "hive-ops-plugin",
+        "depth": 2,
+        "file_count": 3
+      },
+      {
+        "path": "Hermes Plugins/hive-ops-plugin/agents",
+        "name": "agents",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops DevAI",
+        "name": "Hive Ops DevAI",
+        "depth": 1,
+        "file_count": 54
+      },
+      {
+        "path": "Hive Ops DevAI/bin",
+        "name": "bin",
+        "depth": 2,
+        "file_count": 43
+      },
+      {
+        "path": "Hive Ops DevAI/docs",
+        "name": "docs",
+        "depth": 2,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops DevAI/lib",
+        "name": "lib",
+        "depth": 2,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final",
+        "name": "Hive Ops Final",
+        "depth": 1,
+        "file_count": 84
+      },
+      {
+        "path": "Hive Ops Final/.termux",
+        "name": ".termux",
+        "depth": 2,
+        "file_count": 2
+      },
+      {
+        "path": "Hive Ops Final/.termux/boot",
+        "name": "boot",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "Hive Ops Final/bin",
+        "name": "bin",
+        "depth": 2,
+        "file_count": 4
+      },
+      {
+        "path": "Hive Ops Final/etc",
+        "name": "etc",
+        "depth": 2,
+        "file_count": 3
+      },
+      {
+        "path": "Hive Ops Final/lib",
+        "name": "lib",
+        "depth": 2,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete",
+        "name": "original hive os complete",
+        "depth": 2,
+        "file_count": 23
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.config",
+        "name": ".config",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.config/hive",
+        "name": "hive",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.termux",
+        "name": ".termux",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.termux/boot",
+        "name": "boot",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin",
+        "name": "bin",
+        "depth": 3,
+        "file_count": 13
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc",
+        "name": "etc",
+        "depth": 3,
+        "file_count": 7
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/services",
+        "name": "services",
+        "depth": 4,
+        "file_count": 3
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/tor",
+        "name": "tor",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "Hive Ops Final/shell",
+        "name": "shell",
+        "depth": 2,
+        "file_count": 3
+      },
+      {
+        "path": "Hive Ops Final/swarm-core",
+        "name": "swarm-core",
+        "depth": 2,
+        "file_count": 19
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/agents",
+        "name": "agents",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry",
+        "name": "registry",
+        "depth": 3,
+        "file_count": 11
+      },
+      {
+        "path": "Hive Ops Final/tools",
+        "name": "tools",
+        "depth": 2,
+        "file_count": 28
+      },
+      {
+        "path": "bin",
+        "name": "bin",
+        "depth": 1,
+        "file_count": 3
+      },
+      {
+        "path": "blueprints",
+        "name": "blueprints",
+        "depth": 1,
+        "file_count": 274
+      },
+      {
+        "path": "blueprints/00-baseline",
+        "name": "00-baseline",
+        "depth": 2,
+        "file_count": 5
+      },
+      {
+        "path": "blueprints/01-repository-forensics",
+        "name": "01-repository-forensics",
+        "depth": 2,
+        "file_count": 11
+      },
+      {
+        "path": "blueprints/02-current-system-model",
+        "name": "02-current-system-model",
+        "depth": 2,
+        "file_count": 8
+      },
+      {
+        "path": "blueprints/03-security",
+        "name": "03-security",
+        "depth": 2,
+        "file_count": 10
+      },
+      {
+        "path": "blueprints/04-target-architecture",
+        "name": "04-target-architecture",
+        "depth": 2,
+        "file_count": 19
+      },
+      {
+        "path": "blueprints/05-platform-design",
+        "name": "05-platform-design",
+        "depth": 2,
+        "file_count": 11
+      },
+      {
+        "path": "blueprints/06-migration",
+        "name": "06-migration",
+        "depth": 2,
+        "file_count": 10
+      },
+      {
+        "path": "blueprints/07-verification",
+        "name": "07-verification",
+        "depth": 2,
+        "file_count": 10
+      },
+      {
+        "path": "blueprints/08-decisions",
+        "name": "08-decisions",
+        "depth": 2,
+        "file_count": 12
+      },
+      {
+        "path": "blueprints/09-diagrams",
+        "name": "09-diagrams",
+        "depth": 2,
+        "file_count": 15
+      },
+      {
+        "path": "blueprints/10-reviews",
+        "name": "10-reviews",
+        "depth": 2,
+        "file_count": 7
+      },
+      {
+        "path": "blueprints/implementation",
+        "name": "implementation",
+        "depth": 2,
+        "file_count": 152
+      },
+      {
+        "path": "blueprints/implementation/milestone-1",
+        "name": "milestone-1",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/implementation/milestone-10",
+        "name": "milestone-10",
+        "depth": 3,
+        "file_count": 9
+      },
+      {
+        "path": "blueprints/implementation/milestone-11",
+        "name": "milestone-11",
+        "depth": 3,
+        "file_count": 14
+      },
+      {
+        "path": "blueprints/implementation/milestone-12",
+        "name": "milestone-12",
+        "depth": 3,
+        "file_count": 12
+      },
+      {
+        "path": "blueprints/implementation/milestone-13",
+        "name": "milestone-13",
+        "depth": 3,
+        "file_count": 12
+      },
+      {
+        "path": "blueprints/implementation/milestone-14",
+        "name": "milestone-14",
+        "depth": 3,
+        "file_count": 5
+      },
+      {
+        "path": "blueprints/implementation/milestone-15",
+        "name": "milestone-15",
+        "depth": 3,
+        "file_count": 15
+      },
+      {
+        "path": "blueprints/implementation/milestone-16",
+        "name": "milestone-16",
+        "depth": 3,
+        "file_count": 14
+      },
+      {
+        "path": "blueprints/implementation/milestone-17",
+        "name": "milestone-17",
+        "depth": 3,
+        "file_count": 14
+      },
+      {
+        "path": "blueprints/implementation/milestone-18",
+        "name": "milestone-18",
+        "depth": 3,
+        "file_count": 21
+      },
+      {
+        "path": "blueprints/implementation/milestone-19",
+        "name": "milestone-19",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "blueprints/implementation/milestone-2",
+        "name": "milestone-2",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/implementation/milestone-20",
+        "name": "milestone-20",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "blueprints/implementation/milestone-3",
+        "name": "milestone-3",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "blueprints/implementation/milestone-4",
+        "name": "milestone-4",
+        "depth": 3,
+        "file_count": 3
+      },
+      {
+        "path": "blueprints/implementation/milestone-5",
+        "name": "milestone-5",
+        "depth": 3,
+        "file_count": 3
+      },
+      {
+        "path": "blueprints/implementation/milestone-6",
+        "name": "milestone-6",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "blueprints/implementation/milestone-7",
+        "name": "milestone-7",
+        "depth": 3,
+        "file_count": 3
+      },
+      {
+        "path": "blueprints/implementation/milestone-8",
+        "name": "milestone-8",
+        "depth": 3,
+        "file_count": 4
+      },
+      {
+        "path": "blueprints/implementation/milestone-9",
+        "name": "milestone-9",
+        "depth": 3,
+        "file_count": 13
+      },
+      {
+        "path": "bootstrap",
+        "name": "bootstrap",
+        "depth": 1,
+        "file_count": 4
+      },
+      {
+        "path": "brain-plug",
+        "name": "brain-plug",
+        "depth": 1,
+        "file_count": 3
+      },
+      {
+        "path": "config",
+        "name": "config",
+        "depth": 1,
+        "file_count": 1
+      },
+      {
+        "path": "config_engine",
+        "name": "config_engine",
+        "depth": 1,
+        "file_count": 17
+      },
+      {
+        "path": "diagnostics",
+        "name": "diagnostics",
+        "depth": 1,
+        "file_count": 9
+      },
+      {
+        "path": "docs",
+        "name": "docs",
+        "depth": 1,
+        "file_count": 90
+      },
+      {
+        "path": "docs/assets",
+        "name": "assets",
+        "depth": 2,
+        "file_count": 2
+      },
+      {
+        "path": "docs/assets/css",
+        "name": "css",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "docs/assets/js",
+        "name": "js",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "docs/releases",
+        "name": "releases",
+        "depth": 2,
+        "file_count": 4
+      },
+      {
+        "path": "examples",
+        "name": "examples",
+        "depth": 1,
+        "file_count": 3
+      },
+      {
+        "path": "examples/plugins",
+        "name": "plugins",
+        "depth": 2,
+        "file_count": 3
+      },
+      {
+        "path": "examples/plugins/hive-status",
+        "name": "hive-status",
+        "depth": 3,
+        "file_count": 3
+      },
+      {
+        "path": "hive_broker",
+        "name": "hive_broker",
+        "depth": 1,
+        "file_count": 16
+      },
+      {
+        "path": "hive_operator",
+        "name": "hive_operator",
+        "depth": 1,
+        "file_count": 5
+      },
+      {
+        "path": "home",
+        "name": "home",
+        "depth": 1,
+        "file_count": 3
+      },
+      {
+        "path": "installer",
+        "name": "installer",
+        "depth": 1,
+        "file_count": 15
+      },
+      {
+        "path": "lib",
+        "name": "lib",
+        "depth": 1,
+        "file_count": 3
+      },
+      {
+        "path": "network",
+        "name": "network",
+        "depth": 1,
+        "file_count": 10
+      },
+      {
+        "path": "operations_center",
+        "name": "operations_center",
+        "depth": 1,
+        "file_count": 12
+      },
+      {
+        "path": "plugin_sdk",
+        "name": "plugin_sdk",
+        "depth": 1,
+        "file_count": 17
+      },
+      {
+        "path": "policy_engine",
+        "name": "policy_engine",
+        "depth": 1,
+        "file_count": 18
+      },
+      {
+        "path": "release_engine",
+        "name": "release_engine",
+        "depth": 1,
+        "file_count": 18
+      },
+      {
+        "path": "releases",
+        "name": "releases",
+        "depth": 1,
+        "file_count": 5
+      },
+      {
+        "path": "releases/1.0.0",
+        "name": "1.0.0",
+        "depth": 2,
+        "file_count": 5
+      },
+      {
+        "path": "runtime_logs",
+        "name": "runtime_logs",
+        "depth": 1,
+        "file_count": 6
+      },
+      {
+        "path": "security",
+        "name": "security",
+        "depth": 1,
+        "file_count": 10
+      },
+      {
+        "path": "security/vault",
+        "name": "vault",
+        "depth": 2,
+        "file_count": 10
+      },
+      {
+        "path": "services",
+        "name": "services",
+        "depth": 1,
+        "file_count": 13
+      },
+      {
+        "path": "tests",
+        "name": "tests",
+        "depth": 1,
+        "file_count": 171
+      },
+      {
+        "path": "tests/fixtures",
+        "name": "fixtures",
+        "depth": 2,
+        "file_count": 11
+      },
+      {
+        "path": "tests/fixtures/broker",
+        "name": "broker",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "tests/fixtures/canonical-source",
+        "name": "canonical-source",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher",
+        "name": "compatibility-launcher",
+        "depth": 3,
+        "file_count": 5
+      },
+      {
+        "path": "tests/fixtures/plugins",
+        "name": "plugins",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "tests/fixtures/services",
+        "name": "services",
+        "depth": 3,
+        "file_count": 3
+      },
+      {
+        "path": "tests/fixtures/services/manifests",
+        "name": "manifests",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "updates",
+        "name": "updates",
+        "depth": 1,
+        "file_count": 15
+      },
+      {
+        "path": "updates/trust_store",
+        "name": "trust_store",
+        "depth": 2,
+        "file_count": 2
+      }
+    ],
+    "files": [
+      {
+        "path": ".github/workflows/ci.yml",
+        "name": "ci.yml",
+        "extension": ".yml"
+      },
+      {
+        "path": ".github/workflows/command-site-snapshot.yml",
+        "name": "command-site-snapshot.yml",
+        "extension": ".yml"
+      },
+      {
+        "path": ".github/workflows/rc1-baseline-audit.yml",
+        "name": "rc1-baseline-audit.yml",
+        "extension": ".yml"
+      },
+      {
+        "path": ".github/workflows/rc2-candidate.yml",
+        "name": "rc2-candidate.yml",
+        "extension": ".yml"
+      },
+      {
+        "path": ".gitignore",
+        "name": ".gitignore",
+        "extension": ""
+      },
+      {
+        "path": "ENTRY",
+        "name": "ENTRY",
+        "extension": ""
+      },
+      {
+        "path": "EOF",
+        "name": "EOF",
+        "extension": ""
+      },
+      {
+        "path": "Hermes Plugins/hive-ops-plugin/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hermes Plugins/hive-ops-plugin/agents/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hermes Plugins/hive-ops-plugin/brain_plug.py",
+        "name": "brain_plug.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hermes Plugins/install.sh",
+        "name": "install.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hive-42",
+        "name": "hive-42",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hive-boot",
+        "name": "hive-boot",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hive-hermes",
+        "name": "hive-hermes",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hive-os",
+        "name": "hive-os",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hive-ui",
+        "name": "hive-ui",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev",
+        "name": "hivedev",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-alias",
+        "name": "hivedev-alias",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-anchor",
+        "name": "hivedev-anchor",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-anomaly",
+        "name": "hivedev-anomaly",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-av",
+        "name": "hivedev-av",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-backup",
+        "name": "hivedev-backup",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-clipboard",
+        "name": "hivedev-clipboard",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-comms",
+        "name": "hivedev-comms",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-comms3",
+        "name": "hivedev-comms3",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-container",
+        "name": "hivedev-container",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-duress",
+        "name": "hivedev-duress",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-emf",
+        "name": "hivedev-emf",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-exfil",
+        "name": "hivedev-exfil",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-firewall",
+        "name": "hivedev-firewall",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-forensics",
+        "name": "hivedev-forensics",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-gateway",
+        "name": "hivedev-gateway",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-geo",
+        "name": "hivedev-geo",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-hide",
+        "name": "hivedev-hide",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-honey",
+        "name": "hivedev-honey",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-inject",
+        "name": "hivedev-inject",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-integrity",
+        "name": "hivedev-integrity",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-intel",
+        "name": "hivedev-intel",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-key",
+        "name": "hivedev-key",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-log",
+        "name": "hivedev-log",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-mem",
+        "name": "hivedev-mem",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-net",
+        "name": "hivedev-net",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-node",
+        "name": "hivedev-node",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-pet",
+        "name": "hivedev-pet",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-pq",
+        "name": "hivedev-pq",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-secureboot",
+        "name": "hivedev-secureboot",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-shred",
+        "name": "hivedev-shred",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-spoof",
+        "name": "hivedev-spoof",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-swarm",
+        "name": "hivedev-swarm",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-swarm-integration",
+        "name": "hivedev-swarm-integration",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-swarm-manager",
+        "name": "hivedev-swarm-manager",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-temporal",
+        "name": "hivedev-temporal",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-vault",
+        "name": "hivedev-vault",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/bin/hivedev-volume",
+        "name": "hivedev-volume",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops DevAI/docs/THREAT_MATRIX.md",
+        "name": "THREAT_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops DevAI/hive-ctrl.py",
+        "name": "hive-ctrl.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/hive-gateway.py",
+        "name": "hive-gateway.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/hive-orchestrator.py",
+        "name": "hive-orchestrator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/hive-swarm.py",
+        "name": "hive-swarm.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/hive_agents.py",
+        "name": "hive_agents.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/hive_state.json",
+        "name": "hive_state.json",
+        "extension": ".json"
+      },
+      {
+        "path": "Hive Ops DevAI/hive_swarm_integration.py",
+        "name": "hive_swarm_integration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/lib/stealth.py",
+        "name": "stealth.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/swarm_orchestrator.py",
+        "name": "swarm_orchestrator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops DevAI/swarm_pet.py",
+        "name": "swarm_pet.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/.termux/boot/00-hive-ops.sh",
+        "name": "00-hive-ops.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/.termux/boot/00-hive-secure.sh",
+        "name": "00-hive-secure.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/bin/hive",
+        "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/bin/hive-dashboard",
+        "name": "hive-dashboard",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/bin/hive-secure-login",
+        "name": "hive-secure-login",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/bin/hive-ui-v2",
+        "name": "hive-ui-v2",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/etc/bash-integration.sh",
+        "name": "bash-integration.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/etc/env.sh",
+        "name": "env.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/etc/services.json",
+        "name": "services.json",
+        "extension": ".json"
+      },
+      {
+        "path": "Hive Ops Final/lib/swarm_bridge.py",
+        "name": "swarm_bridge.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.config/hive/env.sh",
+        "name": "env.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh",
+        "name": "00-hive.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive",
+        "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_logrotate.sh",
+        "name": "hive_logrotate.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_net.core.sh",
+        "name": "hive_net.core.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_net.sh",
+        "name": "hive_net.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_orbot_ui.sh",
+        "name": "hive_orbot_ui.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_proxy_run.sh",
+        "name": "hive_proxy_run.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_ps.sh",
+        "name": "hive_ps.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_restart.sh",
+        "name": "hive_restart.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_rotator.sh",
+        "name": "hive_rotator.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_services.sh",
+        "name": "hive_services.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_supervisor.sh",
+        "name": "hive_supervisor.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/hive_watchdog.sh",
+        "name": "hive_watchdog.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/bin/step5.1_fix_health.sh",
+        "name": "step5.1_fix_health.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/dev.aliases.sh",
+        "name": "dev.aliases.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/escape.txt",
+        "name": "escape.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/mini-ai.env",
+        "name": "mini-ai.env",
+        "extension": ".env"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.service",
+        "name": "_TEMPLATE.service",
+        "extension": ".service"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.svc",
+        "name": "_TEMPLATE.svc",
+        "extension": ".svc"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/services/mini-ai.svc",
+        "name": "mini-ai.svc",
+        "extension": ".svc"
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/etc/tor/torrc",
+        "name": "torrc",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/original hive os complete/hive_bootstrap.sh",
+        "name": "hive_bootstrap.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "Hive Ops Final/shell/.bashrc",
+        "name": ".bashrc",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/shell/.zshrc",
+        "name": ".zshrc",
+        "extension": ""
+      },
+      {
+        "path": "Hive Ops Final/shell/notes.txt",
+        "name": "notes.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/agents/architect_agent.py",
+        "name": "architect_agent.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/agents/assistant_agent.py",
+        "name": "assistant_agent.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/gateway_bridge.py",
+        "name": "gateway_bridge.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/hive-swarm.py",
+        "name": "hive-swarm.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/hive_state.json",
+        "name": "hive_state.json",
+        "extension": ".json"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/hive_swarm_integration.py",
+        "name": "hive_swarm_integration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_PHASE_3.md",
+        "name": "EVOLUTION_PHASE_3.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/EVOLUTION_REPORT.md",
+        "name": "EVOLUTION_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/FINAL_ATTRIBUTION_REPORT.md",
+        "name": "FINAL_ATTRIBUTION_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/FINAL_REVISED_REPORT.md",
+        "name": "FINAL_REVISED_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/HSL_DEFINITION.md",
+        "name": "HSL_DEFINITION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/REBUILD_REPORT.md",
+        "name": "REBUILD_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md",
+        "name": "SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/SWARM_REGISTRY.md",
+        "name": "SWARM_REGISTRY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/correlation_matrix.md",
+        "name": "correlation_matrix.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/protocol.md",
+        "name": "protocol.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/registry/the-hive-tools-README.md",
+        "name": "the-hive-tools-README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/swarm_orchestrator.py",
+        "name": "swarm_orchestrator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/swarm-core/swarm_pet.py",
+        "name": "swarm_pet.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "Hive Ops Final/tools/batch_job_runner.py",
+        "name": "batch_job_runner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/blockchain_batch_checker.py",
+        "name": "blockchain_batch_checker.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/blockchain_monitor.py",
+        "name": "blockchain_monitor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/condition_simulator.py",
+        "name": "condition_simulator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/deep_disassembler_sqvi.py",
+        "name": "deep_disassembler_sqvi.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/heap_scanner.py",
+        "name": "heap_scanner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/hive_health_monitor.py",
+        "name": "hive_health_monitor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/hive_menu.py",
+        "name": "hive_menu.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/hive_tool_builder.py",
+        "name": "hive_tool_builder.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/inject_payload.py",
+        "name": "inject_payload.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/multi_address_generator.py",
+        "name": "multi_address_generator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/obfuscation_layer.py",
+        "name": "obfuscation_layer.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/parallel-scanner.py",
+        "name": "parallel-scanner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/recon_node.py",
+        "name": "recon_node.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/resonance_scanner.py",
+        "name": "resonance_scanner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sci_deep_disassembler.py",
+        "name": "sci_deep_disassembler.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sci_emulator.py",
+        "name": "sci_emulator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sci_script_layout_validator.py",
+        "name": "sci_script_layout_validator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sci_selector_tracker.py",
+        "name": "sci_selector_tracker.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/series-comparator.py",
+        "name": "series-comparator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/series-evolution-analyzer.py",
+        "name": "series-evolution-analyzer.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sq_investigation_suite.py",
+        "name": "sq_investigation_suite.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sq_series_scanner.py",
+        "name": "sq_series_scanner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/sqvi-deep-scanner.py",
+        "name": "sqvi-deep-scanner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/variable_tracer.py",
+        "name": "variable_tracer.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/wallet_crypto_simulator.py",
+        "name": "wallet_crypto_simulator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "Hive Ops Final/tools/wallet_extractor.py",
+        "name": "wallet_extractor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "MILESTONE10_REPORT.md",
+        "name": "MILESTONE10_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE11_REPORT.md",
+        "name": "MILESTONE11_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE12_REPORT.md",
+        "name": "MILESTONE12_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE13_REPORT.md",
+        "name": "MILESTONE13_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE14_REPORT.md",
+        "name": "MILESTONE14_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE15_REPORT.md",
+        "name": "MILESTONE15_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE16_REPORT.md",
+        "name": "MILESTONE16_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE17_REPORT.md",
+        "name": "MILESTONE17_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE18_REPORT.md",
+        "name": "MILESTONE18_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE19_REPORT.md",
+        "name": "MILESTONE19_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE1_REPORT.md",
+        "name": "MILESTONE1_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE2_REPORT.md",
+        "name": "MILESTONE2_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE3_REPORT.md",
+        "name": "MILESTONE3_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE4_REPORT.md",
+        "name": "MILESTONE4_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE6_REPORT.md",
+        "name": "MILESTONE6_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE7_REPORT.md",
+        "name": "MILESTONE7_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "MILESTONE8_REPORT.md",
+        "name": "MILESTONE8_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "RC_API_SCHEMA_INVENTORY.md",
+        "name": "RC_API_SCHEMA_INVENTORY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "RC_API_SCHEMA_INVENTORY_MIN.md",
+        "name": "RC_API_SCHEMA_INVENTORY_MIN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "apply-hive-rc1.py",
+        "name": "apply-hive-rc1.py",
+        "extension": ".py"
+      },
+      {
+        "path": "bin/hive",
+        "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "bin/hive_boot.py",
+        "name": "hive_boot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "bin/test.py",
+        "name": "test.py",
+        "extension": ".py"
+      },
+      {
+        "path": "blueprints/00-baseline/ENVIRONMENT_BASELINE.md",
+        "name": "ENVIRONMENT_BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/00-baseline/EVIDENCE_INDEX.md",
+        "name": "EVIDENCE_INDEX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/00-baseline/REPOSITORY_BASELINE.md",
+        "name": "REPOSITORY_BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/00-baseline/head_inspection_dump.md",
+        "name": "head_inspection_dump.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/00-baseline/raw_inventory.json",
+        "name": "raw_inventory.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/COMMAND_MAP.md",
+        "name": "COMMAND_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/COMPLETE_FILE_INVENTORY.md",
+        "name": "COMPLETE_FILE_INVENTORY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/DIRECTORY_PURPOSE_MAP.md",
+        "name": "DIRECTORY_PURPOSE_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/DUPLICATION_MATRIX.md",
+        "name": "DUPLICATION_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/ENTRYPOINT_MAP.md",
+        "name": "ENTRYPOINT_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/HERMES_INTEGRATION_MAP.md",
+        "name": "HERMES_INTEGRATION_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/INSTALLATION_FLOW.md",
+        "name": "INSTALLATION_FLOW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/REPAIR_FLOW.md",
+        "name": "REPAIR_FLOW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/SKILL_MODIFICATION_DISCLOSURE.md",
+        "name": "SKILL_MODIFICATION_DISCLOSURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/UNKNOWN_COMPONENTS.md",
+        "name": "UNKNOWN_COMPONENTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/01-repository-forensics/UPDATE_FLOW.md",
+        "name": "UPDATE_FLOW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_ARCHITECTURE.md",
+        "name": "CURRENT_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_COMPONENT_CATALOG.md",
+        "name": "CURRENT_COMPONENT_CATALOG.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_DATA_FLOWS.md",
+        "name": "CURRENT_DATA_FLOWS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_FAILURE_MODES.md",
+        "name": "CURRENT_FAILURE_MODES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_NETWORK_MODEL.md",
+        "name": "CURRENT_NETWORK_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_PERMISSION_MODEL.md",
+        "name": "CURRENT_PERMISSION_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_PROCESS_MODEL.md",
+        "name": "CURRENT_PROCESS_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/02-current-system-model/CURRENT_TRUST_BOUNDARIES.md",
+        "name": "CURRENT_TRUST_BOUNDARIES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/AGENT_THREAT_MODEL.md",
+        "name": "AGENT_THREAT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/ATTACK_SURFACE.md",
+        "name": "ATTACK_SURFACE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/NETWORK_EXPOSURE_AUDIT.md",
+        "name": "NETWORK_EXPOSURE_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/ROOT_VS_NONROOT_SECURITY.md",
+        "name": "ROOT_VS_NONROOT_SECURITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/SECRET_HANDLING_AUDIT.md",
+        "name": "SECRET_HANDLING_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/SECURITY_INVARIANTS.md",
+        "name": "SECURITY_INVARIANTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/SECURITY_RISK_REGISTER.md",
+        "name": "SECURITY_RISK_REGISTER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/SHELL_SAFETY_AUDIT.md",
+        "name": "SHELL_SAFETY_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/SUPPLY_CHAIN_AUDIT.md",
+        "name": "SUPPLY_CHAIN_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/03-security/THREAT_MODEL.md",
+        "name": "THREAT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/AGENT_CONTROL_SPEC.md",
+        "name": "AGENT_CONTROL_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/BACKUP_SYSTEM_SPEC.md",
+        "name": "BACKUP_SYSTEM_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/COMMAND_API_SPEC.md",
+        "name": "COMMAND_API_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/COMPONENT_SPECIFICATIONS.md",
+        "name": "COMPONENT_SPECIFICATIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/CONFIGURATION_SCHEMA_SPEC.md",
+        "name": "CONFIGURATION_SCHEMA_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/CONTROL_PLANE_SPEC.md",
+        "name": "CONTROL_PLANE_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/HERMES_PLUGIN_SPEC.md",
+        "name": "HERMES_PLUGIN_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/HIVE_OS_VISION.md",
+        "name": "HIVE_OS_VISION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/LOGGING_AND_AUDIT_SPEC.md",
+        "name": "LOGGING_AND_AUDIT_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/POLICY_ENGINE_SPEC.md",
+        "name": "POLICY_ENGINE_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/RECOVERY_SYSTEM_SPEC.md",
+        "name": "RECOVERY_SYSTEM_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/RESOURCE_MANAGEMENT_SPEC.md",
+        "name": "RESOURCE_MANAGEMENT_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/ROLLBACK_SAFETY_GUIDE.md",
+        "name": "ROLLBACK_SAFETY_GUIDE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/SERVICE_SUPERVISOR_SPEC.md",
+        "name": "SERVICE_SUPERVISOR_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/TARGET_ARCHITECTURE.md",
+        "name": "TARGET_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/TUI_SPEC.md",
+        "name": "TUI_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/UPDATE_SYSTEM_SPEC.md",
+        "name": "UPDATE_SYSTEM_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/VAULT_SPEC.md",
+        "name": "VAULT_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/04-target-architecture/WORKSPACE_SPEC.md",
+        "name": "WORKSPACE_SPEC.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/ANDROID_LIFECYCLE_MODEL.md",
+        "name": "ANDROID_LIFECYCLE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/BATTERY_AND_THERMAL_MODEL.md",
+        "name": "BATTERY_AND_THERMAL_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/CUSTOM_ROM_RESEARCH_PROFILE.md",
+        "name": "CUSTOM_ROM_RESEARCH_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/DESKTOP_LINUX_PROFILE.md",
+        "name": "DESKTOP_LINUX_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/DEVICE_SUPPORT_MATRIX.md",
+        "name": "DEVICE_SUPPORT_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/PLATFORM_CONTROL_MATRIX.md",
+        "name": "PLATFORM_CONTROL_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/PROOT_COMPATIBILITY_PROFILE.md",
+        "name": "PROOT_COMPATIBILITY_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/ROOT_ENHANCED_PROFILE.md",
+        "name": "ROOT_ENHANCED_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/STANDARD_TERMUX_PROFILE.md",
+        "name": "STANDARD_TERMUX_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/STORAGE_MODEL.md",
+        "name": "STORAGE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/05-platform-design/TERMUX_API_PROFILE.md",
+        "name": "TERMUX_API_PROFILE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/ARCHIVE_PLAN.md",
+        "name": "ARCHIVE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/CANONICAL_SOURCE_DECISION.md",
+        "name": "CANONICAL_SOURCE_DECISION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/COMPATIBILITY_PLAN.md",
+        "name": "COMPATIBILITY_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/CONFIG_MIGRATION_PLAN.md",
+        "name": "CONFIG_MIGRATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/DATA_MIGRATION_PLAN.md",
+        "name": "DATA_MIGRATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/FILE_CLASSIFICATION_LEDGER.md",
+        "name": "FILE_CLASSIFICATION_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/MOVE_PLAN.md",
+        "name": "MOVE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/PHASED_IMPLEMENTATION_PLAN.md",
+        "name": "PHASED_IMPLEMENTATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/ROLLBACK_PLAN.md",
+        "name": "ROLLBACK_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/06-migration/TARGET_REPOSITORY_TREE.md",
+        "name": "TARGET_REPOSITORY_TREE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/ACCEPTANCE_CRITERIA.md",
+        "name": "ACCEPTANCE_CRITERIA.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/HERMES_INTEGRATION_TEST_PLAN.md",
+        "name": "HERMES_INTEGRATION_TEST_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/INSTALL_TEST_MATRIX.md",
+        "name": "INSTALL_TEST_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/PERFORMANCE_BUDGETS.md",
+        "name": "PERFORMANCE_BUDGETS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/PHYSICAL_TERMUX_VALIDATION_PLAN.md",
+        "name": "PHYSICAL_TERMUX_VALIDATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/RECOVERY_TEST_MATRIX.md",
+        "name": "RECOVERY_TEST_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/RELEASE_GATES.md",
+        "name": "RELEASE_GATES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/SECURITY_TEST_PLAN.md",
+        "name": "SECURITY_TEST_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/TEST_ARCHITECTURE.md",
+        "name": "TEST_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/07-verification/UPDATE_TEST_MATRIX.md",
+        "name": "UPDATE_TEST_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0001-canonical-source.md",
+        "name": "ADR-0001-canonical-source.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0002-hermes-integration-boundary.md",
+        "name": "ADR-0002-hermes-integration-boundary.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0003-termux-security-boundary.md",
+        "name": "ADR-0003-termux-security-boundary.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0004-control-plane.md",
+        "name": "ADR-0004-control-plane.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0005-storage-layout.md",
+        "name": "ADR-0005-storage-layout.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0006-agent-permissions.md",
+        "name": "ADR-0006-agent-permissions.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0007-dependency-authority.md",
+        "name": "ADR-0007-dependency-authority.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0008-session-gate-terminology.md",
+        "name": "ADR-0008-session-gate-terminology.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0009-policy-enforcement-boundary.md",
+        "name": "ADR-0009-policy-enforcement-boundary.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0010-update-trust-model.md",
+        "name": "ADR-0010-update-trust-model.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-0011-recovery-model.md",
+        "name": "ADR-0011-recovery-model.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/08-decisions/ADR-TEMPLATE.md",
+        "name": "ADR-TEMPLATE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/09-diagrams/boot-flow.mmd",
+        "name": "boot-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/command-flow.mmd",
+        "name": "command-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/current-network-model.mmd",
+        "name": "current-network-model.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/current-system.mmd",
+        "name": "current-system.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/data-flow.mmd",
+        "name": "data-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/migration-sequence.mmd",
+        "name": "migration-sequence.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/platform-boundaries.mmd",
+        "name": "platform-boundaries.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-agent-permission-flow.mmd",
+        "name": "target-agent-permission-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-control-plane.mmd",
+        "name": "target-control-plane.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-hermes-integration.mmd",
+        "name": "target-hermes-integration.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-recovery-flow.mmd",
+        "name": "target-recovery-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-storage-flow.mmd",
+        "name": "target-storage-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-system.mmd",
+        "name": "target-system.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/target-update-flow.mmd",
+        "name": "target-update-flow.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/09-diagrams/trust-boundaries.mmd",
+        "name": "trust-boundaries.mmd",
+        "extension": ".mmd"
+      },
+      {
+        "path": "blueprints/10-reviews/ARCHITECT_REVIEW.md",
+        "name": "ARCHITECT_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/BLUEPRINT_FREEZE_REPORT.md",
+        "name": "BLUEPRINT_FREEZE_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/BLUEPRINT_GAP_REPORT.md",
+        "name": "BLUEPRINT_GAP_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/RECOVERY_REVIEW.md",
+        "name": "RECOVERY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/TERMUX_REVIEW.md",
+        "name": "TERMUX_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/10-reviews/TESTABILITY_REVIEW.md",
+        "name": "TESTABILITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/BLUEPRINT_INDEX.md",
+        "name": "BLUEPRINT_INDEX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/PHASE0_COMPLETION_REPORT.md",
+        "name": "PHASE0_COMPLETION_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/PHASE1_COMPLETION_REPORT.md",
+        "name": "PHASE1_COMPLETION_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/PHASE2_COMPLETION_REPORT.md",
+        "name": "PHASE2_COMPLETION_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-1/MILESTONE1_REPORT.md",
+        "name": "MILESTONE1_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/CONFIG_STATE_PRESERVATION.md",
+        "name": "CONFIG_STATE_PRESERVATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/INTERRUPTION_RECOVERY.md",
+        "name": "INTERRUPTION_RECOVERY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/MILESTONE10_ACCEPTANCE.md",
+        "name": "MILESTONE10_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/RECOVERY_LEVELS.md",
+        "name": "RECOVERY_LEVELS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/RELEASE_BUNDLE_FORMAT.md",
+        "name": "RELEASE_BUNDLE_FORMAT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/SIGNING_AND_TRUST_MODEL.md",
+        "name": "SIGNING_AND_TRUST_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/TOOL_GUARDRAIL_RECOVERY.md",
+        "name": "TOOL_GUARDRAIL_RECOVERY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-10/UPDATE_STATE_MACHINE.md",
+        "name": "UPDATE_STATE_MACHINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/DEPENDENCY_GRAPH_MODEL.md",
+        "name": "DEPENDENCY_GRAPH_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/HEALTH_CHECK_MODEL.md",
+        "name": "HEALTH_CHECK_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/LEGACY_ADAPTER_MODEL.md",
+        "name": "LEGACY_ADAPTER_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/LEGACY_SERVICE_CALL_GRAPH.md",
+        "name": "LEGACY_SERVICE_CALL_GRAPH.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/LEGACY_SERVICE_MANIFEST_LEDGER.md",
+        "name": "LEGACY_SERVICE_MANIFEST_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/LEGACY_SERVICE_RISK_LEDGER.md",
+        "name": "LEGACY_SERVICE_RISK_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/LEGACY_TO_NATIVE_MAPPING.md",
+        "name": "LEGACY_TO_NATIVE_MAPPING.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/MILESTONE11_ACCEPTANCE.md",
+        "name": "MILESTONE11_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/PROCESS_IDENTITY_MODEL.md",
+        "name": "PROCESS_IDENTITY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/RESTART_AND_CRASH_LOOP_MODEL.md",
+        "name": "RESTART_AND_CRASH_LOOP_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/SERVICE_STATE_MACHINE.md",
+        "name": "SERVICE_STATE_MACHINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/SUPERVISOR_ARCHITECTURE.md",
+        "name": "SUPERVISOR_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-11/UPDATE_SERVICE_COORDINATION.md",
+        "name": "UPDATE_SERVICE_COORDINATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/ARCHITECTURE_PLAN.md",
+        "name": "ARCHITECTURE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/BROKER_ARCHITECTURE.md",
+        "name": "BROKER_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/CAPABILITY_MODEL.md",
+        "name": "CAPABILITY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/EMERGENCY_STOP.md",
+        "name": "EMERGENCY_STOP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/LEGACY_PLUGIN_RISK_LEDGER.md",
+        "name": "LEGACY_PLUGIN_RISK_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/MILESTONE12_ACCEPTANCE.md",
+        "name": "MILESTONE12_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/PERMISSION_MODEL.md",
+        "name": "PERMISSION_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/TASK_MANIFEST_SCHEMA.md",
+        "name": "TASK_MANIFEST_SCHEMA.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/TRANSACTION_ID_MODEL.md",
+        "name": "TRANSACTION_ID_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-12/VERSION_COMPATIBILITY.md",
+        "name": "VERSION_COMPATIBILITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/ARCHITECTURE_PLAN.md",
+        "name": "ARCHITECTURE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/DATA_SOURCES.md",
+        "name": "DATA_SOURCES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/DIAGNOSTIC_RULES.md",
+        "name": "DIAGNOSTIC_RULES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/EVENT_AGGREGATION.md",
+        "name": "EVENT_AGGREGATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/MILESTONE13_ACCEPTANCE.md",
+        "name": "MILESTONE13_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/OPERATIONS_CENTER_ARCHITECTURE.md",
+        "name": "OPERATIONS_CENTER_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/RENDERING.md",
+        "name": "RENDERING.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/RENDERING_MODEL.md",
+        "name": "RENDERING_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/SNAPSHOT_MODEL.md",
+        "name": "SNAPSHOT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-13/VIEW_MODEL.md",
+        "name": "VIEW_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-14/ARCHITECTURE_PLAN.md",
+        "name": "ARCHITECTURE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-14/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-14/CONFIGURATION_AUTHORITY_AUDIT.md",
+        "name": "CONFIGURATION_AUTHORITY_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-14/MILESTONE14_ACCEPTANCE.md",
+        "name": "MILESTONE14_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-14/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/AUDIT_MODEL.md",
+        "name": "AUDIT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/BROKER_ENFORCEMENT_MODEL.md",
+        "name": "BROKER_ENFORCEMENT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/BROKER_POLICY_ENFORCEMENT_AUDIT.md",
+        "name": "BROKER_POLICY_ENFORCEMENT_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/CONTEXT_TRUST_MAP.md",
+        "name": "CONTEXT_TRUST_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/DECISION_MODEL.md",
+        "name": "DECISION_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/DECISION_TO_ENFORCEMENT_MATRIX.md",
+        "name": "DECISION_TO_ENFORCEMENT_MATRIX.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/EMERGENCY_RESTRICTIONS.md",
+        "name": "EMERGENCY_RESTRICTIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/MILESTONE15_ACCEPTANCE.md",
+        "name": "MILESTONE15_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/POLICY_ENGINE_ARCHITECTURE.md",
+        "name": "POLICY_ENGINE_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/PROFILE_MODEL.md",
+        "name": "PROFILE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/REQUEST_AND_CONTEXT_MODEL.md",
+        "name": "REQUEST_AND_CONTEXT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/REQUIREMENT_MODEL.md",
+        "name": "REQUIREMENT_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/RULE_PRECEDENCE.md",
+        "name": "RULE_PRECEDENCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-15/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/CAPABILITY_MODEL.md",
+        "name": "CAPABILITY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/CONFIGURATION_MODEL.md",
+        "name": "CONFIGURATION_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/EXECUTION_BOUNDARY.md",
+        "name": "EXECUTION_BOUNDARY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/FAILURE_CONTAINMENT.md",
+        "name": "FAILURE_CONTAINMENT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/LEGACY_PLUGIN_AUDIT.md",
+        "name": "LEGACY_PLUGIN_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/LIFECYCLE_MODEL.md",
+        "name": "LIFECYCLE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/MANIFEST_SCHEMA.md",
+        "name": "MANIFEST_SCHEMA.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/MILESTONE16_ACCEPTANCE.md",
+        "name": "MILESTONE16_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/PLUGIN_ENFORCEMENT_AUDIT.md",
+        "name": "PLUGIN_ENFORCEMENT_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/PLUGIN_IDENTITY_MODEL.md",
+        "name": "PLUGIN_IDENTITY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/PLUGIN_SDK_ARCHITECTURE.md",
+        "name": "PLUGIN_SDK_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-16/SIGNING_MODEL.md",
+        "name": "SIGNING_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/BASELINE.md",
+        "name": "BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/DEPENDENCY_RESOLUTION.md",
+        "name": "DEPENDENCY_RESOLUTION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/INSTALL_UPDATE_INTEGRATION.md",
+        "name": "INSTALL_UPDATE_INTEGRATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/MILESTONE17_ACCEPTANCE.md",
+        "name": "MILESTONE17_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/OFFLINE_DISTRIBUTION.md",
+        "name": "OFFLINE_DISTRIBUTION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/PLUGIN_PACKAGE_MODEL.md",
+        "name": "PLUGIN_PACKAGE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/PLUGIN_REGISTRY_MODEL.md",
+        "name": "PLUGIN_REGISTRY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/RELEASE_ARCHITECTURE.md",
+        "name": "RELEASE_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/RELEASE_FORMAT.md",
+        "name": "RELEASE_FORMAT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/RELEASE_PRIMITIVE_REUSE_AUDIT.md",
+        "name": "RELEASE_PRIMITIVE_REUSE_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/REPRODUCIBLE_BUILD_MODEL.md",
+        "name": "REPRODUCIBLE_BUILD_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/SECURITY_REVIEW.md",
+        "name": "SECURITY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/SIGNING_AND_TRUST_MODEL.md",
+        "name": "SIGNING_AND_TRUST_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-17/SUPPLY_CHAIN_MODEL.md",
+        "name": "SUPPLY_CHAIN_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/ACTIVATION_ROLLBACK_RESULTS.md",
+        "name": "ACTIVATION_ROLLBACK_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/BROKER_RESULTS.md",
+        "name": "BROKER_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/CONFIG_RESULTS.md",
+        "name": "CONFIG_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/DEPENDENCY_RESULTS.md",
+        "name": "DEPENDENCY_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/DEVICE_BASELINE.md",
+        "name": "DEVICE_BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/FAILURE_INJECTION_RESULTS.md",
+        "name": "FAILURE_INJECTION_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/INSTALLER_RESULTS.md",
+        "name": "INSTALLER_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/KDF_BENCHMARK.md",
+        "name": "KDF_BENCHMARK.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/MILESTONE18_ACCEPTANCE.md",
+        "name": "MILESTONE18_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/NETWORK_OFFLINE_RESULTS.md",
+        "name": "NETWORK_OFFLINE_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/OPERATIONS_CENTER_RESULTS.md",
+        "name": "OPERATIONS_CENTER_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/PATH_RESULTS.md",
+        "name": "PATH_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/PLUGIN_RESULTS.md",
+        "name": "PLUGIN_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/POLICY_RESULTS.md",
+        "name": "POLICY_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/RELEASE_RESULTS.md",
+        "name": "RELEASE_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/RESOURCE_RESULTS.md",
+        "name": "RESOURCE_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/SERVICE_SUPERVISOR_RESULTS.md",
+        "name": "SERVICE_SUPERVISOR_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/TERMUX_DEFECT_LEDGER.md",
+        "name": "TERMUX_DEFECT_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/UPDATE_RECOVERY_RESULTS.md",
+        "name": "UPDATE_RECOVERY_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-18/VAULT_RESULTS.md",
+        "name": "VAULT_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-19/API_SCHEMA_FREEZE.md",
+        "name": "API_SCHEMA_FREEZE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-19/HARDENING_PLAN.md",
+        "name": "HARDENING_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-2/MILESTONE2_REPORT.md",
+        "name": "MILESTONE2_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-20/FINAL_RELEASE_GATES.md",
+        "name": "FINAL_RELEASE_GATES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-20/RC_STABILIZATION_LOG.md",
+        "name": "RC_STABILIZATION_LOG.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-3/CANONICAL_LAUNCHER_INTERPRETER.md",
+        "name": "CANONICAL_LAUNCHER_INTERPRETER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-3/HARDCODED_PATH_LEDGER.md",
+        "name": "HARDCODED_PATH_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-4/CURRENT_PATH_CONTRACT.md",
+        "name": "CURRENT_PATH_CONTRACT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-4/DASHBOARD_REACHABILITY.md",
+        "name": "DASHBOARD_REACHABILITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-4/ISOLATED_PHYSICAL_TERMUX_VALIDATION_CHECKLIST.md",
+        "name": "ISOLATED_PHYSICAL_TERMUX_VALIDATION_CHECKLIST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-5/DASHBOARD_SAFETY_REVIEW.md",
+        "name": "DASHBOARD_SAFETY_REVIEW.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-5/SERVICE_LOADER_CALL_GRAPH.md",
+        "name": "SERVICE_LOADER_CALL_GRAPH.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-5/SERVICE_SCHEMA_MIGRATION.md",
+        "name": "SERVICE_SCHEMA_MIGRATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-6/LEGACY_INSTALLER_CALL_GRAPH.md",
+        "name": "LEGACY_INSTALLER_CALL_GRAPH.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-6/LEGACY_INSTALLER_RISK_LEDGER.md",
+        "name": "LEGACY_INSTALLER_RISK_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-7/ACTIVATION_DESIGN.md",
+        "name": "ACTIVATION_DESIGN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-7/MIGRATION_DESIGN.md",
+        "name": "MIGRATION_DESIGN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-7/PHYSICAL_VALIDATION_PLAN.md",
+        "name": "PHYSICAL_VALIDATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-8/CREDENTIAL_FLOW_MAP.md",
+        "name": "CREDENTIAL_FLOW_MAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-8/CRYPTOGRAPHY_DECISION.md",
+        "name": "CRYPTOGRAPHY_DECISION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-8/LEGACY_CREDENTIAL_RISK_LEDGER.md",
+        "name": "LEGACY_CREDENTIAL_RISK_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-8/PHYSICAL_VALIDATION_PLAN.md",
+        "name": "PHYSICAL_VALIDATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/ACTIVATION_RESULTS.md",
+        "name": "ACTIVATION_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/DEVICE_BASELINE.md",
+        "name": "DEVICE_BASELINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/DISPATCHER_RESULTS.md",
+        "name": "DISPATCHER_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/FAILURE_INJECTION_RESULTS.md",
+        "name": "FAILURE_INJECTION_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/INSTALLER_RESULTS.md",
+        "name": "INSTALLER_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/LEGACY_DETECTION_RESULTS.md",
+        "name": "LEGACY_DETECTION_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/MILESTONE9_ACCEPTANCE.md",
+        "name": "MILESTONE9_ACCEPTANCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/MILESTONE9_REPORT.md",
+        "name": "MILESTONE9_REPORT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/RESOURCE_RESULTS.md",
+        "name": "RESOURCE_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/ROLLBACK_RESULTS.md",
+        "name": "ROLLBACK_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/TERMUX_DEFECT_LEDGER.md",
+        "name": "TERMUX_DEFECT_LEDGER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/TERMUX_DEPENDENCY_RESULTS.md",
+        "name": "TERMUX_DEPENDENCY_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/implementation/milestone-9/VAULT_RESULTS.md",
+        "name": "VAULT_RESULTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "bootstrap/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "bootstrap/__main__.py",
+        "name": "__main__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "bootstrap/install_release.py",
+        "name": "install_release.py",
+        "extension": ".py"
+      },
+      {
+        "path": "bootstrap/verify_bundle.py",
+        "name": "verify_bundle.py",
+        "extension": ".py"
+      },
+      {
+        "path": "brain-plug/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "brain-plug/escape_living_ai.txt",
+        "name": "escape_living_ai.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "brain-plug/therapist_code only.py",
+        "name": "therapist_code only.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config/capabilities.json",
+        "name": "capabilities.json",
+        "extension": ".json"
+      },
+      {
+        "path": "config_engine/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/audit.py",
+        "name": "audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/config.py",
+        "name": "config.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/defaults.py",
+        "name": "defaults.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/environment.py",
+        "name": "environment.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/loader.py",
+        "name": "loader.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/merger.py",
+        "name": "merger.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/migration.py",
+        "name": "migration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/persistence.py",
+        "name": "persistence.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/preview.py",
+        "name": "preview.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/profiles.py",
+        "name": "profiles.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/rollback.py",
+        "name": "rollback.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/transactions.py",
+        "name": "transactions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "config_engine/validator.py",
+        "name": "validator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/audit.py",
+        "name": "audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/doctor.py",
+        "name": "doctor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/finding.py",
+        "name": "finding.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/health.py",
+        "name": "health.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/selftest.py",
+        "name": "selftest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "diagnostics/severity.py",
+        "name": "severity.py",
+        "extension": ".py"
+      },
+      {
+        "path": "docs/.nojekyll",
+        "name": ".nojekyll",
+        "extension": ""
+      },
+      {
+        "path": "docs/ACTIVATION_AND_ROLLBACK.md",
+        "name": "ACTIVATION_AND_ROLLBACK.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/ANTI_ROLLBACK_POLICY.md",
+        "name": "ANTI_ROLLBACK_POLICY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/BOOTSTRAP_AND_EMERGENCY_POLICY.md",
+        "name": "BOOTSTRAP_AND_EMERGENCY_POLICY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CANONICAL_SOURCE.md",
+        "name": "CANONICAL_SOURCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CAPABILITY_MODEL.md",
+        "name": "CAPABILITY_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/COMPATIBILITY_LAUNCHERS.md",
+        "name": "COMPATIBILITY_LAUNCHERS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_BOOTSTRAP.md",
+        "name": "CONFIGURATION_BOOTSTRAP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_ENGINE.md",
+        "name": "CONFIGURATION_ENGINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_MIGRATIONS.md",
+        "name": "CONFIGURATION_MIGRATIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_PROFILES.md",
+        "name": "CONFIGURATION_PROFILES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_ROLLBACK.md",
+        "name": "CONFIGURATION_ROLLBACK.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_SCHEMA.md",
+        "name": "CONFIGURATION_SCHEMA.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CONFIGURATION_TRANSACTIONS.md",
+        "name": "CONFIGURATION_TRANSACTIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/CREDENTIAL_MIGRATION.md",
+        "name": "CREDENTIAL_MIGRATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/DIAGNOSTICS_AND_LOGGING.md",
+        "name": "DIAGNOSTICS_AND_LOGGING.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HERMES_INTEGRATION_BOUNDARY.md",
+        "name": "HERMES_INTEGRATION_BOUNDARY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER.md",
+        "name": "HIVE_BROKER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_APPROVALS.md",
+        "name": "HIVE_BROKER_APPROVALS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_AUDIT.md",
+        "name": "HIVE_BROKER_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_CAPABILITIES.md",
+        "name": "HIVE_BROKER_CAPABILITIES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_EMERGENCY_STOP.md",
+        "name": "HIVE_BROKER_EMERGENCY_STOP.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_PERMISSIONS.md",
+        "name": "HIVE_BROKER_PERMISSIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/HIVE_BROKER_TASK_MANIFEST.md",
+        "name": "HIVE_BROKER_TASK_MANIFEST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/INSTALLATION_ARCHITECTURE.md",
+        "name": "INSTALLATION_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/LEGACY_INSTALLERS.md",
+        "name": "LEGACY_INSTALLERS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/LEGACY_SERVICE_MIGRATION.md",
+        "name": "LEGACY_SERVICE_MIGRATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/NETWORK_MODEL.md",
+        "name": "NETWORK_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OFFLINE_UPDATE_BUNDLES.md",
+        "name": "OFFLINE_UPDATE_BUNDLES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER.md",
+        "name": "OPERATIONS_CENTER.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER_DIAGNOSTICS.md",
+        "name": "OPERATIONS_CENTER_DIAGNOSTICS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER_EVENTS.md",
+        "name": "OPERATIONS_CENTER_EVENTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER_JSON_API.md",
+        "name": "OPERATIONS_CENTER_JSON_API.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER_SECURITY.md",
+        "name": "OPERATIONS_CENTER_SECURITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATIONS_CENTER_VIEWS.md",
+        "name": "OPERATIONS_CENTER_VIEWS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/OPERATOR_EXPERIENCE.md",
+        "name": "OPERATOR_EXPERIENCE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/ORIGINAL_RUNTIME_PARITY.md",
+        "name": "ORIGINAL_RUNTIME_PARITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PASS_G_UPDATE_TEST.md",
+        "name": "PASS_G_UPDATE_TEST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PATH_MODEL.md",
+        "name": "PATH_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_CAPABILITIES.md",
+        "name": "PLUGIN_CAPABILITIES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_CONFIGURATION.md",
+        "name": "PLUGIN_CONFIGURATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_DEPENDENCIES.md",
+        "name": "PLUGIN_DEPENDENCIES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_DEVELOPMENT.md",
+        "name": "PLUGIN_DEVELOPMENT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_LIFECYCLE.md",
+        "name": "PLUGIN_LIFECYCLE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_MANIFEST.md",
+        "name": "PLUGIN_MANIFEST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_PACKAGES.md",
+        "name": "PLUGIN_PACKAGES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_REGISTRY.md",
+        "name": "PLUGIN_REGISTRY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_SDK.md",
+        "name": "PLUGIN_SDK.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_SECURITY.md",
+        "name": "PLUGIN_SECURITY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PLUGIN_SIGNING.md",
+        "name": "PLUGIN_SIGNING.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_AUDIT.md",
+        "name": "POLICY_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_BROKER_INTEGRATION.md",
+        "name": "POLICY_BROKER_INTEGRATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_DECISIONS.md",
+        "name": "POLICY_DECISIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_EMERGENCY_RESTRICTIONS.md",
+        "name": "POLICY_EMERGENCY_RESTRICTIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_ENGINE.md",
+        "name": "POLICY_ENGINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_PROFILES.md",
+        "name": "POLICY_PROFILES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_REQUESTS.md",
+        "name": "POLICY_REQUESTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_REQUIREMENTS.md",
+        "name": "POLICY_REQUIREMENTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/POLICY_RULES.md",
+        "name": "POLICY_RULES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/PRODUCTION_SIGNING_CEREMONY.md",
+        "name": "PRODUCTION_SIGNING_CEREMONY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RC2_RELEASE_CEREMONY.md",
+        "name": "RC2_RELEASE_CEREMONY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RECOVERY_ARCHITECTURE.md",
+        "name": "RECOVERY_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_BUILD.md",
+        "name": "RELEASE_BUILD.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_CHANNELS.md",
+        "name": "RELEASE_CHANNELS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_ENGINE.md",
+        "name": "RELEASE_ENGINE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_FORMAT.md",
+        "name": "RELEASE_FORMAT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_INSTALLATION.md",
+        "name": "RELEASE_INSTALLATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_ROLLBACK.md",
+        "name": "RELEASE_ROLLBACK.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_SIGNING.md",
+        "name": "RELEASE_SIGNING.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RELEASE_TRUST.md",
+        "name": "RELEASE_TRUST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/RUNTIME_ENVIRONMENT.md",
+        "name": "RUNTIME_ENVIRONMENT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SECURITY_BOUNDARIES.md",
+        "name": "SECURITY_BOUNDARIES.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SERVICE_HEALTH_CHECKS.md",
+        "name": "SERVICE_HEALTH_CHECKS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SERVICE_MANIFESTS.md",
+        "name": "SERVICE_MANIFESTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SERVICE_MODEL.md",
+        "name": "SERVICE_MODEL.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SERVICE_RESTART_POLICY.md",
+        "name": "SERVICE_RESTART_POLICY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SERVICE_SUPERVISOR.md",
+        "name": "SERVICE_SUPERVISOR.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/SUPPLY_CHAIN.md",
+        "name": "SUPPLY_CHAIN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/UPDATE_ARCHITECTURE.md",
+        "name": "UPDATE_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/V2_ACCEPTANCE_CHECKLIST.md",
+        "name": "V2_ACCEPTANCE_CHECKLIST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/V2_ANDROID_VALIDATION.md",
+        "name": "V2_ANDROID_VALIDATION.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/VAULT_ARCHITECTURE.md",
+        "name": "VAULT_ARCHITECTURE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/assets/css/hive.css",
+        "name": "hive.css",
+        "extension": ".css"
+      },
+      {
+        "path": "docs/assets/js/hive.js",
+        "name": "hive.js",
+        "extension": ".js"
+      },
+      {
+        "path": "docs/index.html",
+        "name": "index.html",
+        "extension": ".html"
+      },
+      {
+        "path": "docs/original-runtime-parity.json",
+        "name": "original-runtime-parity.json",
+        "extension": ".json"
+      },
+      {
+        "path": "docs/releases/1.0.0-rc.1-known-limitations.md",
+        "name": "1.0.0-rc.1-known-limitations.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/releases/1.0.0-rc.1.md",
+        "name": "1.0.0-rc.1.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/releases/1.0.0.md",
+        "name": "1.0.0.md",
+        "extension": ".md"
+      },
+      {
+        "path": "docs/releases/PRODUCTION_RELEASE_KEY.md",
+        "name": "PRODUCTION_RELEASE_KEY.md",
+        "extension": ".md"
+      },
+      {
+        "path": "emergency-repair.sh",
+        "name": "emergency-repair.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "examples/plugins/hive-status/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "examples/plugins/hive-status/hive_status_example.py",
+        "name": "hive_status_example.py",
+        "extension": ".py"
+      },
+      {
+        "path": "examples/plugins/hive-status/manifest.json",
+        "name": "manifest.json",
+        "extension": ".json"
+      },
+      {
+        "path": "hive-canonical.json",
+        "name": "hive-canonical.json",
+        "extension": ".json"
+      },
+      {
+        "path": "hive_broker/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/adapters.py",
+        "name": "adapters.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/approval.py",
+        "name": "approval.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/audit.py",
+        "name": "audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/capabilities.py",
+        "name": "capabilities.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/dispatcher.py",
+        "name": "dispatcher.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/intents.py",
+        "name": "intents.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/policy.py",
+        "name": "policy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/session.py",
+        "name": "session.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/stop.py",
+        "name": "stop.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/transaction.py",
+        "name": "transaction.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/validator.py",
+        "name": "validator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_broker/version.py",
+        "name": "version.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_operator/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_operator/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_operator/notes.py",
+        "name": "notes.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_operator/shell_integration.py",
+        "name": "shell_integration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "hive_operator/speak.py",
+        "name": "speak.py",
+        "extension": ".py"
+      },
+      {
+        "path": "home/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "home/renderer.py",
+        "name": "renderer.py",
+        "extension": ".py"
+      },
+      {
+        "path": "home/view_model.py",
+        "name": "view_model.py",
+        "extension": ".py"
+      },
+      {
+        "path": "install-hive.sh",
+        "name": "install-hive.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "install-termux-easy.sh",
+        "name": "install-termux-easy.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "install-termux.sh",
+        "name": "install-termux.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "install.sh",
+        "name": "install.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "installer/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "installer/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/activate.py",
+        "name": "activate.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/autoboot.py",
+        "name": "autoboot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/install.py",
+        "name": "install.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/journal.py",
+        "name": "journal.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/legacy.py",
+        "name": "legacy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/plan.py",
+        "name": "plan.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/preflight.py",
+        "name": "preflight.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/rollback.py",
+        "name": "rollback.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/staging.py",
+        "name": "staging.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/termux_repair.py",
+        "name": "termux_repair.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/verify.py",
+        "name": "verify.py",
+        "extension": ".py"
+      },
+      {
+        "path": "installer/version.py",
+        "name": "version.py",
+        "extension": ".py"
+      },
+      {
+        "path": "lib/hive_path.py",
+        "name": "hive_path.py",
+        "extension": ".py"
+      },
+      {
+        "path": "lib/hive_runtime.py",
+        "name": "hive_runtime.py",
+        "extension": ".py"
+      },
+      {
+        "path": "lib/hive_service_loader.py",
+        "name": "hive_service_loader.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/health.py",
+        "name": "health.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/manager.py",
+        "name": "manager.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/orbot.py",
+        "name": "orbot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/profiles.py",
+        "name": "profiles.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/proxy.py",
+        "name": "proxy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/state.py",
+        "name": "state.py",
+        "extension": ".py"
+      },
+      {
+        "path": "network/tor.py",
+        "name": "tor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/collectors.py",
+        "name": "collectors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/data_sources.py",
+        "name": "data_sources.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/diagnostics.py",
+        "name": "diagnostics.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/plugin_view.py",
+        "name": "plugin_view.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/redaction.py",
+        "name": "redaction.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/release_view.py",
+        "name": "release_view.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/render.py",
+        "name": "render.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "operations_center/view_models.py",
+        "name": "view_models.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/audit.py",
+        "name": "audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/broker_client.py",
+        "name": "broker_client.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/capabilities.py",
+        "name": "capabilities.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/compatibility.py",
+        "name": "compatibility.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/configuration.py",
+        "name": "configuration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/developer.py",
+        "name": "developer.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/identity.py",
+        "name": "identity.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/lifecycle.py",
+        "name": "lifecycle.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/loader.py",
+        "name": "loader.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/manifest.py",
+        "name": "manifest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/policy.py",
+        "name": "policy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/registry.py",
+        "name": "registry.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "plugin_sdk/signing.py",
+        "name": "signing.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/actors.py",
+        "name": "actors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/audit.py",
+        "name": "audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/capabilities.py",
+        "name": "capabilities.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/conditions.py",
+        "name": "conditions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/decisions.py",
+        "name": "decisions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/engine.py",
+        "name": "engine.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/evaluator.py",
+        "name": "evaluator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/loader.py",
+        "name": "loader.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/profiles.py",
+        "name": "profiles.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/requests.py",
+        "name": "requests.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/requirements.py",
+        "name": "requirements.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/resources.py",
+        "name": "resources.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/rules.py",
+        "name": "rules.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "policy_engine/validator.py",
+        "name": "validator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/_candidate_gate_standalone.py",
+        "name": "_candidate_gate_standalone.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/builder.py",
+        "name": "builder.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/candidate_gate.py",
+        "name": "candidate_gate.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/channels.py",
+        "name": "channels.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/dependencies.py",
+        "name": "dependencies.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/manifest.py",
+        "name": "manifest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/plugin_package.py",
+        "name": "plugin_package.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/plugin_registry.py",
+        "name": "plugin_registry.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/registry.py",
+        "name": "registry.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/reproducibility.py",
+        "name": "reproducibility.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/sbom.py",
+        "name": "sbom.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/signing.py",
+        "name": "signing.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/verifier.py",
+        "name": "verifier.py",
+        "extension": ".py"
+      },
+      {
+        "path": "release_engine/version.py",
+        "name": "version.py",
+        "extension": ".py"
+      },
+      {
+        "path": "releases/1.0.0/checksums.txt",
+        "name": "checksums.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "releases/1.0.0/hive-os-1.0.0-release.manifest.json",
+        "name": "hive-os-1.0.0-release.manifest.json",
+        "extension": ".json"
+      },
+      {
+        "path": "releases/1.0.0/hive-os-1.0.0-release.metadata.signed.json",
+        "name": "hive-os-1.0.0-release.metadata.signed.json",
+        "extension": ".json"
+      },
+      {
+        "path": "releases/1.0.0/hive-os-1.0.0-release.tar.gz",
+        "name": "hive-os-1.0.0-release.tar.gz",
+        "extension": ".gz"
+      },
+      {
+        "path": "releases/1.0.0/hive-release.pem",
+        "name": "hive-release.pem",
+        "extension": ".pem"
+      },
+      {
+        "path": "requirements-dev.txt",
+        "name": "requirements-dev.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "requirements-extras.txt",
+        "name": "requirements-extras.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "requirements-runtime.txt",
+        "name": "requirements-runtime.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "requirements.txt",
+        "name": "requirements.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "run-hive.cmd",
+        "name": "run-hive.cmd",
+        "extension": ".cmd"
+      },
+      {
+        "path": "run-hive.ps1",
+        "name": "run-hive.ps1",
+        "extension": ".ps1"
+      },
+      {
+        "path": "runtime_logs/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "runtime_logs/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "runtime_logs/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "runtime_logs/permissions.py",
+        "name": "permissions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "runtime_logs/rotation.py",
+        "name": "rotation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "runtime_logs/service_logger.py",
+        "name": "service_logger.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/backend.py",
+        "name": "backend.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/crypto.py",
+        "name": "crypto.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/format.py",
+        "name": "format.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/migration.py",
+        "name": "migration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/redaction.py",
+        "name": "redaction.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/session.py",
+        "name": "session.py",
+        "extension": ".py"
+      },
+      {
+        "path": "security/vault/storage.py",
+        "name": "storage.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/graph.py",
+        "name": "graph.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/health.py",
+        "name": "health.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/legacy.py",
+        "name": "legacy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/logging.py",
+        "name": "logging.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/process.py",
+        "name": "process.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/registry.py",
+        "name": "registry.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/restart.py",
+        "name": "restart.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/schema.py",
+        "name": "schema.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/state.py",
+        "name": "state.py",
+        "extension": ".py"
+      },
+      {
+        "path": "services/supervisor.py",
+        "name": "supervisor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/conftest.py",
+        "name": "conftest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/fixtures/broker/valid_manifest.json",
+        "name": "valid_manifest.json",
+        "extension": ".json"
+      },
+      {
+        "path": "tests/fixtures/canonical-source/known-duplicates.json",
+        "name": "known-duplicates.json",
+        "extension": ".json"
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher/bash_launcher",
+        "name": "bash_launcher",
+        "extension": ""
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher/no_shebang",
+        "name": "no_shebang",
+        "extension": ""
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher/perl_launcher",
+        "name": "perl_launcher",
+        "extension": ""
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher/python_launcher",
+        "name": "python_launcher",
+        "extension": ""
+      },
+      {
+        "path": "tests/fixtures/compatibility-launcher/sh_launcher",
+        "name": "sh_launcher",
+        "extension": ""
+      },
+      {
+        "path": "tests/fixtures/plugins/hive-status-example.zip",
+        "name": "hive-status-example.zip",
+        "extension": ".zip"
+      },
+      {
+        "path": "tests/fixtures/services/http_server.py",
+        "name": "http_server.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/fixtures/services/manifests/fixture-http.json",
+        "name": "fixture-http.json",
+        "extension": ".json"
+      },
+      {
+        "path": "tests/fixtures/services/sleeper.py",
+        "name": "sleeper.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_current_state.py",
+        "name": "test_bootstrap_current_state.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_finalization_transaction.py",
+        "name": "test_bootstrap_finalization_transaction.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_install_release.py",
+        "name": "test_bootstrap_install_release.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_launcher.py",
+        "name": "test_bootstrap_launcher.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_safe_extract.py",
+        "name": "test_bootstrap_safe_extract.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_update_rollback_integration.py",
+        "name": "test_bootstrap_update_rollback_integration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_verify.py",
+        "name": "test_bootstrap_verify.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_bootstrap_zipapp.py",
+        "name": "test_bootstrap_zipapp.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_broker_capabilities.py",
+        "name": "test_broker_capabilities.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_candidate_gate.py",
+        "name": "test_candidate_gate.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_canonical_manifest_bytes.py",
+        "name": "test_canonical_manifest_bytes.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_canonical_source.py",
+        "name": "test_canonical_source.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_compatibility_launcher.py",
+        "name": "test_compatibility_launcher.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_config_engine.py",
+        "name": "test_config_engine.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_credential_migration.py",
+        "name": "test_credential_migration.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_diagnostics_audit.py",
+        "name": "test_diagnostics_audit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_diagnostics_doctor.py",
+        "name": "test_diagnostics_doctor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_diagnostics_health.py",
+        "name": "test_diagnostics_health.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_diagnostics_selftest.py",
+        "name": "test_diagnostics_selftest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_digest_comparison.py",
+        "name": "test_digest_comparison.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_digest_type_substitution.py",
+        "name": "test_digest_type_substitution.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_env_and_services.py",
+        "name": "test_env_and_services.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_file_bytes_hashed.py",
+        "name": "test_file_bytes_hashed.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_hive_broker.py",
+        "name": "test_hive_broker.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_hive_install_commands.py",
+        "name": "test_hive_install_commands.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_home.py",
+        "name": "test_home.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_install_hive_sh_contract.py",
+        "name": "test_install_hive_sh_contract.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_activation.py",
+        "name": "test_installer_activation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_home_security.py",
+        "name": "test_installer_home_security.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_journal.py",
+        "name": "test_installer_journal.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_plan.py",
+        "name": "test_installer_plan.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_preflight.py",
+        "name": "test_installer_preflight.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_rollback.py",
+        "name": "test_installer_rollback.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_installer_staging.py",
+        "name": "test_installer_staging.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_legacy_bridge_default_exit.py",
+        "name": "test_legacy_bridge_default_exit.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_legacy_detection.py",
+        "name": "test_legacy_detection.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_logging.py",
+        "name": "test_logging.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_a1a3a4a5_real_concurrency.py",
+        "name": "test_m19_a1a3a4a5_real_concurrency.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_a2_broker_session_race.py",
+        "name": "test_m19_a2_broker_session_race.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_api_schema_freeze.py",
+        "name": "test_m19_api_schema_freeze.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_archive_expanded_size.py",
+        "name": "test_m19_archive_expanded_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_archive_file_count.py",
+        "name": "test_m19_archive_file_count.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_authorization.py",
+        "name": "test_m19_authorization.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_b5_yaml_absent.py",
+        "name": "test_m19_b5_yaml_absent.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_boundedness.py",
+        "name": "test_m19_boundedness.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_broker_transaction_count.py",
+        "name": "test_m19_broker_transaction_count.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c4_session_impersonation.py",
+        "name": "test_m19_c4_session_impersonation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_adapter.py",
+        "name": "test_m19_c5_adapter.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_cli_adapter_isolation.py",
+        "name": "test_m19_c5_cli_adapter_isolation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_confirm_zero_calls.py",
+        "name": "test_m19_c5_confirm_zero_calls.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_error_zero_calls.py",
+        "name": "test_m19_c5_error_zero_calls.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_external_authority.py",
+        "name": "test_m19_c5_external_authority.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_manifest_no_code.py",
+        "name": "test_m19_c5_manifest_no_code.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_oc_isolation.py",
+        "name": "test_m19_c5_oc_isolation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_policy_deny_zero_calls.py",
+        "name": "test_m19_c5_policy_deny_zero_calls.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_policy_engine.py",
+        "name": "test_m19_c5_policy_engine.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_c5_sdk_isolation.py",
+        "name": "test_m19_c5_sdk_isolation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_concurrency.py",
+        "name": "test_m19_concurrency.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_concurrent_registry_write.py",
+        "name": "test_m19_concurrent_registry_write.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_condition_count.py",
+        "name": "test_m19_condition_count.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_config_history_size.py",
+        "name": "test_m19_config_history_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_config_schema_versions.py",
+        "name": "test_m19_config_schema_versions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_corrupted_state.py",
+        "name": "test_m19_corrupted_state.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_debt_reduction.py",
+        "name": "test_m19_debt_reduction.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_dependency_graph_size.py",
+        "name": "test_m19_dependency_graph_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_fail_closed.py",
+        "name": "test_m19_e1_fail_closed.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_no_trust_all.py",
+        "name": "test_m19_e1_no_trust_all.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_noenv.py",
+        "name": "test_m19_e1_noenv.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_path_containment.py",
+        "name": "test_m19_e1_path_containment.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_permissions.py",
+        "name": "test_m19_e1_permissions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_registry_not_authority.py",
+        "name": "test_m19_e1_registry_not_authority.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_symlink_rejected.py",
+        "name": "test_m19_e1_symlink_rejected.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e1_trust_store_tampering.py",
+        "name": "test_m19_e1_trust_store_tampering.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e2e3_algorithm_downgrade.py",
+        "name": "test_m19_e2e3_algorithm_downgrade.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e2e3_algorithm_tampering.py",
+        "name": "test_m19_e2e3_algorithm_tampering.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_e2e3_domain_separation.py",
+        "name": "test_m19_e2e3_domain_separation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_h4_plugin_resource_bounds.py",
+        "name": "test_m19_h4_plugin_resource_bounds.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_health_check_output.py",
+        "name": "test_m19_health_check_output.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_i1_no_module_loading.py",
+        "name": "test_m19_i1_no_module_loading.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_i2_secret_leakage.py",
+        "name": "test_m19_i2_secret_leakage.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_i3_credential_argv.py",
+        "name": "test_m19_i3_credential_argv.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_i4_environment_leakage.py",
+        "name": "test_m19_i4_environment_leakage.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_i5_temp_file_exposure.py",
+        "name": "test_m19_i5_temp_file_exposure.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_json_document_size.py",
+        "name": "test_m19_json_document_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_log_growth.py",
+        "name": "test_m19_log_growth.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_malformed_input.py",
+        "name": "test_m19_malformed_input.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_nesting_depth.py",
+        "name": "test_m19_nesting_depth.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_output_error_size.py",
+        "name": "test_m19_output_error_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_plugin_registry_size.py",
+        "name": "test_m19_plugin_registry_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_recovery.py",
+        "name": "test_m19_recovery.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_release_registry_history_size.py",
+        "name": "test_m19_release_registry_history_size.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_resource_exhaustion.py",
+        "name": "test_m19_resource_exhaustion.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_restart_count.py",
+        "name": "test_m19_restart_count.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_rule_count.py",
+        "name": "test_m19_rule_count.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_schema_compat.py",
+        "name": "test_m19_schema_compat.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_security_regression.py",
+        "name": "test_m19_security_regression.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_supervisor_concurrent_start_stop.py",
+        "name": "test_m19_supervisor_concurrent_start_stop.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m19_supply_chain.py",
+        "name": "test_m19_supply_chain.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m20_1_trust_store_integrity.py",
+        "name": "test_m20_1_trust_store_integrity.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_m20_trust_anchor_hardening.py",
+        "name": "test_m20_trust_anchor_hardening.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_manifest_payload_digest_separation.py",
+        "name": "test_manifest_payload_digest_separation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_cli.py",
+        "name": "test_network_cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_health.py",
+        "name": "test_network_health.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_orbot.py",
+        "name": "test_network_orbot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_profiles.py",
+        "name": "test_network_profiles.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_proxy.py",
+        "name": "test_network_proxy.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_network_tor.py",
+        "name": "test_network_tor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_no_truncated_digest_auth.py",
+        "name": "test_no_truncated_digest_auth.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_offline_install.py",
+        "name": "test_offline_install.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_operations_center.py",
+        "name": "test_operations_center.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_operations_center_plugin_view.py",
+        "name": "test_operations_center_plugin_view.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_operations_center_unified.py",
+        "name": "test_operations_center_unified.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_operator.py",
+        "name": "test_operator.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_path_resolution.py",
+        "name": "test_path_resolution.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_plugin_sdk_cli.py",
+        "name": "test_plugin_sdk_cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_plugin_sdk_core.py",
+        "name": "test_plugin_sdk_core.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_plugin_sdk_noexec.py",
+        "name": "test_plugin_sdk_noexec.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_plugin_sdk_runtime.py",
+        "name": "test_plugin_sdk_runtime.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_plugin_signature_identity.py",
+        "name": "test_plugin_signature_identity.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_policy_engine.py",
+        "name": "test_policy_engine.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_registry_consistency.py",
+        "name": "test_registry_consistency.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_bootstrap_contract.py",
+        "name": "test_release_bootstrap_contract.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_engine.py",
+        "name": "test_release_engine.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_exclusions.py",
+        "name": "test_release_exclusions.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_final_gate.py",
+        "name": "test_release_final_gate.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_identity_binding.py",
+        "name": "test_release_identity_binding.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_plugin_digest_separation.py",
+        "name": "test_release_plugin_digest_separation.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_release_reproducibility.py",
+        "name": "test_release_reproducibility.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_repair_pass1.py",
+        "name": "test_repair_pass1.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_repair_pass2.py",
+        "name": "test_repair_pass2.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_runtime_detection.py",
+        "name": "test_runtime_detection.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_dependencies.py",
+        "name": "test_service_dependencies.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_legacy_parser.py",
+        "name": "test_service_legacy_parser.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_loader.py",
+        "name": "test_service_loader.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_manifests.py",
+        "name": "test_service_manifests.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_network_coupling.py",
+        "name": "test_service_network_coupling.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_process.py",
+        "name": "test_service_process.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_restart.py",
+        "name": "test_service_restart.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_service_supervisor.py",
+        "name": "test_service_supervisor.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_sha256_integrity.py",
+        "name": "test_sha256_integrity.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_termux_dependency_repair.py",
+        "name": "test_termux_dependency_repair.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_termux_install_autoboot.py",
+        "name": "test_termux_install_autoboot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_bundle.py",
+        "name": "test_update_bundle.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_cli.py",
+        "name": "test_update_cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_cli_workspace.py",
+        "name": "test_update_cli_workspace.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_failure_injection.py",
+        "name": "test_update_failure_injection.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_manifest.py",
+        "name": "test_update_manifest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_metadata.py",
+        "name": "test_update_metadata.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_planning.py",
+        "name": "test_update_planning.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_recovery.py",
+        "name": "test_update_recovery.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_signing.py",
+        "name": "test_update_signing.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_update_verifier.py",
+        "name": "test_update_verifier.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_cli.py",
+        "name": "test_vault_cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_crypto.py",
+        "name": "test_vault_crypto.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_format.py",
+        "name": "test_vault_format.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_operations.py",
+        "name": "test_vault_operations.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_session.py",
+        "name": "test_vault_session.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_vault_storage.py",
+        "name": "test_vault_storage.py",
+        "extension": ".py"
+      },
+      {
+        "path": "update.sh",
+        "name": "update.sh",
+        "extension": ".sh"
+      },
+      {
+        "path": "updates/__init__.py",
+        "name": "__init__.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/bundle.py",
+        "name": "bundle.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/cli.py",
+        "name": "cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/errors.py",
+        "name": "errors.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/manifest.py",
+        "name": "manifest.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/metadata.py",
+        "name": "metadata.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/planner.py",
+        "name": "planner.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/recovery.py",
+        "name": "recovery.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/recovery_cli.py",
+        "name": "recovery_cli.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/signing.py",
+        "name": "signing.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/trust.py",
+        "name": "trust.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/trust_store/hive-parity-test.pem",
+        "name": "hive-parity-test.pem",
+        "extension": ".pem"
+      },
+      {
+        "path": "updates/trust_store/hive-release.pem",
+        "name": "hive-release.pem",
+        "extension": ".pem"
+      },
+      {
+        "path": "updates/updater.py",
+        "name": "updater.py",
+        "extension": ".py"
+      },
+      {
+        "path": "updates/verifier.py",
+        "name": "verifier.py",
+        "extension": ".py"
+      }
+    ]
+  },
   "tools": [],
   "toolsets": [],
   "cases": [],
@@ -25,6 +5335,13 @@
   "evidence": [],
   "agent_ops": {},
   "activity": [
+    {
+      "id": "60efd34807b05b3b680d03a12caf987e9ae352f2",
+      "type": "commit",
+      "title": "Command site: enable repository Explorer snapshots",
+      "timestamp": "2026-08-16T19:19:59-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/60efd34807b05b3b680d03a12caf987e9ae352f2"
+    },
     {
       "id": "85de2c43e928d595cb9e3825e80456c16e41424c",
       "type": "commit",
@@ -87,13 +5404,6 @@
       "title": "release: make post-sign gate self-contained",
       "timestamp": "2026-08-16T11:05:12-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/6ebf16f448fc72f0297dc2f1a8229350e9b7e6b3"
-    },
-    {
-      "id": "12a093fc79835eb02d57655e21af0773708459a6",
-      "type": "commit",
-      "title": "release: package self-contained RC2 post-sign gate",
-      "timestamp": "2026-08-16T10:59:24-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12a093fc79835eb02d57655e21af0773708459a6"
     }
   ],
   "links": [
