@@ -162,3 +162,43 @@ jobs:
         path: |
           dist/hive-bootstrap.pyz
           dist/hive-bootstrap.pyz.sha256
+
+  termux-smoke:
+    name: Termux smoke simulation
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Validate Termux install script syntax
+        run: bash -n install-termux-easy.sh
+
+      - name: Simulate Termux prefix install
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/termux"
+          export TERMUX_PREFIX="$RUNNER_TEMP/termux/usr"
+          export HOME="$RUNNER_TEMP/termux/home"
+          mkdir -p "$TERMUX_PREFIX" "$HOME"
+          # Run the install script dry-run / validation path if available.
+          if grep -q -- "--dry-run\|--check" install-termux-easy.sh; then
+            bash install-termux-easy.sh --dry-run || bash install-termux-easy.sh --check
+          else
+            echo "::notice::install-termux-easy.sh does not expose a dry-run/check mode; skipping live install"
+          fi
+
+      - name: Run unit tests for Termux-relevant modules
+        run: |
+          pytest tests/test_bootstrap_install_release.py tests/test_bootstrap_finalization_transaction.py tests/test_service_process.py tests/test_service_restart.py -v
+
+    continue-on-error: true
