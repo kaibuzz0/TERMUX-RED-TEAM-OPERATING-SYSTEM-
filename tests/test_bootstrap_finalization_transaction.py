@@ -176,7 +176,12 @@ def test_transaction_rejects_symlinked_mutable_state(tmp_path, monkeypatch):
     target = tmp_path / "outside-bashrc"
     target.write_text("outside\n", encoding="utf-8")
     paths["bashrc"].unlink()
-    paths["bashrc"].symlink_to(target)
+    try:
+        paths["bashrc"].symlink_to(target)
+    except OSError as exc:
+        if getattr(exc, "winerror", None) == 1314:
+            pytest.skip("symlink creation requires elevated privileges on this platform")
+        raise
 
     with pytest.raises(bootstrap_install.BootstrapInstallError, match="symlink"):
         bootstrap_install.finalize_termux_activation(
