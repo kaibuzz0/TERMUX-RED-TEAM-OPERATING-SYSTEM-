@@ -39,12 +39,17 @@ class Supervisor:
         log_root: Path,
         runtime_info: dict[str, Any],
         network_manager: NetworkManager | None = None,
+        *,
+        repository_root: Path | None = None,
     ):
         self.manifests = manifests
         self.state_root = state_root
         self.log_root = log_root
         self.runtime_info = runtime_info
         self.network_manager = network_manager
+        # Publicly injectable repository root. When None we fall back to the
+        # legacy module-global resolution so existing callers keep working.
+        self._repository_root = repository_root or _repo_root()
         self.graph = DependencyGraph(manifests)
         self.policies: dict[str, RestartPolicy] = {n: RestartPolicy(m) for n, m in manifests.items()}
         self.processes: dict[str, TrackedProcess] = {}
@@ -67,7 +72,7 @@ class Supervisor:
             resolve_state_root,
             resolve_repository_root,
         )
-        repo_root = _repo_root()
+        repo_root = self._repository_root
         if base is None or base == "repository":
             root = repo_root
         elif base == "canonical-source":

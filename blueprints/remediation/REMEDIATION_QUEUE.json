@@ -233,7 +233,15 @@
         "All tests use public constructor API"
       ],
       "suggested_commit_boundary": "refactor(supervisor): inject path roots instead of module globals",
-      "notes": "Avoids the test-only monkeypatch and makes Supervisor testable."
+      "notes": "Avoids the test-only monkeypatch and makes Supervisor testable.",
+      "status": "completed",
+      "resolution": {
+        "change": "Supervisor.__init__ accepts repository_root keyword argument; defaults to _repo_root() for backward compatibility.",
+        "tests_updated": "tests/test_m19_malformed_input.py now uses public constructor repository_root=Path(tmp) instead of monkeypatching _repo_root.",
+        "test_result": "6 passed, 5 skipped (symlink tests skipped on Windows without privileges).",
+        "backward_compat": "Existing callers without repository_root continue to use module-global resolution.",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-006",

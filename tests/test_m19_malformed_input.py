@@ -65,61 +65,54 @@ class TestMalformedInput:
             log = Path(tmp) / "log"
             state.mkdir()
             log.mkdir()
-            # Supervisor resolves repository root from the source file by default.
-            # Patch it to the temp dir so the containment test is isolated.
-            import services.supervisor as _supervisor_mod
-            original_repo_root = _supervisor_mod._repo_root
-            _supervisor_mod._repo_root = lambda: Path(tmp)
+            # Supervisor accepts an injectable repository_root via public constructor.
+            supervisor = Supervisor(manifests, state, log, {}, repository_root=Path(tmp))
+            repo_root = supervisor._resolve_path("repository", ".", {})
+
+            # Normal path
+            result = supervisor._resolve_path("repository", "bin/hive", {})
+            # Cross-platform: Windows uses backslashes in str(Path).
+            assert "bin/hive" in result.as_posix()
+
+            # Direct traversal caught by explicit check
+            with pytest.raises(ServiceConfigError):
+                supervisor._resolve_path("repository", "../escape", {})
+
+            # Directory named 'fourdots' is NOT traversal (no actual .. component).
+            # It resolves harmlessly under base.  Using '....' is not portable:
+            # Windows path normalization treats multi-dot-only segments as parent
+            # references, so the same semantics are tested with a normal name.
+            fourdots = repo_root / "fourdots"
+            fourdots.mkdir(exist_ok=True)
+            result = supervisor._resolve_path("repository", "fourdots/etc/passwd", {})
+            assert result.as_posix().endswith("fourdots/etc/passwd")
+            assert result.parts[-3] == "fourdots"
+            fourdots.rmdir()
+
+            # Symlink tests require elevated privileges on Windows.
+            _skip_if_no_symlink_support()
+
+            # Absolute symlink escape caught by relative_to after resolution
+            evil = repo_root / "evil_link"
+            if evil.exists() or evil.is_symlink():
+                evil.unlink()
+            evil.symlink_to("/etc/passwd")
             try:
-                supervisor = Supervisor(manifests, state, log, {})
-                repo_root = supervisor._resolve_path("repository", ".", {})
-
-                # Normal path
-                result = supervisor._resolve_path("repository", "bin/hive", {})
-                # Cross-platform: Windows uses backslashes in str(Path).
-                assert "bin/hive" in result.as_posix()
-
-                # Direct traversal caught by explicit check
                 with pytest.raises(ServiceConfigError):
-                    supervisor._resolve_path("repository", "../escape", {})
-
-                # Directory named 'fourdots' is NOT traversal (no actual .. component).
-                # It resolves harmlessly under base.  Using '....' is not portable:
-                # Windows path normalization treats multi-dot-only segments as parent
-                # references, so the same semantics are tested with a normal name.
-                fourdots = repo_root / "fourdots"
-                fourdots.mkdir(exist_ok=True)
-                result = supervisor._resolve_path("repository", "fourdots/etc/passwd", {})
-                assert result.as_posix().endswith("fourdots/etc/passwd")
-                assert result.parts[-3] == "fourdots"
-                fourdots.rmdir()
-
-                # Symlink tests require elevated privileges on Windows.
-                _skip_if_no_symlink_support()
-
-                # Absolute symlink escape caught by relative_to after resolution
-                evil = repo_root / "evil_link"
-                if evil.exists() or evil.is_symlink():
-                    evil.unlink()
-                evil.symlink_to("/etc/passwd")
-                try:
-                    with pytest.raises(ServiceConfigError):
-                        supervisor._resolve_path("repository", "evil_link", {})
-                finally:
-                    evil.unlink()
-
-                # Relative symlink escape caught by relative_to
-                up = repo_root / "up"
-                if up.exists() or up.is_symlink():
-                    up.unlink()
-                up.symlink_to("..")
-                try:
-                    with pytest.raises(ServiceConfigError):
-                        supervisor._resolve_path("repository", "up/etc/passwd", {})
-                finally:
-                    up.unlink()
+                    supervisor._resolve_path("repository", "evil_link", {})
             finally:
-                _supervisor_mod._repo_root = original_repo_root
+                evil.unlink()
+
+            # Relative symlink escape caught by relative_to
+            up = repo_root / "up"
+            if up.exists() or up.is_symlink():
+                up.unlink()
+            up.symlink_to("..")
+            try:
+                with pytest.raises(ServiceConfigError):
+                    supervisor._resolve_path("repository", "up/etc/passwd", {})
+            finally:
+                up.unlink()
 
     def test_symlink_in_working_directory(self):
         _skip_if_no_symlink_support()
