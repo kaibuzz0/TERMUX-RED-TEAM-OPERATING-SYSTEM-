@@ -21,6 +21,24 @@ from services.supervisor import Supervisor
 from updates.bundle import extract_bundle, BundleError
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestMalformedInput:
     def test_deeply_nested_json_rejected(self):
         """B1: Very deeply nested JSON should be handled gracefully."""

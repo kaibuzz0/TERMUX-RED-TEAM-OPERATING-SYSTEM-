@@ -19,6 +19,24 @@ from installer.staging import StagingError
 from config_engine.validator import validate_path_containment, ConfigValidationError
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestVaultPathContainment:
     """VaultStorage._ensure_contained prevents path escape."""
 

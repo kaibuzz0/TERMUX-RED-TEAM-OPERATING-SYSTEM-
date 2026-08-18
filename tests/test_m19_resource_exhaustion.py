@@ -19,6 +19,24 @@ from security.vault.crypto import derive_key
 from services.supervisor import Supervisor, ServiceConfigError
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestResourceExhaustion:
     # -----------------------------------------------------------------------
     # H1: KDF memory exhaustion

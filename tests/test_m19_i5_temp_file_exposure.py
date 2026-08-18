@@ -17,6 +17,24 @@ from pathlib import Path
 import pytest
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestTemporaryFileExposure:
     """I5 — verify temp file safety."""
 
@@ -137,4 +155,3 @@ class TestTemporaryFileExposure:
         # On Unix, at minimum owner-write should be set
         assert mode & stat.S_IWUSR, "Owner write permission missing"
         # Document that group/other permissions are platform-dependent
-

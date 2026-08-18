@@ -10,6 +10,24 @@ import pytest
 from bootstrap import verify_bundle as bootstrap_verify
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    try:
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 def _archive(path: Path, members: list[tuple[str, bytes | None]]) -> Path:
     with tarfile.open(path, "w:gz") as archive:
         for name, payload in members:
@@ -26,6 +44,7 @@ def _archive(path: Path, members: list[tuple[str, bytes | None]]) -> Path:
 
 
 def test_safe_extract_requires_empty_destination(tmp_path: Path) -> None:
+    _skip_if_no_symlink_support()
     bundle = _archive(tmp_path / "bundle.tar.gz", [("file.txt", b"ok")])
     destination = tmp_path / "destination"
     destination.mkdir()
@@ -37,6 +56,7 @@ def test_safe_extract_requires_empty_destination(tmp_path: Path) -> None:
 
 
 def test_safe_extract_rejects_symlink_destination(tmp_path: Path) -> None:
+    _skip_if_no_symlink_support()
     bundle = _archive(tmp_path / "bundle.tar.gz", [("file.txt", b"ok")])
     actual = tmp_path / "actual"
     actual.mkdir()
@@ -88,7 +108,10 @@ def test_safe_extract_ignores_attacker_controlled_tar_modes(tmp_path: Path) -> N
     destination = tmp_path / "destination"
     bootstrap_verify.safe_extract(bundle, destination)
 
-    assert os.stat(destination).st_mode & 0o777 == 0o700
-    assert os.stat(destination / "runtime").st_mode & 0o777 == 0o700
-    assert os.stat(destination / "runtime" / "file.txt").st_mode & 0o777 == 0o600
     assert (destination / "runtime" / "file.txt").read_bytes() == b"payload"
+    # Windows does not preserve exact POSIX permission bits (ACLs differ). On
+    # POSIX, verify the safe_extract sanitizer clamped dangerous modes.
+    if sys.platform != "win32":
+        assert os.stat(destination).st_mode & 0o777 == 0o700
+        assert os.stat(destination / "runtime").st_mode & 0o777 == 0o700
+        assert os.stat(destination / "runtime" / "file.txt").st_mode & 0o777 == 0o600

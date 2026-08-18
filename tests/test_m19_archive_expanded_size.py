@@ -25,6 +25,24 @@ import pytest
 # 1. MAX_EXPANDED_SIZE exact boundary
 # ---------------------------------------------------------------------------
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    try:
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestArchiveExpandedSizeBounded:
     def test_tar_accepts_exactly_max_expanded_size(self, tmp_path, monkeypatch):
         """Tar bundle whose total member size == MAX_EXPANDED_SIZE is accepted."""

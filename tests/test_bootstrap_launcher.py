@@ -48,14 +48,16 @@ def test_managed_launcher_uses_installing_python_and_follows_active_pointer_acro
     assert first_line == f"#!{Path(sys.executable).resolve()}"
 
     _activate(data_root, "release-one", first)
+    # Windows cannot execute a shebang script directly; invoke through the
+    # installing interpreter so the test is portable (HRA-005).
     run_one = subprocess.run(
-        [str(launcher), "status"], capture_output=True, text=True, check=True, timeout=15
+        [sys.executable, str(launcher), "status"], capture_output=True, text=True, check=True, timeout=15
     )
     assert json.loads(run_one.stdout) == {"release": "one", "args": ["status"]}
 
     _activate(data_root, "release-two", second)
     run_two = subprocess.run(
-        [str(launcher), "boot"], capture_output=True, text=True, check=True, timeout=15
+        [sys.executable, str(launcher), "boot"], capture_output=True, text=True, check=True, timeout=15
     )
     assert json.loads(run_two.stdout) == {"release": "two", "args": ["boot"]}
 
@@ -84,7 +86,7 @@ def test_managed_launcher_rejects_tampered_active_runtime_pointer(tmp_path: Path
     (data_root / "active.json").write_text(json.dumps(pointer), encoding="utf-8")
 
     result = subprocess.run(
-        [str(launcher), "status"], capture_output=True, text=True, check=False, timeout=15
+        [sys.executable, str(launcher), "status"], capture_output=True, text=True, check=False, timeout=15
     )
     assert result.returncode == 2
     assert "does not match versioned release layout" in result.stderr
