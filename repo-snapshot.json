@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-17T00:20:08Z",
-  "source_commit": "60efd34807b05b3b680d03a12caf987e9ae352f2",
+  "generated_at": "2026-08-18T00:18:24Z",
+  "source_commit": "399ae80a278eb048189ea43e45a90fb4b80eee3a",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,15 +9,15 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 924,
-    "python_files": 403,
+    "tracked_files": 942,
+    "python_files": 406,
     "javascript_typescript_files": 1,
     "workflow_files": 4,
     "test_files": 170
   },
   "repository_tree": {
-    "total_files": 924,
-    "total_directories": 102,
+    "total_files": 942,
+    "total_directories": 113,
     "files_truncated": false,
     "directories_truncated": false,
     "top_level": [
@@ -273,7 +273,7 @@
         "path": "blueprints",
         "name": "blueprints",
         "depth": 1,
-        "file_count": 274
+        "file_count": 292
       },
       {
         "path": "blueprints/00-baseline",
@@ -466,6 +466,72 @@
         "name": "milestone-9",
         "depth": 3,
         "file_count": 13
+      },
+      {
+        "path": "blueprints/toolsets",
+        "name": "toolsets",
+        "depth": 2,
+        "file_count": 18
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops",
+        "name": "github-repo-ops",
+        "depth": 3,
+        "file_count": 4
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/connectors",
+        "name": "connectors",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/scripts",
+        "name": "scripts",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory",
+        "name": "repo-factory",
+        "depth": 3,
+        "file_count": 12
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates",
+        "name": "templates",
+        "depth": 4,
+        "file_count": 9
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/.github",
+        "name": ".github",
+        "depth": 5,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/.github/workflows",
+        "name": "workflows",
+        "depth": 6,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/data",
+        "name": "data",
+        "depth": 5,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs",
+        "name": "docs",
+        "depth": 5,
+        "file_count": 5
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/ops",
+        "name": "ops",
+        "depth": 5,
+        "file_count": 1
       },
       {
         "path": "bootstrap",
@@ -2939,6 +3005,96 @@
         "extension": ".md"
       },
       {
+        "path": "blueprints/toolsets/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/catalog.json",
+        "name": "catalog.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/connectors/export_repo_snapshot.py",
+        "name": "export_repo_snapshot.py",
+        "extension": ".py"
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/scripts/onboard_repository.py",
+        "name": "onboard_repository.py",
+        "extension": ".py"
+      },
+      {
+        "path": "blueprints/toolsets/github-repo-ops/toolset.json",
+        "name": "toolset.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/export_toolset.py",
+        "name": "export_toolset.py",
+        "extension": ".py"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/.github/workflows/diagnostic-ci.yml",
+        "name": "diagnostic-ci.yml",
+        "extension": ".yml"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/AGENTS.md",
+        "name": "AGENTS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/data/integration_queue.json",
+        "name": "integration_queue.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs/AGENT_HANDOFF.md",
+        "name": "AGENT_HANDOFF.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs/BUILD_CHECKLIST.md",
+        "name": "BUILD_CHECKLIST.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs/PROJECT_BLUEPRINT.md",
+        "name": "PROJECT_BLUEPRINT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs/RESEARCH_LOG.md",
+        "name": "RESEARCH_LOG.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/docs/WORK_QUEUE.md",
+        "name": "WORK_QUEUE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/templates/ops/CURRENT_STATE.md",
+        "name": "CURRENT_STATE.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/toolsets/repo-factory/toolset.json",
+        "name": "toolset.json",
+        "extension": ".json"
+      },
+      {
         "path": "bootstrap/__init__.py",
         "name": "__init__.py",
         "extension": ".py"
@@ -5336,6 +5492,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "399ae80a278eb048189ea43e45a90fb4b80eee3a",
+      "type": "commit",
+      "title": "Merge pull request #5 from kaibuzz0/hive-1.1-rc2-bootstrap",
+      "timestamp": "2026-08-17T19:18:15-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/399ae80a278eb048189ea43e45a90fb4b80eee3a"
+    },
+    {
+      "id": "f69e5a48e1544b48927a4b662314011bef4d5d0f",
+      "type": "commit",
+      "title": "tools: import reusable repository toolsets",
+      "timestamp": "2026-08-17T19:17:44-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f69e5a48e1544b48927a4b662314011bef4d5d0f"
+    },
+    {
       "id": "60efd34807b05b3b680d03a12caf987e9ae352f2",
       "type": "commit",
       "title": "Command site: enable repository Explorer snapshots",
@@ -5390,20 +5560,6 @@
       "title": "test: align candidate gate errors",
       "timestamp": "2026-08-16T11:05:56-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12691465f3f3d5a837b210c44e52d106de71fd10"
-    },
-    {
-      "id": "1c3ca32953eac0f4f813e586763ecd06ff78f5a6",
-      "type": "commit",
-      "title": "release: route candidate gate through standalone core",
-      "timestamp": "2026-08-16T11:05:31-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1c3ca32953eac0f4f813e586763ecd06ff78f5a6"
-    },
-    {
-      "id": "6ebf16f448fc72f0297dc2f1a8229350e9b7e6b3",
-      "type": "commit",
-      "title": "release: make post-sign gate self-contained",
-      "timestamp": "2026-08-16T11:05:12-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/6ebf16f448fc72f0297dc2f1a8229350e9b7e6b3"
     }
   ],
   "links": [
