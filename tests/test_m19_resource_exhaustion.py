@@ -149,6 +149,7 @@ class TestResourceExhaustion:
                 load_json_file(config_path)
 
     def test_config_loader_rejects_symlink(self):
+        _skip_if_no_symlink_support()
         """H2: Symlinked config file rejected."""
         from config_engine.loader import load_json_file
         from config_engine.errors import ConfigValidationError
@@ -279,8 +280,33 @@ class TestResourceExhaustion:
             delays.append(delay)
         assert delays[-1] == 10.0, f"Backoff not capped: {delays}"
 
-    def test_restart_policy_window_reset_allows_restart(self):
-        """H6: Stable window (default 300s) resets attempt counter."""
+    def test_restart_policy_window_reset_allows_restart(self, monkeypatch):
+        """H6: Stable window resets attempt counter; zero/negative window disables reset."""
+        import services.restart as restart_mod
+        from services.restart import RestartPolicy
+
+        # Use a positive window and mock the elapsed time.
+        policy = RestartPolicy({
+            "restart": {
+                "policy": "on-failure",
+                "max_attempts": 2,
+                "window_seconds": 10,
+                "backoff_initial_seconds": 1,
+            }
+        })
+        base_time = 1000.0
+        monkeypatch.setattr(restart_mod.time, "time", lambda: base_time)
+        policy.should_restart("svc", exit_code=1, manually_stopped=False)
+        policy.should_restart("svc", exit_code=1, manually_stopped=False)
+
+        # Without a reset, the third call within the window would crash-loop.
+        # Simulate window elapsed:
+        monkeypatch.setattr(restart_mod.time, "time", lambda: base_time + 11)
+        should, _ = policy.should_restart("svc", exit_code=1, manually_stopped=False)
+        assert should is True, "Window reset should allow restart"
+
+    def test_restart_policy_zero_window_disables_reset(self):
+        """H6b: window_seconds=0/negative disables reset so max_attempts is enforced."""
         from services.restart import RestartPolicy
         policy = RestartPolicy({
             "restart": {
@@ -290,12 +316,10 @@ class TestResourceExhaustion:
                 "backoff_initial_seconds": 1,
             }
         })
-        # First burst uses attempts
         policy.should_restart("svc", exit_code=1, manually_stopped=False)
         policy.should_restart("svc", exit_code=1, manually_stopped=False)
-        # Window=0 means next call resets first_attempt, so attempts reset
-        should, _ = policy.should_restart("svc", exit_code=1, manually_stopped=False)
-        assert should is True, "Window reset should allow restart"
+        with pytest.raises(Exception):  # ServiceRuntimeError
+            policy.should_restart("svc", exit_code=1, manually_stopped=False)
 
     # -----------------------------------------------------------------------
     # H7: Bundle extraction limits (real production code)
