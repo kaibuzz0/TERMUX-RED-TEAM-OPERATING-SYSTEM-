@@ -1,0 +1,53 @@
+code=1
+STDOUT:
+\subprocess.py:1538: FileNotFoundError: [WinError 2] The system cannot find the file specified
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\subprocess.py:1538: FileNotFoundError: [WinError 2] The system cannot find the file specified
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\subprocess.py:1538: FileNotFoundError: [WinError 2] The system cannot find the file specified
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\custom-tc-nrw06\\AppData\\Local\\Temp\\pytest-of-custom-tc-nrw06\\pytest-19\\test_rejects_write_through_pre0\\out\\real.txt' -> 'C:\\Users\\custom-tc-nrw06\\AppData\\Local\\Temp\\pytest-of-custom-tc-nrw06\\pytest-19\\test_rejects_write_through_pre0\\out\\link.txt'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: '..' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmppvikor6a\\base\\escape'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_m19_debt_reduction.py:103: AssertionError: File should not be readable
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp9_3tues8\\secret.json' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp9_3tues8\\config\\link.json'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpsu1ph6n7\\real.txt' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpsu1ph6n7\\link.txt'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_m19_e1_permissions.py:58: AssertionError: Expected 0o600, got 0o666
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp2o2vw0a4\\real.pem' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp2o2vw0a4\\link.pem'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpi8enah9z\\real_dir' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpi8enah9z\\link_dir.pem'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_m19_health_check_output.py:52: AssertionError: assert {'error', 'healthy', 'type'} <= {'exit_code',...lthy', 'type'}
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\custom-tc-nrw06\\AppData\\Local\\Temp\\pytest-of-custom-tc-nrw06\\pytest-19\\test_symlinked_target_behavior0\\real.json' -> 'C:\\Users\\custom-tc-nrw06\\AppData\\Local\\Temp\\pytest-of-custom-tc-nrw06\\pytest-19\\test_symlinked_target_behavior0\\link.json'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_m19_malformed_input.py:73: AssertionError: assert 'bin/hive' in 'D:\\Hermes-USB-Portable-main\\src\\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\\bin\\hive'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpf_fsrjev\\real' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpf_fsrjev\\link'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp8znb40qa\\real.json' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp8znb40qa\\link.json'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\services\restart.py:64: services.errors.ServiceRuntimeError: Service svc entered crash loop
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_m20_1_trust_store_integrity.py:267: AttributeError: module 'os' has no attribute 'geteuid'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp2mulnarq\\real.pem' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmp2mulnarq\\link.pem'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\updates\manifest.py:111: updates.errors.BundleError: Digest mismatch: bin/hive
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\unittest\case.py:703: AssertionError: Items in the first set but not the second:
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--master\tests\test_update_cli_workspace.py:16: AssertionError: assert 511 == 448
+=========================== short test summary info ===========================
+FAILED tests/test_bootstrap_install_release.py::test_stage_verified_release_builds_existing_installer_layout
+FAILED tests/test_bootstrap_safe_extract.py::test_safe_extract_ignores_attacker_controlled_tar_modes
+FAILED tests/test_canonical_source.py::DuplicateEntrypointDebtTests::test_no_new_undocumented_duplicates
+FAILED tests/test_install_hive_sh_contract.py::test_install_hive_shell_is_syntax_valid_and_documents_clean_bootstrap
+FAILED tests/test_install_hive_sh_contract.py::test_install_hive_shell_rejects_insecure_urls_before_touching_termux
+FAILED tests/test_m19_api_schema_freeze.py::TestCompatibilityNegotiationDistinct::test_no_schema_version_negotiation_in_production
+FAILED tests/test_m19_archive_expanded_size.py::TestArchivePreExistingSymlink::test_rejects_write_through_pre_existing_symlink
+FAILED tests/test_m19_corrupted_state.py::TestCorruptedState::test_symlink_resolution_in_state_paths
+FAILED tests/test_m19_debt_reduction.py::TestDebtReduction::test_permission_denied_on_restricted_file
+FAILED tests/test_m19_e1_path_containment.py::TestConfigPathContainment::test_symlink_escape_detected
+FAILED tests/test_m19_e1_path_containment.py::TestPathContainmentMechanism::test_resolve_follows_symlinks
+FAILED tests/test_m19_e1_permissions.py::TestVaultStoragePermissions::test_vault_write_sets_owner_only_permissions
+FAILED tests/test_m19_e1_symlink_rejected.py::TestSymlinkTrustStoreRejected::test_symlink_trust_store_rejected
+FAILED tests/test_m19_e1_symlink_rejected.py::TestSymlinkTrustStoreRejected::test_symlink_to_directory_rejected
+FAILED tests/test_m19_health_check_output.py::TestHealthCheckOutputBounded::test_command_check_returns_small_dict_no_stdout
+FAILED tests/test_m19_i5_temp_file_exposure.py::TestTemporaryFileExposure::test_symlinked_target_behavior
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_path_traversal_variants_rejected
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_symlink_in_working_directory
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_config_loader_rejects_symlink
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_restart_policy_window_reset_allows_restart
+FAILED tests/test_m20_1_trust_store_integrity.py::TestPermissionsAndReadFailure::test_unreadable_trust_store_returns_empty
+FAILED tests/test_m20_trust_anchor_hardening.py::TestSymlinkFailClosed::test_symlink_trust_store_returns_empty
+FAILED tests/test_sha256_integrity.py::TestDigestBinding::test_bundle_with_correct_digest_verifies
+FAILED tests/test_termux_dependency_repair.py::TermuxDependencyRepairTests::test_core_imports_subset_of_runtime
+FAILED tests/test_update_cli_workspace.py::test_automatic_workspace_is_private_and_removed
+25 failed, 1524 passed, 13 skipped, 5 warnings in 242.61s (0:04:02)
+
+STDERR:

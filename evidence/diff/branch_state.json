@@ -1,0 +1,14 @@
+{
+  "ahead": 1,
+  "ahead_commits": [
+    ""
+  ],
+  "behind": 4,
+  "behind_commits": [
+    "399ae80 Merge pull request #5 from kaibuzz0/hive-1.1-rc2-bootstrap",
+    "60efd34 Command site: enable repository Explorer snapshots",
+    "85de2c4 Connect repository to GitHub Command Site",
+    "aeb1351 Merge pull request #4 from kaibuzz0/hive-1.1-rc2-bootstrap"
+  ],
+  "diff_stat": ".github/workflows/command-site-snapshot.yml | 48 -----------------------------\n 1 file changed, 48 deletions(-)"
+}

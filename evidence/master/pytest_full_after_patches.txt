@@ -1,0 +1,12 @@
+code=2
+STDOUT:
+
+=================================== ERRORS ====================================
+_____ ERROR collecting tests/test_m19_supervisor_concurrent_start_stop.py _____
+E   NameError: name 'pytest' is not defined
+=========================== short test summary info ===========================
+ERROR tests/test_m19_supervisor_concurrent_start_stop.py - NameError: name 'p...
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+2 skipped, 1 error in 6.28s
+
+STDERR:

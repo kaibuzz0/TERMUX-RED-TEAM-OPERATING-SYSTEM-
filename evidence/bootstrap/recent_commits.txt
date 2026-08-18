@@ -1,0 +1,10 @@
+fa0f917 fix(audit): remaining Windows/test issues and restart policy bug
+f232ebd fix(audit): Windows/CI portability fixes and hardcoded-path cleanups
+eac751d fix(audit): Windows portability fixes for test suite
+bc1fbad fix(audit): honor $HOME in finalization snapshots and best-effort mode restore
+9a2060b security(audit): remove fake RSA private key markers from honeytrap decoy
+f69e5a4 tools: import reusable repository toolsets
+aa57984 docs: add explicit Hive V2 release acceptance gate
+2f2a3e4 fix: harden legacy detection against unreadable host paths
+5f110c8 fix: make runtime detection permission-safe
+3bdd64a Merge pull request #3 from kaibuzz0/hive-1.1-rc2-bootstrap
