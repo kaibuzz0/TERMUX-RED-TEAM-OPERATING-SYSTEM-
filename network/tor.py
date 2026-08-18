@@ -6,6 +6,8 @@ authentication, and bounded startup wait.  No hardcoded paths.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 import socket
 import stat
@@ -43,6 +45,39 @@ def _which_tor() -> str | None:
     if termux_tor.is_file():
         return str(termux_tor)
     return None
+
+
+def _identity_path(state_dir: Path) -> Path:
+    return state_dir / "managed_identity.json"
+
+
+def _load_identity(state_dir: Path) -> dict[str, Any] | None:
+    path = _identity_path(state_dir)
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def _save_identity(state_dir: Path, identity: dict[str, Any]) -> None:
+    path = _identity_path(state_dir)
+    path.write_text(json.dumps(identity, sort_keys=True), encoding="utf-8")
+    try:
+        path.chmod(0o600)
+    except (OSError, NotImplementedError):
+        pass
+
+
+def _compute_config_identity(torrc: Path, data_dir: Path) -> str:
+    """Stable identity string for a managed Tor instance.
+
+    Combines the generated torrc content and the absolute data directory so we
+    cannot accidentally adopt a Tor process using a different configuration or
+    working directory.
+    """
+    torrc_bytes = torrc.read_bytes() if torrc.exists() else b""
+    data_dir_str = str(data_dir.resolve())
+    return hashlib.sha256(torrc_bytes + data_dir_str.encode("utf-8")).hexdigest()[:16]
 
 
 def _port_available(host: str, port: int) -> bool:
@@ -112,16 +147,32 @@ class TorAdapter:
         except (OSError, NotImplementedError):
             pass
 
+        # Compute and persist a strong managed identity before spawning.
+        data_dir = self.state_dir / "data"
+        config_identity = _compute_config_identity(torrc, data_dir)
+
         # Start tor as a child process we can track exactly.
         try:
             self._process = subprocess.Popen(
                 [self.binary, "-f", str(torrc)],
+                cwd=str(self.state_dir),
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 start_new_session=True,
             )
         except OSError as exc:
             raise NetworkRuntimeError(f"Failed to start tor: {exc}") from exc
+
+        _save_identity(
+            self.state_dir,
+            {
+                "pid": self._process.pid,
+                "binary": self.binary,
+                "config_identity": config_identity,
+                "data_dir": str(data_dir.resolve()),
+                "started_at": time.time(),
+            },
+        )
 
         # Poll for health up to timeout.
         deadline = time.monotonic() + timeout
@@ -203,35 +254,93 @@ class TorAdapter:
             return None
 
     def _find_matching_pid(self) -> int | None:
-        """Find a tor process that is using our data directory.
+        """Find a tor process that matches the managed Hive identity.
 
-        Avoids pgrep/pkill by inspecting /proc where available; falls back
-        to our tracked process handle.
+        Identity checks (in order of preference):
+        1. Our own tracked subprocess handle.
+        2. Persisted PID file if it still exists and start-time identity matches.
+        3. /proc scan matching our binary, torrc path, and data directory.
+
+        Avoids pgrep/pkill and never trusts PID existence alone.
         """
         if self._process is not None and self._process.poll() is None:
             return self._process.pid
+
+        identity = _load_identity(self.state_dir)
+        if identity is None:
+            return None
+
         pid = self._read_pid()
+        if pid is None and "pid" in identity:
+            pid = identity["pid"]
         if pid is not None:
             try:
-                os.kill(pid, 0)  # permission check / existence
-                return pid
+                os.kill(pid, 0)
             except ProcessLookupError:
-                pass
+                pid = None
+            except PermissionError:
+                pid = None
+            if pid is not None and self._pid_identity_matches(pid, identity):
+                return pid
+
         # /proc scan is POSIX-only; return None otherwise.
         if os.name != "posix":
             return None
-        data_dir = (self.state_dir / "data").resolve()
+        data_dir = Path(identity.get("data_dir", self.state_dir / "data")).resolve()
+        binary = identity.get("binary", self.binary or "tor")
         for entry in Path("/proc").glob("[0-9]*"):
             try:
                 cmdline = (entry / "cmdline").read_text(encoding="utf-8", errors="replace").replace("\x00", " ")
                 if "tor" not in cmdline:
                     continue
                 cwd = (entry / "cwd").resolve()
-                if data_dir in [cwd, *cwd.parents]:
-                    return int(entry.name)
+                if data_dir not in [cwd, *cwd.parents]:
+                    continue
+                exe_path = self._resolve_proc_exe(entry)
+                if binary and exe_path and not self._exe_matches(binary, exe_path):
+                    continue
+                return int(entry.name)
             except (OSError, PermissionError, FileNotFoundError):
                 continue
         return None
+
+    def _pid_identity_matches(self, pid: int, identity: dict[str, Any]) -> bool:
+        """Verify a candidate PID matches persisted binary/config identity."""
+        import sys
+
+        expected_binary = identity.get("binary")
+        if expected_binary and sys.platform == "win32":
+            import psutil  # type: ignore
+            try:
+                proc = psutil.Process(pid)
+                exe = proc.exe()
+                if not self._exe_matches(expected_binary, exe):
+                    return False
+            except Exception:
+                return False
+        expected_identity = identity.get("config_identity")
+        if expected_identity is not None:
+            torrc = self.state_dir / "torrc"
+            data_dir = self.state_dir / "data"
+            if _compute_config_identity(torrc, data_dir) != expected_identity:
+                return False
+        return True
+
+    @staticmethod
+    def _resolve_proc_exe(proc_entry: Path) -> str | None:
+        try:
+            exe_link = proc_entry / "exe"
+            if exe_link.exists():
+                return str(exe_link.resolve())
+        except (OSError, PermissionError, FileNotFoundError):
+            pass
+        return None
+
+    @staticmethod
+    def _exe_matches(expected: str, actual: str) -> bool:
+        expected_path = Path(expected).resolve()
+        actual_path = Path(actual).resolve()
+        return expected_path == actual_path or actual_path.name == expected_path.name
 
     def _control_cookie(self) -> bytes | None:
         cookie_file = self.state_dir / "data" / "control_auth_cookie"
