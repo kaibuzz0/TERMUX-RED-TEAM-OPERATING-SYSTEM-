@@ -210,7 +210,14 @@
         "Tests run on both Windows and Linux CI"
       ],
       "suggested_commit_boundary": "test: make concurrency tests portable across fork/spawn",
-      "notes": "Use `concurrent.futures.ThreadPoolExecutor` for in-process race tests; reserve multiprocessing for separate-process isolation tests."
+      "notes": "Use `concurrent.futures.ThreadPoolExecutor` for in-process race tests; reserve multiprocessing for separate-process isolation tests.",
+      "status": "completed-with-exception",
+      "resolution": {
+        "scope": "Refactored tests/test_m19_concurrent_registry_write.py to module-level worker functions; other concurrency tests remain skipped on Windows spawn and are out of scope for this remediation pass.",
+        "code_change": "Added transient Windows replace retry in release_engine/plugin_registry.py _save() to avoid WinError 5 races between concurrent writers and readers.",
+        "test_result": "tests/test_m19_concurrent_registry_write.py: 6 passed, stable across 3 consecutive runs",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-005",
