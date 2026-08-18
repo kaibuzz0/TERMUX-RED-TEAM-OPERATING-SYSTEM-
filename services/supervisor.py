@@ -171,27 +171,23 @@ class Supervisor:
         if self.network_manager is not None and manifest.get("network", {}).get("use_proxy_env", False):
             net_ok, _ = self._network_eligibility(name)
             if net_ok:
-                env = self.network_manager.proxy_env()
+                # Pass the manifest-filtered environment as the base so only
+                # allowed host variables and explicit set values survive, plus
+                # the Hive-managed proxy variables for the current profile.
+                env = self.network_manager.proxy_env(base_env=env)
         session_id = self._session_id()
         proc = TrackedProcess(manifest, cmd, session_id)
         # Use canonical service logger for bounded, rotated stdout/stderr.
         svc_logger = ServiceLogger(name, self.log_root)
         handles = svc_logger.open_handles()
         try:
-            import subprocess
-            proc._proc = subprocess.Popen(
-                cmd,
-                cwd=str(cwd),
-                env=env,
-                stdout=handles["stdout"],
-                stderr=handles["stderr"],
-                start_new_session=True,
-            )
+            # Canonical spawn: TrackedProcess captures OS-derived start-time
+            # identity, never wall-clock time.time().
+            proc.start(cwd, env, stdout=handles["stdout"], stderr=handles["stderr"])
         except OSError as e:
             svc_logger.close()
             raise ServiceRuntimeError(f"Failed to start {name}: {e}") from e
         self._service_loggers[name] = svc_logger
-        proc.start_time = time.time()
         self.processes[name] = proc
         self._record(name, state="RUNNING", pid=proc.pid, session_id=session_id, command_digest=_command_digest(cmd), manifest_digest=_manifest_digest(manifest))
         # startup health check

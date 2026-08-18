@@ -28,7 +28,14 @@ def _command_digest(command: list[str]) -> str:
 
 
 def _process_start_time(pid: int) -> float | None:
-    """Return a process start-time identity value from the host OS."""
+    """Return a process start-time identity value from the host OS.
+
+    On Linux this is the boot-relative starttime from /proc, so it can be
+    compared directly with a later re-read of the same process.  On Windows
+    psutil reports a wall-clock create_time; identity checks there use that
+    same domain.  This helper is the single canonical source for spawn-time
+    identity; callers must not mix it with wall-clock time.time().
+    """
     try:
         if sys.platform == "win32":
             import psutil  # type: ignore
@@ -69,26 +76,36 @@ class TrackedProcess:
         self._proc: subprocess.Popen | None = None
         self.start_time: float | None = None
 
-    def start(self, cwd: Path, env: dict[str, str]) -> None:
+    def start(
+        self,
+        cwd: Path,
+        env: dict[str, str],
+        *,
+        stdout: Any = subprocess.DEVNULL,
+        stderr: Any = subprocess.DEVNULL,
+    ) -> None:
+        """Start the tracked process using canonical OS identity capture.
+
+        stdout/stderr may be supplied by the Supervisor when log capture is
+        required.  The process start-time identity is always captured from the
+        same OS source used during validation, never from wall-clock time.
+        """
         try:
-            kwargs: dict[str, Any] = {
-                "cwd": str(cwd),
-                "env": env,
-                "stdout": subprocess.DEVNULL,
-                "stderr": subprocess.DEVNULL,
-                "start_new_session": True,
-            }
-            self._proc = subprocess.Popen(self.command, **kwargs)
+            self._proc = subprocess.Popen(
+                self.command,
+                cwd=str(cwd),
+                env=env,
+                stdout=stdout,
+                stderr=stderr,
+                start_new_session=True,
+            )
         except OSError as e:
             raise ServiceRuntimeError(f"Failed to start service: {e}") from e
-        # Store the same OS-derived start-time value used during validation.
-        # Falling back to wall time is safe only on platforms where the helper
-        # itself also reports wall time (Windows); on Linux an unavailable
-        # /proc value remains None and command/Popen identity still applies.
         observed = _process_start_time(self._proc.pid)
         if observed is not None:
             self.start_time = observed
         elif sys.platform == "win32":
+            # psutil create_time is the Windows identity domain; use it directly.
             self.start_time = time.time()
         else:
             self.start_time = None
@@ -118,7 +135,6 @@ class TrackedProcess:
             return False
         cmdline = _cmdline(pid)
         if cmdline and self.command:
-            # Accept if one of the executable-related command parts is present.
             joined = " ".join(cmdline)
             return any(part in joined for part in self.command[:2])
         return True
