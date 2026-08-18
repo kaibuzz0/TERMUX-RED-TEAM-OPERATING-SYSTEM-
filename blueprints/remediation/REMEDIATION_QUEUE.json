@@ -77,7 +77,13 @@
         "All tests still pass"
       ],
       "suggested_commit_boundary": "security: remove historical key decoy markers via filter-repo",
-      "notes": "Coordinate with repo owner before force-pushing rewritten history."
+      "notes": "Coordinate with repo owner before force-pushing rewritten history.",
+      "status": "completed-with-exception",
+      "resolution": {
+        "history_rewrite": false,
+        "reason": "Repository policy forbids rewriting published history and force-pushing. The HRA-001 decoy placeholder was removed from current HEAD in prior commit 84ed334 (cherry-picked as 0ea71d0). Literal marker strings in audit evidence were redacted to [REDACTED_KEY_MARKER]. A secret-scan gate (scripts/secret_scan_gate.py) was added to prevent recurrence in future commits.",
+        "verification": "git grep -I -n 'BEGIN RSA PRIVATE KEY' returns nothing in current tree; scripts/secret_scan_gate.py passes."
+      }
     },
     {
       "id": "REM-002",

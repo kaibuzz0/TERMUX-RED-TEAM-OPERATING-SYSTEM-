@@ -33,7 +33,7 @@
         "master",
         "hive-1.1-rc2-bootstrap"
       ],
-      "evidence": "Hive Ops DevAI/bin/hivedev-honey contained literal '-----BEGIN RSA PRIVATE KEY-----' block around line 193 with a [REDACTED PRIVATE KEY] placeholder. Also duplicated in both branches.",
+      "evidence": "Hive Ops DevAI/bin/hivedev-honey contained literal '[REDACTED_KEY_MARKER]' block around line 193 with a [REDACTED PRIVATE KEY] placeholder. Also duplicated in both branches.",
       "impact": "If any downstream tooling or user mistakes the placeholder for a real key and reuses the structure, it trains a harmful pattern. Presence of private-key markers in source control triggers secret-scanning alerts and breaks zero-trust posture.",
       "root_cause": "A helper/honeytrap binary embedded key-shaped decoy material instead of generating keys at runtime or referencing a key-management command.",
       "remediation": "Removed the BEGIN/END markers and replaced the literal block with a clear comment indicating it was a decoy. Rotate any real signing keys that may have been generated from this tooling; audit trust_store and release PEMs for linkage.",

@@ -60,7 +60,7 @@
       [
         "Hive Ops DevAI/bin/hivedev-honey",
         193,
-        "-----BEGIN RSA PRIVATE KEY-----\r MIIEpAIBAAKCAQEAx{random_base64}\r {random_base64}\r {random_base64}\r {random_base64}\r --"
+        "[REDACTED_KEY_MARKER]\r MIIEpAIBAAKCAQEAx{random_base64}\r {random_base64}\r {random_base64}\r {random_base64}\r --"
       ]
     ],
     "password_secret": [
