@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+import json
 import urllib.request
 
 from network.errors import NetworkRuntimeError, OrbotNotAvailableError, ProfileTransitionError, TorNotAvailableError
@@ -213,12 +214,35 @@ class NetworkManager:
             return False, f"proxied request failed: {exc}"
 
     def _tor_confirmation_test(self) -> tuple[bool, str]:
-        ok, detail = self._proxy_test()
-        if not ok:
-            return False, detail
-        # A more explicit Tor exit confirmation would inspect the response for
-        # IsTor=true; for now we keep it layered and conservative.
-        return True, "route test completed"
+        """Explicitly confirm the current proxy route exits through Tor.
+
+        A successful proxied request is NOT proof of Tor.  This test parses the
+        check.torproject.org API response and only sets tor_confirmed=True when
+        the service itself reports IsTor=true.
+        """
+        cfg = default_profile_config(self.current_profile)
+        proxy_url = f"socks5h://{cfg.socks_host}:{cfg.socks_port}"
+        try:
+            req = urllib.request.Request(
+                "https://check.torproject.org/api/ip",
+                headers={"User-Agent": "Hive-OS/1.1"},
+            )
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler({"all": proxy_url})
+            )
+            with opener.open(req, timeout=8) as resp:
+                body = resp.read().decode("utf-8", errors="replace")
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                return False, "Tor check returned non-JSON response"
+            if data.get("IsTor") is True:
+                return True, "Tor confirmed by check.torproject.org"
+            if data.get("IsTor") is False:
+                return False, "check.torproject.org reports IsTor=false"
+            return False, "Tor check response missing IsTor field"
+        except Exception as exc:
+            return False, f"Tor confirmation request failed: {exc}"
 
     def test(self) -> dict[str, Any]:
         report = self.health(include_proxy_test=True, include_tor_confirmation=True)
@@ -235,8 +259,15 @@ class NetworkManager:
     # ------------------------------------------------------------------
     # Proxy execution
     # ------------------------------------------------------------------
-    def proxy_env(self) -> dict[str, str]:
-        return build_proxy_env(self.current_profile, base_env=os.environ)
+    def proxy_env(self, base_env: dict[str, str] | None = None) -> dict[str, str]:
+        """Return proxy-aware environment.
+
+        When base_env is provided, proxy variables are added/removed from that
+        base instead of from raw os.environ.  This lets the Supervisor pass the
+        manifest-filtered environment and avoid leaking arbitrary host variables
+        that the manifest did not explicitly allow.
+        """
+        return build_proxy_env(self.current_profile, base_env=base_env or os.environ)
 
     def can_run_proxy(self) -> tuple[bool, str]:
         allowed, reason = is_proxy_execution_allowed(self.state)
