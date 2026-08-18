@@ -342,7 +342,18 @@
         "CI green after change"
       ],
       "suggested_commit_boundary": "ci: pin third-party actions to SHA and enable dependabot updates",
-      "notes": "Use official action commit SHAs from GitHub."
+      "notes": "Use official action commit SHAs from GitHub.",
+      "status": "completed",
+      "resolution": {
+        "changes": [
+          "Pinned actions/checkout, actions/setup-python, actions/cache to SHA in ci.yml and rc2-candidate.yml.",
+          "Scoped flake8 critical gate to production packages (E9,F63,F7,F82) and made it required.",
+          "Scoped informational flake8/mypy to production packages only; excluded historical/reference trees.",
+          "Added hive-v2-remediation to CI branch triggers.",
+          "Created .github/dependabot.yml for weekly Actions/pip dependency updates."
+        ],
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-008",

@@ -2,7 +2,7 @@ name: Build Hive RC.2 Candidate
 
 on:
   push:
-    branches: [ hive-1.1-rc2-bootstrap ]
+    branches: [ hive-1.1-rc2-bootstrap, hive-v2-remediation ]
     paths:
       - ".github/workflows/rc2-candidate.yml"
       - ".github/workflows/rc1-baseline-audit.yml"
@@ -32,12 +32,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout selected revision
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
         with:
           fetch-depth: 1
 
       - name: Set up Python 3.14
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
         with:
           python-version: "3.14"
 
