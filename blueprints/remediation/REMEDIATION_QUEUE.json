@@ -491,7 +491,13 @@
         "Tor confirmation only returns true for IsTor=true"
       ],
       "suggested_commit_boundary": "one commit per concern: process identity, proxy isolation, tor ownership, tor confirmation",
-      "status": "in-progress"
+      "status": "completed",
+      "validation": {
+        "targeted_tests": "26 passed, 1 skipped",
+        "full_suite": "1472 passed, 28 skipped, 1 failed (test_overview_partial timed out under parallel load)",
+        "flake_assessment": "test_overview_partial passes in isolation and in serial operations suite. Failure under full parallel load is consistent with collector source_timeout=10.0 and a slow Windows broker source, unrelated to service/network changes.",
+        "completed_at": "2026-08-18"
+      }
     }
   ],
   "investigations": [
