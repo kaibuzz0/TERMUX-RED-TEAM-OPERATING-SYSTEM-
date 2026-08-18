@@ -444,6 +444,54 @@
       ],
       "suggested_commit_boundary": "release: tag v2.0.0-rc2 and publish signed release notes",
       "notes": "This is the final gate; do not tag until all P0/P1 items are merged."
+    },
+    {
+      "id": "REM-012",
+      "phase": 2,
+      "priority": "P0",
+      "blocks_rc2": true,
+      "title": "Fix service process identity, proxy env isolation, Tor ownership, and Tor confirmation semantics",
+      "description": "Addresses the concrete correctness defects identified in the ChatGPT deep scan (items A-D): Supervisor spawning bypassed TrackedProcess.start and used wall-clock start_time; proxy_env replaced manifest-filtered env with raw os.environ; Tor adapter trusted PID existence alone; _tor_confirmation_test reported Tor confirmed from any proxied request.",
+      "audit_findings": [
+        "HRA-009",
+        "HRA-010",
+        "HRA-011"
+      ],
+      "implementation_order": 2,
+      "files_affected": [
+        "services/process.py",
+        "services/supervisor.py",
+        "network/manager.py",
+        "network/tor.py",
+        "tests/test_service_process.py",
+        "tests/test_service_network_coupling.py",
+        "tests/test_network_tor.py",
+        "tests/test_tor_confirmation.py"
+      ],
+      "tests_required": [
+        "test_tracked_process_start_time_is_os_derived",
+        "test_supervisor_start_uses_tracked_process_identity",
+        "test_supervisor_restart_preserves_identity",
+        "test_proxy_env_uses_manifest_filtered_base",
+        "test_proxy_env_direct_clears_stale_proxy_values",
+        "test_tor_adapter_persists_managed_identity",
+        "test_tor_adapter_refuses_stale_pid",
+        "test_tor_confirmation_false_when_not_tor",
+        "test_tor_confirmation_true_when_tor",
+        "test_tor_confirmation_false_on_malformed_response"
+      ],
+      "rollback_plan": "Revert services/process.py, services/supervisor.py, network/manager.py, network/tor.py, and the new/extended tests.",
+      "termux_implications": "Linux /proc starttime identity path is now used correctly; no Windows-only assumptions added.",
+      "release_signing_implications": "None direct; improves runtime safety of managed services.",
+      "acceptance_criteria": [
+        "Supervisor.start uses TrackedProcess.start for canonical spawn",
+        "process start_time is OS-derived, not wall-clock",
+        "proxy_env builds on manifest-filtered base env",
+        "Tor adapter persists strong identity and refuses stale PID",
+        "Tor confirmation only returns true for IsTor=true"
+      ],
+      "suggested_commit_boundary": "one commit per concern: process identity, proxy isolation, tor ownership, tor confirmation",
+      "status": "in-progress"
     }
   ],
   "investigations": [
