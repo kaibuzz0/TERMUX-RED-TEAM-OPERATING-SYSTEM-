@@ -1,0 +1,67 @@
+code=1
+STDOUT:
+processing\reduction.py:60: AttributeError: Can't pickle local object 'ConcurrentStartStopTests.test_restart_and_stop_concurrently.<locals>._worker_restart'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\multiprocessing\reduction.py:60: AttributeError: Can't pickle local object 'ConcurrentStartStopTests.test_start_and_start_concurrently.<locals>._worker_start'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\multiprocessing\reduction.py:60: AttributeError: Can't pickle local object 'ConcurrentStartStopTests.test_start_and_stop_concurrently.<locals>._worker_start'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\multiprocessing\reduction.py:60: AttributeError: Can't pickle local object 'ConcurrentStartStopTests.test_stop_and_stop_concurrently.<locals>._worker_stop'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\tests\test_m20_1_trust_store_integrity.py:249: AttributeError: module 'os' has no attribute 'geteuid'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpsn0upw0e\\real.pem' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpsn0upw0e\\link.pem'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\updates\manifest.py:111: updates.errors.BundleError: Digest mismatch: bin/hive
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\unittest\case.py:703: AssertionError: Items in the first set but not the second:
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\tests\test_update_cli_workspace.py:16: AssertionError: assert 511 == 448
+=========================== short test summary info ===========================
+FAILED tests/test_bootstrap_install_release.py::test_stage_verified_release_builds_existing_installer_layout
+FAILED tests/test_bootstrap_launcher.py::test_managed_launcher_uses_installing_python_and_follows_active_pointer_across_rollback
+FAILED tests/test_bootstrap_launcher.py::test_managed_launcher_rejects_tampered_active_runtime_pointer
+FAILED tests/test_bootstrap_safe_extract.py::test_safe_extract_rejects_symlink_destination
+FAILED tests/test_bootstrap_safe_extract.py::test_safe_extract_ignores_attacker_controlled_tar_modes
+FAILED tests/test_canonical_source.py::DuplicateEntrypointDebtTests::test_no_new_undocumented_duplicates
+FAILED tests/test_install_hive_sh_contract.py::test_install_hive_shell_is_syntax_valid_and_documents_clean_bootstrap
+FAILED tests/test_install_hive_sh_contract.py::test_install_hive_shell_rejects_insecure_urls_before_touching_termux
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA1RealConcurrentCommits::test_concurrent_commits_never_corrupt
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA1RealConcurrentCommits::test_file_lock_directory_actually_exclusive
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA3ExceptionSafetyUnderLoad::test_exception_releases_lock_while_others_wait
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_activation_blocks_concurrent_processes
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_activation_lock_released_after_completion
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_two_config_commits_at_same_time_with_exception
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_two_activation_locks_acquired_simultaneously
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_two_activation_locks_same_transaction_id
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_two_activation_locks_different_transaction_ids
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA4RealActivationSerialization::test_no_duplicate_transaction_ownership
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA5CrashRecovery::test_stale_lock_with_live_pid_not_cleared
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA5CrashRecovery::test_crash_while_holding_lock_is_recoverable
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA5CrashRecovery::test_stale_lock_from_killed_process
+FAILED tests/test_m19_a1a3a4a5_real_concurrency.py::TestA5CrashRecovery::test_unrelated_signal_does_not_release_lock
+FAILED tests/test_m19_api_schema_freeze.py::TestCompatibilityNegotiationDistinct::test_no_schema_version_negotiation_in_production
+FAILED tests/test_m19_archive_expanded_size.py::TestArchivePreExistingSymlink::test_rejects_write_through_pre_existing_symlink
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_two_registry_writers_concurrently
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_registry_register_loser_fails_cleanly
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_no_torn_json_under_concurrent_writes
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_no_partial_pointer_during_concurrent_updates
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_registry_state_remains_valid_after_race
+FAILED tests/test_m19_concurrent_registry_write.py::TestConcurrentRegistryWrites::test_registry_set_state_concurrently
+FAILED tests/test_m19_corrupted_state.py::TestCorruptedState::test_symlink_resolution_in_state_paths
+FAILED tests/test_m19_debt_reduction.py::TestDebtReduction::test_permission_denied_on_restricted_file
+FAILED tests/test_m19_e1_path_containment.py::TestConfigPathContainment::test_symlink_escape_detected
+FAILED tests/test_m19_e1_path_containment.py::TestPathContainmentMechanism::test_resolve_follows_symlinks
+FAILED tests/test_m19_e1_permissions.py::TestVaultStoragePermissions::test_vault_write_sets_owner_only_permissions
+FAILED tests/test_m19_e1_symlink_rejected.py::TestSymlinkTrustStoreRejected::test_symlink_trust_store_rejected
+FAILED tests/test_m19_e1_symlink_rejected.py::TestSymlinkTrustStoreRejected::test_symlink_to_directory_rejected
+FAILED tests/test_m19_health_check_output.py::TestHealthCheckOutputBounded::test_command_check_returns_small_dict_no_stdout
+FAILED tests/test_m19_i5_temp_file_exposure.py::TestTemporaryFileExposure::test_symlinked_target_behavior
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_path_traversal_variants_rejected
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_symlink_in_working_directory
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_config_loader_rejects_symlink
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_restart_policy_window_reset_allows_restart
+FAILED tests/test_m19_supervisor_concurrent_start_stop.py::ConcurrentStartStopTests::test_restart_and_stop_concurrently
+FAILED tests/test_m19_supervisor_concurrent_start_stop.py::ConcurrentStartStopTests::test_start_and_start_concurrently
+FAILED tests/test_m19_supervisor_concurrent_start_stop.py::ConcurrentStartStopTests::test_start_and_stop_concurrently
+FAILED tests/test_m19_supervisor_concurrent_start_stop.py::ConcurrentStartStopTests::test_stop_and_stop_concurrently
+FAILED tests/test_m20_1_trust_store_integrity.py::TestPermissionsAndReadFailure::test_unreadable_trust_store_returns_empty
+FAILED tests/test_m20_trust_anchor_hardening.py::TestSymlinkFailClosed::test_symlink_trust_store_returns_empty
+FAILED tests/test_sha256_integrity.py::TestDigestBinding::test_bundle_with_correct_digest_verifies
+FAILED tests/test_termux_dependency_repair.py::TermuxDependencyRepairTests::test_core_imports_subset_of_runtime
+FAILED tests/test_update_cli_workspace.py::test_automatic_workspace_is_private_and_removed
+52 failed, 1526 passed, 8 skipped, 5 warnings in 236.50s (0:03:56)
+
+STDERR:

@@ -17,6 +17,16 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from updates.trust import TrustStore, TrustError
 from updates.signing import export_public_key_pem
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 class TestSymlinkTrustStoreRejected:
     """Symlink trust store files must be rejected."""

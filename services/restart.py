@@ -51,8 +51,10 @@ class RestartPolicy:
         now = time.time()
         if state.attempts == 0:
             state.first_attempt = now
-        # Reset attempts if stable window passed.
-        if now - state.first_attempt > self.window_seconds:
+        # Reset attempts if stable window passed. A zero/negative window
+        # disables reset so max_attempts can trigger a crash loop deterministically
+        # within the same burst (HRA-015).
+        if self.window_seconds > 0 and now - state.first_attempt > self.window_seconds:
             state.attempts = 0
             state.first_attempt = now
             state.crash_loop = False

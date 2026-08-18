@@ -27,6 +27,16 @@ from config_engine.persistence import (
 from config_engine.errors import ConfigError
 from services.supervisor import Supervisor, ServiceConfigError
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 class TestCorruptedState:
     # -----------------------------------------------------------------------

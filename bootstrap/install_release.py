@@ -296,14 +296,27 @@ def _restore_file_snapshot(snapshot: dict[str, Any]) -> None:
             raise BootstrapInstallError(f"cannot restore file over unexpected non-file: {path}")
         os.replace(temp_path, path)
         temp_path = None
+        # os.replace on Windows preserves the destination ACL, so re-apply the
+        # intended permission bits after replacement. On platforms where
+        # chmod cannot set certain bits (e.g. Windows group/other), this is
+        # best-effort and must not abort the rollback.
+        try:
+            path.chmod(snapshot["mode"])
+        except (OSError, NotImplementedError):
+            pass
     finally:
         if temp_path is not None:
             temp_path.unlink(missing_ok=True)
 
 
+def _home_for_finalization() -> Path:
+    """Return the user's home directory, honoring $HOME first (Termux/Android/CI)."""
+    return Path(os.environ.get("HOME", os.path.expanduser("~")))
+
+
 def _termux_finalization_snapshots(data_root: Path, prefix: Path, release_id: str) -> list[dict[str, Any]]:
     """Snapshot every mutable file touched before activation commits."""
-    home = Path.home()
+    home = _home_for_finalization()
     bashrc = home / ".bashrc"
     paths = [
         prefix.expanduser().resolve() / "bin" / "hive",

@@ -3,6 +3,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import sys
 from pathlib import Path
 
 import pytest
@@ -106,11 +107,22 @@ def test_stage_verified_release_builds_existing_installer_layout(tmp_path):
     staged_data = staged / "data" / "runtime" / "etc" / "defaults.txt"
     assert staged_executable.read_bytes() == executable_payload
     assert staged_data.read_bytes() == data_payload
-    assert os.stat(staged_executable).st_mode & 0o777 == 0o700
-    assert os.stat(staged_data).st_mode & 0o777 == 0o600
-    assert os.stat(staged / "data" / "runtime").st_mode & 0o777 == 0o700
-    assert os.stat(staged / "state" / "manifest.json").st_mode & 0o777 == 0o600
-    assert os.stat(staged / "metadata.json").st_mode & 0o777 == 0o600
+    if sys.platform != "win32":
+        # Windows file copies do not preserve POSIX executable bits; verify
+        # only on POSIX where the sanitizer should have enforced the manifest.
+        assert os.stat(staged_executable).st_mode & 0o777 == 0o700
+    mode_data = os.stat(staged_data).st_mode & 0o777
+    if sys.platform != "win32":
+        assert mode_data == 0o600
+    mode_runtime_dir = os.stat(staged / "data" / "runtime").st_mode & 0o777
+    if sys.platform != "win32":
+        assert mode_runtime_dir == 0o700
+    mode_manifest = os.stat(staged / "state" / "manifest.json").st_mode & 0o777
+    if sys.platform != "win32":
+        assert mode_manifest == 0o600
+    mode_meta = os.stat(staged / "metadata.json").st_mode & 0o777
+    if sys.platform != "win32":
+        assert mode_meta == 0o600
 
     recorded = json.loads((staged / "state" / "manifest.json").read_text(encoding="utf-8"))
     assert recorded["manifest"] == manifest

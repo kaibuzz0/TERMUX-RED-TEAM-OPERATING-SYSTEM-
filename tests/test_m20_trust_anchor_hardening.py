@@ -33,6 +33,16 @@ from updates.signing import (
 from updates.trust import TrustStore, TrustedKey, TrustError, _compute_fingerprint
 from updates.metadata import build_metadata
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 class TestFingerprintBinding:
     """1-4. Fingerprint acceptance, mismatch, duplicate key_id, changed key."""

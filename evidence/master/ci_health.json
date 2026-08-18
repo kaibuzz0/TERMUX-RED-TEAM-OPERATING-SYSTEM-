@@ -1,0 +1,42 @@
+{
+  "ci.yml": {
+    "has_test_job": true,
+    "has_lint": true,
+    "has_security_scan": true,
+    "matrix_count": 6,
+    "uses_continues_on_error": true,
+    "uses_needs": true,
+    "has_upload_artifact": true,
+    "lines": 161
+  },
+  "command-site-snapshot.yml": {
+    "has_test_job": false,
+    "has_lint": false,
+    "has_security_scan": false,
+    "matrix_count": 1,
+    "uses_continues_on_error": false,
+    "uses_needs": false,
+    "has_upload_artifact": false,
+    "lines": 48
+  },
+  "rc1-baseline-audit.yml": {
+    "has_test_job": false,
+    "has_lint": false,
+    "has_security_scan": false,
+    "matrix_count": 0,
+    "uses_continues_on_error": false,
+    "uses_needs": false,
+    "has_upload_artifact": false,
+    "lines": 53
+  },
+  "rc2-candidate.yml": {
+    "has_test_job": true,
+    "has_lint": false,
+    "has_security_scan": false,
+    "matrix_count": 1,
+    "uses_continues_on_error": false,
+    "uses_needs": false,
+    "has_upload_artifact": true,
+    "lines": 269
+  }
+}

@@ -16,6 +16,16 @@ from pathlib import Path
 
 import pytest
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 class TestTemporaryFileExposure:
     """I5 — verify temp file safety."""
@@ -137,4 +147,3 @@ class TestTemporaryFileExposure:
         # On Unix, at minimum owner-write should be set
         assert mode & stat.S_IWUSR, "Owner write permission missing"
         # Document that group/other permissions are platform-dependent
-

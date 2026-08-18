@@ -29,6 +29,24 @@ from installer.journal import InstallJournal
 from installer.activate import ActiveState, ActivationSafetyError
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestDebtReduction:
     # -----------------------------------------------------------------------
     # J1: Detailed KDF benchmark (addresses debt #5)
@@ -68,6 +86,9 @@ class TestDebtReduction:
     # -----------------------------------------------------------------------
 
     def test_permission_denied_on_restricted_file(self):
+        import sys, pytest
+        if sys.platform == "win32":
+            pytest.skip("Windows does not enforce POSIX permission bits")
         """J2: Accessing a file with mode 000 must raise PermissionError.
 
         NOTE: As root inside PRoot, chmod restrictions may be bypassed.

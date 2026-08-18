@@ -1,0 +1,38 @@
+* 9a2060b security(audit): remove fake RSA private key markers from honeytrap decoy
+| * 84ed334 security(audit): remove fake RSA private key markers from honeytrap decoy
+| *   399ae80 Merge pull request #5 from kaibuzz0/hive-1.1-rc2-bootstrap
+| |\  
+| |/  
+|/|   
+* | f69e5a4 tools: import reusable repository toolsets
+| * 60efd34 Command site: enable repository Explorer snapshots
+| * 85de2c4 Connect repository to GitHub Command Site
+| *   aeb1351 Merge pull request #4 from kaibuzz0/hive-1.1-rc2-bootstrap
+| |\  
+| |/  
+|/|   
+* | aa57984 docs: add explicit Hive V2 release acceptance gate
+* | 2f2a3e4 fix: harden legacy detection against unreadable host paths
+* | 5f110c8 fix: make runtime detection permission-safe
+|/  
+*   3bdd64a Merge pull request #3 from kaibuzz0/hive-1.1-rc2-bootstrap
+|\  
+| * 1269146 test: align candidate gate errors
+| * 1c3ca32 release: route candidate gate through standalone core
+| * 6ebf16f release: make post-sign gate self-contained
+| * 12a093f release: package self-contained RC2 post-sign gate
+| * c403567 test: cover post-sign candidate gate
+| * 03edc5d release: add post-sign RC2 candidate gate
+| * b931dc5 release: make RC2 signing-kit hashes portable
+| * 6db7b8d release: pin RC1 identity in RC2 baseline
+| * 7525808 release: derive RC2 sequence from published RC1 metadata
+| * 7b09253 release: audit published RC1 anti-rollback baseline
+| * 1b07a39 test: integrate managed launcher with update and rollback lifecycle
+| * d70bf5d test: prove Termux activation finalization rolls back atomically
+| * 4618a6a bootstrap: make Termux activation finalization transactional
+| * 5058300 ci: only surface pytest diagnostics after test failure
+| * be025c7 ci: keep RC2 bootstrap artifact interpreter-neutral
+| * 37a4d5c ci: build interpreter-neutral bootstrap zipapp
+| * 6cab241 test: keep bootstrap zipapp interpreter-neutral
+| * aeff99c test: pin global launcher to installing Python
+| * 89b2c3d bootstrap: generate Termux-native global launcher shebang

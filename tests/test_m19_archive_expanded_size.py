@@ -20,6 +20,16 @@ from pathlib import Path
 
 import pytest
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 # ---------------------------------------------------------------------------
 # 1. MAX_EXPANDED_SIZE exact boundary

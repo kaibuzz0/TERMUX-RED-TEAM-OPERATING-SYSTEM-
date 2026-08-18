@@ -1,0 +1,942 @@
+.github/workflows/ci.yml
+.github/workflows/command-site-snapshot.yml
+.github/workflows/rc1-baseline-audit.yml
+.github/workflows/rc2-candidate.yml
+.gitignore
+ENTRY
+EOF
+Hermes Plugins/hive-ops-plugin/__init__.py
+Hermes Plugins/hive-ops-plugin/agents/__init__.py
+Hermes Plugins/hive-ops-plugin/brain_plug.py
+Hermes Plugins/install.sh
+Hive Ops DevAI/bin/hive-42
+Hive Ops DevAI/bin/hive-boot
+Hive Ops DevAI/bin/hive-hermes
+Hive Ops DevAI/bin/hive-os
+Hive Ops DevAI/bin/hive-ui
+Hive Ops DevAI/bin/hivedev
+Hive Ops DevAI/bin/hivedev-alias
+Hive Ops DevAI/bin/hivedev-anchor
+Hive Ops DevAI/bin/hivedev-anomaly
+Hive Ops DevAI/bin/hivedev-av
+Hive Ops DevAI/bin/hivedev-backup
+Hive Ops DevAI/bin/hivedev-clipboard
+Hive Ops DevAI/bin/hivedev-comms
+Hive Ops DevAI/bin/hivedev-comms3
+Hive Ops DevAI/bin/hivedev-container
+Hive Ops DevAI/bin/hivedev-duress
+Hive Ops DevAI/bin/hivedev-emf
+Hive Ops DevAI/bin/hivedev-exfil
+Hive Ops DevAI/bin/hivedev-firewall
+Hive Ops DevAI/bin/hivedev-forensics
+Hive Ops DevAI/bin/hivedev-gateway
+Hive Ops DevAI/bin/hivedev-geo
+Hive Ops DevAI/bin/hivedev-hide
+Hive Ops DevAI/bin/hivedev-honey
+Hive Ops DevAI/bin/hivedev-inject
+Hive Ops DevAI/bin/hivedev-integrity
+Hive Ops DevAI/bin/hivedev-intel
+Hive Ops DevAI/bin/hivedev-key
+Hive Ops DevAI/bin/hivedev-log
+Hive Ops DevAI/bin/hivedev-mem
+Hive Ops DevAI/bin/hivedev-net
+Hive Ops DevAI/bin/hivedev-node
+Hive Ops DevAI/bin/hivedev-pet
+Hive Ops DevAI/bin/hivedev-pq
+Hive Ops DevAI/bin/hivedev-secureboot
+Hive Ops DevAI/bin/hivedev-shred
+Hive Ops DevAI/bin/hivedev-spoof
+Hive Ops DevAI/bin/hivedev-swarm
+Hive Ops DevAI/bin/hivedev-swarm-integration
+Hive Ops DevAI/bin/hivedev-swarm-manager
+Hive Ops DevAI/bin/hivedev-temporal
+Hive Ops DevAI/bin/hivedev-vault
+Hive Ops DevAI/bin/hivedev-volume
+Hive Ops DevAI/docs/THREAT_MATRIX.md
+Hive Ops DevAI/hive-ctrl.py
+Hive Ops DevAI/hive-gateway.py
+Hive Ops DevAI/hive-orchestrator.py
+Hive Ops DevAI/hive-swarm.py
+Hive Ops DevAI/hive_agents.py
+Hive Ops DevAI/hive_state.json
+Hive Ops DevAI/hive_swarm_integration.py
+Hive Ops DevAI/lib/stealth.py
+Hive Ops DevAI/swarm_orchestrator.py
+Hive Ops DevAI/swarm_pet.py
+Hive Ops Final/.termux/boot/00-hive-ops.sh
+Hive Ops Final/.termux/boot/00-hive-secure.sh
+Hive Ops Final/README.md
+Hive Ops Final/bin/hive
+Hive Ops Final/bin/hive-dashboard
+Hive Ops Final/bin/hive-secure-login
+Hive Ops Final/bin/hive-ui-v2
+Hive Ops Final/etc/bash-integration.sh
+Hive Ops Final/etc/env.sh
+Hive Ops Final/etc/services.json
+Hive Ops Final/lib/swarm_bridge.py
+Hive Ops Final/original hive os complete/.config/hive/env.sh
+Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh
+Hive Ops Final/original hive os complete/bin/hive
+Hive Ops Final/original hive os complete/bin/hive_logrotate.sh
+Hive Ops Final/original hive os complete/bin/hive_net.core.sh
+Hive Ops Final/original hive os complete/bin/hive_net.sh
+Hive Ops Final/original hive os complete/bin/hive_orbot_ui.sh
+Hive Ops Final/original hive os complete/bin/hive_proxy_run.sh
+Hive Ops Final/original hive os complete/bin/hive_ps.sh
+Hive Ops Final/original hive os complete/bin/hive_restart.sh
+Hive Ops Final/original hive os complete/bin/hive_rotator.sh
+Hive Ops Final/original hive os complete/bin/hive_services.sh
+Hive Ops Final/original hive os complete/bin/hive_supervisor.sh
+Hive Ops Final/original hive os complete/bin/hive_watchdog.sh
+Hive Ops Final/original hive os complete/bin/step5.1_fix_health.sh
+Hive Ops Final/original hive os complete/etc/dev.aliases.sh
+Hive Ops Final/original hive os complete/etc/escape.txt
+Hive Ops Final/original hive os complete/etc/mini-ai.env
+Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.service
+Hive Ops Final/original hive os complete/etc/services/_TEMPLATE.svc
+Hive Ops Final/original hive os complete/etc/services/mini-ai.svc
+Hive Ops Final/original hive os complete/etc/tor/torrc
+Hive Ops Final/original hive os complete/hive_bootstrap.sh
+Hive Ops Final/shell/.bashrc
+Hive Ops Final/shell/.zshrc
+Hive Ops Final/shell/notes.txt
+Hive Ops Final/swarm-core/agents/architect_agent.py
+Hive Ops Final/swarm-core/agents/assistant_agent.py
+Hive Ops Final/swarm-core/gateway_bridge.py
+Hive Ops Final/swarm-core/hive-swarm.py
+Hive Ops Final/swarm-core/hive_state.json
+Hive Ops Final/swarm-core/hive_swarm_integration.py
+Hive Ops Final/swarm-core/registry/EVOLUTION_PHASE_3.md
+Hive Ops Final/swarm-core/registry/EVOLUTION_REPORT.md
+Hive Ops Final/swarm-core/registry/FINAL_ATTRIBUTION_REPORT.md
+Hive Ops Final/swarm-core/registry/FINAL_REVISED_REPORT.md
+Hive Ops Final/swarm-core/registry/HSL_DEFINITION.md
+Hive Ops Final/swarm-core/registry/REBUILD_REPORT.md
+Hive Ops Final/swarm-core/registry/SPACE_QUEST_3_FINAL_FORENSIC_REPORT.md
+Hive Ops Final/swarm-core/registry/SWARM_REGISTRY.md
+Hive Ops Final/swarm-core/registry/correlation_matrix.md
+Hive Ops Final/swarm-core/registry/protocol.md
+Hive Ops Final/swarm-core/registry/the-hive-tools-README.md
+Hive Ops Final/swarm-core/swarm_orchestrator.py
+Hive Ops Final/swarm-core/swarm_pet.py
+Hive Ops Final/tools/README.md
+Hive Ops Final/tools/batch_job_runner.py
+Hive Ops Final/tools/blockchain_batch_checker.py
+Hive Ops Final/tools/blockchain_monitor.py
+Hive Ops Final/tools/condition_simulator.py
+Hive Ops Final/tools/deep_disassembler_sqvi.py
+Hive Ops Final/tools/heap_scanner.py
+Hive Ops Final/tools/hive_health_monitor.py
+Hive Ops Final/tools/hive_menu.py
+Hive Ops Final/tools/hive_tool_builder.py
+Hive Ops Final/tools/inject_payload.py
+Hive Ops Final/tools/multi_address_generator.py
+Hive Ops Final/tools/obfuscation_layer.py
+Hive Ops Final/tools/parallel-scanner.py
+Hive Ops Final/tools/recon_node.py
+Hive Ops Final/tools/resonance_scanner.py
+Hive Ops Final/tools/sci_deep_disassembler.py
+Hive Ops Final/tools/sci_emulator.py
+Hive Ops Final/tools/sci_script_layout_validator.py
+Hive Ops Final/tools/sci_selector_tracker.py
+Hive Ops Final/tools/series-comparator.py
+Hive Ops Final/tools/series-evolution-analyzer.py
+Hive Ops Final/tools/sq_investigation_suite.py
+Hive Ops Final/tools/sq_series_scanner.py
+Hive Ops Final/tools/sqvi-deep-scanner.py
+Hive Ops Final/tools/variable_tracer.py
+Hive Ops Final/tools/wallet_crypto_simulator.py
+Hive Ops Final/tools/wallet_extractor.py
+MILESTONE10_REPORT.md
+MILESTONE11_REPORT.md
+MILESTONE12_REPORT.md
+MILESTONE13_REPORT.md
+MILESTONE14_REPORT.md
+MILESTONE15_REPORT.md
+MILESTONE16_REPORT.md
+MILESTONE17_REPORT.md
+MILESTONE18_REPORT.md
+MILESTONE19_REPORT.md
+MILESTONE1_REPORT.md
+MILESTONE2_REPORT.md
+MILESTONE3_REPORT.md
+MILESTONE4_REPORT.md
+MILESTONE6_REPORT.md
+MILESTONE7_REPORT.md
+MILESTONE8_REPORT.md
+RC_API_SCHEMA_INVENTORY.md
+RC_API_SCHEMA_INVENTORY_MIN.md
+README.md
+apply-hive-rc1.py
+bin/hive
+bin/hive_boot.py
+bin/test.py
+blueprints/00-baseline/ENVIRONMENT_BASELINE.md
+blueprints/00-baseline/EVIDENCE_INDEX.md
+blueprints/00-baseline/REPOSITORY_BASELINE.md
+blueprints/00-baseline/head_inspection_dump.md
+blueprints/00-baseline/raw_inventory.json
+blueprints/01-repository-forensics/COMMAND_MAP.md
+blueprints/01-repository-forensics/COMPLETE_FILE_INVENTORY.md
+blueprints/01-repository-forensics/DIRECTORY_PURPOSE_MAP.md
+blueprints/01-repository-forensics/DUPLICATION_MATRIX.md
+blueprints/01-repository-forensics/ENTRYPOINT_MAP.md
+blueprints/01-repository-forensics/HERMES_INTEGRATION_MAP.md
+blueprints/01-repository-forensics/INSTALLATION_FLOW.md
+blueprints/01-repository-forensics/REPAIR_FLOW.md
+blueprints/01-repository-forensics/SKILL_MODIFICATION_DISCLOSURE.md
+blueprints/01-repository-forensics/UNKNOWN_COMPONENTS.md
+blueprints/01-repository-forensics/UPDATE_FLOW.md
+blueprints/02-current-system-model/CURRENT_ARCHITECTURE.md
+blueprints/02-current-system-model/CURRENT_COMPONENT_CATALOG.md
+blueprints/02-current-system-model/CURRENT_DATA_FLOWS.md
+blueprints/02-current-system-model/CURRENT_FAILURE_MODES.md
+blueprints/02-current-system-model/CURRENT_NETWORK_MODEL.md
+blueprints/02-current-system-model/CURRENT_PERMISSION_MODEL.md
+blueprints/02-current-system-model/CURRENT_PROCESS_MODEL.md
+blueprints/02-current-system-model/CURRENT_TRUST_BOUNDARIES.md
+blueprints/03-security/AGENT_THREAT_MODEL.md
+blueprints/03-security/ATTACK_SURFACE.md
+blueprints/03-security/NETWORK_EXPOSURE_AUDIT.md
+blueprints/03-security/ROOT_VS_NONROOT_SECURITY.md
+blueprints/03-security/SECRET_HANDLING_AUDIT.md
+blueprints/03-security/SECURITY_INVARIANTS.md
+blueprints/03-security/SECURITY_RISK_REGISTER.md
+blueprints/03-security/SHELL_SAFETY_AUDIT.md
+blueprints/03-security/SUPPLY_CHAIN_AUDIT.md
+blueprints/03-security/THREAT_MODEL.md
+blueprints/04-target-architecture/AGENT_CONTROL_SPEC.md
+blueprints/04-target-architecture/BACKUP_SYSTEM_SPEC.md
+blueprints/04-target-architecture/COMMAND_API_SPEC.md
+blueprints/04-target-architecture/COMPONENT_SPECIFICATIONS.md
+blueprints/04-target-architecture/CONFIGURATION_SCHEMA_SPEC.md
+blueprints/04-target-architecture/CONTROL_PLANE_SPEC.md
+blueprints/04-target-architecture/HERMES_PLUGIN_SPEC.md
+blueprints/04-target-architecture/HIVE_OS_VISION.md
+blueprints/04-target-architecture/LOGGING_AND_AUDIT_SPEC.md
+blueprints/04-target-architecture/POLICY_ENGINE_SPEC.md
+blueprints/04-target-architecture/RECOVERY_SYSTEM_SPEC.md
+blueprints/04-target-architecture/RESOURCE_MANAGEMENT_SPEC.md
+blueprints/04-target-architecture/ROLLBACK_SAFETY_GUIDE.md
+blueprints/04-target-architecture/SERVICE_SUPERVISOR_SPEC.md
+blueprints/04-target-architecture/TARGET_ARCHITECTURE.md
+blueprints/04-target-architecture/TUI_SPEC.md
+blueprints/04-target-architecture/UPDATE_SYSTEM_SPEC.md
+blueprints/04-target-architecture/VAULT_SPEC.md
+blueprints/04-target-architecture/WORKSPACE_SPEC.md
+blueprints/05-platform-design/ANDROID_LIFECYCLE_MODEL.md
+blueprints/05-platform-design/BATTERY_AND_THERMAL_MODEL.md
+blueprints/05-platform-design/CUSTOM_ROM_RESEARCH_PROFILE.md
+blueprints/05-platform-design/DESKTOP_LINUX_PROFILE.md
+blueprints/05-platform-design/DEVICE_SUPPORT_MATRIX.md
+blueprints/05-platform-design/PLATFORM_CONTROL_MATRIX.md
+blueprints/05-platform-design/PROOT_COMPATIBILITY_PROFILE.md
+blueprints/05-platform-design/ROOT_ENHANCED_PROFILE.md
+blueprints/05-platform-design/STANDARD_TERMUX_PROFILE.md
+blueprints/05-platform-design/STORAGE_MODEL.md
+blueprints/05-platform-design/TERMUX_API_PROFILE.md
+blueprints/06-migration/ARCHIVE_PLAN.md
+blueprints/06-migration/CANONICAL_SOURCE_DECISION.md
+blueprints/06-migration/COMPATIBILITY_PLAN.md
+blueprints/06-migration/CONFIG_MIGRATION_PLAN.md
+blueprints/06-migration/DATA_MIGRATION_PLAN.md
+blueprints/06-migration/FILE_CLASSIFICATION_LEDGER.md
+blueprints/06-migration/MOVE_PLAN.md
+blueprints/06-migration/PHASED_IMPLEMENTATION_PLAN.md
+blueprints/06-migration/ROLLBACK_PLAN.md
+blueprints/06-migration/TARGET_REPOSITORY_TREE.md
+blueprints/07-verification/ACCEPTANCE_CRITERIA.md
+blueprints/07-verification/HERMES_INTEGRATION_TEST_PLAN.md
+blueprints/07-verification/INSTALL_TEST_MATRIX.md
+blueprints/07-verification/PERFORMANCE_BUDGETS.md
+blueprints/07-verification/PHYSICAL_TERMUX_VALIDATION_PLAN.md
+blueprints/07-verification/RECOVERY_TEST_MATRIX.md
+blueprints/07-verification/RELEASE_GATES.md
+blueprints/07-verification/SECURITY_TEST_PLAN.md
+blueprints/07-verification/TEST_ARCHITECTURE.md
+blueprints/07-verification/UPDATE_TEST_MATRIX.md
+blueprints/08-decisions/ADR-0001-canonical-source.md
+blueprints/08-decisions/ADR-0002-hermes-integration-boundary.md
+blueprints/08-decisions/ADR-0003-termux-security-boundary.md
+blueprints/08-decisions/ADR-0004-control-plane.md
+blueprints/08-decisions/ADR-0005-storage-layout.md
+blueprints/08-decisions/ADR-0006-agent-permissions.md
+blueprints/08-decisions/ADR-0007-dependency-authority.md
+blueprints/08-decisions/ADR-0008-session-gate-terminology.md
+blueprints/08-decisions/ADR-0009-policy-enforcement-boundary.md
+blueprints/08-decisions/ADR-0010-update-trust-model.md
+blueprints/08-decisions/ADR-0011-recovery-model.md
+blueprints/08-decisions/ADR-TEMPLATE.md
+blueprints/09-diagrams/boot-flow.mmd
+blueprints/09-diagrams/command-flow.mmd
+blueprints/09-diagrams/current-network-model.mmd
+blueprints/09-diagrams/current-system.mmd
+blueprints/09-diagrams/data-flow.mmd
+blueprints/09-diagrams/migration-sequence.mmd
+blueprints/09-diagrams/platform-boundaries.mmd
+blueprints/09-diagrams/target-agent-permission-flow.mmd
+blueprints/09-diagrams/target-control-plane.mmd
+blueprints/09-diagrams/target-hermes-integration.mmd
+blueprints/09-diagrams/target-recovery-flow.mmd
+blueprints/09-diagrams/target-storage-flow.mmd
+blueprints/09-diagrams/target-system.mmd
+blueprints/09-diagrams/target-update-flow.mmd
+blueprints/09-diagrams/trust-boundaries.mmd
+blueprints/10-reviews/ARCHITECT_REVIEW.md
+blueprints/10-reviews/BLUEPRINT_FREEZE_REPORT.md
+blueprints/10-reviews/BLUEPRINT_GAP_REPORT.md
+blueprints/10-reviews/RECOVERY_REVIEW.md
+blueprints/10-reviews/SECURITY_REVIEW.md
+blueprints/10-reviews/TERMUX_REVIEW.md
+blueprints/10-reviews/TESTABILITY_REVIEW.md
+blueprints/BLUEPRINT_INDEX.md
+blueprints/PHASE0_COMPLETION_REPORT.md
+blueprints/PHASE1_COMPLETION_REPORT.md
+blueprints/PHASE2_COMPLETION_REPORT.md
+blueprints/implementation/milestone-1/MILESTONE1_REPORT.md
+blueprints/implementation/milestone-10/CONFIG_STATE_PRESERVATION.md
+blueprints/implementation/milestone-10/INTERRUPTION_RECOVERY.md
+blueprints/implementation/milestone-10/MILESTONE10_ACCEPTANCE.md
+blueprints/implementation/milestone-10/RECOVERY_LEVELS.md
+blueprints/implementation/milestone-10/RELEASE_BUNDLE_FORMAT.md
+blueprints/implementation/milestone-10/SECURITY_REVIEW.md
+blueprints/implementation/milestone-10/SIGNING_AND_TRUST_MODEL.md
+blueprints/implementation/milestone-10/TOOL_GUARDRAIL_RECOVERY.md
+blueprints/implementation/milestone-10/UPDATE_STATE_MACHINE.md
+blueprints/implementation/milestone-11/DEPENDENCY_GRAPH_MODEL.md
+blueprints/implementation/milestone-11/HEALTH_CHECK_MODEL.md
+blueprints/implementation/milestone-11/LEGACY_ADAPTER_MODEL.md
+blueprints/implementation/milestone-11/LEGACY_SERVICE_CALL_GRAPH.md
+blueprints/implementation/milestone-11/LEGACY_SERVICE_MANIFEST_LEDGER.md
+blueprints/implementation/milestone-11/LEGACY_SERVICE_RISK_LEDGER.md
+blueprints/implementation/milestone-11/LEGACY_TO_NATIVE_MAPPING.md
+blueprints/implementation/milestone-11/MILESTONE11_ACCEPTANCE.md
+blueprints/implementation/milestone-11/PROCESS_IDENTITY_MODEL.md
+blueprints/implementation/milestone-11/RESTART_AND_CRASH_LOOP_MODEL.md
+blueprints/implementation/milestone-11/SECURITY_REVIEW.md
+blueprints/implementation/milestone-11/SERVICE_STATE_MACHINE.md
+blueprints/implementation/milestone-11/SUPERVISOR_ARCHITECTURE.md
+blueprints/implementation/milestone-11/UPDATE_SERVICE_COORDINATION.md
+blueprints/implementation/milestone-12/ARCHITECTURE_PLAN.md
+blueprints/implementation/milestone-12/BASELINE.md
+blueprints/implementation/milestone-12/BROKER_ARCHITECTURE.md
+blueprints/implementation/milestone-12/CAPABILITY_MODEL.md
+blueprints/implementation/milestone-12/EMERGENCY_STOP.md
+blueprints/implementation/milestone-12/LEGACY_PLUGIN_RISK_LEDGER.md
+blueprints/implementation/milestone-12/MILESTONE12_ACCEPTANCE.md
+blueprints/implementation/milestone-12/PERMISSION_MODEL.md
+blueprints/implementation/milestone-12/SECURITY_REVIEW.md
+blueprints/implementation/milestone-12/TASK_MANIFEST_SCHEMA.md
+blueprints/implementation/milestone-12/TRANSACTION_ID_MODEL.md
+blueprints/implementation/milestone-12/VERSION_COMPATIBILITY.md
+blueprints/implementation/milestone-13/ARCHITECTURE_PLAN.md
+blueprints/implementation/milestone-13/BASELINE.md
+blueprints/implementation/milestone-13/DATA_SOURCES.md
+blueprints/implementation/milestone-13/DIAGNOSTIC_RULES.md
+blueprints/implementation/milestone-13/EVENT_AGGREGATION.md
+blueprints/implementation/milestone-13/MILESTONE13_ACCEPTANCE.md
+blueprints/implementation/milestone-13/OPERATIONS_CENTER_ARCHITECTURE.md
+blueprints/implementation/milestone-13/RENDERING.md
+blueprints/implementation/milestone-13/RENDERING_MODEL.md
+blueprints/implementation/milestone-13/SECURITY_REVIEW.md
+blueprints/implementation/milestone-13/SNAPSHOT_MODEL.md
+blueprints/implementation/milestone-13/VIEW_MODEL.md
+blueprints/implementation/milestone-14/ARCHITECTURE_PLAN.md
+blueprints/implementation/milestone-14/BASELINE.md
+blueprints/implementation/milestone-14/CONFIGURATION_AUTHORITY_AUDIT.md
+blueprints/implementation/milestone-14/MILESTONE14_ACCEPTANCE.md
+blueprints/implementation/milestone-14/SECURITY_REVIEW.md
+blueprints/implementation/milestone-15/AUDIT_MODEL.md
+blueprints/implementation/milestone-15/BASELINE.md
+blueprints/implementation/milestone-15/BROKER_ENFORCEMENT_MODEL.md
+blueprints/implementation/milestone-15/BROKER_POLICY_ENFORCEMENT_AUDIT.md
+blueprints/implementation/milestone-15/CONTEXT_TRUST_MAP.md
+blueprints/implementation/milestone-15/DECISION_MODEL.md
+blueprints/implementation/milestone-15/DECISION_TO_ENFORCEMENT_MATRIX.md
+blueprints/implementation/milestone-15/EMERGENCY_RESTRICTIONS.md
+blueprints/implementation/milestone-15/MILESTONE15_ACCEPTANCE.md
+blueprints/implementation/milestone-15/POLICY_ENGINE_ARCHITECTURE.md
+blueprints/implementation/milestone-15/PROFILE_MODEL.md
+blueprints/implementation/milestone-15/REQUEST_AND_CONTEXT_MODEL.md
+blueprints/implementation/milestone-15/REQUIREMENT_MODEL.md
+blueprints/implementation/milestone-15/RULE_PRECEDENCE.md
+blueprints/implementation/milestone-15/SECURITY_REVIEW.md
+blueprints/implementation/milestone-16/BASELINE.md
+blueprints/implementation/milestone-16/CAPABILITY_MODEL.md
+blueprints/implementation/milestone-16/CONFIGURATION_MODEL.md
+blueprints/implementation/milestone-16/EXECUTION_BOUNDARY.md
+blueprints/implementation/milestone-16/FAILURE_CONTAINMENT.md
+blueprints/implementation/milestone-16/LEGACY_PLUGIN_AUDIT.md
+blueprints/implementation/milestone-16/LIFECYCLE_MODEL.md
+blueprints/implementation/milestone-16/MANIFEST_SCHEMA.md
+blueprints/implementation/milestone-16/MILESTONE16_ACCEPTANCE.md
+blueprints/implementation/milestone-16/PLUGIN_ENFORCEMENT_AUDIT.md
+blueprints/implementation/milestone-16/PLUGIN_IDENTITY_MODEL.md
+blueprints/implementation/milestone-16/PLUGIN_SDK_ARCHITECTURE.md
+blueprints/implementation/milestone-16/SECURITY_REVIEW.md
+blueprints/implementation/milestone-16/SIGNING_MODEL.md
+blueprints/implementation/milestone-17/BASELINE.md
+blueprints/implementation/milestone-17/DEPENDENCY_RESOLUTION.md
+blueprints/implementation/milestone-17/INSTALL_UPDATE_INTEGRATION.md
+blueprints/implementation/milestone-17/MILESTONE17_ACCEPTANCE.md
+blueprints/implementation/milestone-17/OFFLINE_DISTRIBUTION.md
+blueprints/implementation/milestone-17/PLUGIN_PACKAGE_MODEL.md
+blueprints/implementation/milestone-17/PLUGIN_REGISTRY_MODEL.md
+blueprints/implementation/milestone-17/RELEASE_ARCHITECTURE.md
+blueprints/implementation/milestone-17/RELEASE_FORMAT.md
+blueprints/implementation/milestone-17/RELEASE_PRIMITIVE_REUSE_AUDIT.md
+blueprints/implementation/milestone-17/REPRODUCIBLE_BUILD_MODEL.md
+blueprints/implementation/milestone-17/SECURITY_REVIEW.md
+blueprints/implementation/milestone-17/SIGNING_AND_TRUST_MODEL.md
+blueprints/implementation/milestone-17/SUPPLY_CHAIN_MODEL.md
+blueprints/implementation/milestone-18/ACTIVATION_ROLLBACK_RESULTS.md
+blueprints/implementation/milestone-18/BROKER_RESULTS.md
+blueprints/implementation/milestone-18/CONFIG_RESULTS.md
+blueprints/implementation/milestone-18/DEPENDENCY_RESULTS.md
+blueprints/implementation/milestone-18/DEVICE_BASELINE.md
+blueprints/implementation/milestone-18/FAILURE_INJECTION_RESULTS.md
+blueprints/implementation/milestone-18/INSTALLER_RESULTS.md
+blueprints/implementation/milestone-18/KDF_BENCHMARK.md
+blueprints/implementation/milestone-18/MILESTONE18_ACCEPTANCE.md
+blueprints/implementation/milestone-18/NETWORK_OFFLINE_RESULTS.md
+blueprints/implementation/milestone-18/OPERATIONS_CENTER_RESULTS.md
+blueprints/implementation/milestone-18/PATH_RESULTS.md
+blueprints/implementation/milestone-18/PLUGIN_RESULTS.md
+blueprints/implementation/milestone-18/POLICY_RESULTS.md
+blueprints/implementation/milestone-18/README.md
+blueprints/implementation/milestone-18/RELEASE_RESULTS.md
+blueprints/implementation/milestone-18/RESOURCE_RESULTS.md
+blueprints/implementation/milestone-18/SERVICE_SUPERVISOR_RESULTS.md
+blueprints/implementation/milestone-18/TERMUX_DEFECT_LEDGER.md
+blueprints/implementation/milestone-18/UPDATE_RECOVERY_RESULTS.md
+blueprints/implementation/milestone-18/VAULT_RESULTS.md
+blueprints/implementation/milestone-19/API_SCHEMA_FREEZE.md
+blueprints/implementation/milestone-19/HARDENING_PLAN.md
+blueprints/implementation/milestone-2/MILESTONE2_REPORT.md
+blueprints/implementation/milestone-20/FINAL_RELEASE_GATES.md
+blueprints/implementation/milestone-20/RC_STABILIZATION_LOG.md
+blueprints/implementation/milestone-3/CANONICAL_LAUNCHER_INTERPRETER.md
+blueprints/implementation/milestone-3/HARDCODED_PATH_LEDGER.md
+blueprints/implementation/milestone-4/CURRENT_PATH_CONTRACT.md
+blueprints/implementation/milestone-4/DASHBOARD_REACHABILITY.md
+blueprints/implementation/milestone-4/ISOLATED_PHYSICAL_TERMUX_VALIDATION_CHECKLIST.md
+blueprints/implementation/milestone-5/DASHBOARD_SAFETY_REVIEW.md
+blueprints/implementation/milestone-5/SERVICE_LOADER_CALL_GRAPH.md
+blueprints/implementation/milestone-5/SERVICE_SCHEMA_MIGRATION.md
+blueprints/implementation/milestone-6/LEGACY_INSTALLER_CALL_GRAPH.md
+blueprints/implementation/milestone-6/LEGACY_INSTALLER_RISK_LEDGER.md
+blueprints/implementation/milestone-7/ACTIVATION_DESIGN.md
+blueprints/implementation/milestone-7/MIGRATION_DESIGN.md
+blueprints/implementation/milestone-7/PHYSICAL_VALIDATION_PLAN.md
+blueprints/implementation/milestone-8/CREDENTIAL_FLOW_MAP.md
+blueprints/implementation/milestone-8/CRYPTOGRAPHY_DECISION.md
+blueprints/implementation/milestone-8/LEGACY_CREDENTIAL_RISK_LEDGER.md
+blueprints/implementation/milestone-8/PHYSICAL_VALIDATION_PLAN.md
+blueprints/implementation/milestone-9/ACTIVATION_RESULTS.md
+blueprints/implementation/milestone-9/DEVICE_BASELINE.md
+blueprints/implementation/milestone-9/DISPATCHER_RESULTS.md
+blueprints/implementation/milestone-9/FAILURE_INJECTION_RESULTS.md
+blueprints/implementation/milestone-9/INSTALLER_RESULTS.md
+blueprints/implementation/milestone-9/LEGACY_DETECTION_RESULTS.md
+blueprints/implementation/milestone-9/MILESTONE9_ACCEPTANCE.md
+blueprints/implementation/milestone-9/MILESTONE9_REPORT.md
+blueprints/implementation/milestone-9/RESOURCE_RESULTS.md
+blueprints/implementation/milestone-9/ROLLBACK_RESULTS.md
+blueprints/implementation/milestone-9/TERMUX_DEFECT_LEDGER.md
+blueprints/implementation/milestone-9/TERMUX_DEPENDENCY_RESULTS.md
+blueprints/implementation/milestone-9/VAULT_RESULTS.md
+blueprints/toolsets/README.md
+blueprints/toolsets/catalog.json
+blueprints/toolsets/github-repo-ops/README.md
+blueprints/toolsets/github-repo-ops/connectors/export_repo_snapshot.py
+blueprints/toolsets/github-repo-ops/scripts/onboard_repository.py
+blueprints/toolsets/github-repo-ops/toolset.json
+blueprints/toolsets/repo-factory/README.md
+blueprints/toolsets/repo-factory/export_toolset.py
+blueprints/toolsets/repo-factory/templates/.github/workflows/diagnostic-ci.yml
+blueprints/toolsets/repo-factory/templates/AGENTS.md
+blueprints/toolsets/repo-factory/templates/data/integration_queue.json
+blueprints/toolsets/repo-factory/templates/docs/AGENT_HANDOFF.md
+blueprints/toolsets/repo-factory/templates/docs/BUILD_CHECKLIST.md
+blueprints/toolsets/repo-factory/templates/docs/PROJECT_BLUEPRINT.md
+blueprints/toolsets/repo-factory/templates/docs/RESEARCH_LOG.md
+blueprints/toolsets/repo-factory/templates/docs/WORK_QUEUE.md
+blueprints/toolsets/repo-factory/templates/ops/CURRENT_STATE.md
+blueprints/toolsets/repo-factory/toolset.json
+bootstrap/__init__.py
+bootstrap/__main__.py
+bootstrap/install_release.py
+bootstrap/verify_bundle.py
+brain-plug/README.md
+brain-plug/escape_living_ai.txt
+brain-plug/therapist_code only.py
+config/capabilities.json
+config_engine/__init__.py
+config_engine/audit.py
+config_engine/cli.py
+config_engine/config.py
+config_engine/defaults.py
+config_engine/environment.py
+config_engine/errors.py
+config_engine/loader.py
+config_engine/merger.py
+config_engine/migration.py
+config_engine/persistence.py
+config_engine/preview.py
+config_engine/profiles.py
+config_engine/rollback.py
+config_engine/schema.py
+config_engine/transactions.py
+config_engine/validator.py
+diagnostics/__init__.py
+diagnostics/audit.py
+diagnostics/cli.py
+diagnostics/doctor.py
+diagnostics/errors.py
+diagnostics/finding.py
+diagnostics/health.py
+diagnostics/selftest.py
+diagnostics/severity.py
+docs/.nojekyll
+docs/ACTIVATION_AND_ROLLBACK.md
+docs/ANTI_ROLLBACK_POLICY.md
+docs/BOOTSTRAP_AND_EMERGENCY_POLICY.md
+docs/CANONICAL_SOURCE.md
+docs/CAPABILITY_MODEL.md
+docs/COMPATIBILITY_LAUNCHERS.md
+docs/CONFIGURATION_BOOTSTRAP.md
+docs/CONFIGURATION_ENGINE.md
+docs/CONFIGURATION_MIGRATIONS.md
+docs/CONFIGURATION_PROFILES.md
+docs/CONFIGURATION_ROLLBACK.md
+docs/CONFIGURATION_SCHEMA.md
+docs/CONFIGURATION_TRANSACTIONS.md
+docs/CREDENTIAL_MIGRATION.md
+docs/DIAGNOSTICS_AND_LOGGING.md
+docs/HERMES_INTEGRATION_BOUNDARY.md
+docs/HIVE_BROKER.md
+docs/HIVE_BROKER_APPROVALS.md
+docs/HIVE_BROKER_AUDIT.md
+docs/HIVE_BROKER_CAPABILITIES.md
+docs/HIVE_BROKER_EMERGENCY_STOP.md
+docs/HIVE_BROKER_PERMISSIONS.md
+docs/HIVE_BROKER_TASK_MANIFEST.md
+docs/INSTALLATION_ARCHITECTURE.md
+docs/LEGACY_INSTALLERS.md
+docs/LEGACY_SERVICE_MIGRATION.md
+docs/NETWORK_MODEL.md
+docs/OFFLINE_UPDATE_BUNDLES.md
+docs/OPERATIONS_CENTER.md
+docs/OPERATIONS_CENTER_DIAGNOSTICS.md
+docs/OPERATIONS_CENTER_EVENTS.md
+docs/OPERATIONS_CENTER_JSON_API.md
+docs/OPERATIONS_CENTER_SECURITY.md
+docs/OPERATIONS_CENTER_VIEWS.md
+docs/OPERATOR_EXPERIENCE.md
+docs/ORIGINAL_RUNTIME_PARITY.md
+docs/PASS_G_UPDATE_TEST.md
+docs/PATH_MODEL.md
+docs/PLUGIN_CAPABILITIES.md
+docs/PLUGIN_CONFIGURATION.md
+docs/PLUGIN_DEPENDENCIES.md
+docs/PLUGIN_DEVELOPMENT.md
+docs/PLUGIN_LIFECYCLE.md
+docs/PLUGIN_MANIFEST.md
+docs/PLUGIN_PACKAGES.md
+docs/PLUGIN_REGISTRY.md
+docs/PLUGIN_SDK.md
+docs/PLUGIN_SECURITY.md
+docs/PLUGIN_SIGNING.md
+docs/POLICY_AUDIT.md
+docs/POLICY_BROKER_INTEGRATION.md
+docs/POLICY_DECISIONS.md
+docs/POLICY_EMERGENCY_RESTRICTIONS.md
+docs/POLICY_ENGINE.md
+docs/POLICY_PROFILES.md
+docs/POLICY_REQUESTS.md
+docs/POLICY_REQUIREMENTS.md
+docs/POLICY_RULES.md
+docs/PRODUCTION_SIGNING_CEREMONY.md
+docs/RC2_RELEASE_CEREMONY.md
+docs/RECOVERY_ARCHITECTURE.md
+docs/RELEASE_BUILD.md
+docs/RELEASE_CHANNELS.md
+docs/RELEASE_ENGINE.md
+docs/RELEASE_FORMAT.md
+docs/RELEASE_INSTALLATION.md
+docs/RELEASE_ROLLBACK.md
+docs/RELEASE_SIGNING.md
+docs/RELEASE_TRUST.md
+docs/RUNTIME_ENVIRONMENT.md
+docs/SECURITY_BOUNDARIES.md
+docs/SERVICE_HEALTH_CHECKS.md
+docs/SERVICE_MANIFESTS.md
+docs/SERVICE_MODEL.md
+docs/SERVICE_RESTART_POLICY.md
+docs/SERVICE_SUPERVISOR.md
+docs/SUPPLY_CHAIN.md
+docs/UPDATE_ARCHITECTURE.md
+docs/V2_ACCEPTANCE_CHECKLIST.md
+docs/V2_ANDROID_VALIDATION.md
+docs/VAULT_ARCHITECTURE.md
+docs/assets/css/hive.css
+docs/assets/js/hive.js
+docs/index.html
+docs/original-runtime-parity.json
+docs/releases/1.0.0-rc.1-known-limitations.md
+docs/releases/1.0.0-rc.1.md
+docs/releases/1.0.0.md
+docs/releases/PRODUCTION_RELEASE_KEY.md
+emergency-repair.sh
+examples/plugins/hive-status/__init__.py
+examples/plugins/hive-status/hive_status_example.py
+examples/plugins/hive-status/manifest.json
+hive-canonical.json
+hive_broker/__init__.py
+hive_broker/adapters.py
+hive_broker/approval.py
+hive_broker/audit.py
+hive_broker/capabilities.py
+hive_broker/cli.py
+hive_broker/dispatcher.py
+hive_broker/errors.py
+hive_broker/intents.py
+hive_broker/policy.py
+hive_broker/schema.py
+hive_broker/session.py
+hive_broker/stop.py
+hive_broker/transaction.py
+hive_broker/validator.py
+hive_broker/version.py
+hive_operator/__init__.py
+hive_operator/cli.py
+hive_operator/notes.py
+hive_operator/shell_integration.py
+hive_operator/speak.py
+home/__init__.py
+home/renderer.py
+home/view_model.py
+install-hive.sh
+install-termux-easy.sh
+install-termux.sh
+install.sh
+installer/README.md
+installer/__init__.py
+installer/activate.py
+installer/autoboot.py
+installer/install.py
+installer/journal.py
+installer/legacy.py
+installer/plan.py
+installer/preflight.py
+installer/rollback.py
+installer/schema.py
+installer/staging.py
+installer/termux_repair.py
+installer/verify.py
+installer/version.py
+lib/hive_path.py
+lib/hive_runtime.py
+lib/hive_service_loader.py
+network/__init__.py
+network/cli.py
+network/errors.py
+network/health.py
+network/manager.py
+network/orbot.py
+network/profiles.py
+network/proxy.py
+network/state.py
+network/tor.py
+operations_center/__init__.py
+operations_center/cli.py
+operations_center/collectors.py
+operations_center/data_sources.py
+operations_center/diagnostics.py
+operations_center/errors.py
+operations_center/plugin_view.py
+operations_center/redaction.py
+operations_center/release_view.py
+operations_center/render.py
+operations_center/schema.py
+operations_center/view_models.py
+plugin_sdk/__init__.py
+plugin_sdk/audit.py
+plugin_sdk/broker_client.py
+plugin_sdk/capabilities.py
+plugin_sdk/cli.py
+plugin_sdk/compatibility.py
+plugin_sdk/configuration.py
+plugin_sdk/developer.py
+plugin_sdk/errors.py
+plugin_sdk/identity.py
+plugin_sdk/lifecycle.py
+plugin_sdk/loader.py
+plugin_sdk/manifest.py
+plugin_sdk/policy.py
+plugin_sdk/registry.py
+plugin_sdk/schema.py
+plugin_sdk/signing.py
+policy_engine/__init__.py
+policy_engine/actors.py
+policy_engine/audit.py
+policy_engine/capabilities.py
+policy_engine/cli.py
+policy_engine/conditions.py
+policy_engine/decisions.py
+policy_engine/engine.py
+policy_engine/errors.py
+policy_engine/evaluator.py
+policy_engine/loader.py
+policy_engine/profiles.py
+policy_engine/requests.py
+policy_engine/requirements.py
+policy_engine/resources.py
+policy_engine/rules.py
+policy_engine/schema.py
+policy_engine/validator.py
+release_engine/__init__.py
+release_engine/_candidate_gate_standalone.py
+release_engine/builder.py
+release_engine/candidate_gate.py
+release_engine/channels.py
+release_engine/cli.py
+release_engine/dependencies.py
+release_engine/errors.py
+release_engine/manifest.py
+release_engine/plugin_package.py
+release_engine/plugin_registry.py
+release_engine/registry.py
+release_engine/reproducibility.py
+release_engine/sbom.py
+release_engine/schema.py
+release_engine/signing.py
+release_engine/verifier.py
+release_engine/version.py
+releases/1.0.0/checksums.txt
+releases/1.0.0/hive-os-1.0.0-release.manifest.json
+releases/1.0.0/hive-os-1.0.0-release.metadata.signed.json
+releases/1.0.0/hive-os-1.0.0-release.tar.gz
+releases/1.0.0/hive-release.pem
+requirements-dev.txt
+requirements-extras.txt
+requirements-runtime.txt
+requirements.txt
+run-hive.cmd
+run-hive.ps1
+runtime_logs/__init__.py
+runtime_logs/cli.py
+runtime_logs/errors.py
+runtime_logs/permissions.py
+runtime_logs/rotation.py
+runtime_logs/service_logger.py
+security/vault/__init__.py
+security/vault/backend.py
+security/vault/cli.py
+security/vault/crypto.py
+security/vault/errors.py
+security/vault/format.py
+security/vault/migration.py
+security/vault/redaction.py
+security/vault/session.py
+security/vault/storage.py
+services/__init__.py
+services/cli.py
+services/errors.py
+services/graph.py
+services/health.py
+services/legacy.py
+services/logging.py
+services/process.py
+services/registry.py
+services/restart.py
+services/schema.py
+services/state.py
+services/supervisor.py
+tests/__init__.py
+tests/conftest.py
+tests/fixtures/broker/valid_manifest.json
+tests/fixtures/canonical-source/known-duplicates.json
+tests/fixtures/compatibility-launcher/bash_launcher
+tests/fixtures/compatibility-launcher/no_shebang
+tests/fixtures/compatibility-launcher/perl_launcher
+tests/fixtures/compatibility-launcher/python_launcher
+tests/fixtures/compatibility-launcher/sh_launcher
+tests/fixtures/plugins/hive-status-example.zip
+tests/fixtures/services/http_server.py
+tests/fixtures/services/manifests/fixture-http.json
+tests/fixtures/services/sleeper.py
+tests/test_bootstrap_current_state.py
+tests/test_bootstrap_finalization_transaction.py
+tests/test_bootstrap_install_release.py
+tests/test_bootstrap_launcher.py
+tests/test_bootstrap_safe_extract.py
+tests/test_bootstrap_update_rollback_integration.py
+tests/test_bootstrap_verify.py
+tests/test_bootstrap_zipapp.py
+tests/test_broker_capabilities.py
+tests/test_candidate_gate.py
+tests/test_canonical_manifest_bytes.py
+tests/test_canonical_source.py
+tests/test_compatibility_launcher.py
+tests/test_config_engine.py
+tests/test_credential_migration.py
+tests/test_diagnostics_audit.py
+tests/test_diagnostics_doctor.py
+tests/test_diagnostics_health.py
+tests/test_diagnostics_selftest.py
+tests/test_digest_comparison.py
+tests/test_digest_type_substitution.py
+tests/test_env_and_services.py
+tests/test_file_bytes_hashed.py
+tests/test_hive_broker.py
+tests/test_hive_install_commands.py
+tests/test_home.py
+tests/test_install_hive_sh_contract.py
+tests/test_installer_activation.py
+tests/test_installer_home_security.py
+tests/test_installer_journal.py
+tests/test_installer_plan.py
+tests/test_installer_preflight.py
+tests/test_installer_rollback.py
+tests/test_installer_staging.py
+tests/test_legacy_bridge_default_exit.py
+tests/test_legacy_detection.py
+tests/test_logging.py
+tests/test_m19_a1a3a4a5_real_concurrency.py
+tests/test_m19_a2_broker_session_race.py
+tests/test_m19_api_schema_freeze.py
+tests/test_m19_archive_expanded_size.py
+tests/test_m19_archive_file_count.py
+tests/test_m19_authorization.py
+tests/test_m19_b5_yaml_absent.py
+tests/test_m19_boundedness.py
+tests/test_m19_broker_transaction_count.py
+tests/test_m19_c4_session_impersonation.py
+tests/test_m19_c5_adapter.py
+tests/test_m19_c5_cli_adapter_isolation.py
+tests/test_m19_c5_confirm_zero_calls.py
+tests/test_m19_c5_error_zero_calls.py
+tests/test_m19_c5_external_authority.py
+tests/test_m19_c5_manifest_no_code.py
+tests/test_m19_c5_oc_isolation.py
+tests/test_m19_c5_policy_deny_zero_calls.py
+tests/test_m19_c5_policy_engine.py
+tests/test_m19_c5_sdk_isolation.py
+tests/test_m19_concurrency.py
+tests/test_m19_concurrent_registry_write.py
+tests/test_m19_condition_count.py
+tests/test_m19_config_history_size.py
+tests/test_m19_config_schema_versions.py
+tests/test_m19_corrupted_state.py
+tests/test_m19_debt_reduction.py
+tests/test_m19_dependency_graph_size.py
+tests/test_m19_e1_fail_closed.py
+tests/test_m19_e1_no_trust_all.py
+tests/test_m19_e1_noenv.py
+tests/test_m19_e1_path_containment.py
+tests/test_m19_e1_permissions.py
+tests/test_m19_e1_registry_not_authority.py
+tests/test_m19_e1_symlink_rejected.py
+tests/test_m19_e1_trust_store_tampering.py
+tests/test_m19_e2e3_algorithm_downgrade.py
+tests/test_m19_e2e3_algorithm_tampering.py
+tests/test_m19_e2e3_domain_separation.py
+tests/test_m19_h4_plugin_resource_bounds.py
+tests/test_m19_health_check_output.py
+tests/test_m19_i1_no_module_loading.py
+tests/test_m19_i2_secret_leakage.py
+tests/test_m19_i3_credential_argv.py
+tests/test_m19_i4_environment_leakage.py
+tests/test_m19_i5_temp_file_exposure.py
+tests/test_m19_json_document_size.py
+tests/test_m19_log_growth.py
+tests/test_m19_malformed_input.py
+tests/test_m19_nesting_depth.py
+tests/test_m19_output_error_size.py
+tests/test_m19_plugin_registry_size.py
+tests/test_m19_recovery.py
+tests/test_m19_release_registry_history_size.py
+tests/test_m19_resource_exhaustion.py
+tests/test_m19_restart_count.py
+tests/test_m19_rule_count.py
+tests/test_m19_schema_compat.py
+tests/test_m19_security_regression.py
+tests/test_m19_supervisor_concurrent_start_stop.py
+tests/test_m19_supply_chain.py
+tests/test_m20_1_trust_store_integrity.py
+tests/test_m20_trust_anchor_hardening.py
+tests/test_manifest_payload_digest_separation.py
+tests/test_network_cli.py
+tests/test_network_health.py
+tests/test_network_orbot.py
+tests/test_network_profiles.py
+tests/test_network_proxy.py
+tests/test_network_tor.py
+tests/test_no_truncated_digest_auth.py
+tests/test_offline_install.py
+tests/test_operations_center.py
+tests/test_operations_center_plugin_view.py
+tests/test_operations_center_unified.py
+tests/test_operator.py
+tests/test_path_resolution.py
+tests/test_plugin_sdk_cli.py
+tests/test_plugin_sdk_core.py
+tests/test_plugin_sdk_noexec.py
+tests/test_plugin_sdk_runtime.py
+tests/test_plugin_signature_identity.py
+tests/test_policy_engine.py
+tests/test_registry_consistency.py
+tests/test_release_bootstrap_contract.py
+tests/test_release_engine.py
+tests/test_release_exclusions.py
+tests/test_release_final_gate.py
+tests/test_release_identity_binding.py
+tests/test_release_plugin_digest_separation.py
+tests/test_release_reproducibility.py
+tests/test_repair_pass1.py
+tests/test_repair_pass2.py
+tests/test_runtime_detection.py
+tests/test_service_dependencies.py
+tests/test_service_legacy_parser.py
+tests/test_service_loader.py
+tests/test_service_manifests.py
+tests/test_service_network_coupling.py
+tests/test_service_process.py
+tests/test_service_restart.py
+tests/test_service_supervisor.py
+tests/test_sha256_integrity.py
+tests/test_termux_dependency_repair.py
+tests/test_termux_install_autoboot.py
+tests/test_update_bundle.py
+tests/test_update_cli.py
+tests/test_update_cli_workspace.py
+tests/test_update_failure_injection.py
+tests/test_update_manifest.py
+tests/test_update_metadata.py
+tests/test_update_planning.py
+tests/test_update_recovery.py
+tests/test_update_signing.py
+tests/test_update_verifier.py
+tests/test_vault_cli.py
+tests/test_vault_crypto.py
+tests/test_vault_format.py
+tests/test_vault_operations.py
+tests/test_vault_session.py
+tests/test_vault_storage.py
+update.sh
+updates/__init__.py
+updates/bundle.py
+updates/cli.py
+updates/errors.py
+updates/manifest.py
+updates/metadata.py
+updates/planner.py
+updates/recovery.py
+updates/recovery_cli.py
+updates/signing.py
+updates/trust.py
+updates/trust_store/hive-parity-test.pem
+updates/trust_store/hive-release.pem
+updates/updater.py
+updates/verifier.py

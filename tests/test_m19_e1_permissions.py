@@ -29,6 +29,9 @@ class TestVaultStoragePermissions:
     """Vault storage attempts restrictive permissions on temp files."""
 
     def test_vault_write_sets_owner_only_permissions(self):
+        import sys, pytest
+        if sys.platform == "win32":
+            pytest.skip("Windows ACLs cannot enforce POSIX owner-only mode")
         """VaultStorage.write() attempts chmod(0o600) on temp file."""
         with tempfile.TemporaryDirectory() as tmp:
             vault_dir = Path(tmp) / "vault"

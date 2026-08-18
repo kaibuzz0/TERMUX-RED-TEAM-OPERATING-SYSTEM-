@@ -31,6 +31,24 @@ from updates.signing import (
 from updates.metadata import build_metadata
 
 
+
+
+def _skip_if_no_symlink_support():
+    """Skip tests that require creating symlinks when unprivileged on Windows."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "src"
+            dst = Path(tmp) / "dst"
+            src.write_text("x")
+            try:
+                dst.symlink_to(src)
+            except OSError as exc:
+                if getattr(exc, "winerror", None) == 1314:
+                    pytest.skip("symlink creation requires elevated privileges on this platform")
+    except Exception:
+        pass
+
 class TestTrustStoreTruncated:
     """Truncated trust-store file handling."""
 
@@ -246,7 +264,7 @@ class TestPermissionsAndReadFailure:
 
         Skipped when running as root (root bypasses file permissions).
         """
-        if os.geteuid() == 0:
+        if (os.geteuid() if hasattr(os, 'geteuid') else 0) == 0:
             pytest.skip("Root bypasses file permission checks")
         priv = Ed25519PrivateKey.generate()
         with tempfile.TemporaryDirectory() as tmp:

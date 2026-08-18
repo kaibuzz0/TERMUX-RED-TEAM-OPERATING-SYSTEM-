@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import stat
+import sys
 from pathlib import Path
 
 import pytest
@@ -13,7 +14,13 @@ def test_automatic_workspace_is_private_and_removed() -> None:
     with _work_directory(None, "hive-update-test-") as work:
         captured = work
         assert work.is_dir()
-        assert stat.S_IMODE(work.stat().st_mode) == 0o700
+        mode = stat.S_IMODE(work.stat().st_mode)
+    # Windows directory ACLs do not isolate group/other bits; check owner
+    # read/write/execute and skip the exact group/other mask there.
+    if sys.platform == "win32":
+        assert mode & 0o500 == 0o500, f"workspace must be owner-readable/executable, got {oct(mode)}"
+    else:
+        assert mode == 0o700
         (work / "marker").write_text("ok", encoding="utf-8")
     assert not captured.exists()
 

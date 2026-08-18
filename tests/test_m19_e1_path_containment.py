@@ -18,6 +18,16 @@ from security.vault.errors import VaultSafetyError
 from installer.staging import StagingError
 from config_engine.validator import validate_path_containment, ConfigValidationError
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
+
+
 
 class TestVaultPathContainment:
     """VaultStorage._ensure_contained prevents path escape."""

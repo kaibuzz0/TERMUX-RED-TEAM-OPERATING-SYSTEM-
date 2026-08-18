@@ -1,0 +1,17 @@
+code=1
+STDOUT:
+......F
+================================== FAILURES ===================================
+_ test_failed_activation_restores_launcher_autoboot_pointer_and_release_record _
+tests\test_bootstrap_finalization_transaction.py:93: in test_failed_activation_restores_launcher_autoboot_pointer_and_release_record
+    assert paths[name].read_bytes() == expected_bytes
+E   AssertionError: assert b'new managed bashrc\n' == b'old bashrc\n'
+E     
+E     At index 0 diff: b'n' != b'o'
+E     Use -v to get more diff
+=========================== short test summary info ===========================
+FAILED tests/test_bootstrap_finalization_transaction.py::test_failed_activation_restores_launcher_autoboot_pointer_and_release_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 6 passed in 7.06s
+
+STDERR:

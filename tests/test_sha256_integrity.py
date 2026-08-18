@@ -86,7 +86,9 @@ class TestDigestBinding:
             source.mkdir()
             (source / "bin").mkdir()
             content = "#!/bin/sh\necho ok"
-            (source / "bin" / "hive").write_text(content, encoding="utf-8")
+            # Write with explicit newline='\n' so cross-platform text translation
+            # does not change the file hash under Windows (HRA-007).
+            (source / "bin" / "hive").write_text(content, encoding="utf-8", newline="\n")
             hive_size = (source / "bin" / "hive").stat().st_size
             hive_sha = hashlib.sha256(content.encode("utf-8")).hexdigest()
 
@@ -116,7 +118,7 @@ class TestDigestBinding:
             source = Path(tmp) / "source"
             source.mkdir()
             (source / "bin").mkdir()
-            (source / "bin" / "hive").write_text("#!/bin/sh\necho ok", encoding="utf-8")
+            (source / "bin" / "hive").write_text("#!/bin/sh\necho ok", encoding="utf-8", newline="\n")
 
             # Build original manifest and sign
             manifest = [{"path": "bin/hive", "hash": "abc123"}]
@@ -163,7 +165,7 @@ class TestDigestBinding:
             source.mkdir()
             (source / "bin").mkdir()
             content = "x"
-            (source / "bin" / "hive").write_text(content, encoding="utf-8")
+            (source / "bin" / "hive").write_text(content, encoding="utf-8", newline="\n")
             hive_size = (source / "bin" / "hive").stat().st_size
             hive_sha = hashlib.sha256(content.encode("utf-8")).hexdigest()
 

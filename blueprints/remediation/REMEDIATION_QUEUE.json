@@ -1,0 +1,550 @@
+{
+  "issue": 7,
+  "title": "BUILD REMEDIATION BLUEPRINTS",
+  "audit_issue": 6,
+  "repo": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
+  "branches": {
+    "master": {
+      "head": "d173d2fee8a4eb5407eb5a82249443ee8312f5c7",
+      "short": "d173d2f"
+    },
+    "hive-1.1-rc2-bootstrap": {
+      "head": "fa0f917c3166b07fdf9e1c181721665b56ffe851",
+      "short": "fa0f917"
+    }
+  },
+  "generated_at": "",
+  "queue": [
+    {
+      "id": "REM-000",
+      "phase": 0,
+      "title": "Establish controlled baseline and tool parity",
+      "audit_findings": [],
+      "kind": "engineering",
+      "priority": "P0",
+      "blocks_rc2": true,
+      "files_affected": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/rc2-candidate.yml",
+        "requirements-dev.txt",
+        "scripts/run_tests.sh"
+      ],
+      "dependencies": [],
+      "implementation_order": 0,
+      "tests_required": [
+        "CI passes on ubuntu-latest with all 1463 tests",
+        "CI passes on windows-latest with expected 28 skips",
+        "Portable git and Python 3.11 env documented"
+      ],
+      "rollback_plan": "Revert workflow changes; keep local worktrees intact.",
+      "termux_implications": "None directly; this enables reproducible validation of Android-targeted fixes.",
+      "release_signing_implications": "SHA-pinned CI is prerequisite for trustworthy release builds (enables HRA-016).",
+      "acceptance_criteria": [
+        "Both branches green on CI before any further fix commits",
+        "README/CONTRIBUTING references CI matrix"
+      ],
+      "suggested_commit_boundary": "ci: pin actions and document platform matrix",
+      "notes": "Do not start code fixes until CI baseline is reproducible."
+    },
+    {
+      "id": "REM-001",
+      "phase": 1,
+      "title": "Rewrite git history to remove HRA-001 key decoy from all history",
+      "audit_findings": [
+        "HRA-001"
+      ],
+      "kind": "security",
+      "priority": "P0",
+      "blocks_rc2": true,
+      "files_affected": [
+        "Hive Ops DevAI/bin/hivedev-honey",
+        ".git/index (history rewrite)"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 1,
+      "tests_required": [
+        "git log --all --full-history -- Hive\\ Ops\\ DevAI/bin/hivedev-honey shows no key markers",
+        "truffleHog or git-secrets scan clean",
+        "re-run full pytest suite after rewrite"
+      ],
+      "rollback_plan": "Keep a pre-rewrite bare backup remote; if rewrite corrupts branches, restore from backup.",
+      "termux_implications": "None, but any Termux clone from this repo will inherit rewritten history.",
+      "release_signing_implications": "Historical release tags must be re-signed or re-tagged after rewrite; notify all forks.",
+      "acceptance_criteria": [
+        "No BEGIN/END PRIVATE KEY strings in any commit reachable from master or bootstrap",
+        "All tests still pass"
+      ],
+      "suggested_commit_boundary": "security: remove historical key decoy markers via filter-repo",
+      "notes": "Coordinate with repo owner before force-pushing rewritten history."
+    },
+    {
+      "id": "REM-002",
+      "phase": 1,
+      "title": "Consolidate and rotate trust_store / release PEM artifacts",
+      "audit_findings": [
+        "HRA-017"
+      ],
+      "kind": "security",
+      "priority": "P1",
+      "blocks_rc2": false,
+      "files_affected": [
+        "releases/1.0.0/hive-release.pem",
+        "updates/trust_store/hive-release.pem",
+        "release_engine/verifier.py",
+        "updates/manifest.py",
+        "bootstrap/install_release.py"
+      ],
+      "dependencies": [
+        "REM-001"
+      ],
+      "implementation_order": 2,
+      "tests_required": [
+        "test_m20_1_trust_store_integrity.py",
+        "test_m20_trust_anchor_hardening.py",
+        "test_bootstrap_install_release.py",
+        "test_sha256_integrity.py",
+        "New test: only one hive-release.pem exists and is loaded"
+      ],
+      "rollback_plan": "Keep old PEM in a signed archive outside the repo; revert to two copies if tooling isn't updated.",
+      "termux_implications": "Termux update path must use the single trust anchor; verify on-device install/update.",
+      "release_signing_implications": "All future releases must be signed by the consolidated key; old releases need re-verification metadata.",
+      "acceptance_criteria": [
+        "Exactly one hive-release.pem in the repo",
+        "Update and release verifiers both load the same path",
+        "Legacy duplicate files removed"
+      ],
+      "suggested_commit_boundary": "security: consolidate trust anchor and remove duplicate release PEM",
+      "notes": "Consider key rotation if the old key touched the hivedev tooling."
+    },
+    {
+      "id": "REM-003",
+      "phase": 2,
+      "title": "Implement proper Windows ACL snapshot/restore for transactional rollback",
+      "audit_findings": [
+        "HRA-003"
+      ],
+      "kind": "correctness",
+      "priority": "P1",
+      "blocks_rc2": false,
+      "files_affected": [
+        "bootstrap/install_release.py",
+        "tests/test_bootstrap_finalization_transaction.py"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 3,
+      "tests_required": [
+        "test_bootstrap_finalization_transaction.py on Windows",
+        "test_bootstrap_finalization_transaction.py on Linux",
+        "New property test: rollback restores content and ACL-equivalent permissions"
+      ],
+      "rollback_plan": "Keep current best-effort chmod fallback behind a feature flag.",
+      "termux_implications": "Termux uses POSIX permissions; this change must not regress Android behavior.",
+      "release_signing_implications": "None.",
+      "acceptance_criteria": [
+        "Rollback test passes on Windows with exact permission-equivalence check",
+        "No regression on Linux/Termux"
+      ],
+      "suggested_commit_boundary": "fix(bootstrap): preserve ACLs during transactional rollback on Windows",
+      "notes": "Use pywin32 or ctypes to snapshot/restore DACLs."
+    },
+    {
+      "id": "REM-004",
+      "phase": 2,
+      "title": "Refactor concurrency tests to module-level workers or threading",
+      "audit_findings": [
+        "HRA-005"
+      ],
+      "kind": "test_quality",
+      "priority": "P2",
+      "blocks_rc2": false,
+      "files_affected": [
+        "tests/test_m19_a1a3a4a5_real_concurrency.py",
+        "tests/test_m19_concurrent_registry_write.py",
+        "tests/test_m19_supervisor_concurrent_start_stop.py"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 4,
+      "tests_required": [
+        "All three concurrency tests pass on Windows spawn",
+        "All three pass on Linux fork"
+      ],
+      "rollback_plan": "Re-enable existing skip decorators if refactor introduces flakiness.",
+      "termux_implications": "Threading model affects Android process limits; prefer threading over multiprocessing where possible.",
+      "release_signing_implications": "None.",
+      "acceptance_criteria": [
+        "No local closures passed to multiprocessing",
+        "Tests run on both Windows and Linux CI"
+      ],
+      "suggested_commit_boundary": "test: make concurrency tests portable across fork/spawn",
+      "notes": "Use `concurrent.futures.ThreadPoolExecutor` for in-process race tests; reserve multiprocessing for separate-process isolation tests."
+    },
+    {
+      "id": "REM-005",
+      "phase": 2,
+      "title": "Refactor Supervisor path resolution to accept injectable roots",
+      "audit_findings": [
+        "HRA-013"
+      ],
+      "kind": "architecture",
+      "priority": "P1",
+      "blocks_rc2": false,
+      "files_affected": [
+        "services/supervisor.py",
+        "lib/hive_path.py",
+        "tests/test_m19_malformed_input.py",
+        "tests/test_m19_e1_path_containment.py",
+        "tests/test_m19_corrupted_state.py"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 5,
+      "tests_required": [
+        "test_m19_malformed_input.py without monkeypatching _repo_root",
+        "All path-containment tests pass"
+      ],
+      "rollback_plan": "Restore monkeypatch-based test if constructor refactor breaks other consumers.",
+      "termux_implications": "Path resolution is core to Android containment; no behavioral change expected.",
+      "release_signing_implications": "None.",
+      "acceptance_criteria": [
+        "Supervisor accepts repository_root, config_root, etc. at construction",
+        "Module-level _repo_root remains as default but is not required",
+        "All tests use public constructor API"
+      ],
+      "suggested_commit_boundary": "refactor(supervisor): inject path roots instead of module globals",
+      "notes": "Avoids the test-only monkeypatch and makes Supervisor testable."
+    },
+    {
+      "id": "REM-006",
+      "phase": 2,
+      "title": "Add regression test for restart crash-loop with window_seconds=0",
+      "audit_findings": [
+        "HRA-015"
+      ],
+      "kind": "test_quality",
+      "priority": "P0",
+      "blocks_rc2": true,
+      "files_affected": [
+        "services/restart.py",
+        "tests/test_m19_resource_exhaustion.py"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 6,
+      "tests_required": [
+        "New test: zero window enforces max_attempts crash loop",
+        "New test: positive window resets attempts after elapsed time",
+        "Full pytest suite"
+      ],
+      "rollback_plan": "The source fix is already committed; only adding tests, so revert test additions only.",
+      "termux_implications": "Service restart policy directly affects Termux daemon behavior.",
+      "release_signing_implications": "None.",
+      "acceptance_criteria": [
+        "Crash-loop test passes on both platforms",
+        "No behavior change beyond tests"
+      ],
+      "suggested_commit_boundary": "test(restart): add regression tests for window=0 crash-loop enforcement",
+      "notes": "Source fix already done in audit phase; this locks in the contract."
+    },
+    {
+      "id": "REM-007",
+      "phase": 3,
+      "title": "Pin all GitHub Actions to SHA and add dependency update automation",
+      "audit_findings": [
+        "HRA-016"
+      ],
+      "kind": "ci_security",
+      "priority": "P1",
+      "blocks_rc2": false,
+      "files_affected": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/command-site-snapshot.yml",
+        ".github/workflows/rc1-baseline-audit.yml",
+        ".github/workflows/rc2-candidate.yml",
+        ".github/dependabot.yml (new)"
+      ],
+      "dependencies": [
+        "REM-000",
+        "REM-001"
+      ],
+      "implementation_order": 7,
+      "tests_required": [
+        "Workflows still pass after SHA pinning",
+        "Dependabot opens a test PR for an action update"
+      ],
+      "rollback_plan": "Revert to floating tags if SHA maintenance becomes unmanageable (not recommended).",
+      "termux_implications": "None.",
+      "release_signing_implications": "Build reproducibility and supply-chain integrity improved.",
+      "acceptance_criteria": [
+        "No workflow uses a floating major tag",
+        "Every action has '# vX.Y.Z' comment",
+        "CI green after change"
+      ],
+      "suggested_commit_boundary": "ci: pin third-party actions to SHA and enable dependabot updates",
+      "notes": "Use official action commit SHAs from GitHub."
+    },
+    {
+      "id": "REM-008",
+      "phase": 3,
+      "title": "Add CI matrix job for Termux/Android smoke tests",
+      "audit_findings": [
+        "HRA-002",
+        "HRA-003",
+        "HRA-015"
+      ],
+      "kind": "ci_platform",
+      "priority": "P2",
+      "blocks_rc2": false,
+      "files_affected": [
+        ".github/workflows/ci.yml",
+        "scripts/termux-smoke-test.sh (new)",
+        "README.md"
+      ],
+      "dependencies": [
+        "REM-007"
+      ],
+      "implementation_order": 8,
+      "tests_required": [
+        "Run install-termux-easy.sh in an Android emulator or Docker Termux image",
+        "Verify bootstrap finalization and restart policy behavior"
+      ],
+      "rollback_plan": "Allow job to be non-required (experimental) initially.",
+      "termux_implications": "Directly validates Android install path; catch Path.home and permission regressions.",
+      "release_signing_implications": "None until smoke test becomes required.",
+      "acceptance_criteria": [
+        "Termux smoke job runs green on PRs (may be non-blocking initially)",
+        "Job exercises install, finalization, and service restart"
+      ],
+      "suggested_commit_boundary": "ci: add Termux smoke test matrix job",
+      "notes": "If GitHub Actions doesn't provide Termux runner, use a Docker image with proot/termux prefix."
+    },
+    {
+      "id": "REM-009",
+      "phase": 4,
+      "title": "Remove legacy Hive Ops duplicate entrypoints and consolidate canonical bin/hive",
+      "audit_findings": [
+        "HRA-017"
+      ],
+      "kind": "cleanup",
+      "priority": "P2",
+      "blocks_rc2": false,
+      "files_affected": [
+        "bin/hive",
+        "Hive Ops DevAI/bin/hive-os",
+        "Hive Ops Final/bin/hive",
+        "Hive Ops Final/original hive os complete/bin/hive",
+        "tests/test_canonical_source.py",
+        "canonical-source.json"
+      ],
+      "dependencies": [
+        "REM-002",
+        "REM-005"
+      ],
+      "implementation_order": 9,
+      "tests_required": [
+        "test_canonical_source.py passes",
+        "New test: only canonical entrypoints exist",
+        "Install smoke test still launches the correct binary"
+      ],
+      "rollback_plan": "Move duplicates to an attic/deprecated directory rather than deleting if compatibility is uncertain.",
+      "termux_implications": "Termux install scripts reference bin/hive; ensure canonical path stays valid.",
+      "release_signing_implications": "Release packaging must include only the canonical launcher.",
+      "acceptance_criteria": [
+        "Single bin/hive and bin/hive-os (or documented aliases)",
+        "Legacy Hive Ops bin/ dirs removed or moved to blueprints/deprecated"
+      ],
+      "suggested_commit_boundary": "cleanup: consolidate canonical launchers and remove legacy duplicates",
+      "notes": "Preserve historical files in blueprints/deprecated if they have documentation value."
+    },
+    {
+      "id": "REM-010",
+      "phase": 4,
+      "title": "Audit and remove hardcoded absolute paths from blueprints and docs",
+      "audit_findings": [
+        "HRA-018"
+      ],
+      "kind": "documentation",
+      "priority": "P3",
+      "blocks_rc2": false,
+      "files_affected": [
+        "blueprints/**/*.md",
+        "MILESTONE*_REPORT.md",
+        "docs/**/*.md"
+      ],
+      "dependencies": [
+        "REM-000"
+      ],
+      "implementation_order": 10,
+      "tests_required": [
+        "New lint test: no /root/..., /home/..., or [A-Za-z]:\\ paths in markdown source",
+        "Existing docs still render correctly"
+      ],
+      "rollback_plan": "Re-introduce specific paths in code blocks if they are examples.",
+      "termux_implications": "Documentation should reference $HOME and Termux paths, not host-specific paths.",
+      "release_signing_implications": "None.",
+      "acceptance_criteria": [
+        "Security scan finds zero hardcoded absolute paths outside examples",
+        "All examples are clearly marked as examples"
+      ],
+      "suggested_commit_boundary": "docs: replace host-specific paths with parameterized examples",
+      "notes": "Add a CI lint step so this doesn't regress."
+    },
+    {
+      "id": "REM-011",
+      "phase": 5,
+      "title": "Run final RC.2 acceptance gate and generate signed release notes",
+      "audit_findings": [
+        "HRA-001",
+        "HRA-002",
+        "HRA-015",
+        "HRA-016",
+        "HRA-017"
+      ],
+      "kind": "acceptance",
+      "priority": "P0",
+      "blocks_rc2": true,
+      "files_affected": [
+        "RELEASE_NOTES.md",
+        "version.py",
+        ".github/workflows/rc2-candidate.yml"
+      ],
+      "dependencies": [
+        "REM-001",
+        "REM-002",
+        "REM-006",
+        "REM-007"
+      ],
+      "implementation_order": 11,
+      "tests_required": [
+        "Full pytest suite: 1463 passed, expected skips",
+        "TruffleHog / git-secrets clean",
+        "CI matrix green (ubuntu, windows, termux-smoke optional)",
+        "Manual sign/verify round-trip on a release artifact"
+      ],
+      "rollback_plan": "Tag RC.2 as pre-release; do not promote to stable until acceptance criteria met.",
+      "termux_implications": "Final install/finalization test on Termux before tagging.",
+      "release_signing_implications": "Release notes must reference trust anchor path and key fingerprint.",
+      "acceptance_criteria": [
+        "All RC.2-blocking findings closed",
+        "No open High/Critical findings",
+        "Signed release artifact verifies with consolidated trust anchor"
+      ],
+      "suggested_commit_boundary": "release: tag v2.0.0-rc2 and publish signed release notes",
+      "notes": "This is the final gate; do not tag until all P0/P1 items are merged."
+    }
+  ],
+  "investigations": [
+    {
+      "id": "INV-001",
+      "title": "Investigate whether hivedev tooling ever generated or distributed a real signing key",
+      "audit_finding": "HRA-001",
+      "owner": "security",
+      "deliverable": "Signed memo or incident report; key rotation plan if needed",
+      "due": "Before REM-002 merges"
+    },
+    {
+      "id": "INV-002",
+      "title": "Determine if command-site-snapshot workflow should exist on bootstrap branch",
+      "audit_finding": "HRA-016",
+      "owner": "release",
+      "deliverable": "Decision: keep on master only vs. restore on bootstrap; branch strategy doc",
+      "due": "Before REM-007"
+    },
+    {
+      "id": "INV-003",
+      "title": "Evaluate pywin32 vs. ctypes for Windows ACL snapshot in REM-003",
+      "audit_finding": "HRA-003",
+      "owner": "platform",
+      "deliverable": "Spike PR with benchmark and dependency analysis",
+      "due": "Before REM-003 implementation"
+    },
+    {
+      "id": "INV-004",
+      "title": "Survey Termux community for install/update pain points not covered by tests",
+      "audit_finding": "HRA-004",
+      "owner": "termux-portability",
+      "deliverable": "Issue list and prioritized backlog",
+      "due": "Before REM-008"
+    }
+  ],
+  "dependency_graph": {
+    "REM-000": [],
+    "REM-001": [
+      "REM-000"
+    ],
+    "REM-002": [
+      "REM-001"
+    ],
+    "REM-003": [
+      "REM-000"
+    ],
+    "REM-004": [
+      "REM-000"
+    ],
+    "REM-005": [
+      "REM-000"
+    ],
+    "REM-006": [
+      "REM-000"
+    ],
+    "REM-007": [
+      "REM-000",
+      "REM-001"
+    ],
+    "REM-008": [
+      "REM-007"
+    ],
+    "REM-009": [
+      "REM-002",
+      "REM-005"
+    ],
+    "REM-010": [
+      "REM-000"
+    ],
+    "REM-011": [
+      "REM-001",
+      "REM-002",
+      "REM-006",
+      "REM-007"
+    ]
+  },
+  "phases": [
+    {
+      "phase": 0,
+      "name": "Baseline & CI parity",
+      "goal": "Reproducible test matrix before any fixes"
+    },
+    {
+      "phase": 1,
+      "name": "Security & trust hardening",
+      "goal": "Remove historical secret markers and consolidate trust anchor"
+    },
+    {
+      "phase": 2,
+      "name": "Core correctness & portability",
+      "goal": "Fix rollback ACLs, path injection, concurrency tests, restart regression tests"
+    },
+    {
+      "phase": 3,
+      "name": "CI / release infrastructure",
+      "goal": "SHA-pin actions and add Termux smoke test"
+    },
+    {
+      "phase": 4,
+      "name": "Cleanup, dead-code, docs",
+      "goal": "Remove duplicate launchers and host-specific paths"
+    },
+    {
+      "phase": 5,
+      "name": "RC.2 acceptance",
+      "goal": "Final gate and signed release"
+    }
+  ]
+}

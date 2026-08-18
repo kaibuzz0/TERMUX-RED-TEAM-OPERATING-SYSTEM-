@@ -1,0 +1,40 @@
+code=1
+STDOUT:
+.........s...F......ss...F.............................................. [  4%]
+............................................................s........... [  9%]
+........................................................................ [ 14%]
+........................................................................ [ 19%]
+..................s..................................................... [ 24%]
+........................................................................ [ 29%]
+........................................................................ [ 34%]
+............................................................s........... [ 38%]
+...............................s........................................ [ 43%]
+........................................................................ [ 48%]
+........................................................................ [ 53%]
+..FF.................................................................... [ 58%]
+....................F.......F........................................... [ 63%]
+.............................................s.......................... [ 68%]
+...........s............................................................ [ 72%]
+........................................................................ [ 77%]
+........................................................................ [ 82%]
+........................................................................ [ 87%]
+...................................................................s.... [ 92%]
+.......ss.......ss...................................................... [ 97%]
+........................................                                 [100%]
+================================== FAILURES ===================================
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\tests\test_bootstrap_install_release.py:113: AssertionError: staged executable must be owner-readable/executable, got 0o666
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\tests\test_bootstrap_safe_extract.py:114: NameError: name 'sys' is not defined
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\tests\test_m19_malformed_input.py:85: AssertionError: assert False
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpcj3zc8wv\\real' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpcj3zc8wv\\link'
+D:\Hermes-USB-Portable-main\.cache\runtimes\windows-x64\python\Lib\pathlib.py:1198: OSError: [WinError 1314] A required privilege is not held by the client: 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpnorv32er\\real.json' -> 'C:\\Users\\CUSTOM~1\\AppData\\Local\\Temp\\tmpnorv32er\\link.json'
+D:\Hermes-USB-Portable-main\src\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap\services\restart.py:64: services.errors.ServiceRuntimeError: Service svc entered crash loop
+=========================== short test summary info ===========================
+FAILED tests/test_bootstrap_install_release.py::test_stage_verified_release_builds_existing_installer_layout
+FAILED tests/test_bootstrap_safe_extract.py::test_safe_extract_ignores_attacker_controlled_tar_modes
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_path_traversal_variants_rejected
+FAILED tests/test_m19_malformed_input.py::TestMalformedInput::test_symlink_in_working_directory
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_config_loader_rejects_symlink
+FAILED tests/test_m19_resource_exhaustion.py::TestResourceExhaustion::test_restart_policy_window_reset_allows_restart
+6 failed, 1460 passed, 24 skipped, 3 warnings in 196.96s (0:03:16)
+
+STDERR:

@@ -1,0 +1,20 @@
+{
+  "master": {
+    "path": "D:\\Hermes-USB-Portable-main\\src\\TERMUX-RED-TEAM-OPERATING-SYSTEM--master",
+    "head": "",
+    "status": "",
+    "branch": "",
+    "log": "",
+    "file_count": 0,
+    "files": []
+  },
+  "bootstrap": {
+    "path": "D:\\Hermes-USB-Portable-main\\src\\TERMUX-RED-TEAM-OPERATING-SYSTEM--hive-1.1-rc2-bootstrap",
+    "head": "",
+    "status": "",
+    "branch": "",
+    "log": "",
+    "file_count": 0,
+    "files": []
+  }
+}

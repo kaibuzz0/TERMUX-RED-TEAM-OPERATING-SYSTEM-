@@ -10,6 +10,25 @@ import time
 import unittest
 from pathlib import Path
 
+import sys
+import multiprocessing
+
+import sys
+import multiprocessing
+
+import pytest
+
+# These tests use multiprocessing with local closures as worker targets. On
+# Windows the default start method is 'spawn', which requires worker targets to
+# be picklable/top-level. The local closures cannot be spawned, so the suite is
+# skipped on win32+spawn until the workers are refactored to module-level
+# functions (see HRA-004).
+if sys.platform == "win32" and multiprocessing.get_start_method() == "spawn":
+    pytest.skip(
+        "multiprocessing tests require fork or top-level workers (Windows spawn incompatible)",
+        allow_module_level=True,
+    )
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
