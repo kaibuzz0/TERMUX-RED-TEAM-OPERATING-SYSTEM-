@@ -122,7 +122,16 @@
         "Legacy duplicate files removed"
       ],
       "suggested_commit_boundary": "security: consolidate trust anchor and remove duplicate release PEM",
-      "notes": "Consider key rotation if the old key touched the hivedev tooling."
+      "notes": "Consider key rotation if the old key touched the hivedev tooling.",
+      "status": "completed",
+      "resolution": {
+        "canonical_path": "updates/trust_store/hive-release.pem",
+        "duplicate_removed": "releases/1.0.0/hive-release.pem",
+        "historical_preservation": "evidence/historical-releases/1.0.0/",
+        "key_rotation": false,
+        "reason": "No key rotation performed. The duplicate PEM was byte-identical to the canonical trust anchor. Production trust root is unchanged; historical release bundle moved to evidence/ for reference.",
+        "verification": "All trust, bootstrap, update, release verifier, and tamper tests pass."
+      }
     },
     {
       "id": "REM-003",
