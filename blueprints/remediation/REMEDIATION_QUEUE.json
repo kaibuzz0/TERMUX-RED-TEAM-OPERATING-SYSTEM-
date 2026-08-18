@@ -170,7 +170,14 @@
         "No regression on Linux/Termux"
       ],
       "suggested_commit_boundary": "fix(bootstrap): preserve ACLs during transactional rollback on Windows",
-      "notes": "Use pywin32 or ctypes to snapshot/restore DACLs."
+      "notes": "Use pywin32 or ctypes to snapshot/restore DACLs.",
+      "status": "completed",
+      "resolution": {
+        "change": "_snapshot_regular_file captures Windows ACL via ctypes/advapi32; _restore_file_snapshot reapplies captured ACL after content rollback.",
+        "test_result": "3 passed, 1 skipped in tests/test_bootstrap_finalization_transaction.py",
+        "note": "On non-Windows platforms acl field remains None; POSIX chmod fallback still applies.",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-004",
