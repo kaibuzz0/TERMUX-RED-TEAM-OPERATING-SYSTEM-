@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-08-17",
+  "release_scope": "excluded-blueprints-only",
+  "toolsets": [
+    {
+      "id": "repo-factory",
+      "name": "Repo Factory",
+      "path": "blueprints/toolsets/repo-factory",
+      "version": "0.1.0",
+      "maturity": "experimental",
+      "entrypoint": "python blueprints/toolsets/repo-factory/export_toolset.py",
+      "source": "kaibuzz0/cipher-solving-suite@main:toolsets/repo-factory"
+    },
+    {
+      "id": "github-repo-ops",
+      "name": "GitHub Repository Operations",
+      "path": "blueprints/toolsets/github-repo-ops",
+      "version": "0.1.0",
+      "maturity": "experimental",
+      "entrypoint": "python blueprints/toolsets/github-repo-ops/connectors/export_repo_snapshot.py",
+      "source": "kaibuzz0/Git-hub-command-site@main"
+    }
+  ]
+}
