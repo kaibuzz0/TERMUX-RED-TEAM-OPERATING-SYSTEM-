@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-18T00:18:24Z",
-  "source_commit": "399ae80a278eb048189ea43e45a90fb4b80eee3a",
+  "generated_at": "2026-08-18T23:13:26Z",
+  "source_commit": "f225f6ecd4421269e60c42ecead671b63118bcf9",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,15 +9,15 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 942,
+    "tracked_files": 997,
     "python_files": 406,
     "javascript_typescript_files": 1,
     "workflow_files": 4,
-    "test_files": 170
+    "test_files": 191
   },
   "repository_tree": {
-    "total_files": 942,
-    "total_directories": 113,
+    "total_files": 997,
+    "total_directories": 121,
     "files_truncated": false,
     "directories_truncated": false,
     "top_level": [
@@ -58,6 +58,7 @@
       "diagnostics",
       "docs",
       "emergency-repair.sh",
+      "evidence",
       "examples",
       "hive-canonical.json",
       "hive_broker",
@@ -273,7 +274,7 @@
         "path": "blueprints",
         "name": "blueprints",
         "depth": 1,
-        "file_count": 292
+        "file_count": 305
       },
       {
         "path": "blueprints/00-baseline",
@@ -340,6 +341,12 @@
         "name": "10-reviews",
         "depth": 2,
         "file_count": 7
+      },
+      {
+        "path": "blueprints/audits",
+        "name": "audits",
+        "depth": 2,
+        "file_count": 2
       },
       {
         "path": "blueprints/implementation",
@@ -468,6 +475,24 @@
         "file_count": 13
       },
       {
+        "path": "blueprints/remediation",
+        "name": "remediation",
+        "depth": 2,
+        "file_count": 11
+      },
+      {
+        "path": "blueprints/remediation/investigations",
+        "name": "investigations",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/remediation/plans",
+        "name": "plans",
+        "depth": 3,
+        "file_count": 9
+      },
+      {
         "path": "blueprints/toolsets",
         "name": "toolsets",
         "depth": 2,
@@ -592,6 +617,30 @@
         "name": "releases",
         "depth": 2,
         "file_count": 4
+      },
+      {
+        "path": "evidence",
+        "name": "evidence",
+        "depth": 1,
+        "file_count": 42
+      },
+      {
+        "path": "evidence/bootstrap",
+        "name": "bootstrap",
+        "depth": 2,
+        "file_count": 17
+      },
+      {
+        "path": "evidence/diff",
+        "name": "diff",
+        "depth": 2,
+        "file_count": 3
+      },
+      {
+        "path": "evidence/master",
+        "name": "master",
+        "depth": 2,
+        "file_count": 17
       },
       {
         "path": "examples",
@@ -2245,6 +2294,16 @@
         "extension": ".md"
       },
       {
+        "path": "blueprints/audits/HERMES_AUDIT_FINDINGS.json",
+        "name": "HERMES_AUDIT_FINDINGS.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/audits/HERMES_FULL_REPO_AUDIT.md",
+        "name": "HERMES_FULL_REPO_AUDIT.md",
+        "extension": ".md"
+      },
+      {
         "path": "blueprints/implementation/milestone-1/MILESTONE1_REPORT.md",
         "name": "MILESTONE1_REPORT.md",
         "extension": ".md"
@@ -3005,6 +3064,61 @@
         "extension": ".md"
       },
       {
+        "path": "blueprints/remediation/REMEDIATION_QUEUE.json",
+        "name": "REMEDIATION_QUEUE.json",
+        "extension": ".json"
+      },
+      {
+        "path": "blueprints/remediation/investigations/INVESTIGATIONS.md",
+        "name": "INVESTIGATIONS.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/CI_AND_TEST_PLAN.md",
+        "name": "CI_AND_TEST_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/CONCURRENCY_AND_SERVICE_PLAN.md",
+        "name": "CONCURRENCY_AND_SERVICE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/DOCS_AND_CONFIG_PLAN.md",
+        "name": "DOCS_AND_CONFIG_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/DUPLICATE_AND_DEAD_CODE_PLAN.md",
+        "name": "DUPLICATE_AND_DEAD_CODE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/MASTER_REMEDIATION_PLAN.md",
+        "name": "MASTER_REMEDIATION_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/RC2_ACCEPTANCE_PLAN.md",
+        "name": "RC2_ACCEPTANCE_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/RELEASE_AND_BOOTSTRAP_PLAN.md",
+        "name": "RELEASE_AND_BOOTSTRAP_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/SECURITY_AND_TRUST_PLAN.md",
+        "name": "SECURITY_AND_TRUST_PLAN.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/remediation/plans/TERMUX_PORTABILITY_PLAN.md",
+        "name": "TERMUX_PORTABILITY_PLAN.md",
+        "extension": ".md"
+      },
+      {
         "path": "blueprints/toolsets/README.md",
         "name": "README.md",
         "extension": ".md"
@@ -3718,6 +3832,216 @@
         "path": "emergency-repair.sh",
         "name": "emergency-repair.sh",
         "extension": ".sh"
+      },
+      {
+        "path": "evidence/baseline.json",
+        "name": "baseline.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/bootstrap/automated_scan.json",
+        "name": "automated_scan.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/bootstrap/ci_health.json",
+        "name": "ci_health.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/bootstrap/ci_tests.json",
+        "name": "ci_tests.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/bootstrap/deep_scan.json",
+        "name": "deep_scan.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/bootstrap/ls-files.txt",
+        "name": "ls-files.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pygount-summary-after-fixes.txt",
+        "name": "pygount-summary-after-fixes.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pygount-summary.txt",
+        "name": "pygount-summary.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_collect.txt",
+        "name": "pytest_collect.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_final.txt",
+        "name": "pytest_final.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full.txt",
+        "name": "pytest_full.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full_after_batch2.txt",
+        "name": "pytest_full_after_batch2.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full_after_cleanfixes.txt",
+        "name": "pytest_full_after_cleanfixes.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full_after_patches.txt",
+        "name": "pytest_full_after_patches.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full_after_skipfix.txt",
+        "name": "pytest_full_after_skipfix.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_full_after_symlinkfix.txt",
+        "name": "pytest_full_after_symlinkfix.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/pytest_run.txt",
+        "name": "pytest_run.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/bootstrap/recent_commits.txt",
+        "name": "recent_commits.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/diff/branch_state.json",
+        "name": "branch_state.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/diff/branch_state_after_cleanup.json",
+        "name": "branch_state_after_cleanup.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/diff/recent_log.txt",
+        "name": "recent_log.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/duplicate_map.json",
+        "name": "duplicate_map.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/inventories.json",
+        "name": "inventories.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/master/automated_scan.json",
+        "name": "automated_scan.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/master/ci_health.json",
+        "name": "ci_health.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/master/ci_tests.json",
+        "name": "ci_tests.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/master/deep_scan.json",
+        "name": "deep_scan.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/master/ls-files.txt",
+        "name": "ls-files.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pygount-summary-after-fixes.txt",
+        "name": "pygount-summary-after-fixes.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pygount-summary.txt",
+        "name": "pygount-summary.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_collect.txt",
+        "name": "pytest_collect.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_final.txt",
+        "name": "pytest_final.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full.txt",
+        "name": "pytest_full.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full_after_batch2.txt",
+        "name": "pytest_full_after_batch2.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full_after_cleanfixes.txt",
+        "name": "pytest_full_after_cleanfixes.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full_after_patches.txt",
+        "name": "pytest_full_after_patches.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full_after_skipfix.txt",
+        "name": "pytest_full_after_skipfix.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_full_after_symlinkfix.txt",
+        "name": "pytest_full_after_symlinkfix.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/pytest_run.txt",
+        "name": "pytest_run.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master/recent_commits.txt",
+        "name": "recent_commits.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/master_top_files.json",
+        "name": "master_top_files.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/security_scan_raw.json",
+        "name": "security_scan_raw.json",
+        "extension": ".json"
       },
       {
         "path": "examples/plugins/hive-status/__init__.py",
@@ -5492,6 +5816,62 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "f225f6ecd4421269e60c42ecead671b63118bcf9",
+      "type": "commit",
+      "title": "Merge pull request #8 from kaibuzz0/hive-v2-remediation",
+      "timestamp": "2026-08-18T18:13:16-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f225f6ecd4421269e60c42ecead671b63118bcf9"
+    },
+    {
+      "id": "c91be94643967868fb53b63329246fdff924661e",
+      "type": "commit",
+      "title": "docs(remediation): Issue #7 blueprint package",
+      "timestamp": "2026-08-17T20:51:43-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/c91be94643967868fb53b63329246fdff924661e"
+    },
+    {
+      "id": "47d09f6571fb9548d4b40c473f570c438564acd6",
+      "type": "commit",
+      "title": "docs(audit): HERMES full repo audit deliverables for Issue #6",
+      "timestamp": "2026-08-17T20:47:30-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/47d09f6571fb9548d4b40c473f570c438564acd6"
+    },
+    {
+      "id": "02956ad93a2e6f986512c6f045eec87e794d1986",
+      "type": "commit",
+      "title": "fix(audit): remaining Windows/test issues and restart policy bug",
+      "timestamp": "2026-08-17T20:42:59-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/02956ad93a2e6f986512c6f045eec87e794d1986"
+    },
+    {
+      "id": "37141c66652a9557e59f7324f5ea705e30e218e3",
+      "type": "commit",
+      "title": "fix(audit): Windows/CI portability fixes and hardcoded-path cleanups",
+      "timestamp": "2026-08-17T20:22:46-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/37141c66652a9557e59f7324f5ea705e30e218e3"
+    },
+    {
+      "id": "ef0a4c03ca6d8320ebd154f7868da56a0a633571",
+      "type": "commit",
+      "title": "fix(audit): Windows portability fixes for test suite",
+      "timestamp": "2026-08-17T20:07:36-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/ef0a4c03ca6d8320ebd154f7868da56a0a633571"
+    },
+    {
+      "id": "a9d5f01178095cb5e8f55031ac3d091a4a035a17",
+      "type": "commit",
+      "title": "fix(audit): honor $HOME in finalization snapshots and best-effort mode restore",
+      "timestamp": "2026-08-17T19:55:54-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a9d5f01178095cb5e8f55031ac3d091a4a035a17"
+    },
+    {
+      "id": "9b1c972020b2c5d289558058a92d327384a37c56",
+      "type": "commit",
+      "title": "security(audit): remove fake RSA private key markers from honeytrap decoy",
+      "timestamp": "2026-08-17T19:44:33-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/9b1c972020b2c5d289558058a92d327384a37c56"
+    },
+    {
       "id": "399ae80a278eb048189ea43e45a90fb4b80eee3a",
       "type": "commit",
       "title": "Merge pull request #5 from kaibuzz0/hive-1.1-rc2-bootstrap",
@@ -5504,62 +5884,6 @@
       "title": "tools: import reusable repository toolsets",
       "timestamp": "2026-08-17T19:17:44-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f69e5a48e1544b48927a4b662314011bef4d5d0f"
-    },
-    {
-      "id": "60efd34807b05b3b680d03a12caf987e9ae352f2",
-      "type": "commit",
-      "title": "Command site: enable repository Explorer snapshots",
-      "timestamp": "2026-08-16T19:19:59-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/60efd34807b05b3b680d03a12caf987e9ae352f2"
-    },
-    {
-      "id": "85de2c43e928d595cb9e3825e80456c16e41424c",
-      "type": "commit",
-      "title": "Connect repository to GitHub Command Site",
-      "timestamp": "2026-08-16T18:59:09-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/85de2c43e928d595cb9e3825e80456c16e41424c"
-    },
-    {
-      "id": "aeb13519c6064fc8d9d3badc7d53e0603016f2ab",
-      "type": "commit",
-      "title": "Merge pull request #4 from kaibuzz0/hive-1.1-rc2-bootstrap",
-      "timestamp": "2026-08-16T18:55:14-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/aeb13519c6064fc8d9d3badc7d53e0603016f2ab"
-    },
-    {
-      "id": "aa579843a31c1f13bcf78a72a58b734f966db35f",
-      "type": "commit",
-      "title": "docs: add explicit Hive V2 release acceptance gate",
-      "timestamp": "2026-08-16T13:32:42-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/aa579843a31c1f13bcf78a72a58b734f966db35f"
-    },
-    {
-      "id": "2f2a3e4c1cbdb6b1c263bba5cc69bcad99a24d41",
-      "type": "commit",
-      "title": "fix: harden legacy detection against unreadable host paths",
-      "timestamp": "2026-08-16T13:31:55-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/2f2a3e4c1cbdb6b1c263bba5cc69bcad99a24d41"
-    },
-    {
-      "id": "5f110c8faa2e037c1ad47bfa5f241953a897fb1f",
-      "type": "commit",
-      "title": "fix: make runtime detection permission-safe",
-      "timestamp": "2026-08-16T13:31:33-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/5f110c8faa2e037c1ad47bfa5f241953a897fb1f"
-    },
-    {
-      "id": "3bdd64ae817e0cf89325298ca0bab1dbc25cffb2",
-      "type": "commit",
-      "title": "Merge pull request #3 from kaibuzz0/hive-1.1-rc2-bootstrap",
-      "timestamp": "2026-08-16T11:23:33-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/3bdd64ae817e0cf89325298ca0bab1dbc25cffb2"
-    },
-    {
-      "id": "12691465f3f3d5a837b210c44e52d106de71fd10",
-      "type": "commit",
-      "title": "test: align candidate gate errors",
-      "timestamp": "2026-08-16T11:05:56-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12691465f3f3d5a837b210c44e52d106de71fd10"
     }
   ],
   "links": [
