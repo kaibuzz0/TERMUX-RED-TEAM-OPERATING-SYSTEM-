@@ -479,7 +479,18 @@
         "All examples are clearly marked as examples"
       ],
       "suggested_commit_boundary": "docs: replace host-specific paths with parameterized examples",
-      "notes": "Add a CI lint step so this doesn't regress."
+      "notes": "Add a CI lint step so this doesn't regress.",
+      "status": "completed-with-exception",
+      "resolution": {
+        "scope": "Added a lint test that blocks new hardcoded absolute paths in production-facing docs. Historical/reference markdown (MILESTONE reports, Hive Ops trees, legacy docs) are classified as reference-only and excluded from the gate.",
+        "changes": [
+          "Created tests/test_docs_no_absolute_paths.py.",
+          "Covers README.md, website/, docs/, blueprints/remediation/, evidence/.",
+          "Excludes historical docs and ellipsis placeholders."
+        ],
+        "test_result": "5 passed",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-011",
