@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "github-repo-ops",
+  "name": "GitHub Repository Operations",
+  "version": "0.1.0",
+  "maturity": "experimental",
+  "description": "Portable repository snapshot and onboarding utilities for GitHub command/workbench integration.",
+  "entrypoint": "connectors/export_repo_snapshot.py",
+  "dependencies": ["git"],
+  "provenance": "kaibuzz0/Git-hub-command-site@main",
+  "release_scope": "excluded-blueprints-only"
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "repo-factory",
+  "name": "Repo Factory",
+  "version": "0.1.0",
+  "maturity": "experimental",
+  "description": "Exportable AI-friendly repository bootstrap with diagnostic CI, blueprints, research logs, work queues, handoffs, checklists, current state, and integration inbox.",
+  "entrypoint": "export_toolset.py",
+  "dependencies": [],
+  "provenance": "kaibuzz0/cipher-solving-suite@main:toolsets/repo-factory",
+  "release_scope": "excluded-blueprints-only"
+}
