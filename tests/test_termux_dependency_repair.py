@@ -59,7 +59,7 @@ def _stdlib_modules() -> set[str]:
     stdlib = set(sys.builtin_module_names)
     stdlib |= {
         "argparse", "base64", "collections", "concurrent", "copy", "dataclasses",
-        "datetime", "enum", "errno", "getpass", "hashlib", "json", "os", "pathlib",
+        "datetime", "enum", "errno", "getpass", "gzip", "gzip", "hashlib", "json", "os", "pathlib",
         "platform", "re", "secrets", "shutil", "signal", "socket", "stat",
         "subprocess", "sys", "tarfile", "tempfile", "time", "typing", "uuid",
         "zipfile", "inspect", "textwrap", "logging", "threading", "numbers",
@@ -185,7 +185,7 @@ class TermuxDependencyRepairTests(unittest.TestCase):
         runtime = _parse_requirements(RUNTIME_REQS)
         # Known internal packages are OK
         internals = {
-            "config_engine", "policy_engine", "hive_broker", "operations_center",
+            "bootstrap", "bootstrap", "config_engine", "policy_engine", "hive_broker", "operations_center",
             "services", "installer", "security", "plugin_sdk", "release_engine",
             "updates", "lib", "version", "schema", "network", "runtime_logs", "diagnostics", "home", "hive_operator", "config",
         }

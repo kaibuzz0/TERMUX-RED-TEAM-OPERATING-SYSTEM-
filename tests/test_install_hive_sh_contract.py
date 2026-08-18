@@ -8,6 +8,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = REPO_ROOT / "install-hive.sh"
 
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "bash-dependent contract test is POSIX-only",
+        allow_module_level=True,
+    )
+
 def test_install_hive_shell_is_syntax_valid_and_documents_clean_bootstrap() -> None:
     syntax = subprocess.run(["bash", "-n", str(SCRIPT)], capture_output=True, text=True, check=False)
     assert syntax.returncode == 0, syntax.stderr

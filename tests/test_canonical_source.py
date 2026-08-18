@@ -7,6 +7,7 @@ runtime behavior.
 
 import json
 import os
+import sys
 import re
 import unittest
 from pathlib import Path
@@ -165,8 +166,14 @@ class DuplicateEntrypointDebtTests(unittest.TestCase):
                 base = os.path.splitext(f)[0]
                 if base in candidate_names:
                     full = Path(root) / f
-                    # Only count executables or shell scripts
-                    if full.suffix in {".sh", ".py"} or os.access(full, os.X_OK):
+                    # Only count executables or shell scripts. On Windows,
+                    # os.access(X_OK) is always true, so restrict to known
+                    # script extensions there (HRA-008).
+                    if sys.platform == "win32":
+                        is_entrypoint = full.suffix in {".sh", ".py"}
+                    else:
+                        is_entrypoint = full.suffix in {".sh", ".py"} or os.access(full, os.X_OK)
+                    if is_entrypoint:
                         found[base].append(str(full.relative_to(REPO_ROOT)).replace(os.sep, "/"))
 
         # Build set of known paths

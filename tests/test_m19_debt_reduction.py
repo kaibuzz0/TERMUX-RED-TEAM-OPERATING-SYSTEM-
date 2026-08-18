@@ -86,6 +86,9 @@ class TestDebtReduction:
     # -----------------------------------------------------------------------
 
     def test_permission_denied_on_restricted_file(self):
+        import sys, pytest
+        if sys.platform == "win32":
+            pytest.skip("Windows does not enforce POSIX permission bits")
         """J2: Accessing a file with mode 000 must raise PermissionError.
 
         NOTE: As root inside PRoot, chmod restrictions may be bypassed.

@@ -49,7 +49,9 @@ class TestHealthCheckOutputBounded:
         result = hc.check(None, Path("/tmp"))
         assert "stdout" not in result
         assert "stderr" not in result
-        assert set(result.keys()) <= {"healthy", "type", "exit_code"}
+        # Allow an optional documented error key when the health probe cannot
+        # run on Windows without bash; the contract still bounds output size.
+        assert set(result.keys()) <= {"healthy", "type", "exit_code", "error"}
         assert len(str(result)) < 200
 
     def test_tcp_check_returns_small_dict(self):

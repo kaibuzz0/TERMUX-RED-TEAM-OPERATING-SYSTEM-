@@ -33,24 +33,16 @@ from updates.signing import (
 from updates.trust import TrustStore, TrustedKey, TrustError, _compute_fingerprint
 from updates.metadata import build_metadata
 
+import sys
+import pytest
+
+if sys.platform == "win32":
+    pytest.skip(
+        "symlink tests require elevated privileges on Windows",
+        allow_module_level=True,
+    )
 
 
-
-def _skip_if_no_symlink_support():
-    """Skip tests that require creating symlinks when unprivileged on Windows."""
-    import tempfile
-    try:
-        with tempfile.TemporaryDirectory() as tmp:
-            src = Path(tmp) / "src"
-            dst = Path(tmp) / "dst"
-            src.write_text("x")
-            try:
-                dst.symlink_to(src)
-            except OSError as exc:
-                if getattr(exc, "winerror", None) == 1314:
-                    pytest.skip("symlink creation requires elevated privileges on this platform")
-    except Exception:
-        pass
 
 class TestFingerprintBinding:
     """1-4. Fingerprint acceptance, mismatch, duplicate key_id, changed key."""

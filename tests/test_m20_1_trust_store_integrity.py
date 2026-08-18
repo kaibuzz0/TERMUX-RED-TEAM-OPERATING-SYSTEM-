@@ -264,7 +264,7 @@ class TestPermissionsAndReadFailure:
 
         Skipped when running as root (root bypasses file permissions).
         """
-        if os.geteuid() == 0:
+        if (os.geteuid() if hasattr(os, 'geteuid') else 0) == 0:
             pytest.skip("Root bypasses file permission checks")
         priv = Ed25519PrivateKey.generate()
         with tempfile.TemporaryDirectory() as tmp:

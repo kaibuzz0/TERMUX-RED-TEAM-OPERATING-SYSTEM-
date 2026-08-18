@@ -22,20 +22,20 @@ from services.supervisor import Supervisor, ServiceConfigError
 
 
 def _skip_if_no_symlink_support():
-    """Skip tests that require creating symlinks when unprivileged on Windows."""
-    import tempfile
+    """Skip the current test if this Windows session cannot create symlinks."""
+    import sys, tempfile
+    if sys.platform != "win32":
+        return
+    from pathlib import Path
     try:
         with tempfile.TemporaryDirectory() as tmp:
             src = Path(tmp) / "src"
             dst = Path(tmp) / "dst"
             src.write_text("x")
-            try:
-                dst.symlink_to(src)
-            except OSError as exc:
-                if getattr(exc, "winerror", None) == 1314:
-                    pytest.skip("symlink creation requires elevated privileges on this platform")
-    except Exception:
-        pass
+            dst.symlink_to(src)
+    except OSError as exc:
+        if getattr(exc, "winerror", None) == 1314:
+            pytest.skip("symlink creation requires elevated privileges on this platform")
 
 class TestResourceExhaustion:
     # -----------------------------------------------------------------------

@@ -277,12 +277,17 @@ class TestCompatibilityNegotiationDistinct:
 
     def test_no_schema_version_negotiation_in_production(self):
         """No production module contains schema version negotiation logic."""
+        import sys, re
+        if sys.platform == "win32":
+            pytest.skip("grep-based static scan is POSIX-only")
         import subprocess
+        # Resolve repo root relative to this test file instead of hardcoding
+        repo_root = Path(__file__).resolve().parent.parent
         result = subprocess.run(
             ["grep", "-rni", "schema_version.*negotiat",
              "--include=*.py", "."],
             capture_output=True, text=True,
-            cwd="/root/hive-m18/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
+            cwd=str(repo_root),
         )
         lines = [l for l in result.stdout.splitlines()
                  if "tests/" not in l and "venv/" not in l and "__pycache__" not in l

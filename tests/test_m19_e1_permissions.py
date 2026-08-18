@@ -25,28 +25,13 @@ from updates.trust import TrustStore
 from updates.signing import export_public_key_pem
 
 
-
-
-def _skip_if_no_symlink_support():
-    """Skip tests that require creating symlinks when unprivileged on Windows."""
-    import tempfile
-    try:
-        with tempfile.TemporaryDirectory() as tmp:
-            src = Path(tmp) / "src"
-            dst = Path(tmp) / "dst"
-            src.write_text("x")
-            try:
-                dst.symlink_to(src)
-            except OSError as exc:
-                if getattr(exc, "winerror", None) == 1314:
-                    pytest.skip("symlink creation requires elevated privileges on this platform")
-    except Exception:
-        pass
-
 class TestVaultStoragePermissions:
     """Vault storage attempts restrictive permissions on temp files."""
 
     def test_vault_write_sets_owner_only_permissions(self):
+        import sys, pytest
+        if sys.platform == "win32":
+            pytest.skip("Windows ACLs cannot enforce POSIX owner-only mode")
         """VaultStorage.write() attempts chmod(0o600) on temp file."""
         with tempfile.TemporaryDirectory() as tmp:
             vault_dir = Path(tmp) / "vault"
