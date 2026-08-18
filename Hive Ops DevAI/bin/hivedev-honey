@@ -190,12 +190,10 @@ port = 22
             ]
         },
         'ssh_key': {
-            'content': """-----BEGIN RSA PRIVATE KEY-----
-MIIEpAIBAAKCAQEAx{random_base64}
-{random_base64}
-{random_base64}
-{random_base64}
------END RSA PRIVATE KEY-----
+            'content': """[REDACTED PRIVATE KEY PLACEHOLDER - real keys generated at runtime per install]
+
+# SSH Key for prod-server-{random}
+# Generated: {timestamp}
 
 # SSH Key for prod-server-{random}
 # Generated: {timestamp}
