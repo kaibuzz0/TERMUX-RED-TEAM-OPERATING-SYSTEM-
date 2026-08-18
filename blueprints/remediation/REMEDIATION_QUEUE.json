@@ -257,7 +257,18 @@
         "No behavior change beyond tests"
       ],
       "suggested_commit_boundary": "test(restart): add regression tests for window=0 crash-loop enforcement",
-      "notes": "Source fix already done in audit phase; this locks in the contract."
+      "notes": "Source fix already done in audit phase; this locks in the contract.",
+      "status": "completed",
+      "validation": {
+        "source_state": "Fix already committed in audit phase (HRA-015).",
+        "tests_added": [
+          "test_zero_window_enforces_crash_loop_within_burst",
+          "test_positive_window_resets_attempts_after_elapsed_time",
+          "test_mark_success_resets_crash_loop_state"
+        ],
+        "test_result": "9 passed in test_service_restart.py",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-007",
