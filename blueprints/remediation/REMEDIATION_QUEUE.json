@@ -44,7 +44,13 @@
         "README/CONTRIBUTING references CI matrix"
       ],
       "suggested_commit_boundary": "ci: pin actions and document platform matrix",
-      "notes": "Do not start code fixes until CI baseline is reproducible."
+      "notes": "Do not start code fixes until CI baseline is reproducible.",
+      "status": "completed-with-exception",
+      "resolution": {
+        "baseline": "Full suite passes on Windows Python 3.11: 1472 passed, 28 skipped, 1 known flaky timeout (test_overview_partial passes in isolation).",
+        "ci_state": "CI workflows present and cherry-picked onto hive-v2-remediation. No new workflow changes made in this branch; baseline validation done via local pytest.",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-001",
@@ -395,7 +401,16 @@
         "Legacy Hive Ops bin/ dirs removed or moved to blueprints/deprecated"
       ],
       "suggested_commit_boundary": "cleanup: consolidate canonical launchers and remove legacy duplicates",
-      "notes": "Preserve historical files in blueprints/deprecated if they have documentation value."
+      "notes": "Preserve historical files in blueprints/deprecated if they have documentation value.",
+      "status": "completed",
+      "resolution": {
+        "canonical_dispatcher": "bin/hive",
+        "compatibility_wrapper": "bin/hive-os (delegates to bin/hive)",
+        "deprecated_copies": "moved to blueprints/deprecated/",
+        "classification": "MODERN_CANONICAL = bin/hive; COMPATIBILITY_WRAPPER = bin/hive-os; REFERENCE_ONLY = blueprints/deprecated/; REMOVED_FROM_PAYLOAD = duplicate Hive Ops launchers",
+        "test_result": "20 passed in tests/test_canonical_source.py",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-010",

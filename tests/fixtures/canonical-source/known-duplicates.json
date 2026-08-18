@@ -14,14 +14,15 @@
       "Hive Ops DevAI/hive_swarm_integration.py",
       "Hive Ops Final/swarm-core/hive_swarm_integration.py"
     ],
-    "hive": [
-      "Hive Ops Final/bin/hive",
-      "Hive Ops Final/original hive os complete/bin/hive",
-      "bin/hive"
-    ],
     "install": [
       "installer/install.py"
     ]
   },
-  "migration_state": "canonical-source-declared"
+  "migration_state": "canonical-runtime-consolidated",
+  "compatibility_wrappers": {
+    "bin/hive-os": "delegates to bin/hive"
+  },
+  "canonical_entrypoints": {
+    "bin/hive": "authoritative production dispatcher"
+  }
 }
