@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
+import http.client
 import socket
 import subprocess
 import time
 from pathlib import Path
 from typing import Any
-
-from services.errors import ServiceRuntimeError
 
 
 class HealthCheck:
@@ -59,7 +58,6 @@ class HealthCheck:
             return {"healthy": False, "type": "tcp-local"}
 
     def _http_check(self) -> dict[str, Any]:
-        import urllib.request
         host = self.config.get("host", "127.0.0.1")
         port = self.config.get("port")
         path = self.config.get("path", "/")
@@ -68,14 +66,23 @@ class HealthCheck:
             return {"healthy": False, "type": "http-local", "error": f"Non-loopback host rejected: {host}"}
         if not isinstance(port, int) or port <= 0 or port > 65535:
             return {"healthy": False, "type": "http-local", "error": f"Invalid port: {port}"}
-        url = f"http://{host}:{port}{path}"
+        if not isinstance(path, str) or not path.startswith("/") or "\r" in path or "\n" in path:
+            return {"healthy": False, "type": "http-local", "error": "Invalid HTTP path"}
+
+        connection = http.client.HTTPConnection(host, port, timeout=timeout)
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Hive-OS/1.1"})
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                _ = resp.read()
-            return {"healthy": True, "type": "http-local"}
+            connection.request("GET", path, headers={"User-Agent": "Hive-OS/1.1"})
+            response = connection.getresponse()
+            _ = response.read()
+            healthy = 200 <= response.status < 400
+            result = {"healthy": healthy, "type": "http-local", "status": response.status}
+            if not healthy:
+                result["error"] = f"HTTP status {response.status}"
+            return result
         except Exception as e:
             return {"healthy": False, "type": "http-local", "error": str(e)}
+        finally:
+            connection.close()
 
     def _file_check(self, log_root: Path) -> dict[str, Any]:
         rel = self.config.get("path")
