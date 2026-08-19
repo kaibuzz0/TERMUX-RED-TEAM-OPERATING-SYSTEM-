@@ -21,7 +21,7 @@ pynacl>=1.5.0
 bcrypt>=4.0.0
 
 # AI & NLP (for brain-plug/therapist components)
-nltk>=3.8.0
+nltk>=3.10.3
 numpy>=1.24.0
 joblib>=1.3.0
 pronouncing>=0.2.0
