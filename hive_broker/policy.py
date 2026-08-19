@@ -11,7 +11,6 @@ from typing import Any
 
 from config_engine.config import get_config
 from hive_broker.errors import PolicyError
-from policy_engine.capabilities import is_read_only
 from policy_engine.decisions import DecisionState
 from policy_engine.engine import PolicyEngine
 from policy_engine.requests import PolicyRequest
@@ -61,6 +60,30 @@ def evaluate_action(action: str, profile_name: str, context: dict[str, Any] | No
     request = _make_request("broker", action, ctx)
     decision = engine.evaluate(request, profile_name=profile_name)
     return decision.to_dict()
+
+
+def check_policy(
+    *,
+    actor_type: str,
+    capability: str,
+    resource_type: str,
+    resource_id: str,
+    profile_name: str = "observer",
+) -> dict[str, Any]:
+    """Evaluate one diagnostic policy request without dispatching any adapter."""
+    context = _base_context()
+    context["broker_policy_profile"] = profile_name
+    request = PolicyRequest.from_dict(
+        {
+            "schema_version": 1,
+            "request_id": "broker-policy-check",
+            "actor": {"type": actor_type, "id": "broker-cli"},
+            "capability": capability,
+            "resource": {"type": resource_type, "id": resource_id},
+            "context": context,
+        }
+    )
+    return _engine().evaluate(request, profile_name=profile_name).to_dict()
 
 
 def _engine() -> PolicyEngine:
