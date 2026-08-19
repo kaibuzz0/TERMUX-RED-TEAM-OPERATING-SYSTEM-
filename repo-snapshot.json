@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-18T23:13:26Z",
-  "source_commit": "f225f6ecd4421269e60c42ecead671b63118bcf9",
+  "generated_at": "2026-08-19T00:15:47Z",
+  "source_commit": "1f1dea7bf2f36dae9368235eb6253fcdd9514d6c",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,15 +9,15 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 997,
-    "python_files": 406,
+    "tracked_files": 1005,
+    "python_files": 409,
     "javascript_typescript_files": 1,
     "workflow_files": 4,
-    "test_files": 191
+    "test_files": 194
   },
   "repository_tree": {
-    "total_files": 997,
-    "total_directories": 121,
+    "total_files": 1005,
+    "total_directories": 129,
     "files_truncated": false,
     "directories_truncated": false,
     "top_level": [
@@ -75,7 +75,6 @@
       "plugin_sdk",
       "policy_engine",
       "release_engine",
-      "releases",
       "requirements-dev.txt",
       "requirements-extras.txt",
       "requirements-runtime.txt",
@@ -83,6 +82,7 @@
       "run-hive.cmd",
       "run-hive.ps1",
       "runtime_logs",
+      "scripts",
       "security",
       "services",
       "tests",
@@ -94,7 +94,7 @@
         "path": ".github",
         "name": ".github",
         "depth": 1,
-        "file_count": 4
+        "file_count": 5
       },
       {
         "path": ".github/workflows",
@@ -124,13 +124,13 @@
         "path": "Hive Ops DevAI",
         "name": "Hive Ops DevAI",
         "depth": 1,
-        "file_count": 54
+        "file_count": 53
       },
       {
         "path": "Hive Ops DevAI/bin",
         "name": "bin",
         "depth": 2,
-        "file_count": 43
+        "file_count": 42
       },
       {
         "path": "Hive Ops DevAI/docs",
@@ -148,7 +148,7 @@
         "path": "Hive Ops Final",
         "name": "Hive Ops Final",
         "depth": 1,
-        "file_count": 84
+        "file_count": 82
       },
       {
         "path": "Hive Ops Final/.termux",
@@ -166,7 +166,7 @@
         "path": "Hive Ops Final/bin",
         "name": "bin",
         "depth": 2,
-        "file_count": 4
+        "file_count": 3
       },
       {
         "path": "Hive Ops Final/etc",
@@ -184,7 +184,7 @@
         "path": "Hive Ops Final/original hive os complete",
         "name": "original hive os complete",
         "depth": 2,
-        "file_count": 23
+        "file_count": 22
       },
       {
         "path": "Hive Ops Final/original hive os complete/.config",
@@ -214,7 +214,7 @@
         "path": "Hive Ops Final/original hive os complete/bin",
         "name": "bin",
         "depth": 3,
-        "file_count": 13
+        "file_count": 12
       },
       {
         "path": "Hive Ops Final/original hive os complete/etc",
@@ -268,13 +268,13 @@
         "path": "bin",
         "name": "bin",
         "depth": 1,
-        "file_count": 3
+        "file_count": 4
       },
       {
         "path": "blueprints",
         "name": "blueprints",
         "depth": 1,
-        "file_count": 305
+        "file_count": 309
       },
       {
         "path": "blueprints/00-baseline",
@@ -347,6 +347,48 @@
         "name": "audits",
         "depth": 2,
         "file_count": 2
+      },
+      {
+        "path": "blueprints/deprecated",
+        "name": "deprecated",
+        "depth": 2,
+        "file_count": 4
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops DevAI",
+        "name": "Hive Ops DevAI",
+        "depth": 3,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops DevAI/bin",
+        "name": "bin",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final",
+        "name": "Hive Ops Final",
+        "depth": 3,
+        "file_count": 2
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final/bin",
+        "name": "bin",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final/original hive os complete",
+        "name": "original hive os complete",
+        "depth": 4,
+        "file_count": 1
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final/original hive os complete/bin",
+        "name": "bin",
+        "depth": 5,
+        "file_count": 1
       },
       {
         "path": "blueprints/implementation",
@@ -622,7 +664,7 @@
         "path": "evidence",
         "name": "evidence",
         "depth": 1,
-        "file_count": 42
+        "file_count": 48
       },
       {
         "path": "evidence/bootstrap",
@@ -635,6 +677,18 @@
         "name": "diff",
         "depth": 2,
         "file_count": 3
+      },
+      {
+        "path": "evidence/historical-releases",
+        "name": "historical-releases",
+        "depth": 2,
+        "file_count": 6
+      },
+      {
+        "path": "evidence/historical-releases/1.0.0",
+        "name": "1.0.0",
+        "depth": 3,
+        "file_count": 4
       },
       {
         "path": "evidence/master",
@@ -721,22 +775,16 @@
         "file_count": 18
       },
       {
-        "path": "releases",
-        "name": "releases",
-        "depth": 1,
-        "file_count": 5
-      },
-      {
-        "path": "releases/1.0.0",
-        "name": "1.0.0",
-        "depth": 2,
-        "file_count": 5
-      },
-      {
         "path": "runtime_logs",
         "name": "runtime_logs",
         "depth": 1,
         "file_count": 6
+      },
+      {
+        "path": "scripts",
+        "name": "scripts",
+        "depth": 1,
+        "file_count": 2
       },
       {
         "path": "security",
@@ -760,7 +808,7 @@
         "path": "tests",
         "name": "tests",
         "depth": 1,
-        "file_count": 171
+        "file_count": 173
       },
       {
         "path": "tests/fixtures",
@@ -818,6 +866,11 @@
       }
     ],
     "files": [
+      {
+        "path": ".github/dependabot.yml",
+        "name": "dependabot.yml",
+        "extension": ".yml"
+      },
       {
         "path": ".github/workflows/ci.yml",
         "name": "ci.yml",
@@ -886,11 +939,6 @@
       {
         "path": "Hive Ops DevAI/bin/hive-hermes",
         "name": "hive-hermes",
-        "extension": ""
-      },
-      {
-        "path": "Hive Ops DevAI/bin/hive-os",
-        "name": "hive-os",
         "extension": ""
       },
       {
@@ -1159,11 +1207,6 @@
         "extension": ".md"
       },
       {
-        "path": "Hive Ops Final/bin/hive",
-        "name": "hive",
-        "extension": ""
-      },
-      {
         "path": "Hive Ops Final/bin/hive-dashboard",
         "name": "hive-dashboard",
         "extension": ""
@@ -1207,11 +1250,6 @@
         "path": "Hive Ops Final/original hive os complete/.termux/boot/00-hive.sh",
         "name": "00-hive.sh",
         "extension": ".sh"
-      },
-      {
-        "path": "Hive Ops Final/original hive os complete/bin/hive",
-        "name": "hive",
-        "extension": ""
       },
       {
         "path": "Hive Ops Final/original hive os complete/bin/hive_logrotate.sh",
@@ -1671,6 +1709,11 @@
       {
         "path": "bin/hive",
         "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "bin/hive-os",
+        "name": "hive-os",
         "extension": ""
       },
       {
@@ -2301,6 +2344,26 @@
       {
         "path": "blueprints/audits/HERMES_FULL_REPO_AUDIT.md",
         "name": "HERMES_FULL_REPO_AUDIT.md",
+        "extension": ".md"
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops DevAI/bin/hive-os",
+        "name": "hive-os",
+        "extension": ""
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final/bin/hive",
+        "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "blueprints/deprecated/Hive Ops Final/original hive os complete/bin/hive",
+        "name": "hive",
+        "extension": ""
+      },
+      {
+        "path": "blueprints/deprecated/README.md",
+        "name": "README.md",
         "extension": ".md"
       },
       {
@@ -3944,6 +4007,36 @@
         "extension": ".json"
       },
       {
+        "path": "evidence/historical-releases/1.0.0-hive-release.pem",
+        "name": "1.0.0-hive-release.pem",
+        "extension": ".pem"
+      },
+      {
+        "path": "evidence/historical-releases/1.0.0/checksums.txt",
+        "name": "checksums.txt",
+        "extension": ".txt"
+      },
+      {
+        "path": "evidence/historical-releases/1.0.0/hive-os-1.0.0-release.manifest.json",
+        "name": "hive-os-1.0.0-release.manifest.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/historical-releases/1.0.0/hive-os-1.0.0-release.metadata.signed.json",
+        "name": "hive-os-1.0.0-release.metadata.signed.json",
+        "extension": ".json"
+      },
+      {
+        "path": "evidence/historical-releases/1.0.0/hive-os-1.0.0-release.tar.gz",
+        "name": "hive-os-1.0.0-release.tar.gz",
+        "extension": ".gz"
+      },
+      {
+        "path": "evidence/historical-releases/README.md",
+        "name": "README.md",
+        "extension": ".md"
+      },
+      {
         "path": "evidence/inventories.json",
         "name": "inventories.json",
         "extension": ".json"
@@ -4669,31 +4762,6 @@
         "extension": ".py"
       },
       {
-        "path": "releases/1.0.0/checksums.txt",
-        "name": "checksums.txt",
-        "extension": ".txt"
-      },
-      {
-        "path": "releases/1.0.0/hive-os-1.0.0-release.manifest.json",
-        "name": "hive-os-1.0.0-release.manifest.json",
-        "extension": ".json"
-      },
-      {
-        "path": "releases/1.0.0/hive-os-1.0.0-release.metadata.signed.json",
-        "name": "hive-os-1.0.0-release.metadata.signed.json",
-        "extension": ".json"
-      },
-      {
-        "path": "releases/1.0.0/hive-os-1.0.0-release.tar.gz",
-        "name": "hive-os-1.0.0-release.tar.gz",
-        "extension": ".gz"
-      },
-      {
-        "path": "releases/1.0.0/hive-release.pem",
-        "name": "hive-release.pem",
-        "extension": ".pem"
-      },
-      {
         "path": "requirements-dev.txt",
         "name": "requirements-dev.txt",
         "extension": ".txt"
@@ -4752,6 +4820,16 @@
         "path": "runtime_logs/service_logger.py",
         "name": "service_logger.py",
         "extension": ".py"
+      },
+      {
+        "path": "scripts/secret_scan_gate.py",
+        "name": "secret_scan_gate.py",
+        "extension": ".py"
+      },
+      {
+        "path": "scripts/termux-smoke-test.sh",
+        "name": "termux-smoke-test.sh",
+        "extension": ".sh"
       },
       {
         "path": "security/vault/__init__.py",
@@ -5036,6 +5114,11 @@
       {
         "path": "tests/test_digest_type_substitution.py",
         "name": "test_digest_type_substitution.py",
+        "extension": ".py"
+      },
+      {
+        "path": "tests/test_docs_no_absolute_paths.py",
+        "name": "test_docs_no_absolute_paths.py",
         "extension": ".py"
       },
       {
@@ -5644,6 +5727,11 @@
         "extension": ".py"
       },
       {
+        "path": "tests/test_tor_confirmation.py",
+        "name": "test_tor_confirmation.py",
+        "extension": ".py"
+      },
+      {
         "path": "tests/test_update_bundle.py",
         "name": "test_update_bundle.py",
         "extension": ".py"
@@ -5816,74 +5904,74 @@
   "agent_ops": {},
   "activity": [
     {
-      "id": "f225f6ecd4421269e60c42ecead671b63118bcf9",
+      "id": "1f1dea7bf2f36dae9368235eb6253fcdd9514d6c",
       "type": "commit",
-      "title": "Merge pull request #8 from kaibuzz0/hive-v2-remediation",
-      "timestamp": "2026-08-18T18:13:16-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f225f6ecd4421269e60c42ecead671b63118bcf9"
+      "title": "Merge pull request #9 from kaibuzz0/hive-v2-remediation",
+      "timestamp": "2026-08-18T19:15:37-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1f1dea7bf2f36dae9368235eb6253fcdd9514d6c"
     },
     {
-      "id": "c91be94643967868fb53b63329246fdff924661e",
+      "id": "f755a19aa894e2deb32fbadf971b006a382c1688",
       "type": "commit",
-      "title": "docs(remediation): Issue #7 blueprint package",
-      "timestamp": "2026-08-17T20:51:43-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/c91be94643967868fb53b63329246fdff924661e"
+      "title": "docs: add lint test preventing new absolute paths in production docs (REM-010)",
+      "timestamp": "2026-08-18T18:54:29-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f755a19aa894e2deb32fbadf971b006a382c1688"
     },
     {
-      "id": "47d09f6571fb9548d4b40c473f570c438564acd6",
+      "id": "f984d81a321d4763779b32b4c3703e49039d0cc2",
       "type": "commit",
-      "title": "docs(audit): HERMES full repo audit deliverables for Issue #6",
-      "timestamp": "2026-08-17T20:47:30-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/47d09f6571fb9548d4b40c473f570c438564acd6"
+      "title": "ci: add Termux smoke simulation job (REM-008)",
+      "timestamp": "2026-08-18T18:52:36-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f984d81a321d4763779b32b4c3703e49039d0cc2"
     },
     {
-      "id": "02956ad93a2e6f986512c6f045eec87e794d1986",
+      "id": "12c83655c7782cea5946979a2c646e92e090bf67",
       "type": "commit",
-      "title": "fix(audit): remaining Windows/test issues and restart policy bug",
-      "timestamp": "2026-08-17T20:42:59-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/02956ad93a2e6f986512c6f045eec87e794d1986"
+      "title": "ci: pin GitHub Actions to SHA, scope lint gates, add dependabot (REM-007)",
+      "timestamp": "2026-08-18T18:50:43-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/12c83655c7782cea5946979a2c646e92e090bf67"
     },
     {
-      "id": "37141c66652a9557e59f7324f5ea705e30e218e3",
+      "id": "b579bbdaa6515189048e91f9739bd5fce9ffda24",
       "type": "commit",
-      "title": "fix(audit): Windows/CI portability fixes and hardcoded-path cleanups",
-      "timestamp": "2026-08-17T20:22:46-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/37141c66652a9557e59f7324f5ea705e30e218e3"
+      "title": "test(registry): refactor concurrent registry tests for Windows spawn (REM-004)",
+      "timestamp": "2026-08-18T18:50:11-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b579bbdaa6515189048e91f9739bd5fce9ffda24"
     },
     {
-      "id": "ef0a4c03ca6d8320ebd154f7868da56a0a633571",
+      "id": "41ebde9ac19f3e4bce89510dae271343b8948265",
       "type": "commit",
-      "title": "fix(audit): Windows portability fixes for test suite",
-      "timestamp": "2026-08-17T20:07:36-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/ef0a4c03ca6d8320ebd154f7868da56a0a633571"
+      "title": "fix(bootstrap): capture and restore Windows ACLs during transactional rollback (REM-003)",
+      "timestamp": "2026-08-18T18:48:35-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/41ebde9ac19f3e4bce89510dae271343b8948265"
     },
     {
-      "id": "a9d5f01178095cb5e8f55031ac3d091a4a035a17",
+      "id": "bd11a520a6bb143a5d8471b80892699e3a7eeffb",
       "type": "commit",
-      "title": "fix(audit): honor $HOME in finalization snapshots and best-effort mode restore",
-      "timestamp": "2026-08-17T19:55:54-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a9d5f01178095cb5e8f55031ac3d091a4a035a17"
+      "title": "cleanup(runtime): consolidate canonical bin/hive and deprecate duplicate launchers (REM-009)",
+      "timestamp": "2026-08-18T18:46:53-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/bd11a520a6bb143a5d8471b80892699e3a7eeffb"
     },
     {
-      "id": "9b1c972020b2c5d289558058a92d327384a37c56",
+      "id": "cceda8fcea9a5381fa1f402c5a7edf49f22ad26a",
       "type": "commit",
-      "title": "security(audit): remove fake RSA private key markers from honeytrap decoy",
-      "timestamp": "2026-08-17T19:44:33-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/9b1c972020b2c5d289558058a92d327384a37c56"
+      "title": "refactor(supervisor): inject repository_root via public constructor (REM-005)",
+      "timestamp": "2026-08-18T18:45:00-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/cceda8fcea9a5381fa1f402c5a7edf49f22ad26a"
     },
     {
-      "id": "399ae80a278eb048189ea43e45a90fb4b80eee3a",
+      "id": "82e2f87febca39dc6785b0249619e3f571ff9001",
       "type": "commit",
-      "title": "Merge pull request #5 from kaibuzz0/hive-1.1-rc2-bootstrap",
-      "timestamp": "2026-08-17T19:18:15-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/399ae80a278eb048189ea43e45a90fb4b80eee3a"
+      "title": "security(trust): consolidate release trust anchor and preserve history (REM-002)",
+      "timestamp": "2026-08-18T18:43:56-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/82e2f87febca39dc6785b0249619e3f571ff9001"
     },
     {
-      "id": "f69e5a48e1544b48927a4b662314011bef4d5d0f",
+      "id": "8f0a21ab35713e1d4a98a70ca08ec3462f888998",
       "type": "commit",
-      "title": "tools: import reusable repository toolsets",
-      "timestamp": "2026-08-17T19:17:44-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/f69e5a48e1544b48927a4b662314011bef4d5d0f"
+      "title": "test(restart): add crash-loop regression tests and complete REM-006",
+      "timestamp": "2026-08-18T18:43:04-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/8f0a21ab35713e1d4a98a70ca08ec3462f888998"
     }
   ],
   "links": [
