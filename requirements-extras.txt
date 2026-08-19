@@ -14,7 +14,7 @@ pynacl>=1.6.2
 bcrypt>=4.0.0
 
 # Web & API
-requests>=2.31.0
+requests>=2.34.2
 urllib3>=2.7.0
 
 # AI & NLP (for brain-plug / therapist / DevAI components)
