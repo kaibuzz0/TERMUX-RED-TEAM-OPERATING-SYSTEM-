@@ -9,8 +9,7 @@ from pathlib import Path
 
 from hive_broker import Broker
 from hive_broker.errors import BrokerError
-
-
+from hive_broker.policy import check_policy
 
 
 def _broker() -> Broker:
@@ -90,9 +89,9 @@ def cmd_audit(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_policy_check(args):
-    """Broker-facing read-only policy check."""
-    decision = _check_policy(
+def cmd_policy_check(args: argparse.Namespace) -> int:
+    """Broker-facing diagnostic policy check; never dispatches an adapter."""
+    decision = check_policy(
         actor_type=args.actor,
         capability=args.capability,
         resource_type=args.resource,
