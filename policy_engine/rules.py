@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from policy_engine.actors import actor_may_mutate, validate_actor
 from policy_engine.capabilities import is_read_only, is_mutating, validate_capability
@@ -13,6 +13,9 @@ from policy_engine.errors import PolicyValidationError
 from policy_engine.requirements import evaluate_requirement, requirement_from_dict
 from policy_engine.resources import validate_resource
 from policy_engine.schema import validate_id
+
+if TYPE_CHECKING:
+    from policy_engine.requests import PolicyRequest
 
 
 @dataclass(frozen=True)
