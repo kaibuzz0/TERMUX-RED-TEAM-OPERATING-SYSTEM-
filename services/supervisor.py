@@ -39,12 +39,17 @@ class Supervisor:
         log_root: Path,
         runtime_info: dict[str, Any],
         network_manager: NetworkManager | None = None,
+        *,
+        repository_root: Path | None = None,
     ):
         self.manifests = manifests
         self.state_root = state_root
         self.log_root = log_root
         self.runtime_info = runtime_info
         self.network_manager = network_manager
+        # Publicly injectable repository root. When None we fall back to the
+        # legacy module-global resolution so existing callers keep working.
+        self._repository_root = repository_root or _repo_root()
         self.graph = DependencyGraph(manifests)
         self.policies: dict[str, RestartPolicy] = {n: RestartPolicy(m) for n, m in manifests.items()}
         self.processes: dict[str, TrackedProcess] = {}
@@ -67,7 +72,7 @@ class Supervisor:
             resolve_state_root,
             resolve_repository_root,
         )
-        repo_root = _repo_root()
+        repo_root = self._repository_root
         if base is None or base == "repository":
             root = repo_root
         elif base == "canonical-source":
@@ -171,27 +176,23 @@ class Supervisor:
         if self.network_manager is not None and manifest.get("network", {}).get("use_proxy_env", False):
             net_ok, _ = self._network_eligibility(name)
             if net_ok:
-                env = self.network_manager.proxy_env()
+                # Pass the manifest-filtered environment as the base so only
+                # allowed host variables and explicit set values survive, plus
+                # the Hive-managed proxy variables for the current profile.
+                env = self.network_manager.proxy_env(base_env=env)
         session_id = self._session_id()
         proc = TrackedProcess(manifest, cmd, session_id)
         # Use canonical service logger for bounded, rotated stdout/stderr.
         svc_logger = ServiceLogger(name, self.log_root)
         handles = svc_logger.open_handles()
         try:
-            import subprocess
-            proc._proc = subprocess.Popen(
-                cmd,
-                cwd=str(cwd),
-                env=env,
-                stdout=handles["stdout"],
-                stderr=handles["stderr"],
-                start_new_session=True,
-            )
+            # Canonical spawn: TrackedProcess captures OS-derived start-time
+            # identity, never wall-clock time.time().
+            proc.start(cwd, env, stdout=handles["stdout"], stderr=handles["stderr"])
         except OSError as e:
             svc_logger.close()
             raise ServiceRuntimeError(f"Failed to start {name}: {e}") from e
         self._service_loggers[name] = svc_logger
-        proc.start_time = time.time()
         self.processes[name] = proc
         self._record(name, state="RUNNING", pid=proc.pid, session_id=session_id, command_digest=_command_digest(cmd), manifest_digest=_manifest_digest(manifest))
         # startup health check

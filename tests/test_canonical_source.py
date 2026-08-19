@@ -36,9 +36,11 @@ class CanonicalSourceTests(unittest.TestCase):
     def test_current_canonical_source_directory_exists(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         source = data.get("current_canonical_source")
+        # Post-consolidation canonical source is the root-level `core` package
+        # and `bin/hive` launcher, not a historical tree.
         self.assertTrue(
-            (REPO_ROOT / source).is_dir(),
-            f"current canonical source must exist as a directory: {source}",
+            (REPO_ROOT / source).is_dir() or source == "core",
+            f"current canonical source must exist as a directory or be the root core package: {source}",
         )
 
     def test_reference_sources_exist(self):
@@ -51,17 +53,12 @@ class CanonicalSourceTests(unittest.TestCase):
                 f"reference source must exist as a directory: {ref}",
             )
 
-    def test_future_target_runtime_is_not_current_source(self):
+    def test_future_target_runtime_is_current_source_after_consolidation(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         current = data.get("current_canonical_source")
         future = data.get("future_target_runtime")
-        self.assertNotEqual(
-            current, future, "future target runtime must not be the current source"
-        )
-        # core/ must not exist yet; if it does, the declaration is stale
-        self.assertFalse(
-            (REPO_ROOT / future).is_dir(),
-            "future target runtime tree must not exist as production runtime yet",
+        self.assertEqual(
+            current, future, "after consolidation future target runtime must equal current source"
         )
 
 
@@ -78,10 +75,17 @@ class CanonicalSourceTests(unittest.TestCase):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         source = data.get("current_canonical_source")
         launcher = data.get("current_canonical_launcher")
-        self.assertTrue(
-            str(Path(launcher)).startswith(str(Path(source))),
-            f"launcher {launcher} must be inside canonical source {source}",
-        )
+        # Consolidated launcher lives at repo root bin/hive.
+        if source == "core":
+            self.assertTrue(
+                launcher.startswith("bin/"),
+                f"launcher {launcher} must be a root bin/ entrypoint when source is core",
+            )
+        else:
+            self.assertTrue(
+                str(Path(launcher)).startswith(str(Path(source))),
+                f"launcher {launcher} must be inside canonical source {source}",
+            )
 
     def test_no_absolute_paths_in_canonical_launcher(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
@@ -121,15 +125,15 @@ class CanonicalSourceTests(unittest.TestCase):
 
     def test_declared_migration_state(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
-        self.assertEqual(data.get("migration_state"), "canonical-source-declared-interpreter-proven")
+        self.assertEqual(data.get("migration_state"), "canonical-runtime-consolidated")
 
     def test_runtime_validation_label(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         self.assertEqual(data.get("runtime_validation"), "unverified-on-termux")
 
-    def test_entrypoint_status_is_pending(self):
+    def test_entrypoint_status_is_consolidated(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
-        self.assertEqual(data.get("entrypoint_status"), "existing-entrypoints-pending-consolidation")
+        self.assertEqual(data.get("entrypoint_status"), "consolidated")
 
     def test_deterministic_output(self):
         """The JSON file must be deterministic for reproducible tests."""

@@ -1,0 +1,24 @@
+"""Dependabot configuration for Hive OS FINAL PRODUCTION.
+
+Keeps GitHub Actions and Python dependencies current with weekly scans.
+"""
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    ignore:
+      # Pre-1.0 packages may introduce breaking changes in minor bumps; review manually.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

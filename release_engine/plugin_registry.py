@@ -55,7 +55,28 @@ class PersistentPluginRegistry:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.path.parent / f".{self.path.name}.tmp-{uuid.uuid4().hex}"
         tmp.write_text(json.dumps(self._data, indent=2, sort_keys=True), encoding="utf-8")
-        tmp.replace(self.path)
+        # Windows may transiently deny replace when a concurrent reader holds the
+        # target handle. Retry briefly before failing.
+        last_err: OSError | None = None
+        for _ in range(10):
+            try:
+                tmp.replace(self.path)
+                return
+            except PermissionError as exc:
+                last_err = exc
+                if getattr(exc, "winerror", None) == 5:
+                    import time
+                    time.sleep(0.02)
+                    continue
+                raise
+            except OSError as exc:
+                raise
+        if last_err is not None:
+            try:
+                tmp.unlink(missing_ok=True)
+            except OSError:
+                pass
+            raise last_err
 
     def list_plugins(self) -> List[PluginRegistryRecord]:
         return [self._record(v) for v in self._data.get("plugins", {}).values()]

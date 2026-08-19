@@ -86,7 +86,7 @@ These duplicates create an ambiguous canonical entrypoint and enlarge the trust 
 - **Blocks V2/RC.2:** Yes
 - **Status:** Fixed in both branches.
 
-**Evidence:** Hive Ops DevAI/bin/hivedev-honey contained literal '-----BEGIN RSA PRIVATE KEY-----' block around line 193 with a [REDACTED PRIVATE KEY] placeholder. Also duplicated in both branches.
+**Evidence:** Hive Ops DevAI/bin/hivedev-honey contained literal '[REDACTED_KEY_MARKER]' block around line 193 with a [REDACTED PRIVATE KEY] placeholder. Also duplicated in both branches.
 
 **Impact:** If any downstream tooling or user mistakes the placeholder for a real key and reuses the structure, it trains a harmful pattern. Presence of private-key markers in source control triggers secret-scanning alerts and breaks zero-trust posture.
 

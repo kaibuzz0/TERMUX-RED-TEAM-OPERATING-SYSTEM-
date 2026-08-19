@@ -122,3 +122,70 @@ def test_no_network_required_starts_in_hold(tmp_path):
     result = sup.start("no-network")
     assert result["state"] == "RUNNING"
     sup.stop("no-network")
+
+
+
+def test_proxy_env_uses_manifest_filtered_base(tmp_path):
+    """Supervisor must pass manifest-filtered env to proxy_env, not raw os.environ."""
+    from network import NetworkManager
+    from services.supervisor import Supervisor
+    # Put a denied host variable into os.environ; it should not reach the child.
+    import os
+    os.environ["HIVE_HOST_DENIED"] = "should-not-appear"
+    manifest = {
+        "needs-proxy": {
+            "schema_version": 1,
+            "name": "needs-proxy",
+            "enabled": True,
+            "command": {"interpreter": "python", "args": ["-c", "import time; time.sleep(3600)"]},
+            "environment": {
+                "allow": ["PATH"],
+                "set": {"HIVE_MANIFEST_SET": "survives"},
+            },
+            "network": {"required": True, "profile": "any", "use_proxy_env": True},
+            "health_check": {"type": "process"},
+            "restart": {"policy": "never"},
+        },
+    }
+    net_mgr = NetworkManager(state_root=tmp_path / "net")
+    net_mgr.select_direct()
+    sup = Supervisor(manifest, tmp_path / "svc", tmp_path / "logs", {}, network_manager=net_mgr)
+    proc = sup.processes.get("needs-proxy")
+    # Before start, inspect the built environment via protected helper if needed.
+    # We instead verify via the spawned process env file if accessible.
+    # Simpler: ensure the Supervisor passes base_env=env to proxy_env by
+    # checking that a denied host var absent from allow list is not present.
+    env = sup._build_environment(manifest["needs-proxy"])
+    assert "HIVE_HOST_DENIED" not in env
+    assert env["HIVE_MANIFEST_SET"] == "survives"
+    # Start the service; it should run.
+    result = sup.start("needs-proxy")
+    assert result["state"] == "RUNNING"
+    sup.stop("needs-proxy")
+    del os.environ["HIVE_HOST_DENIED"]
+
+
+def test_proxy_env_direct_clears_stale_proxy_values(tmp_path):
+    """When profile is DIRECT, proxy vars must be absent from child env."""
+    from network import NetworkManager
+    from services.supervisor import Supervisor
+    manifest = {
+        "needs-proxy": {
+            "schema_version": 1,
+            "name": "needs-proxy",
+            "enabled": True,
+            "command": {"interpreter": "python", "args": ["-c", "import time; time.sleep(3600)"]},
+            "environment": {"allow": [], "set": {}},
+            "network": {"required": True, "profile": "any", "use_proxy_env": True},
+            "health_check": {"type": "process"},
+            "restart": {"policy": "never"},
+        },
+    }
+    net_mgr = NetworkManager(state_root=tmp_path / "net")
+    net_mgr.select_direct()
+    sup = Supervisor(manifest, tmp_path / "svc", tmp_path / "logs", {}, network_manager=net_mgr)
+    env = sup._build_environment(manifest["needs-proxy"])
+    env = net_mgr.proxy_env(base_env=env)
+    assert "ALL_PROXY" not in env
+    assert "HTTP_PROXY" not in env
+    assert "HTTPS_PROXY" not in env

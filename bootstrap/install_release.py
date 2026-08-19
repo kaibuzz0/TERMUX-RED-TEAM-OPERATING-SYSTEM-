@@ -256,21 +256,119 @@ def enable_termux_autoboot(active_runtime: Path) -> None:
         raise BootstrapInstallError(f"failed to enable Termux autoboot: {exc}") from exc
 
 
+def _windows_acl_support_available() -> bool:
+    """Return True when running on Windows and ctypes can access ADVAPI32."""
+    return sys.platform == "win32"
+
+
+def _snapshot_windows_acl(path: Path) -> bytes | None:
+    """Return the binary SECURITY_DESCRIPTOR for a file, or None on failure."""
+    import ctypes
+    from ctypes import wintypes
+    from ctypes import POINTER
+
+    if not path.exists():
+        return None
+    advapi32 = ctypes.windll.advapi32
+    kernel32 = ctypes.windll.kernel32
+
+    GENERIC_READ = 0x80000000
+    FILE_FLAG_BACKUP_SEMANTICS = 0x02000000
+    OPEN_EXISTING = 3
+
+    hFile = kernel32.CreateFileW(
+        ctypes.c_wchar_p(str(path)),
+        GENERIC_READ,
+        0,
+        None,
+        OPEN_EXISTING,
+        FILE_FLAG_BACKUP_SEMANTICS,
+        None,
+    )
+    if hFile == -1:
+        return None
+
+    try:
+        advapi32.GetSecurityInfo.restype = wintypes.DWORD
+        advapi32.GetSecurityInfo.argtypes = [
+            wintypes.HANDLE, wintypes.DWORD, wintypes.DWORD,
+            ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p),
+            ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p),
+            ctypes.POINTER(ctypes.c_void_p),
+        ]
+        pSD = ctypes.c_void_p()
+        rc = advapi32.GetSecurityInfo(hFile, 1, 0x00000005, None, None, None, None, ctypes.byref(pSD))
+        if rc != 0:
+            return None
+        advapi32.MakeSelfRelativeSD.restype = wintypes.BOOL
+        advapi32.MakeSelfRelativeSD.argtypes = [ctypes.c_void_p, ctypes.c_void_p, POINTER(wintypes.DWORD)]
+        advapi32.GetSecurityDescriptorLength.argtypes = [ctypes.c_void_p]
+        advapi32.GetSecurityDescriptorLength.restype = wintypes.DWORD
+        length = advapi32.GetSecurityDescriptorLength(pSD)
+        buf = ctypes.create_string_buffer(length)
+        needed = wintypes.DWORD()
+        if not advapi32.MakeSelfRelativeSD(pSD, buf, ctypes.byref(needed)):
+            return None
+        return buf.raw
+    finally:
+        kernel32.CloseHandle(hFile)
+
+
+def _restore_windows_acl(path: Path, sddl: bytes | None) -> None:
+    """Apply a previously captured SECURITY_DESCRIPTOR to a file."""
+    if sddl is None:
+        return
+    import ctypes
+    from ctypes import wintypes
+    from ctypes import POINTER
+
+    advapi32 = ctypes.windll.advapi32
+    kernel32 = ctypes.windll.kernel32
+
+    GENERIC_WRITE = 0x40000000
+    FILE_FLAG_BACKUP_SEMANTICS = 0x02000000
+    OPEN_EXISTING = 3
+
+    hFile = kernel32.CreateFileW(
+        ctypes.c_wchar_p(str(path)),
+        GENERIC_WRITE,
+        0,
+        None,
+        OPEN_EXISTING,
+        FILE_FLAG_BACKUP_SEMANTICS,
+        None,
+    )
+    if hFile == -1:
+        return
+
+    try:
+        advapi32.SetSecurityInfo.restype = wintypes.DWORD
+        advapi32.SetSecurityInfo.argtypes = [
+            wintypes.HANDLE, wintypes.DWORD, wintypes.DWORD,
+            ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p,
+        ]
+        advapi32.SetSecurityInfo(hFile, 1, 0x00000005, None, None, ctypes.cast(sddl, ctypes.c_void_p), None)
+    finally:
+        kernel32.CloseHandle(hFile)
+
+
 def _snapshot_regular_file(path: Path) -> dict[str, Any]:
-    """Capture exact file bytes/mode without following symlinks."""
+    """Capture exact file bytes/mode/ACL without following symlinks."""
     if path.is_symlink():
         raise BootstrapInstallError(f"refusing transactional finalization through symlink: {path}")
     if not path.exists():
-        return {"path": path, "existed": False, "data": b"", "mode": 0}
+        return {"path": path, "existed": False, "data": b"", "mode": 0, "acl": None}
     if not path.is_file():
         raise BootstrapInstallError(f"refusing transactional finalization over non-file path: {path}")
     try:
-        return {
+        snapshot = {
             "path": path,
             "existed": True,
             "data": path.read_bytes(),
             "mode": path.stat().st_mode & 0o7777,
+            "acl": _snapshot_windows_acl(path) if _windows_acl_support_available() else None,
         }
+        return snapshot
     except OSError as exc:
         raise BootstrapInstallError(f"cannot snapshot finalization state {path}: {exc}") from exc
 
@@ -303,6 +401,12 @@ def _restore_file_snapshot(snapshot: dict[str, Any]) -> None:
         try:
             path.chmod(snapshot["mode"])
         except (OSError, NotImplementedError):
+            pass
+        # Restore captured Windows DACL if available. Best-effort: do not fail
+        # the rollback if the platform restricts the operation.
+        try:
+            _restore_windows_acl(path, snapshot.get("acl"))
+        except Exception:
             pass
     finally:
         if temp_path is not None:
