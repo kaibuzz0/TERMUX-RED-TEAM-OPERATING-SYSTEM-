@@ -17,7 +17,7 @@ scapy>=2.5.0
 paramiko>=3.5.1
 beautifulsoup4>=4.12.0
 cryptography>=41.0.0
-pynacl>=1.5.0
+pynacl>=1.6.2
 bcrypt>=4.0.0
 
 # AI & NLP (for brain-plug/therapist components)
