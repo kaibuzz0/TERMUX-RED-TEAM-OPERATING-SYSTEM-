@@ -7,11 +7,15 @@ import os
 from pathlib import Path
 from typing import Any
 
-from security.vault.errors import VaultSafetyError
-
 
 LEGACY_AUTH_DIR = ".hive_auth"
 LEGACY_AUTH_FILE = "passwd"
+
+
+def _home_path() -> Path:
+    """Resolve the operator home without ever falling back to a shared temp dir."""
+    configured = os.environ.get("HOME")
+    return Path(configured).expanduser() if configured else Path.home()
 
 
 def _looks_like_base64(text: str) -> bool:
@@ -27,7 +31,7 @@ def _looks_like_base64(text: str) -> bool:
 
 def detect_legacy_credentials(home: Path | None = None) -> dict[str, Any]:
     """Detect legacy credential storage without modifying it."""
-    home = home or Path(os.environ.get("HOME", "/tmp"))
+    home = home or _home_path()
     auth_dir = home / LEGACY_AUTH_DIR
     auth_file = auth_dir / LEGACY_AUTH_FILE
 
@@ -60,7 +64,7 @@ def build_migration_plan(home: Path | None = None) -> dict[str, Any]:
             "reason": findings["reason"],
         }
 
-    home = home or Path(os.environ.get("HOME", "/tmp"))
+    home = home or _home_path()
     vault_dir = home / ".hive" / "vault"
 
     return {
