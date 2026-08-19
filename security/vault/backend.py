@@ -19,6 +19,12 @@ from security.vault.redaction import redact
 TEST_KDF_PARAMETERS = {"name": "scrypt", "n": 2**10, "r": 8, "p": 1}
 
 
+def _home_path() -> Path:
+    """Resolve the operator home without using a shared temporary directory."""
+    configured = os.environ.get("HOME")
+    return Path(configured).expanduser() if configured else Path.home()
+
+
 @dataclass
 class SecretRecord:
     name: str
@@ -53,7 +59,7 @@ class Vault:
     VAULT_DATA_SCHEMA = 1
 
     def __init__(self, vault_dir: Path | None = None):
-        home = Path(os.environ.get("HOME", "/tmp"))
+        home = _home_path()
         self.vault_dir = vault_dir or (home / ".hive" / "vault")
         self.storage = VaultStorage(self.vault_dir)
         self._key: bytes | None = None

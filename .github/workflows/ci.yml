@@ -1,10 +1,13 @@
-name: Hive Ops DevAI CI
+name: Hive OS FINAL Production CI
 
 on:
   push:
     branches: [ master, main, develop, hive-1.1-rc2-bootstrap, hive-v2-remediation ]
   pull_request:
     branches: [ master, main, hive-v2-remediation ]
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -15,162 +18,212 @@ jobs:
         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Cache pip packages
-      uses: actions/cache@1bd1e32a3bdc45362d1b7261e235c14d09d26423  # v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+      - name: Cache pip packages
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684  # v4.2.3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Lint critical errors (required gate)
-      run: |
-        flake8 bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Validate workflow action pins
+        run: python scripts/validate_workflow_pins.py
 
-    - name: Lint production code (informational)
-      run: |
-        flake8 bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
+      - name: Lint critical errors (required gate)
+        run: |
+          flake8 bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    - name: Type check production code (informational)
-      run: |
-        mypy bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --ignore-missing-imports || true
+      - name: Lint production code (informational)
+        run: |
+          flake8 bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
 
-    - name: Test with pytest
-      id: pytest
-      continue-on-error: true
-      shell: bash
-      run: |
-        set -o pipefail
-        pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
+      - name: Type check production code (informational)
+        run: |
+          mypy bin core config_engine diagnostics hive_broker installer lib network operations_center policy_engine release_engine runtime_logs security services updates --ignore-missing-imports || true
 
-    - name: Surface pytest failures
-      if: steps.pytest.outcome == 'failure'
-      run: |
-        python - <<'PY'
-        from pathlib import Path
+      - name: Test with pytest
+        id: pytest
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
 
-        output_path = Path("pytest-output.txt")
-        if not output_path.is_file():
-            print("::error title=pytest failure::Pytest failed before diagnostics were captured.")
-            raise SystemExit(1)
+      - name: Surface pytest failures
+        if: steps.pytest.outcome == 'failure'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
 
-        output = output_path.read_text(encoding="utf-8", errors="replace")
-        lines = output.splitlines()
-        summary = [line for line in lines if line.startswith(("FAILED ", "ERROR "))]
+          output_path = Path("pytest-output.txt")
+          if not output_path.is_file():
+              print("::error title=pytest failure::Pytest failed before diagnostics were captured.")
+              raise SystemExit(1)
 
-        def emit(text: str) -> None:
-            text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
-            print(f"::error title=pytest failure::{text}")
+          output = output_path.read_text(encoding="utf-8", errors="replace")
+          lines = output.splitlines()
+          summary = [line for line in lines if line.startswith(("FAILED ", "ERROR "))]
 
-        if summary:
-            for line in summary[:40]:
-                emit(line)
-        else:
-            start = next(
-                (
-                    i
-                    for i, line in enumerate(lines)
-                    if line.startswith("=================================== FAILURES")
-                    or line.startswith("==================================== ERRORS")
-                ),
-                max(0, len(lines) - 30),
-            )
-            emit("\n".join(lines[start : start + 30]))
-        raise SystemExit(1)
-        PY
+          def emit(text: str) -> None:
+              text = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+              print(f"::error title=pytest failure::{text}")
+
+          if summary:
+              for line in summary[:40]:
+                  emit(line)
+          else:
+              start = next(
+                  (
+                      i
+                      for i, line in enumerate(lines)
+                      if line.startswith("=================================== FAILURES")
+                      or line.startswith("==================================== ERRORS")
+                  ),
+                  max(0, len(lines) - 30),
+              )
+              emit("\n".join(lines[start : start + 30]))
+          raise SystemExit(1)
+          PY
 
   security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
-    - name: Set up Python
-      uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.11'
 
-    - name: Install security tools
-      run: |
-        pip install bandit safety
+      - name: Run repository secret marker gate
+        run: python scripts/secret_scan_gate.py
 
-    - name: Run bandit security scan
-      run: |
-        # Keep a machine-readable report even when findings exist, then enforce
-        # the release gate with a second medium-or-higher severity scan.
-        bandit -r "Hive Ops DevAI" bootstrap installer updates -f json -o bandit-report.json || true
-        bandit -r "Hive Ops DevAI" bootstrap installer updates -ll
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit safety
 
-    - name: Upload security scan results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: security-scan
-        path: bandit-report.json
+      - name: Run Bandit security scan
+        run: |
+          # Keep a machine-readable report even when findings exist, then enforce
+          # the production release gate with a second medium-or-higher severity scan.
+          bandit -r bootstrap installer updates release_engine services network diagnostics hive_broker policy_engine security -f json -o bandit-report.json || true
+          bandit -r bootstrap installer updates release_engine services network diagnostics hive_broker policy_engine security -ll
+
+      - name: Upload security scan results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: security-scan
+          path: bandit-report.json
 
   build:
+    name: Canonical production package validation
     runs-on: ubuntu-latest
     needs: [test, security]
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
-    - name: Set up Python
-      uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.11'
 
-    - name: Create distribution package
-      run: |
-        mkdir -p dist
-        tar -czf dist/hive-ops-devai.tar.gz \
-          --exclude=.git \
-          --exclude=__pycache__ \
-          --exclude=*.pyc \
-          --exclude=.pytest_cache \
-          --exclude=brain-plug/escape_living_ai.txt \
-          "Hive Ops DevAI" "Hive Ops Final" "Hermes Plugins" brain-plug install.sh README.md requirements.txt
+      - name: Install release dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Create standalone clean-install bootstrap
-      run: |
-        python -m zipapp bootstrap -o dist/hive-bootstrap.pyz
-        python dist/hive-bootstrap.pyz --help
-        python dist/hive-bootstrap.pyz install --help
-        python dist/hive-bootstrap.pyz verify --help
-        sha256sum dist/hive-bootstrap.pyz > dist/hive-bootstrap.pyz.sha256
+      - name: Build canonical unsigned CI candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf dist/final-ci-candidate
+          mkdir -p dist/final-ci-candidate
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+          python -m release_engine.cli build \
+            --source "$GITHUB_WORKSPACE" \
+            --output "$GITHUB_WORKSPACE/dist/final-ci-candidate" \
+            --version "1.1.0-rc.0" \
+            --sequence 0 \
+            --build-id "ci-${GITHUB_SHA:0:12}" \
+            --revision "$GITHUB_SHA" \
+            --platforms termux \
+            --architectures aarch64 \
+            --channel ci
+          bundle=$(find dist/final-ci-candidate -maxdepth 1 -name '*.tar.gz' -print -quit)
+          test -n "$bundle"
+          python -m release_engine.cli inspect "$bundle" --work-dir "$RUNNER_TEMP/hive-ci-inspect"
 
-    - name: Upload Hive package
-      uses: actions/upload-artifact@v4
-      with:
-        name: hive-ops-package
-        path: dist/hive-ops-devai.tar.gz
+      - name: Validate deprecated/reference trees are excluded
+        shell: bash
+        run: |
+          set -euo pipefail
+          manifest=$(find dist/final-ci-candidate -maxdepth 1 -name '*.manifest.json' -print -quit)
+          python - "$manifest" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
 
-    - name: Upload clean-install bootstrap
-      uses: actions/upload-artifact@v4
-      with:
-        name: hive-clean-install-bootstrap
-        path: |
-          dist/hive-bootstrap.pyz
-          dist/hive-bootstrap.pyz.sha256
+          manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          paths = {entry["path"] for entry in manifest}
+          forbidden_prefixes = (
+              "blueprints/",
+              "evidence/",
+          )
+          bad = sorted(path for path in paths if path.startswith(forbidden_prefixes))
+          if bad:
+              raise SystemExit(f"reference-only path entered production manifest: {bad[0]}")
+          for required in ("bin/hive", "hive-canonical.json", "installer/activate.py", "network/manager.py", "services/supervisor.py"):
+              if required not in paths:
+                  raise SystemExit(f"canonical production manifest missing: {required}")
+          print("canonical production manifest boundary: PASS")
+          PY
+
+      - name: Create standalone clean-install bootstrap
+        run: |
+          python -m zipapp bootstrap -o dist/hive-bootstrap.pyz
+          python dist/hive-bootstrap.pyz --help
+          python dist/hive-bootstrap.pyz install --help
+          python dist/hive-bootstrap.pyz verify --help
+          sha256sum dist/hive-bootstrap.pyz > dist/hive-bootstrap.pyz.sha256
+
+      - name: Upload canonical CI candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: hive-final-ci-candidate
+          path: dist/final-ci-candidate/
+          if-no-files-found: error
+
+      - name: Upload clean-install bootstrap
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: hive-clean-install-bootstrap
+          path: |
+            dist/hive-bootstrap.pyz
+            dist/hive-bootstrap.pyz.sha256
 
   termux-smoke:
     name: Termux smoke simulation
     runs-on: ubuntu-24.04
+    continue-on-error: true
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: "3.11"
 
@@ -188,9 +241,9 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/termux"
           export TERMUX_PREFIX="$RUNNER_TEMP/termux/usr"
+          export PREFIX="$TERMUX_PREFIX"
           export HOME="$RUNNER_TEMP/termux/home"
           mkdir -p "$TERMUX_PREFIX" "$HOME"
-          # Run the install script dry-run / validation path if available.
           if grep -q -- "--dry-run\|--check" install-termux-easy.sh; then
             bash install-termux-easy.sh --dry-run || bash install-termux-easy.sh --check
           else
@@ -200,5 +253,3 @@ jobs:
       - name: Run unit tests for Termux-relevant modules
         run: |
           pytest tests/test_bootstrap_install_release.py tests/test_bootstrap_finalization_transaction.py tests/test_service_process.py tests/test_service_restart.py -v
-
-    continue-on-error: true

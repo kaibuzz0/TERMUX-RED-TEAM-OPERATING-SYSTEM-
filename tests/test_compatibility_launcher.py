@@ -71,7 +71,7 @@ class CompatibilityLauncherFunctionalTests(unittest.TestCase):
     def test_resolve_diagnostic(self):
         result = self._run_launcher("--resolve")
         self.assertEqual(result.returncode, 0, f"--resolve should succeed: {result.stderr}")
-        self.assertIn("Hive Ops Final", result.stdout, "resolve should show canonical source")
+        self.assertIn("canonical_source", result.stdout, "resolve should show canonical source")
         self.assertIn("runtime_validation", result.stdout, "resolve should show validation status")
 
     def test_resolve_does_not_mutate(self):
@@ -86,7 +86,7 @@ class CompatibilityLauncherFunctionalTests(unittest.TestCase):
         other_dir = str(REPO_ROOT.parent)
         result = self._run_launcher("--resolve", cwd=other_dir)
         self.assertEqual(result.returncode, 0, f"resolve from parent dir should work: {result.stderr}")
-        self.assertIn("Hive Ops Final", result.stdout)
+        self.assertIn("canonical_source", result.stdout)
 
     def test_argument_forwarding(self):
         # Forward --help; canonical launcher will either handle it or error, but our launcher

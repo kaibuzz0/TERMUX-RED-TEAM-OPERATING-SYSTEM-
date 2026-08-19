@@ -76,7 +76,18 @@ class StagingArea:
             if op.destination.exists() and not op.overwrite:
                 raise StagingError(f"Destination already exists and overwrite is false: {op.destination}")
             if op.source.is_dir():
-                shutil.copytree(op.source, op.destination, dirs_exist_ok=op.overwrite)
+                # Avoid staging deep historical/reference trees that cause Windows path-length
+                # failures and bloat release payloads.
+                _STAGING_IGNORED = {
+                    ".git", ".github", "__pycache__", ".pytest_cache", "node_modules",
+                    "blueprints",  # exclude entire blueprints tree from runtime payload
+                    "evidence",    # exclude historical release evidence from runtime payload
+                }
+
+                def _ignore_staging(src: str, names: list[str]) -> set[str]:
+                    return set(names) & _STAGING_IGNORED
+
+                shutil.copytree(op.source, op.destination, dirs_exist_ok=op.overwrite, ignore=_ignore_staging)
             else:
                 op.destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(op.source, op.destination)

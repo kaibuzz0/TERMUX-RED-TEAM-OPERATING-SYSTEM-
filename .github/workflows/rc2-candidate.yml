@@ -32,12 +32,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout selected revision
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
           fetch-depth: 1
 
       - name: Set up Python 3.14
-        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f392ef68e  # v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: "3.14"
 
@@ -45,6 +45,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+
+      - name: Validate workflow action pins
+        run: python scripts/validate_workflow_pins.py
 
       - name: Resolve exact RC.1 anti-rollback baseline
         shell: bash
@@ -168,16 +171,23 @@ jobs:
           paths = {entry["path"] for entry in manifest}
           required = {
               "bin/hive",
+              "bin/hive-os",
               "hive-canonical.json",
+              "core/__init__.py",
               "installer/activate.py",
               "installer/autoboot.py",
               "installer/plan.py",
               "installer/schema.py",
-              "Hive Ops Final/bin/hive",
+              "network/manager.py",
+              "services/supervisor.py",
           }
           missing = sorted(required - paths)
           if missing:
               raise SystemExit(f"candidate manifest missing required runtime file: {missing[0]}")
+          forbidden_prefixes = ("blueprints/", "evidence/")
+          forbidden = sorted(path for path in paths if path.startswith(forbidden_prefixes))
+          if forbidden:
+              raise SystemExit(f"candidate manifest contains reference-only path: {forbidden[0]}")
           release = metadata.get("release", {})
           if release.get("commit") != os.environ["GITHUB_SHA"]:
               raise SystemExit("candidate metadata is not bound to the workflow commit")
@@ -261,7 +271,7 @@ jobs:
           )
 
       - name: Upload unsigned RC.2 candidate
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
           name: hive-rc2-unsigned-${{ github.sha }}
           path: dist/rc2-candidate/

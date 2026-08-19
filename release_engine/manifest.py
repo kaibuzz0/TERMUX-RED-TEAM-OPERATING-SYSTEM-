@@ -32,6 +32,8 @@ def build_release_manifest(
     excludes = {
         ".git",
         ".github",
+        "blueprints/deprecated",
+        "evidence/historical-releases",
         "blueprints",
         "tests",
         "__pycache__",

@@ -37,7 +37,7 @@ class PlanGenerationTests(unittest.TestCase):
     def test_canonical_source_captured(self):
         from installer.plan import generate_plan
         plan = generate_plan(transaction_id="txn-3")
-        self.assertTrue(plan.source.canonical_source.name.endswith("Hive Ops Final") or "Hive Ops Final" in str(plan.source.canonical_source))
+        self.assertEqual(plan.source.canonical_source.resolve(), REPO_ROOT.resolve())
 
     def test_operation_order_stable(self):
         from installer.plan import generate_plan
