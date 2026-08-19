@@ -50,7 +50,7 @@ class MetadataValidationTests(unittest.TestCase):
     def test_load_real_metadata(self):
         data = load_metadata(REPO_ROOT)
         self.assertEqual(data["schema_version"], 1)
-        self.assertEqual(data["current_canonical_source"], "Hive Ops Final")
+        self.assertEqual(data["current_canonical_source"], ".")
 
     def test_missing_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -83,12 +83,13 @@ class CanonicalPathTests(unittest.TestCase):
     def test_resolve_canonical_source(self):
         source = resolve_canonical_source(REPO_ROOT)
         self.assertTrue(source.is_dir())
-        self.assertIn("Hive Ops Final", str(source))
+        # Post-consolidation canonical source is the repository root.
+        self.assertEqual(source.resolve(), REPO_ROOT.resolve())
 
     def test_resolve_canonical_launcher(self):
         launcher = resolve_canonical_launcher(REPO_ROOT)
         self.assertTrue(launcher.is_file())
-        self.assertIn("Hive Ops Final", str(launcher))
+        self.assertEqual(launcher.resolve(), (REPO_ROOT / "bin" / "hive").resolve())
 
 
 class PathRootResolutionTests(unittest.TestCase):

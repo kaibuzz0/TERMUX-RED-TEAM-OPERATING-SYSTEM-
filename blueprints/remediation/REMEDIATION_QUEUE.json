@@ -533,7 +533,20 @@
         "Signed release artifact verifies with consolidated trust anchor"
       ],
       "suggested_commit_boundary": "release: tag v2.0.0-rc2 and publish signed release notes",
-      "notes": "This is the final gate; do not tag until all P0/P1 items are merged."
+      "notes": "This is the final gate; do not tag until all P0/P1 items are merged.",
+      "status": "completed-with-exception",
+      "resolution": {
+        "scope": "All dependency-ready REM items completed. Full pytest suite passes. Signed release notes and tag are operator-gated.",
+        "test_result": "1487 passed, 27 skipped, 3 warnings (WinError 5 warnings in broker session race tests are known flakiness, not failures)",
+        "changes": [
+          "Canonical runtime source fixed to repo root (.) with bin/hive authoritative and core/ package.",
+          "Added root etc/services.json copied from historical canonical production definition.",
+          "Excluded blueprints/ and evidence/ from runtime staging to avoid Windows long-path failures.",
+          "Updated tests that expected 'Hive Ops Final' in --resolve output to accept canonical_source."
+        ],
+        "release_notes": "RELEASE_NOTES.md and version tagging remain pending operator approval for exact production version string.",
+        "completed_at": "2026-08-18"
+      }
     },
     {
       "id": "REM-012",

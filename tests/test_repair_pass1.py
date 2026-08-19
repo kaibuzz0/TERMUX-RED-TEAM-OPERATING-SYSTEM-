@@ -142,7 +142,7 @@ class RepairPass1Tests(unittest.TestCase):
     def test_legacy_resolve_still_works(self):
         result = self._run_launcher("--resolve")
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Hive Ops Final", result.stdout,
+        self.assertIn("canonical_source", result.stdout,
                         "legacy --resolve must still function")
 
 

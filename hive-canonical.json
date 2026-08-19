@@ -2,8 +2,8 @@
   "schema_version": 1,
   "project": "Hive OS",
   "repository": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
-  "current_canonical_source": "core",
-  "future_target_runtime": "core",
+  "current_canonical_source": ".",
+  "future_target_runtime": ".",
   "reference_sources": [
     "Hive Ops DevAI",
     "Hive Ops Final",

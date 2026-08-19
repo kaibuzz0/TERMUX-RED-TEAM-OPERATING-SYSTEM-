@@ -36,11 +36,11 @@ class CanonicalSourceTests(unittest.TestCase):
     def test_current_canonical_source_directory_exists(self):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         source = data.get("current_canonical_source")
-        # Post-consolidation canonical source is the root-level `core` package
-        # and `bin/hive` launcher, not a historical tree.
+        # Post-consolidation canonical source is the repository root itself,
+        # with bin/hive as the launcher and core/ as the runtime package.
         self.assertTrue(
-            (REPO_ROOT / source).is_dir() or source == "core",
-            f"current canonical source must exist as a directory or be the root core package: {source}",
+            (REPO_ROOT / source).is_dir(),
+            f"current canonical source must exist as a directory: {source}",
         )
 
     def test_reference_sources_exist(self):
@@ -75,15 +75,18 @@ class CanonicalSourceTests(unittest.TestCase):
         data = json.loads(CANONICAL_JSON.read_text(encoding="utf-8"))
         source = data.get("current_canonical_source")
         launcher = data.get("current_canonical_launcher")
-        # Consolidated launcher lives at repo root bin/hive.
-        if source == "core":
+        # Consolidated launcher lives inside the canonical source tree.
+        source_path = Path(source)
+        launcher_path = Path(launcher)
+        if source == ".":
+            # Repo root canonical source: launcher must be a top-level bin/ entrypoint.
             self.assertTrue(
-                launcher.startswith("bin/"),
-                f"launcher {launcher} must be a root bin/ entrypoint when source is core",
+                launcher_path.parts[:1] == ("bin",),
+                f"launcher {launcher} must be a top-level bin/ entrypoint when source is repo root",
             )
         else:
             self.assertTrue(
-                str(Path(launcher)).startswith(str(Path(source))),
+                str(launcher_path).startswith(str(source_path)),
                 f"launcher {launcher} must be inside canonical source {source}",
             )
 
