@@ -6,7 +6,7 @@
 # Install with: python -m pip install -r requirements-extras.txt
 
 # Networking & Security
-dnspython>=2.4.0
+dnspython>=2.8.0
 scapy>=2.5.0
 paramiko>=3.3.0
 beautifulsoup4>=4.12.0
