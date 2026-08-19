@@ -28,7 +28,7 @@ pronouncing>=0.3.0
 matplotlib>=3.7.0
 
 # Web & API
-urllib3>=2.0.0
+urllib3>=2.7.0
 
 # Testing
 pytest>=7.4.0
