@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T22:50:46Z",
-  "source_commit": "b72161b61cd575bc91aaf36690211668dd6834a8",
+  "generated_at": "2026-08-21T23:17:45Z",
+  "source_commit": "fa3555a72cb2b1c08f58a26e47109710e2e13eec",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,14 +9,14 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 1012,
-    "python_files": 412,
+    "tracked_files": 1013,
+    "python_files": 413,
     "javascript_typescript_files": 1,
     "workflow_files": 5,
-    "test_files": 195
+    "test_files": 196
   },
   "repository_tree": {
-    "total_files": 1012,
+    "total_files": 1013,
     "total_directories": 131,
     "files_truncated": false,
     "directories_truncated": false,
@@ -823,7 +823,7 @@
         "path": "tests",
         "name": "tests",
         "depth": 1,
-        "file_count": 174
+        "file_count": 175
       },
       {
         "path": "tests/fixtures",
@@ -5207,6 +5207,11 @@
         "extension": ".py"
       },
       {
+        "path": "tests/test_installer_cli_syntax.py",
+        "name": "test_installer_cli_syntax.py",
+        "extension": ".py"
+      },
+      {
         "path": "tests/test_installer_home_security.py",
         "name": "test_installer_home_security.py",
         "extension": ".py"
@@ -5954,6 +5959,27 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "fa3555a72cb2b1c08f58a26e47109710e2e13eec",
+      "type": "commit",
+      "title": "Merge pull request #40 from kaibuzz0/fix/production-payload-allowlist",
+      "timestamp": "2026-08-21T18:17:37-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/fa3555a72cb2b1c08f58a26e47109710e2e13eec"
+    },
+    {
+      "id": "1c7ec73dc6b9a23188d1c51ad609aed98e71e1d5",
+      "type": "commit",
+      "title": "test: align release/process tests with fail-closed allowlist and Windows psutil gap",
+      "timestamp": "2026-08-21T18:03:14-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1c7ec73dc6b9a23188d1c51ad609aed98e71e1d5"
+    },
+    {
+      "id": "a0a14b479023b575c1f006675278b2ecebe8fbbb",
+      "type": "commit",
+      "title": "fix(diagnostics,installer): H-NET-001 intentional HOLD state + installer CLI syntax",
+      "timestamp": "2026-08-21T17:52:00-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a0a14b479023b575c1f006675278b2ecebe8fbbb"
+    },
+    {
       "id": "b72161b61cd575bc91aaf36690211668dd6834a8",
       "type": "commit",
       "title": "Merge pull request #39 from kaibuzz0/fix/production-payload-allowlist",
@@ -6001,27 +6027,6 @@
       "title": "chore(deps): update cryptography requirement from >=41.0.0 to >=41.0.7",
       "timestamp": "2026-08-21T21:09:54Z",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/364b6268a605c06a31336842da9b48ab283c5317"
-    },
-    {
-      "id": "6a3a12e554e66f3ba1e164d8ccdae5808a39ef5a",
-      "type": "commit",
-      "title": "chore(deps): update pyyaml requirement from >=6.0.1 to >=6.0.3",
-      "timestamp": "2026-08-21T21:09:54Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/6a3a12e554e66f3ba1e164d8ccdae5808a39ef5a"
-    },
-    {
-      "id": "4b1572c461f51d5ebe91b8d456aabab31392d987",
-      "type": "commit",
-      "title": "Merge pull request #37 from kaibuzz0/fix/python-3.10-dependency-floors",
-      "timestamp": "2026-08-21T16:07:44-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/4b1572c461f51d5ebe91b8d456aabab31392d987"
-    },
-    {
-      "id": "a4d316645a2050bd7c3ed3d98294850dcd84220d",
-      "type": "commit",
-      "title": "deps: lower matplotlib floor to support Python 3.10",
-      "timestamp": "2026-08-21T15:59:18-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a4d316645a2050bd7c3ed3d98294850dcd84220d"
     }
   ],
   "links": [
