@@ -29,9 +29,9 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-py${{ matrix.python-version }}-pip-
 
       - name: Install Python dependencies
         run: |
@@ -59,10 +59,10 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          pytest -v "Hive Ops DevAI" tests --cov=. --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
+          pytest -v tests             --cov=bin --cov=core --cov=config_engine --cov=diagnostics --cov=hive_broker             --cov=installer --cov=lib --cov=network --cov=operations_center             --cov=policy_engine --cov=release_engine --cov=runtime_logs --cov=security             --cov=services --cov=updates             --cov-report=xml --cov-report=term-missing --junitxml=pytest-report.xml 2>&1 | tee pytest-output.txt
 
       - name: Surface pytest failures
-        if: steps.pytest.outcome == 'failure'
+        if: steps.pytest.conclusion == 'failure'
         run: |
           python - <<'PY'
           from pathlib import Path
