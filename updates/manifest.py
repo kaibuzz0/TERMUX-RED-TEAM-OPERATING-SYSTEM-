@@ -15,6 +15,7 @@ from updates.errors import BundleError
 EXCLUDED_PREFIXES = (
     ".git",
     "blueprints",
+    "evidence",
     "tests",
     "__pycache__",
     ".pytest_cache",
