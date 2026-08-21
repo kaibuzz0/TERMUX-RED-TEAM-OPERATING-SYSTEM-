@@ -39,8 +39,24 @@ def evaluate_health(network_manager, supervisor, broker_available: bool = True, 
         if neth.level.name == "HEALTHY":
             components["network"] = "healthy"
         elif neth.level.name == "UNAVAILABLE":
-            components["network"] = "failed"
-            findings.append(Finding("H-NET-001", Severity.ERROR, "network", "Network profile is unavailable", {}))
+            # Distinguish intentional default HOLD (no profile configured) from a
+            # real profile failure.  A fresh source checkout has never selected a
+            # profile, so "hold" is expected and should not be reported as FAILED.
+            profile = network_manager.current_profile.name.lower()
+            if profile == "hold":
+                components["network"] = "degraded"
+                findings.append(Finding(
+                    "H-NET-001", Severity.WARNING, "network",
+                    "Network profile is not configured (hold). Select a profile with 'hive net direct', 'hive net orbot', or 'hive net tor'.",
+                    {"profile": profile, "configured": False},
+                ))
+            else:
+                components["network"] = "failed"
+                findings.append(Finding(
+                    "H-NET-001", Severity.ERROR, "network",
+                    f"Network profile '{profile}' is unavailable",
+                    {"profile": profile, "configured": True},
+                ))
         else:
             components["network"] = "degraded"
             findings.append(Finding("H-NET-002", Severity.WARNING, "network", "Network is degraded", {"overall": neth.overall}))

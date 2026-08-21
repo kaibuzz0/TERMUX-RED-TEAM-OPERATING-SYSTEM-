@@ -6,11 +6,11 @@ This package provides a transactional, staged, auditable installation foundation
 
 ## Commands
 
-- `python3 -m installer.install --check` — run non-mutating preflight checks.
-- `python3 -m installer.install --plan [--json]` — generate a deterministic installation plan.
-- `python3 -m installer.install --dry-run` — validate the plan without mutating the system.
-- `python3 -m installer.install --stage TARGET` — verify a staged installation directory.
-- `python3 -m installer.install --verify TARGET` — alias for `--stage`.
+- `python3 -m installer.install check` — run non-mutating preflight checks.
+- `python3 -m installer.install plan [--json]` — generate a deterministic installation plan.
+- `python3 -m installer.install dry-run` — validate the plan without mutating the system.
+- `python3 -m installer.install stage TARGET` — verify a staged installation directory.
+- `python3 -m installer.install verify TARGET` — alias for `--stage`.
 
 ## Design principles
 

@@ -1,15 +1,15 @@
 """Main installer CLI surface.
 
 Supported commands:
-  python3 -m installer.install --check
-  python3 -m installer.install --plan [--json]
-  python3 -m installer.install --dry-run
-  python3 -m installer.install --stage [TARGET]
-  python3 -m installer.install --verify [TARGET]
-  python3 -m installer.install --activate [TARGET] --approve
-  python3 -m installer.install --status
-  python3 -m installer.install --rollback --approve
-  python3 -m installer.install --legacy-detect
+  python3 -m installer.install check
+  python3 -m installer.install plan [--json]
+  python3 -m installer.install dry-run
+  python3 -m installer.install stage [TARGET]
+  python3 -m installer.install verify [TARGET]
+  python3 -m installer.install activate [TARGET] --approve
+  python3 -m installer.install status
+  python3 -m installer.install rollback --approve
+  python3 -m installer.install legacy-detect
 
 No command automatically activates a production installation.
 """
