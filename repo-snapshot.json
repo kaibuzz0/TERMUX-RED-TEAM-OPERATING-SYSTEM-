@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T21:37:19Z",
-  "source_commit": "bf13ded5904b239765150705c145a49390d2c0ea",
+  "generated_at": "2026-08-21T22:50:46Z",
+  "source_commit": "b72161b61cd575bc91aaf36690211668dd6834a8",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5954,6 +5954,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "b72161b61cd575bc91aaf36690211668dd6834a8",
+      "type": "commit",
+      "title": "Merge pull request #39 from kaibuzz0/fix/production-payload-allowlist",
+      "timestamp": "2026-08-21T17:50:38-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b72161b61cd575bc91aaf36690211668dd6834a8"
+    },
+    {
+      "id": "20a9e3bbd3155a1d163312d26e151c3e9d99c7e6",
+      "type": "commit",
+      "title": "fix(release): fail-closed production payload allowlist",
+      "timestamp": "2026-08-21T16:54:38-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/20a9e3bbd3155a1d163312d26e151c3e9d99c7e6"
+    },
+    {
       "id": "bf13ded5904b239765150705c145a49390d2c0ea",
       "type": "commit",
       "title": "Merge pull request #38 from kaibuzz0/fix/production-payload-boundary",
@@ -6008,20 +6022,6 @@
       "title": "deps: lower matplotlib floor to support Python 3.10",
       "timestamp": "2026-08-21T15:59:18-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a4d316645a2050bd7c3ed3d98294850dcd84220d"
-    },
-    {
-      "id": "1fc9e0d48e80e9ac8561cb828141b7d2e56c9218",
-      "type": "commit",
-      "title": "Merge pull request #36 from kaibuzz0/fix/final-production-ci-root-causes",
-      "timestamp": "2026-08-21T15:32:19-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1fc9e0d48e80e9ac8561cb828141b7d2e56c9218"
-    },
-    {
-      "id": "1adfd4e4c1610597d861d27cf8315dd9991720d2",
-      "type": "commit",
-      "title": "ci: fix production CI root causes on current master",
-      "timestamp": "2026-08-21T15:31:49-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1adfd4e4c1610597d861d27cf8315dd9991720d2"
     }
   ],
   "links": [
