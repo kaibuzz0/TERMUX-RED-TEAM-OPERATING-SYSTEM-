@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-19T01:21:45Z",
-  "source_commit": "5fcce5cdaf13189a5fa5f5a5af62271312651549",
+  "generated_at": "2026-08-21T19:44:45Z",
+  "source_commit": "b81389d7a16fbba926cd0040390589d56c7e49e6",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5949,6 +5949,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "b81389d7a16fbba926cd0040390589d56c7e49e6",
+      "type": "commit",
+      "title": "Merge pull request #35 from kaibuzz0/fix/manifest-exclude-evidence",
+      "timestamp": "2026-08-21T14:44:35-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b81389d7a16fbba926cd0040390589d56c7e49e6"
+    },
+    {
+      "id": "c9550cdc7cef4ce69d79908c7197f2735759b24a",
+      "type": "commit",
+      "title": "fix(release): exclude evidence/ from canonical release manifest",
+      "timestamp": "2026-08-21T14:43:30-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/c9550cdc7cef4ce69d79908c7197f2735759b24a"
+    },
+    {
       "id": "5fcce5cdaf13189a5fa5f5a5af62271312651549",
       "type": "commit",
       "title": "Merge pull request #23 from kaibuzz0/dependabot/pip/beautifulsoup4-gte-4.15.0",
@@ -6003,20 +6017,6 @@
       "title": "Merge pull request #25 from kaibuzz0/dependabot/pip/matplotlib-gte-3.11.1",
       "timestamp": "2026-08-18T20:14:28-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/4518027547d63165837a3cd929f793a0e048423d"
-    },
-    {
-      "id": "9e9a7647dd1ed1f4e43048610697ab178e6b483a",
-      "type": "commit",
-      "title": "chore(deps): update click requirement from >=8.1.0 to >=8.4.2",
-      "timestamp": "2026-08-19T01:14:22Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/9e9a7647dd1ed1f4e43048610697ab178e6b483a"
-    },
-    {
-      "id": "9158edba347c41ff67fa9c5b410025426c1d1991",
-      "type": "commit",
-      "title": "Merge pull request #31 from kaibuzz0/dependabot/pip/pynacl-gte-1.6.2",
-      "timestamp": "2026-08-18T20:14:08-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/9158edba347c41ff67fa9c5b410025426c1d1991"
     }
   ],
   "links": [
