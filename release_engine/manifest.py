@@ -16,6 +16,34 @@ from updates.manifest import build_manifest as _build_update_manifest
 from release_engine.errors import ManifestError
 
 
+# Top-level directories/files that constitute the canonical Hive OS production
+# runtime.  Everything at the repository root outside this set is considered
+# distribution, documentation, development, legacy-reference, or optional
+# experimental material and MUST NOT enter a signed production bundle.
+# See tests/test_canonical_payload_boundary.py for the regression contract.
+_RUNTIME_TOP_LEVEL_ALLOWLIST: frozenset[str] = frozenset({
+    "bin",
+    "config_engine",
+    "diagnostics",
+    "etc",
+    "hive_broker",
+    "hive_operator",
+    "hive-canonical.json",
+    "home",
+    "installer",
+    "lib",
+    "network",
+    "operations_center",
+    "plugin_sdk",
+    "policy_engine",
+    "release_engine",
+    "runtime_logs",
+    "security",
+    "services",
+    "updates",
+})
+
+
 def build_release_manifest(
     source_dir: Path,
     base_dir: Path | None = None,
@@ -65,6 +93,11 @@ def build_release_manifest(
 
     def _excluded(entry: Dict[str, Any]) -> bool:
         rel = entry["path"]
+        # Fail-closed: only allowlisted top-level items may ship.  Unknown future
+        # repository roots are rejected by default.
+        top = rel.split("/", 1)[0]
+        if top not in _RUNTIME_TOP_LEVEL_ALLOWLIST:
+            return True
         if any(rel.startswith(e + "/") or rel == e for e in excludes):
             return True
         if any(rel.endswith(suffix) for suffix in (".key", ".pem", ".p12", ".env", ".db", ".log")):
