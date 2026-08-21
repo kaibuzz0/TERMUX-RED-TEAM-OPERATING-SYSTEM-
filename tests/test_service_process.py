@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import tempfile
+import sys
 import time
+
+import pytest
 from pathlib import Path
 
 from services.process import TrackedProcess
@@ -35,6 +38,8 @@ def test_terminate_aborts_if_identity_invalid(tmp_path):
 
 def test_tracked_process_start_time_is_os_derived(tmp_path):
     """Ensure start_time is captured from OS identity, not wall-clock."""
+    if sys.platform == "win32":
+        pytest.importorskip("psutil", reason="Windows identity domain requires psutil; Linux/Termux uses /proc directly")
     manifest = {"name": "test"}
     command = ["python", "-c", "import time; time.sleep(3600)"]
     proc = TrackedProcess(manifest, command, "session-1")

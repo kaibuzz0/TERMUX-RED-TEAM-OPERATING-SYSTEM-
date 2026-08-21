@@ -88,7 +88,9 @@ class TestReproducibleBuild:
     def test_repeated_build_digest(self, tmp_path):
         src = tmp_path / "src"
         src.mkdir()
-        (src / "file.txt").write_text("hello", encoding="utf-8")
+        (src / "bin").mkdir()
+        (src / "bin" / "hive").write_text("#!/bin/sh\necho hello", encoding="utf-8")
+        (src / "hive-canonical.json").write_text('{"project": "Hive OS"}', encoding="utf-8")
         out1 = tmp_path / "out1"
         out2 = tmp_path / "out2"
         build_release(src, out1, "1.0.0", 1, "b1", "abc", ["linux"], ["aarch64"])
@@ -100,9 +102,11 @@ class TestReproducibleBuild:
     def test_manifest_digest_changes_on_content(self, tmp_path):
         src = tmp_path / "src"
         src.mkdir()
-        (src / "file.txt").write_text("a", encoding="utf-8")
+        (src / "bin").mkdir()
+        (src / "bin" / "hive").write_text("#!/bin/sh\necho a", encoding="utf-8")
+        (src / "hive-canonical.json").write_text('{"project": "Hive OS"}', encoding="utf-8")
         m1 = manifest_digest(build_release_manifest(src))
-        (src / "file.txt").write_text("b", encoding="utf-8")
+        (src / "bin" / "hive").write_text("#!/bin/sh\necho b", encoding="utf-8")
         m2 = manifest_digest(build_release_manifest(src))
         assert m1 != m2
 
