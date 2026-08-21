@@ -167,7 +167,7 @@ jobs:
           test -n "$bundle"
           python -m release_engine.cli inspect "$bundle" --work-dir "$RUNNER_TEMP/hive-ci-inspect"
 
-      - name: Validate deprecated/reference trees are excluded
+      - name: Validate production payload boundary
         shell: bash
         run: |
           set -euo pipefail
@@ -176,16 +176,31 @@ jobs:
           import json
           import sys
           from pathlib import Path
+          from release_engine.manifest import _RUNTIME_TOP_LEVEL_ALLOWLIST
 
           manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
           paths = {entry["path"] for entry in manifest}
+
+          # Fail-closed: only allowlisted top-level items may ship.
+          unknown = sorted(
+              set(path.split("/", 1)[0] for path in paths)
+              - _RUNTIME_TOP_LEVEL_ALLOWLIST
+          )
+          if unknown:
+              raise SystemExit(f"unknown top-level items in production manifest: {unknown}")
+
+          # Legacy/reference-only trees must not ship.
           forbidden_prefixes = (
               "blueprints/",
               "evidence/",
+              "Hive Ops DevAI/",
+              "Hive Ops Final/",
+              "Hermes Plugins/",
           )
           bad = sorted(path for path in paths if path.startswith(forbidden_prefixes))
           if bad:
               raise SystemExit(f"reference-only path entered production manifest: {bad[0]}")
+
           for required in ("bin/hive", "hive-canonical.json", "installer/activate.py", "network/manager.py", "services/supervisor.py"):
               if required not in paths:
                   raise SystemExit(f"canonical production manifest missing: {required}")

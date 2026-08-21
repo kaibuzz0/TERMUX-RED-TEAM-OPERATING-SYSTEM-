@@ -11,7 +11,9 @@ from release_engine.manifest import build_release_manifest
 def test_build_excludes_forbidden_artifacts(tmp_path):
     src = tmp_path / "src"
     src.mkdir()
-    (src / "good.py").write_text("print(1)", encoding="utf-8")
+    (src / "bin").mkdir()
+    (src / "bin" / "hive").write_text("#!/bin/sh\necho hive", encoding="utf-8")
+    (src / "hive-canonical.json").write_text('{"project": "Hive OS"}', encoding="utf-8")
 
     forbidden = [
         (".git", "config"),
@@ -42,7 +44,7 @@ def test_build_excludes_forbidden_artifacts(tmp_path):
     )
 
     paths = {e["path"] for e in build_release_manifest(src, extra_excludes={"state", "tmp", "audit"})}
-    assert "good.py" in paths
+    assert "bin/hive" in paths
     for parts in forbidden:
         rel = "/".join(parts)
         assert rel not in paths, f"excluded path present: {rel}"
