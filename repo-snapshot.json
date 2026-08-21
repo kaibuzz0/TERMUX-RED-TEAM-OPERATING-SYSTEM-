@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T19:44:45Z",
-  "source_commit": "b81389d7a16fbba926cd0040390589d56c7e49e6",
+  "generated_at": "2026-08-21T20:32:28Z",
+  "source_commit": "1fc9e0d48e80e9ac8561cb828141b7d2e56c9218",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5949,6 +5949,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "1fc9e0d48e80e9ac8561cb828141b7d2e56c9218",
+      "type": "commit",
+      "title": "Merge pull request #36 from kaibuzz0/fix/final-production-ci-root-causes",
+      "timestamp": "2026-08-21T15:32:19-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1fc9e0d48e80e9ac8561cb828141b7d2e56c9218"
+    },
+    {
+      "id": "1adfd4e4c1610597d861d27cf8315dd9991720d2",
+      "type": "commit",
+      "title": "ci: fix production CI root causes on current master",
+      "timestamp": "2026-08-21T15:31:49-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1adfd4e4c1610597d861d27cf8315dd9991720d2"
+    },
+    {
       "id": "b81389d7a16fbba926cd0040390589d56c7e49e6",
       "type": "commit",
       "title": "Merge pull request #35 from kaibuzz0/fix/manifest-exclude-evidence",
@@ -6003,20 +6017,6 @@
       "title": "Merge pull request #32 from kaibuzz0/dependabot/pip/click-gte-8.4.2",
       "timestamp": "2026-08-18T20:14:58-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/22383641fae5a99375dc19b4c93d1a75bab950e6"
-    },
-    {
-      "id": "fe6a33e22c2c52d3529f3169a4c225f083a36e00",
-      "type": "commit",
-      "title": "chore(deps): update pytest-asyncio requirement from >=0.21.0 to >=0.26.0",
-      "timestamp": "2026-08-19T01:14:36Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/fe6a33e22c2c52d3529f3169a4c225f083a36e00"
-    },
-    {
-      "id": "4518027547d63165837a3cd929f793a0e048423d",
-      "type": "commit",
-      "title": "Merge pull request #25 from kaibuzz0/dependabot/pip/matplotlib-gte-3.11.1",
-      "timestamp": "2026-08-18T20:14:28-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/4518027547d63165837a3cd929f793a0e048423d"
     }
   ],
   "links": [
