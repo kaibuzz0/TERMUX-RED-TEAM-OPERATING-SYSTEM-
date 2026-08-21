@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T21:14:36Z",
-  "source_commit": "7df25231d19040e7766426d1d42eea1cf78099cc",
+  "generated_at": "2026-08-21T21:37:19Z",
+  "source_commit": "bf13ded5904b239765150705c145a49390d2c0ea",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,14 +9,14 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 1011,
-    "python_files": 411,
+    "tracked_files": 1012,
+    "python_files": 412,
     "javascript_typescript_files": 1,
     "workflow_files": 5,
-    "test_files": 194
+    "test_files": 195
   },
   "repository_tree": {
-    "total_files": 1011,
+    "total_files": 1012,
     "total_directories": 131,
     "files_truncated": false,
     "directories_truncated": false,
@@ -823,7 +823,7 @@
         "path": "tests",
         "name": "tests",
         "depth": 1,
-        "file_count": 173
+        "file_count": 174
       },
       {
         "path": "tests/fixtures",
@@ -5112,6 +5112,11 @@
         "extension": ".py"
       },
       {
+        "path": "tests/test_canonical_payload_boundary.py",
+        "name": "test_canonical_payload_boundary.py",
+        "extension": ".py"
+      },
+      {
         "path": "tests/test_canonical_source.py",
         "name": "test_canonical_source.py",
         "extension": ".py"
@@ -5949,6 +5954,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "bf13ded5904b239765150705c145a49390d2c0ea",
+      "type": "commit",
+      "title": "Merge pull request #38 from kaibuzz0/fix/production-payload-boundary",
+      "timestamp": "2026-08-21T16:37:10-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/bf13ded5904b239765150705c145a49390d2c0ea"
+    },
+    {
+      "id": "2dff177c54fe62be0e479140f577b2c139f77067",
+      "type": "commit",
+      "title": "fix(release): enforce canonical production payload boundary",
+      "timestamp": "2026-08-21T16:31:09-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/2dff177c54fe62be0e479140f577b2c139f77067"
+    },
+    {
       "id": "7df25231d19040e7766426d1d42eea1cf78099cc",
       "type": "commit",
       "title": "Merge pull request #33 from kaibuzz0/dependabot/pip/cryptography-gte-41.0.7",
@@ -6003,20 +6022,6 @@
       "title": "ci: fix production CI root causes on current master",
       "timestamp": "2026-08-21T15:31:49-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1adfd4e4c1610597d861d27cf8315dd9991720d2"
-    },
-    {
-      "id": "b81389d7a16fbba926cd0040390589d56c7e49e6",
-      "type": "commit",
-      "title": "Merge pull request #35 from kaibuzz0/fix/manifest-exclude-evidence",
-      "timestamp": "2026-08-21T14:44:35-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b81389d7a16fbba926cd0040390589d56c7e49e6"
-    },
-    {
-      "id": "c9550cdc7cef4ce69d79908c7197f2735759b24a",
-      "type": "commit",
-      "title": "fix(release): exclude evidence/ from canonical release manifest",
-      "timestamp": "2026-08-21T14:43:30-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/c9550cdc7cef4ce69d79908c7197f2735759b24a"
     }
   ],
   "links": [
