@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T20:32:28Z",
-  "source_commit": "1fc9e0d48e80e9ac8561cb828141b7d2e56c9218",
+  "generated_at": "2026-08-21T21:07:55Z",
+  "source_commit": "4b1572c461f51d5ebe91b8d456aabab31392d987",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5949,6 +5949,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "4b1572c461f51d5ebe91b8d456aabab31392d987",
+      "type": "commit",
+      "title": "Merge pull request #37 from kaibuzz0/fix/python-3.10-dependency-floors",
+      "timestamp": "2026-08-21T16:07:44-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/4b1572c461f51d5ebe91b8d456aabab31392d987"
+    },
+    {
+      "id": "a4d316645a2050bd7c3ed3d98294850dcd84220d",
+      "type": "commit",
+      "title": "deps: lower matplotlib floor to support Python 3.10",
+      "timestamp": "2026-08-21T15:59:18-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/a4d316645a2050bd7c3ed3d98294850dcd84220d"
+    },
+    {
       "id": "1fc9e0d48e80e9ac8561cb828141b7d2e56c9218",
       "type": "commit",
       "title": "Merge pull request #36 from kaibuzz0/fix/final-production-ci-root-causes",
@@ -6003,20 +6017,6 @@
       "title": "Merge pull request #26 from kaibuzz0/dependabot/pip/pytest-asyncio-gte-0.26.0",
       "timestamp": "2026-08-18T20:15:58-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/006791a8e28c87170114e6db419015de319ce528"
-    },
-    {
-      "id": "16b7f5cf65cb1d297371cdfc52565904445c59fd",
-      "type": "commit",
-      "title": "chore(deps): update requests requirement from >=2.31.0 to >=2.34.2",
-      "timestamp": "2026-08-19T01:15:55Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/16b7f5cf65cb1d297371cdfc52565904445c59fd"
-    },
-    {
-      "id": "22383641fae5a99375dc19b4c93d1a75bab950e6",
-      "type": "commit",
-      "title": "Merge pull request #32 from kaibuzz0/dependabot/pip/click-gte-8.4.2",
-      "timestamp": "2026-08-18T20:14:58-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/22383641fae5a99375dc19b4c93d1a75bab950e6"
     }
   ],
   "links": [
