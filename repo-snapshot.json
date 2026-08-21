@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T21:13:05Z",
-  "source_commit": "63e76a2630f47c80a9b0bbc5cd6ad9684096dc84",
+  "generated_at": "2026-08-21T21:14:36Z",
+  "source_commit": "7df25231d19040e7766426d1d42eea1cf78099cc",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5949,11 +5949,25 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "7df25231d19040e7766426d1d42eea1cf78099cc",
+      "type": "commit",
+      "title": "Merge pull request #33 from kaibuzz0/dependabot/pip/cryptography-gte-41.0.7",
+      "timestamp": "2026-08-21T16:14:27-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/7df25231d19040e7766426d1d42eea1cf78099cc"
+    },
+    {
       "id": "63e76a2630f47c80a9b0bbc5cd6ad9684096dc84",
       "type": "commit",
       "title": "Merge pull request #34 from kaibuzz0/dependabot/pip/pyyaml-gte-6.0.3",
       "timestamp": "2026-08-21T16:12:58-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/63e76a2630f47c80a9b0bbc5cd6ad9684096dc84"
+    },
+    {
+      "id": "364b6268a605c06a31336842da9b48ab283c5317",
+      "type": "commit",
+      "title": "chore(deps): update cryptography requirement from >=41.0.0 to >=41.0.7",
+      "timestamp": "2026-08-21T21:09:54Z",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/364b6268a605c06a31336842da9b48ab283c5317"
     },
     {
       "id": "6a3a12e554e66f3ba1e164d8ccdae5808a39ef5a",
@@ -6003,20 +6017,6 @@
       "title": "fix(release): exclude evidence/ from canonical release manifest",
       "timestamp": "2026-08-21T14:43:30-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/c9550cdc7cef4ce69d79908c7197f2735759b24a"
-    },
-    {
-      "id": "5fcce5cdaf13189a5fa5f5a5af62271312651549",
-      "type": "commit",
-      "title": "Merge pull request #23 from kaibuzz0/dependabot/pip/beautifulsoup4-gte-4.15.0",
-      "timestamp": "2026-08-18T20:19:57-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/5fcce5cdaf13189a5fa5f5a5af62271312651549"
-    },
-    {
-      "id": "1a05cec36334eb0cc5cdd630a778e6220ebd2ce2",
-      "type": "commit",
-      "title": "chore(deps): update beautifulsoup4 requirement from >=4.12.0 to >=4.15.0",
-      "timestamp": "2026-08-19T01:19:46Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/1a05cec36334eb0cc5cdd630a778e6220ebd2ce2"
     }
   ],
   "links": [
