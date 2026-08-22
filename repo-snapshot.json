@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-22T01:07:45Z",
-  "source_commit": "13da93c44cf9309e32f5040ce3496e83fb047ab9",
+  "generated_at": "2026-08-22T01:26:56Z",
+  "source_commit": "d19c60b2af9782e4616bd0026db7c24b7fd80adf",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,14 +9,14 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 1014,
-    "python_files": 414,
+    "tracked_files": 1015,
+    "python_files": 415,
     "javascript_typescript_files": 1,
     "workflow_files": 5,
-    "test_files": 197
+    "test_files": 198
   },
   "repository_tree": {
-    "total_files": 1014,
+    "total_files": 1015,
     "total_directories": 131,
     "files_truncated": false,
     "directories_truncated": false,
@@ -823,7 +823,7 @@
         "path": "tests",
         "name": "tests",
         "depth": 1,
-        "file_count": 176
+        "file_count": 177
       },
       {
         "path": "tests/fixtures",
@@ -5677,6 +5677,11 @@
         "extension": ".py"
       },
       {
+        "path": "tests/test_public_key_identity_consistency.py",
+        "name": "test_public_key_identity_consistency.py",
+        "extension": ".py"
+      },
+      {
         "path": "tests/test_registry_consistency.py",
         "name": "test_registry_consistency.py",
         "extension": ".py"
@@ -5964,6 +5969,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "d19c60b2af9782e4616bd0026db7c24b7fd80adf",
+      "type": "commit",
+      "title": "Merge pull request #42 from kaibuzz0/fix/production-key-public-fingerprint",
+      "timestamp": "2026-08-21T20:26:46-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/d19c60b2af9782e4616bd0026db7c24b7fd80adf"
+    },
+    {
+      "id": "b0b92e8e2e0d1f11b381c29818c5eaf9d8be425f",
+      "type": "commit",
+      "title": "fix: correct active production key fingerprint in docs/index.html",
+      "timestamp": "2026-08-21T20:26:12-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b0b92e8e2e0d1f11b381c29818c5eaf9d8be425f"
+    },
+    {
       "id": "13da93c44cf9309e32f5040ce3496e83fb047ab9",
       "type": "commit",
       "title": "Merge pull request #41 from kaibuzz0/fix/production-key-rotation-2026-03",
@@ -6018,20 +6037,6 @@
       "title": "Merge pull request #38 from kaibuzz0/fix/production-payload-boundary",
       "timestamp": "2026-08-21T16:37:10-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/bf13ded5904b239765150705c145a49390d2c0ea"
-    },
-    {
-      "id": "2dff177c54fe62be0e479140f577b2c139f77067",
-      "type": "commit",
-      "title": "fix(release): enforce canonical production payload boundary",
-      "timestamp": "2026-08-21T16:31:09-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/2dff177c54fe62be0e479140f577b2c139f77067"
-    },
-    {
-      "id": "7df25231d19040e7766426d1d42eea1cf78099cc",
-      "type": "commit",
-      "title": "Merge pull request #33 from kaibuzz0/dependabot/pip/cryptography-gte-41.0.7",
-      "timestamp": "2026-08-21T16:14:27-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/7df25231d19040e7766426d1d42eea1cf78099cc"
     }
   ],
   "links": [
