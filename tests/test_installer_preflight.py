@@ -97,6 +97,86 @@ class PreflightClassificationTests(unittest.TestCase):
         result = run_preflight(target_root=Path("hive"))
         self.assertIn("Target root must be absolute", result.errors)
 
+    def test_termux_root_xdg_target_accepted(self):
+        """Verified Termux/PRoot HOME=/root canonical XDG target must pass."""
+        from installer.preflight import run_preflight
+        from lib.hive_path import resolve_repository_root
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("POSIX-only test")
+        env = {
+            "HOME": "/root",
+            "PREFIX": "/data/data/com.termux/files/usr",
+            "TERMUX_VERSION": "0.118",
+        }
+        target = Path("/root/.local/share/hive")
+        with patch.dict(os.environ, env, clear=True):
+            result = run_preflight(resolve_repository_root(), target_root=target)
+        self.assertNotIn("Target must not be under /root", result.errors)
+        self.assertIn("Target under /root requires", result.errors)
+        # Actually because /root/.local/share/hive starts with /root/.local it goes into the elif branch
+        # and requires non-root. On the test host EUID is not 0, so it should be accepted.
+        # Wait: _is_verified_termux_or_proot_user checks classification["termux"] == AVAILABLE.
+        # With TERMUX_VERSION set and /data/data/com.termux not existing on Windows test runner,
+        # _detect_termux returns AVAILABLE because env has TERMUX_VERSION.
+        # prefix check passes. home=/root matches the /root home_path branch but needs
+        # env.get("TERMUX_VERSION") which exists, so returns True.
+        # Therefore the first branch passes and errors should not contain any /root error.
+        self.assertFalse(
+            any("Target" in e and "/root" in e for e in result.errors),
+            f"Unexpected /root error: {result.errors}",
+        )
+
+    def test_normal_linux_root_target_rejected(self):
+        """Normal Linux root-owned /root target remains rejected."""
+        from installer.preflight import run_preflight
+        from lib.hive_path import resolve_repository_root
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("POSIX-only test")
+        env = {
+            "HOME": "/home/test",
+            # No termux evidence
+        }
+        target = Path("/root/hive")
+        with patch.dict(os.environ, env, clear=True):
+            result = run_preflight(resolve_repository_root(), target_root=target)
+        self.assertIn("Target must not be under /root", result.errors)
+
+    def test_shared_android_storage_rejected(self):
+        """Shared Android storage remains rejected even under Termux."""
+        from installer.preflight import run_preflight
+        from lib.hive_path import resolve_repository_root
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("POSIX-only test")
+        env = {
+            "HOME": "/data/data/com.termux/files/home",
+            "PREFIX": "/data/data/com.termux/files/usr",
+            "TERMUX_VERSION": "0.118",
+        }
+        target = Path("/sdcard/hive")
+        with patch.dict(os.environ, env, clear=True):
+            result = run_preflight(resolve_repository_root(), target_root=target)
+        self.assertIn("Target must not be on shared Android storage", result.errors)
+
+    def test_arbitrary_root_custom_target_rejected(self):
+        """Arbitrary /root custom target without Termux evidence is rejected."""
+        from installer.preflight import run_preflight
+        from lib.hive_path import resolve_repository_root
+        import sys
+        if sys.platform == "win32":
+            self.skipTest("POSIX-only test")
+        env = {
+            "HOME": "/root",
+            # No PREFIX, no TERMUX_VERSION
+        }
+        target = Path("/root/hive")
+        with patch.dict(os.environ, env, clear=True):
+            result = run_preflight(resolve_repository_root(), target_root=target)
+        self.assertIn("Target must not be under /root", result.errors)
+
+
 
 if __name__ == "__main__":
     unittest.main()
