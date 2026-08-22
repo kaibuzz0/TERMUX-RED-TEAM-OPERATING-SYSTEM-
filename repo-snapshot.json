@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-21T23:17:45Z",
-  "source_commit": "fa3555a72cb2b1c08f58a26e47109710e2e13eec",
+  "generated_at": "2026-08-22T01:07:45Z",
+  "source_commit": "13da93c44cf9309e32f5040ce3496e83fb047ab9",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -9,14 +9,14 @@
     "default_branch": "master"
   },
   "stats": {
-    "tracked_files": 1013,
-    "python_files": 413,
+    "tracked_files": 1014,
+    "python_files": 414,
     "javascript_typescript_files": 1,
     "workflow_files": 5,
-    "test_files": 196
+    "test_files": 197
   },
   "repository_tree": {
-    "total_files": 1013,
+    "total_files": 1014,
     "total_directories": 131,
     "files_truncated": false,
     "directories_truncated": false,
@@ -823,7 +823,7 @@
         "path": "tests",
         "name": "tests",
         "depth": 1,
-        "file_count": 175
+        "file_count": 176
       },
       {
         "path": "tests/fixtures",
@@ -5242,6 +5242,11 @@
         "extension": ".py"
       },
       {
+        "path": "tests/test_key_rotation_2026_03.py",
+        "name": "test_key_rotation_2026_03.py",
+        "extension": ".py"
+      },
+      {
         "path": "tests/test_legacy_bridge_default_exit.py",
         "name": "test_legacy_bridge_default_exit.py",
         "extension": ".py"
@@ -5959,6 +5964,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "13da93c44cf9309e32f5040ce3496e83fb047ab9",
+      "type": "commit",
+      "title": "Merge pull request #41 from kaibuzz0/fix/production-key-rotation-2026-03",
+      "timestamp": "2026-08-21T20:07:37-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/13da93c44cf9309e32f5040ce3496e83fb047ab9"
+    },
+    {
+      "id": "93a932a02070033788a404b3827334de0892a39a",
+      "type": "commit",
+      "title": "fix: rotate production release key to hive-release-prod-2026-03",
+      "timestamp": "2026-08-21T20:02:41-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/93a932a02070033788a404b3827334de0892a39a"
+    },
+    {
       "id": "fa3555a72cb2b1c08f58a26e47109710e2e13eec",
       "type": "commit",
       "title": "Merge pull request #40 from kaibuzz0/fix/production-payload-allowlist",
@@ -6013,20 +6032,6 @@
       "title": "Merge pull request #33 from kaibuzz0/dependabot/pip/cryptography-gte-41.0.7",
       "timestamp": "2026-08-21T16:14:27-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/7df25231d19040e7766426d1d42eea1cf78099cc"
-    },
-    {
-      "id": "63e76a2630f47c80a9b0bbc5cd6ad9684096dc84",
-      "type": "commit",
-      "title": "Merge pull request #34 from kaibuzz0/dependabot/pip/pyyaml-gte-6.0.3",
-      "timestamp": "2026-08-21T16:12:58-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/63e76a2630f47c80a9b0bbc5cd6ad9684096dc84"
-    },
-    {
-      "id": "364b6268a605c06a31336842da9b48ab283c5317",
-      "type": "commit",
-      "title": "chore(deps): update cryptography requirement from >=41.0.0 to >=41.0.7",
-      "timestamp": "2026-08-21T21:09:54Z",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/364b6268a605c06a31336842da9b48ab283c5317"
     }
   ],
   "links": [
