@@ -107,6 +107,67 @@ def _classify_file(path: Path, legacy_root: Path) -> dict[str, Any]:
     }
 
 
+def _resolve_hive_command_path() -> Path | None:
+    """Resolve a `hive` command found on PATH to its real file path."""
+    import shutil
+    exe = shutil.which("hive")
+    if not exe:
+        return None
+    exe_path = Path(exe)
+    try:
+        resolved = exe_path.resolve(strict=True)
+    except (OSError, ValueError):
+        resolved = exe_path
+    return resolved
+
+
+def _looks_like_hive_runtime(path: Path) -> bool:
+    """Return True if the resolved path looks like a legacy Hive runtime."""
+    if not path.is_file() and not path.is_symlink():
+        return False
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except (OSError, UnicodeDecodeError):
+        return False
+    # Recognize known legacy runtime markers in the launcher script.
+    markers = ["HIVE_HOME", "Hive-Ops", "Hive Ops", "hive_operator", "hive_broker"]
+    return any(m in text for m in markers)
+
+
+def _find_legacy_root_from_command() -> tuple[str, Path] | None:
+    """If `hive` is on PATH, resolve it and walk up to the runtime root.
+
+    Only returns a candidate when the resolved command actually looks like a
+    Hive OS runtime launcher, to avoid false positives from unrelated
+    executables named "hive".
+    """
+    resolved = _resolve_hive_command_path()
+    if resolved is None:
+        return None
+
+    # Broken symlinks or unreadable targets cannot be evaluated safely.
+    try:
+        if not resolved.exists():
+            return None
+    except OSError:
+        return None
+
+    if not _looks_like_hive_runtime(resolved):
+        return None
+
+    # Expected layout: <legacy_root>/bin/hive
+    if resolved.name == "hive" and resolved.parent.name == "bin":
+        legacy_root = resolved.parent.parent
+        if _is_readable_directory(legacy_root):
+            return ("command_path", legacy_root)
+
+    # Fallback: the file looks like a Hive launcher but is not in bin/hive.
+    legacy_root = resolved.parent
+    if _is_readable_directory(legacy_root):
+        return ("command_path", legacy_root)
+    return None
+
+
 def detect_legacy_installation(
     home: Path | None = None,
     legacy_root_override: Path | None = None,
@@ -118,9 +179,18 @@ def detect_legacy_installation(
     if legacy_root_override:
         candidates.append(("override", legacy_root_override))
     else:
+        # PATH-resolved command takes precedence because it reflects the user's
+        # actual runtime environment, not a static fallback path.
+        command_candidate = _find_legacy_root_from_command()
+        if command_candidate:
+            candidates.append(command_candidate)
+
+        # Common known legacy roots.
         candidates.extend([
             ("home_hive", home / "hive"),
             ("legacy_root", Path("/root/hive")),
+            ("root_bin_hive", Path("/root/Hive-Ops")),
+            ("legacy_bin_hive", Path("/root/bin/hive")),
         ])
 
     found = []

@@ -74,6 +74,52 @@ def _detect_termux(env: dict[str, Any]) -> CapabilityState:
     return CapabilityState.UNKNOWN
 
 
+def _is_verified_termux_or_proot_user(
+    env: dict[str, Any],
+    classification: dict[str, CapabilityState],
+) -> bool:
+    """Return True only when positive evidence shows HOME=/root is a safe
+    constrained Android/Termux/PRoot user environment rather than a privileged
+    Linux root account.
+
+    Required evidence:
+      * termux classification is AVAILABLE, AND
+      * PREFIX is set and points into the Termux prefix, AND
+      * HOME matches the Termux home path or a PRoot distro home path.
+
+    This deliberately fails closed when the environment identity is ambiguous.
+    """
+    if classification.get("termux") != CapabilityState.AVAILABLE:
+        return False
+
+    prefix = env.get("prefix") or env.get("PREFIX")
+    if not prefix:
+        return False
+    prefix_path = Path(prefix)
+    # e.g. /data/data/com.termux/files/usr or a PRoot prefix
+    if not (
+        "com.termux" in str(prefix_path)
+        or (prefix_path.name == "usr" and prefix_path.parent.parent.name.startswith("com.termux"))
+    ):
+        return False
+
+    home = env.get("home") or env.get("HOME")
+    if not home:
+        return False
+    home_path = Path(home)
+    # Accept canonical Termux home or a PRoot distro home that uses /root.
+    if home_path.match("/data/data/com.termux/*"):
+        return True
+    if home_path.match("/root"):
+        # Only allow /root as home when it is a PRoot-style constrained root.
+        # Positive evidence: TERMUX_VERSION or /data/data/com.termux exists.
+        if env.get("TERMUX_VERSION") or env.get("termux_version"):
+            return True
+        if Path("/data/data/com.termux").exists():
+            return True
+    return False
+
+
 def _probe_exists(path: Path) -> tuple[bool, OSError | None]:
     """Probe a path without allowing host permission quirks to abort preflight."""
     try:
@@ -171,6 +217,11 @@ def run_preflight(repo_root: Path | None = None, target_root: Path | None = None
         "termux": _detect_termux(env),
         "android": CapabilityState.UNVERIFIED,  # Requires physical check.
         "storage": CapabilityState.UNKNOWN,
+        "is_root": (
+            CapabilityState.AVAILABLE
+            if (hasattr(os, "geteuid") and os.geteuid() == 0)
+            else CapabilityState.UNAVAILABLE
+        ),
     }
 
     errors: list[str] = []
@@ -223,8 +274,25 @@ def run_preflight(repo_root: Path | None = None, target_root: Path | None = None
     if os.name != "nt" and target_root.parts and str(target_root).startswith(("/sdcard", "/storage", "/mnt")):
         errors.append("Target must not be on shared Android storage")
 
-    # Root path rejection (POSIX paths only)
+    # Root path rejection (POSIX paths only).
+    # The intent is to prevent accidental installation into a privileged
+    # root-owned directory on normal Linux hosts. A legitimate Android/Termux
+    # or PRoot environment where HOME resolves to /root is allowed when there
+    # is positive evidence that this is a constrained user environment, not a
+    # privileged Linux root account.
     if os.name != "nt" and str(target_root).startswith("/root"):
-        errors.append("Target must not be under /root")
+        if _is_verified_termux_or_proot_user(env, classification):
+            # Canonical per-user XDG target under a Termux/PRoot HOME is safe.
+            pass
+        elif str(target_root).startswith(("/root/.local", "/root/.config", "/root/.cache")):
+            # Even on a normal root account, the standard XDG subdirectories
+            # are per-user and not the root filesystem itself. Still require a
+            # non-root EUID unless we have Termux evidence.
+            if classification.get("is_root") != CapabilityState.AVAILABLE:
+                pass
+            else:
+                errors.append("Target under /root requires a non-root user or verified Termux/PRoot environment")
+        else:
+            errors.append("Target must not be under /root")
 
     return PreflightResult(env, classification, existing_status, warnings, errors)

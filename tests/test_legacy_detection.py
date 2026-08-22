@@ -6,6 +6,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from installer.legacy import detect_legacy_installation, build_migration_plan
 from installer.schema import LegacyStatus
@@ -84,6 +85,81 @@ class LegacyDetectionTests(unittest.TestCase):
         detect_legacy_installation(self.tmp)
         after = set(self.tmp.rglob("*"))
         self.assertEqual(before, after)
+
+    @unittest.skipIf(os.name == "nt", "symlinks require elevated privileges on Windows")
+    def test_root_bin_hive_symlink_detected(self):
+        """/root/bin/hive symlink pointing to /root/Hive-Ops/bin/hive must be detected."""
+        # Simulate /root on the temp filesystem.
+        fake_root = self.tmp / "root"
+        fake_root.mkdir()
+        hive_ops = fake_root / "Hive-Ops"
+        hive_ops.mkdir()
+        (hive_ops / "bin" / "hive").parent.mkdir(parents=True)
+        (hive_ops / "bin" / "hive").write_text("#!/bin/bash\nHIVE_HOME=/root/Hive-Ops", encoding="utf-8")
+
+        bin_dir = fake_root / "bin"
+        bin_dir.mkdir()
+        (bin_dir / "hive").symlink_to(hive_ops / "bin" / "hive")
+
+        import shutil
+        original_which = shutil.which
+        def fake_which(name):
+            if name == "hive":
+                return str(bin_dir / "hive")
+            return original_which(name)
+
+        with patch.object(shutil, "which", fake_which):
+            result = detect_legacy_installation(legacy_root_override=None)
+
+        self.assertNotEqual(
+            result["legacy_status"],
+            LegacyStatus.NO_LEGACY_INSTALLATION.value,
+            f"Expected legacy detected but got: {result}",
+        )
+
+    def test_unrelated_hive_command_ignored(self):
+        """An unrelated executable named hive must not trigger false migration."""
+        fake_root = self.tmp / "root"
+        fake_root.mkdir()
+        bin_dir = fake_root / "bin"
+        bin_dir.mkdir()
+        (bin_dir / "hive").write_text("#!/bin/bash\necho hello", encoding="utf-8")
+
+        import shutil
+        original_which = shutil.which
+        def fake_which(name):
+            if name == "hive":
+                return str(bin_dir / "hive")
+            return original_which(name)
+
+        with patch.object(shutil, "which", fake_which):
+            result = detect_legacy_installation(legacy_root_override=None)
+
+        self.assertEqual(result["legacy_status"], LegacyStatus.NO_LEGACY_INSTALLATION.value)
+
+    @unittest.skipIf(os.name == "nt", "symlinks require elevated privileges on Windows")
+    def test_broken_symlink_handled_safely(self):
+        """A broken hive symlink must not crash detection."""
+        fake_root = self.tmp / "root"
+        fake_root.mkdir()
+        bin_dir = fake_root / "bin"
+        bin_dir.mkdir()
+        (bin_dir / "hive").symlink_to("/nonexistent/path/hive")
+
+        import shutil
+        original_which = shutil.which
+        def fake_which(name):
+            if name == "hive":
+                return str(bin_dir / "hive")
+            return original_which(name)
+
+        with patch.object(shutil, "which", fake_which):
+            result = detect_legacy_installation(legacy_root_override=None)
+        # Should not raise and should not falsely claim legacy.
+        self.assertIn(
+            result["legacy_status"],
+            (LegacyStatus.NO_LEGACY_INSTALLATION.value, LegacyStatus.UNKNOWN.value),
+        )
 
 
 if __name__ == "__main__":
