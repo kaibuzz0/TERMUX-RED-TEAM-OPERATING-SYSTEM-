@@ -19,8 +19,8 @@ def _unsigned_metadata() -> dict:
         "release": {
             "release_id": "hive-os-1.1.0-rc.2-rc2-deadbeef0000",
             "version": "1.1.0-rc.2",
-            "release_sequence": 22,
-            "security_sequence": 22,
+            "release_sequence": 23,
+            "security_sequence": 23,
             "channel": "rc",
             "build_id": "rc2-deadbeef0000",
             "source_revision": "deadbeef" * 5,
@@ -41,9 +41,9 @@ def _candidate() -> dict:
         "status": "unsigned_candidate_only",
         "version": "1.1.0-rc.2",
         "rc1_sequence": 21,
-        "security_sequence": 22,
+        "security_sequence": 23,
         "source_revision": "deadbeef" * 5,
-        "expected_production_key_id": "hive-release-prod-2026-02",
+        "expected_production_key_id": "hive-release-prod-2026-03",
         "bundle": "candidate.tar.gz",
         "metadata": "candidate.metadata.json",
         "manifest": "candidate.manifest.json",
@@ -89,7 +89,7 @@ def test_validate_signed_metadata_accepts_exact_candidate(monkeypatch: pytest.Mo
     signed = json.loads(json.dumps(unsigned))
     signed["signing"] = {
         "algorithm": "Ed25519",
-        "key_id": "hive-release-prod-2026-02",
+        "key_id": "hive-release-prod-2026-03",
         "signature": "test-signature",
     }
     monkeypatch.setattr(candidate_gate, "verify_metadata", lambda metadata: None)
@@ -105,7 +105,7 @@ def test_validate_signed_metadata_rejects_unsigned_field_substitution(
     signed["release"]["commit"] = "cafebabe" * 5
     signed["signing"] = {
         "algorithm": "Ed25519",
-        "key_id": "hive-release-prod-2026-02",
+        "key_id": "hive-release-prod-2026-03",
         "signature": "test-signature",
     }
     monkeypatch.setattr(candidate_gate, "verify_metadata", lambda metadata: None)

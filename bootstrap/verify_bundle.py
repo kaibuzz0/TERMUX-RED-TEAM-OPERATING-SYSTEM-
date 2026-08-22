@@ -22,10 +22,10 @@ from typing import Any
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat, load_pem_public_key
 
-ROOT_KEY_ID = "hive-release-prod-2026-02"
-ROOT_KEY_FINGERPRINT = "55c4ca0853756b608c250f687ea8aa3f5ab9157240a243648303185b5f6925f4"
+ROOT_KEY_ID = "hive-release-prod-2026-03"
+ROOT_KEY_FINGERPRINT = "1c55f45db250153c7045ff85526c56355adedbf0673ddb52e73ccbca9905835f"
 ROOT_KEY_PEM = b"""-----BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEABf4VRp7InkSSIM9wHZusMV+ujbHgmREPJQgCZhJvpCU=
+MCowBQYDK2VwAyEA5bI3SLvvOBOM2rbrjK1f+dlTLczf/0a9looWt8RmbO4=
 -----END PUBLIC KEY-----
 """
 MAX_SECURITY_SEQUENCE = 2_147_483_647

@@ -27,7 +27,7 @@ from bootstrap.verify_bundle import verify_bundle, verify_metadata
 RC1_RELEASE_ID = "hive-os-1.1.0-rc.1-20260815-parity"
 RC1_SECURITY_SEQUENCE = 21
 EXPECTED_VERSION = "1.1.0-rc.2"
-EXPECTED_SECURITY_SEQUENCE = 22
+EXPECTED_SECURITY_SEQUENCE = 23
 EXPECTED_PLATFORM = "termux"
 EXPECTED_ARCHITECTURE = "aarch64"
 

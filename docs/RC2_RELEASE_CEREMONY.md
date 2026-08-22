@@ -52,7 +52,7 @@ Required metadata properties include:
 - `architectures = ["aarch64"]`;
 - correct `security_sequence`;
 - empty signature block before signing;
-- expected production key id recorded by the candidate kit: `hive-release-prod-2026-02`.
+- expected production key id recorded by the candidate kit: `hive-release-prod-2026-03`.
 
 If any identity field is wrong, discard the candidate and rebuild. Do not edit signed fields by hand.
 
@@ -66,7 +66,7 @@ Example command shape:
 python -m release_engine.cli sign \
   --metadata hive-os-1.1.0-rc.2-<build>.metadata.json \
   --private-key /secure/offline/production-release-key.pem \
-  --key-id hive-release-prod-2026-02 \
+  --key-id hive-release-prod-2026-03 \
   --output metadata.signed.json
 ```
 
