@@ -181,7 +181,7 @@ python bin/hive ops
 ## Security
 
 - Release metadata is signed with Ed25519.
-- Active production key: `hive-release-prod-2026-02`
+- Active production key: `hive-release-prod-2026-03`
 - Revoked key: `hive-release-prod-2026-01`
 - Trust anchor: `updates/trust_store/hive-release.pem`
 - Local secrets live in an encrypted vault.

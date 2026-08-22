@@ -1,55 +1,49 @@
-# Hive OS Production Release Key
+# Production Release Key
 
-## Retired Production Key
+## hive-release-prod-2026-01 (REVOKED)
 
-**Key ID:**
-`hive-release-prod-2026-01`
-
-**Status:**
-`REVOKED`
-
-**Replacement:**
-`hive-release-prod-2026-02`
+**Status:** REVOKED
 
 **SHA-256 Fingerprint:**
-`61229b1b0c7cefa8772c67a16bacea0ca8bd570bc9af96d58da41bfbdf0661b3`
+```
+61229b1b0c7cefa8772c67a16bacea0ca8bd570bc9af96d58da41bfbdf0661b3
+```
 
-**Reason for retirement:**
-Passphrase unavailable before first stable release; the key never signed a published stable Hive OS release.
+## hive-release-prod-2026-02 (REVOKED)
 
----
+**Status:** REVOKED
 
-## Active Production Key
+**Reason:** Signing private key/passphrase became unusable before stable publication.
 
-**Key ID:**
-`hive-release-prod-2026-02`
-
-**Algorithm:**
-Ed25519
-
-**Purpose:**
-`release`
-
-**Status:**
-`ACTIVE`
+**Replacement:** `hive-release-prod-2026-03`
 
 **SHA-256 Fingerprint:**
-`55c4ca0853756b608c250f687ea8aa3f5ab9157240a243648303185b5f6925f4`
+```
+55c4ca0853756b608c250f687ea8aa3f5ab9157240a243648303185b5f6925f4
+```
 
-**Fingerprint Input:**
-Raw 32-byte Ed25519 public key
+## hive-release-prod-2026-03 (ACTIVE)
 
-**Private key:**
-OFFLINE / NOT PUBLISHED
+**Status:** ACTIVE
 
-**Private-key format:**
-Encrypted PKCS#8 PEM
+**Algorithm:** Ed25519
 
-**Passphrase:**
-NOT RECORDED
+**Purpose:** release
 
-**Trust-store path:**
-`updates/trust_store/hive-release.pem`
+**SHA-256 Fingerprint:**
+```
+1c55f45db250153c7045ff85526c56355adedbf0673ddb52e73ccbca9905835f
+```
 
-This file contains **only** the public Ed25519 SubjectPublicKeyInfo PEM and metadata for both the retired and active production keys.
-It does not contain any private key, passphrase, or other secret material.
+**Public PEM:**
+```
+-----BEGIN PUBLIC KEY-----
+MCowBQYDK2VwAyEA5bI3SLvvOBOM2rbrjK1f+dlTLczf/0a9looWt8RmbO4=
+-----END PUBLIC KEY-----
+```
+
+**Private Key:** OFFLINE / NOT PUBLISHED
+
+**Private Format:** encrypted PKCS#8 PEM
+
+**Passphrase:** Operator-held only. Never committed, logged, or transmitted.

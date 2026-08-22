@@ -247,14 +247,14 @@ jobs:
               "source_revision": os.environ["GITHUB_SHA"],
               "source_date_epoch": int(os.environ["SOURCE_DATE_EPOCH"]),
               "build_id": os.environ["HIVE_BUILD_ID"],
-              "expected_production_key_id": "hive-release-prod-2026-02",
+              "expected_production_key_id": "hive-release-prod-2026-03",
               "bundle": bundle.name,
               "metadata": metadata.name,
               "manifest": manifest.name,
               "bootstrap": "hive-bootstrap.pyz",
               "post_sign_gate": "hive-release-gate.pyz",
               "next_step": (
-                  "offline-sign the metadata with hive-release-prod-2026-02, then run "
+                  "offline-sign the metadata with hive-release-prod-2026-03, then run "
                   "`python hive-release-gate.pyz --candidate-dir . --signed-metadata <signed.json> "
                   "--output publishable`"
               ),
