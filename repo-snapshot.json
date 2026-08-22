@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-22T01:26:56Z",
-  "source_commit": "d19c60b2af9782e4616bd0026db7c24b7fd80adf",
+  "generated_at": "2026-08-22T20:06:45Z",
+  "source_commit": "7a6abc694c1107c202f5ffc22f2f60a30fef19af",
   "repo": {
     "id": "termux-red-team-operating-system-",
     "full_name": "kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-",
@@ -5969,6 +5969,20 @@
   "agent_ops": {},
   "activity": [
     {
+      "id": "7a6abc694c1107c202f5ffc22f2f60a30fef19af",
+      "type": "commit",
+      "title": "Merge pull request #43 from kaibuzz0/fix/physical-termux-installer-preflight",
+      "timestamp": "2026-08-22T15:06:37-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/7a6abc694c1107c202f5ffc22f2f60a30fef19af"
+    },
+    {
+      "id": "2c8f5a56347c7f427172f58482bbd1b0e60faf80",
+      "type": "commit",
+      "title": "fix(installer): allow Termux/PRoot HOME=/root and detect /root/bin/hive legacy",
+      "timestamp": "2026-08-22T14:53:22-05:00",
+      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/2c8f5a56347c7f427172f58482bbd1b0e60faf80"
+    },
+    {
       "id": "d19c60b2af9782e4616bd0026db7c24b7fd80adf",
       "type": "commit",
       "title": "Merge pull request #42 from kaibuzz0/fix/production-key-public-fingerprint",
@@ -6023,20 +6037,6 @@
       "title": "Merge pull request #39 from kaibuzz0/fix/production-payload-allowlist",
       "timestamp": "2026-08-21T17:50:38-05:00",
       "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/b72161b61cd575bc91aaf36690211668dd6834a8"
-    },
-    {
-      "id": "20a9e3bbd3155a1d163312d26e151c3e9d99c7e6",
-      "type": "commit",
-      "title": "fix(release): fail-closed production payload allowlist",
-      "timestamp": "2026-08-21T16:54:38-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/20a9e3bbd3155a1d163312d26e151c3e9d99c7e6"
-    },
-    {
-      "id": "bf13ded5904b239765150705c145a49390d2c0ea",
-      "type": "commit",
-      "title": "Merge pull request #38 from kaibuzz0/fix/production-payload-boundary",
-      "timestamp": "2026-08-21T16:37:10-05:00",
-      "url": "https://github.com/kaibuzz0/TERMUX-RED-TEAM-OPERATING-SYSTEM-/commit/bf13ded5904b239765150705c145a49390d2c0ea"
     }
   ],
   "links": [
